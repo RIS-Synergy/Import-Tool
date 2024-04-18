@@ -4,13 +4,22 @@ https://documentation.forschungsdaten.at/
 
 ** Scripts
 *** ./scripts/fd-openapi
-Public, staging, api from the `forschungsdaten.at` documentation harvested on [2024-04-10].
+Public, staging, api from the _forschungsdaten.at_ documentation harvested on [2024-04-10].
 
 #+BEGIN_SRC shell
-curl https://cris-staging.aau.at/ris-synergy/info/v3/api-docs    | jq . > info.json
-curl https://cris-staging.aau.at/ris-synergy/project/v3/api-docs | jq . > project.json
-curl https://cris-staging.aau.at/ris-synergy/orgUnit/v3/api-docs | jq . > orgUnit.json
-curl https://cris-staging.aau.at/ris-synergy/funding/v3/api-docs | jq . > funding.json
+  curl https://cris-staging.aau.at/ris-synergy/info/v3/api-docs    | jq . > info.json
+  curl https://cris-staging.aau.at/ris-synergy/project/v3/api-docs | jq . > project.json
+  curl https://cris-staging.aau.at/ris-synergy/orgUnit/v3/api-docs | jq . > orgUnit.json
+  curl https://cris-staging.aau.at/ris-synergy/funding/v3/api-docs | jq . > funding.json
+#+END_SRC
+
+#+BEGIN_SRC
+  find . -type f -exec md5sum {} \; | sort -k 2
+
+  3cec0ee2450bac0611d753599572306c  ./funding.json
+  3d187ef05e6adecd1fc827da6f6c01e4  ./info.json
+  8c3a79c5bb0d6be14bc6678ea4c31874  ./orgUnit.json
+  242de744d12a9da865a886ebe4c43da4  ./project.json
 #+END_SRC
 ** Tests
 *** ./tests/samples
