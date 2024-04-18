@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <h1>
-      RIS-Synergy
-    </h1>
-  </div>
+  <NuxtLayout>
+    <v-app>
+      <NuxtPage />
+    </v-app>
+  </NuxtLayout>
 </template>
