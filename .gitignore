@@ -1,0 +1,5 @@
+# yarn is a package manager. The meaningful value is saved in the package.json.
+.yarn
+
+# docs are stored in org mode
+docs/*.html

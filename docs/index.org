@@ -1,0 +1,17 @@
+* RIS Documentation
+** External documentation
+https://documentation.forschungsdaten.at/
+
+** Scripts
+*** ./scripts/fd-openapi
+Public, staging, api from the `forschungsdaten.at` documentation harvested on [2024-04-10].
+
+#+BEGIN_SRC shell
+curl https://cris-staging.aau.at/ris-synergy/info/v3/api-docs    | jq . > info.json
+curl https://cris-staging.aau.at/ris-synergy/project/v3/api-docs | jq . > project.json
+curl https://cris-staging.aau.at/ris-synergy/orgUnit/v3/api-docs | jq . > orgUnit.json
+curl https://cris-staging.aau.at/ris-synergy/funding/v3/api-docs | jq . > funding.json
+#+END_SRC
+** Tests
+*** ./tests/samples
+These samples are important from the FWF test API.
