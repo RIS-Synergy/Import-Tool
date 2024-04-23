@@ -1,6 +1,10 @@
+import dotenv from "dotenv";
 import app from './app'
-const port = process.env.PORT
+
+dotenv.config();
+
+const port = process.env.PORT || 3000
 
 app.listen(port, () => {
-  console.log(`RIS-API listening on port ${port}`)
+  console.log(`RIS-Synergy API listening on port ${port}`)
 })

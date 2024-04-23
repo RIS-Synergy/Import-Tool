@@ -6,3 +6,9 @@ docs/*.html
 
 # environment files
 .env*
+
+# output directory
+dist/
+
+# package dependencies
+node-modules/

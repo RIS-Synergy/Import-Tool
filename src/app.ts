@@ -1,5 +1,8 @@
-import express, { Request, Response } from 'express'
+// import express from 'express'
+// import { Request, Response } from 'express'
 // import { customErrorHandler, unexpectedErrorHandler } from './middleware/errorHandler'
+import express, { Express, Request, Response } from "express";
+
 
 const app = express()
 
