@@ -1,6 +1,10 @@
 import express, { Router, Request, Response } from "express"
 // import { AuthenticationError } from '../utils/errors'
 // import { login } from './validators'
+
+import { Logger } from "tslog";
+const log = new Logger({ name: 'view:fwf:auth'});
+
 import { unexpectedErrorHandler } from '../middleware/errorHandler'
 
 import oauth2 from '../middleware/oauth2'
@@ -21,13 +25,10 @@ async function getAuthEndpoint (url: string) {
         grant_type: 'client_credentials',
         client_id: process.env.AUTH_CLIENT_ID,
         client_secret: process.env.AUTH_CLIENT_SECRET
-      }),
-      // onResponseError({ request, response, options }) {
-      //   console.log('onResponseError', request, response, options)
-      // }
+      })
     });
 
-    // console.log(response)
+    log.info('Received the Auth Token')
 
     /* Now that we have the token, we can GET the `url` */
     const info = await ofetch(url, {
@@ -36,6 +37,8 @@ async function getAuthEndpoint (url: string) {
         'Content-Type': 'application/json'
       }
     })
+
+    log.info(`Received url: ${url}`)
 
     return info
   } catch (error) {
