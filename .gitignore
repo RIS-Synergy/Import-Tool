@@ -6,6 +6,9 @@
 .cache
 dist
 
+# public
+public/fwf-test/
+
 # Node dependencies
 node_modules
 
