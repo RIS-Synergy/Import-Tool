@@ -1,18 +1,9 @@
-import express, { Router, Request, Response } from "express"
-// import { AuthenticationError } from '../utils/errors'
-// import { login } from './validators'
+import { ofetch } from "ofetch";
 
 import { Logger } from "tslog";
 const log = new Logger({ name: 'view:fwf:auth'});
 
-import { unexpectedErrorHandler } from '../middleware/errorHandler'
-
-import oauth2 from '../middleware/oauth2'
-import { ofetch } from "ofetch";
-
-const router: Router = express.Router()
-
-async function getAuthEndpoint (url: string) {
+export async function getAuthEndpoint (url: string) {
   try {
     /* First we need to get the OAuth2 token */
     const response = await ofetch(process.env.AUTH_SERVER, {
@@ -42,20 +33,6 @@ async function getAuthEndpoint (url: string) {
 
     return info
   } catch (error) {
-    console.error(error)
-    throw new Error('info error')
+    log.error('AuthEndpoint Error', error)
   }
 }
-
-router.get('/info', async (req: Request, res: Response) => {
-  const result = await getAuthEndpoint(process.env.RIS_INFO_URL)
-  res.json({
-    result
-  })
-})
-
-router.get('/foo', (req: Request, res: Response) => {
-  throw new Error('foo')
-})
-
-export default router

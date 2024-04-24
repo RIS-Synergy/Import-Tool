@@ -1,22 +1,21 @@
-// import express from 'express'
-// import { Request, Response } from 'express'
 import express, { Express, Request, Response } from "express";
 import { unexpectedErrorHandler } from './middleware/errorHandler'
+import { getAuthEndpoint } from './utils/oauth2'
 
 const app = express()
 
 // middlewares
 app.use(express.json())
 
-// hello world
+// root url
 app.get('/', (_req: Request, res: Response) => {
   res.json({
-    msg: 'hello world'
+    info: 'RIS Synergy API'
   })
 })
 
-// routes
-app.use('/fwf', require('./views/fwf').default)
+// fa: funding agency (Fördergeber)
+app.use('/fa', require('./views/funding-agency').default)
 
 // error handler last
 app.use(unexpectedErrorHandler)
