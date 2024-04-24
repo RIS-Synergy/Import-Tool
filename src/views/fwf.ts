@@ -8,38 +8,46 @@ import { ofetch } from "ofetch";
 
 const router: Router = express.Router()
 
-const AUTH_SERVER = process.env.AUTH_SERVER
-const CLIENT_ID = process.env.CLIENT_ID
-const CLIENT_SECRET = process.env.CLIENT_SECRET
-const RIS_INFO_URL = process.env.RIS_INFO_URL
+async function getAuthEndpoint (url: string) {
+  try {
+    /* First we need to get the OAuth2 token */
+    const response = await ofetch(process.env.AUTH_SERVER, {
+      method: 'POST',
+      headers: {
+        // @ts-ignore
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      body: new URLSearchParams({
+        grant_type: 'client_credentials',
+        client_id: process.env.AUTH_CLIENT_ID,
+        client_secret: process.env.AUTH_CLIENT_SECRET
+      }),
+      // onResponseError({ request, response, options }) {
+      //   console.log('onResponseError', request, response, options)
+      // }
+    });
 
-router.get('/info', /*oauth2(),*/ async (req: Request, res: Response) => {
-  const response = await ofetch(AUTH_SERVER, {
-    method: 'POST',
-    headers: {
-      // @ts-ignore
-      'content-type': 'application/x-www-form-urlencoded'
-    },
-    body: {
-      grant_type: 'client_credentials',
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET
-    },
-    // async onResponseError({ request, response, options }) {
-    //   // Log error
-    //   console.log(
-    //     "[fetch response error]",
-    //     request,
-    //     response
-    //   );
-    // }
-  });
+    // console.log(response)
 
-  console.log(response)
+    /* Now that we have the token, we can GET the `url` */
+    const info = await ofetch(url, {
+      headers: {
+        Authorization: `Bearer ${response.access_token}`,
+        'Content-Type': 'application/json'
+      }
+    })
 
+    return info
+  } catch (error) {
+    console.error(error)
+    throw new Error('info error')
+  }
+}
+
+router.get('/info', async (req: Request, res: Response) => {
+  const result = await getAuthEndpoint(process.env.RIS_INFO_URL)
   res.json({
-    response,
-    user: 'foo'
+    result
   })
 })
 
