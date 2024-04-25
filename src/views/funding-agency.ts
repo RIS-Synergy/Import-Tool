@@ -10,8 +10,18 @@ router.get('/info', async (req: Request, res: Response) => {
   res.json(result.endpoints)
 })
 
+router.get('/fundings/:id', async (req: Request, res: Response) => {
+  const result = await getAuthEndpoint(process.env.RIS_URL_FUNDINGS + req.params.id)
+  res.json(result)
+})
+
 router.get('/fundings', async (req: Request, res: Response) => {
   const result = await getAuthEndpoint(process.env.RIS_URL_FUNDINGS)
+  res.json(result)
+})
+
+router.get('/projects/:id', async (req: Request, res: Response) => {
+  const result = await getAuthEndpoint(process.env.RIS_URL_PROJECTS + req.params.id)
   res.json(result)
 })
 

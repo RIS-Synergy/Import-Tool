@@ -12,3 +12,6 @@ dist/
 
 # package dependencies
 node-modules/
+
+# samples data (not sure if this is ok to include this in repo)
+tests/samples/fwf/*
