@@ -2,14 +2,15 @@
   "name": "ris-api",
   "version": "1.0.0",
   "description": "RIS-Synergy API: Funder -> PURE interface",
-  "main": "index.js",
+  "main": "ndex.js",
   "scripts": {
     "dev": "nodemon src/server.ts",
+    "debug": "nodemon --exec node --inspect-brk -r ts-node/register src/server.ts",
     "test": "vitest"
   },
   "keywords": [],
   "author": "Kirill Stytsenko <kirill@styts.com>",
-  "license": "ISC",
+  "license": "Unlicensed",
   "private": true,
   "devDependencies": {
     "@types/express": "^4.17.21",

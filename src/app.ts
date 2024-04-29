@@ -17,6 +17,9 @@ app.get('/', (_req: Request, res: Response) => {
 // fa: funding agency (Fördergeber)
 app.use('/fa', require('./views/funding-agency').default)
 
+// ri: research institution (Forschungsstätte)
+app.use('/ri', require('./views/research-institution').default)
+
 // error handler last
 app.use(unexpectedErrorHandler)
 

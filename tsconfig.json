@@ -15,6 +15,7 @@
         // "typeRoots": [
         //   "./types"
         // ]
+        "rootDir": "src"
     },
     "include": [
         "src/**/*"

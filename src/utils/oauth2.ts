@@ -1,7 +1,7 @@
 import { ofetch } from "ofetch";
 
 import { Logger } from "tslog";
-const log = new Logger({ name: 'view:fwf:auth'});
+const log = new Logger({ name: 'utils:oauth2'});
 
 export async function getAuthEndpoint (url: string) {
   try {
