@@ -10,10 +10,6 @@ const item = props.item;
 </script>
 
 <template>
-  <v-card>
-    <v-card-title>
-      {{item.id}}
-    </v-card-title>
     <v-container class="">
       <v-row no-gutters>
         <v-col class="title" sm="2">
@@ -138,7 +134,6 @@ const item = props.item;
         {{item}}
       </pre>
     </v-container>
-  </v-card>
 </template>
 
 <style>
