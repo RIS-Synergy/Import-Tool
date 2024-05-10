@@ -2,7 +2,7 @@
   <v-data-table
     :items="getItems(items)"
     density="compact"
-    items-per-page="10"
+    items-per-page="25"
   >
     <template v-slot:item.action="x">
       <v-dialog>

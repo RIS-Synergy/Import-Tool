@@ -17,6 +17,9 @@
           <v-btn :to="`/info`">
             info
           </v-btn>
+          <v-btn :to="`/pure`">
+            Pure
+          </v-btn>
         </v-app-bar-title>
       </v-app-bar>
 

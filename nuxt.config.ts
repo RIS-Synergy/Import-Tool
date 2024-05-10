@@ -15,6 +15,11 @@ export default defineNuxtConfig({
       })
     }
   ],
+  nitro: {
+    routeRules: {
+      '/api/**': { proxy: 'http://localhost:3001/**' },
+    }
+  },
   vite: {
     vue: {
       template: {
