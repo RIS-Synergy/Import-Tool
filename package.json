@@ -5,8 +5,9 @@
   "main": "ndex.js",
   "scripts": {
     "dev": "nodemon src/server.ts",
-    "debug": "nodemon --exec node --inspect-brk -r ts-node/register src/server.ts",
-    "test": "vitest"
+    "debug": "nodemon --exec node --inspect-brk -r ts-node/register scripts/create-project.ts",
+    "test": "vitest",
+    "create-project": "ts-node ./scripts/create-project.ts"
   },
   "keywords": [],
   "author": "Kirill Stytsenko <kirill@styts.com>",
