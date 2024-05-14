@@ -14,9 +14,7 @@
         <template v-slot:default="{ isActive }">
           <v-card :title="x.item.id">
             <v-card-text>
-              <pre>
-                {{ x.item.action }}
-              </pre>
+              <PureProjectEdit :item="x.item.action" />
             </v-card-text>
 
             <v-card-actions>

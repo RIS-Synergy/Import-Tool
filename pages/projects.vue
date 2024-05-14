@@ -22,6 +22,11 @@
             </v-card-text>
 
             <v-card-actions>
+              <v-btn
+                color="primary"
+                text="Upload to PURE"
+                @click="uploadToPure(x.item.action)"
+              ></v-btn>
               <v-spacer></v-spacer>
               <v-btn
                 text="Close"
@@ -40,6 +45,15 @@ const { data: items } = await useFetch('http://localhost:3000/fwf-test/projects.
 
 function getLang (item, lang) {
   return item.find((x) => x.lang === lang).text
+}
+
+async function uploadToPure (item) {
+  console.log('uploading to pure', item)
+  const x = await $fetch("/api/ri/upload", {
+    method: 'POST',
+    body: JSON.stringify(item)
+  });
+  console.log(x)
 }
 
 function getItems (itms) {
