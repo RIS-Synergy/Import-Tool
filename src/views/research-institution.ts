@@ -17,10 +17,17 @@ router.get('/search', async (req: Request, res: Response) => {
 
 router.post('/upload', async (req: Request, res: Response) => {
   const pure = projectETL(req.body)
-  console.log(pure)
-
   const result = await callRIApi('/projects', 'PUT', pure)
-  console.log(result)
+  res.json(result)
+})
+
+router.get('/organizations/:id', async (req: Request, res: Response) => {
+  const result = await callRIApi(`/organizations/${req.params.id}`, 'GET')
+  res.json(result)
+})
+
+router.get('/persons/:id', async (req: Request, res: Response) => {
+  const result = await callRIApi(`/persons/${req.params.id}`, 'GET')
   res.json(result)
 })
 
