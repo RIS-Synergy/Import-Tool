@@ -12,6 +12,13 @@ const item = props.item;
 <template>
   <v-container class="">
     <v-row no-gutters>
+      <v-col class="title" sm="2"> Title </v-col>
+      <v-col sm="10">
+        {{ item.title.en_GB }}
+      </v-col>
+    </v-row>
+
+    <v-row no-gutters>
       <v-col class="title" sm="2"> Pure ID </v-col>
       <v-col sm="10">
         {{ item.pureId }}
@@ -48,7 +55,7 @@ const item = props.item;
       </v-col>
     </v-row>
 
-    <v-row no-gutters>
+    <v-row v-if="false" no-gutters>
       <v-col class="title" sm="2"> Version </v-col>
       <v-col sm="10">
         {{ item.version }}
@@ -58,55 +65,51 @@ const item = props.item;
     <v-row no-gutters>
       <v-col class="title" sm="2"> Participants </v-col>
       <v-col sm="10">
-        <pre>
-          {{ item.participants }}
-        </pre>
+        <div v-for="p in item.participants">
+          <PureParticipant :item="p" />
+        </div>
       </v-col>
     </v-row>
 
     <v-row no-gutters>
       <v-col class="title" sm="2"> Period </v-col>
       <v-col sm="10">
+        <div class="text">
+          Period:
+        </div>
         {{ item.period.startDate }} - {{ item.period.endDate }} <br />
+        <div class="text">
+          Effective Period:
+        </div>
         {{ item.effectivePeriod.startDate }} - {{ item.effectivePeriod.endDate }}
       </v-col>
     </v-row>
 
     <v-row no-gutters>
-      <v-col class="title" sm="2"> Identifiors </v-col>
+      <v-col class="title" sm="2"> Identifiers </v-col>
       <v-col sm="10">
-        <pre>
-          {{ item.identifiers }}
-        </pre>
+        <div v-for="identifier in item.identifiers">
+          <PureIdentifier :item="identifier" />
+        </div>
       </v-col>
     </v-row>
 
     <v-row no-gutters>
       <v-col class="title" sm="2"> Organizations </v-col>
       <v-col sm="10">
-        <pre>
-          {{ item.organizations }}
-        </pre>
+        <div v-for="org in item.organizations">
+          <PureOrganization :item="org" />
+        </div>
       </v-col>
     </v-row>
 
-    <v-row no-gutters>
+    <v-row v-if="false" no-gutters>
       <v-col class="title" sm="2"> Managing Organization </v-col>
       <v-col sm="10">
-        <pre>
-          {{ item.managingOrganization }}
-        </pre>
+        <PureOrganization :item="item.managingOrganization" />
       </v-col>
     </v-row>
 
-    <v-row no-gutters>
-      <v-col class="title" sm="2"> Title </v-col>
-      <v-col sm="10">
-        <pre>
-          {{ item.title }}
-        </pre>
-      </v-col>
-    </v-row>
   </v-container>
 </template>
 
@@ -115,10 +118,8 @@ const item = props.item;
   font-weight: bold;
 }
 
-pre.all {
-  background-color: #f5f5f5;
-  font-size: 12px;
-  padding: 10px;
-  border-radius: 5px;
+/* copy in a scss style global file */
+.text {
+  color: #999;
 }
 </style>
