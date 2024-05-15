@@ -61,6 +61,7 @@ function getItems (itms) {
     return {
       id: x.id,
       title: getLang(x.title, 'en'),
+      PI: x.team[0].person.electronicAddress,
       action: x
     }
   })
