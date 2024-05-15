@@ -11,12 +11,7 @@ const item = props.item;
 
 <template>
   <v-container class="">
-    <v-row no-gutters>
-      <v-col class="title" sm="2"> Title </v-col>
-      <v-col sm="10">
-        {{ item.title.en_GB }}
-      </v-col>
-    </v-row>
+    <PureEdit label="Title" :item="item.title" />
 
     <v-row no-gutters>
       <v-col class="title" sm="2"> Pure ID </v-col>
