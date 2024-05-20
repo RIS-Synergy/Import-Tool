@@ -7,11 +7,16 @@ const props = defineProps({
 });
 
 const item = props.item;
+
+function save (x, y) {
+  console.log(x)
+  item[y] = x;
+}
 </script>
 
 <template>
   <v-container class="">
-    <PureEdit label="Title" :item="item.title" />
+    <PureEdit label="Title" :item="item.title" @save="item.title = $event" />
 
     <v-row no-gutters>
       <v-col class="title" sm="2"> Pure ID </v-col>

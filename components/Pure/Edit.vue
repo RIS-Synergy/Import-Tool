@@ -25,9 +25,12 @@
 </template>
 
 <script setup>
+// const model = defineModel()
+const emit = defineEmits(['save'])
+
 const props = defineProps({
   item: {
-    type: Object,
+    type: Object || String || Number,
     required: true,
   },
   label: {
@@ -43,11 +46,14 @@ function useLang (item, lang = 'en_GB') {
 }
 
 function save () {
-  console.log('save icon')
   allowEdit.value = false;
   edit.value = false
+  const lang = 'en_GB';
+  var newValue = props.item;
+  newValue[lang] = text.value;
+  emit('save', newValue);
 }
-const text = useLang(item);
+const text = ref(useLang(item));
 
 const edit = ref(false);
 const allowEdit = ref(false);

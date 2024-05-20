@@ -19,6 +19,12 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
+              <v-btn
+                variant="tonal"
+                color="primary"
+                @click="save(x.item.action)">
+                Save
+              </v-btn>
               <v-btn text="Close" @click="isActive.value = false"></v-btn>
             </v-card-actions>
           </v-card>
@@ -33,6 +39,15 @@ const { data: items } = await useFetch("/api/ri/search");
 
 function getLang (item, lang) {
   return item.find((x) => x.lang === lang).text
+}
+
+async function save (item) {
+  console.log('save/edit to pure', item)
+  const x = await $fetch(`/api/ri/projects/${item.uuid}`, {
+    method: 'PUT',
+    body: JSON.stringify(item)
+  });
+  console.log(x)
 }
 
 function getItems (itms) {
