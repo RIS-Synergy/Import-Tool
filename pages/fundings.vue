@@ -4,6 +4,12 @@
     density="compact"
     items-per-page="100"
   >
+    <template v-slot:item.id="{ item }">
+      <NuxtLink :to="`/funding/${item.id}`">
+        {{ item.id }}
+      </NuxtLink>
+    </template>
+
     <template v-slot:item.action="x">
       <v-dialog>
         <template v-slot:activator="{ props: activatorProps }">
@@ -48,8 +54,9 @@ const { data: items } = await useFetch('http://localhost:3000/fwf-test/fundings.
 function getItems (itms) {
   return itms.map((x) => {
     return {
-      id: x.id,
+      action: x,
       type: x.type,
+      id: x.id,
       legalType: x.legalType,
       fs: x.fundingScheme,
       name: x.name[0].text,
@@ -61,7 +68,6 @@ function getItems (itms) {
       running: x.running,
       amount: x.amount && x.amount.amount,
       partOf: x.partOf && x.partOf.id,
-      action: x
     }
   })
 }
