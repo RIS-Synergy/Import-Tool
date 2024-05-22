@@ -1,5 +1,4 @@
 <template>
-  <h1> Call </h1>
   <v-container>
     <FundingEdit label="ID" v-model="model.id" />
     <FundingEdit label="Type" v-model="model.type" />
@@ -7,17 +6,17 @@
     <FundingEdit label="Identifiers" v-model="model.identifiers" />
     <FundingEdit label="Acronym" v-model="model.acronym" />
     <FundingEdit label="Description" v-model="model.description" component="LangTrans" />
-    <FundingEdit label="Funder" v-model="model.funder" />
+    <FundingEdit label="Funder" v-model="model.funder" component="Default" />
     <FundingEdit label="Characteristics" v-model="model.characteristics" />
     <FundingEdit label="Target Groups" v-model="model.targetGroups" />
-    <FundingEdit label="Subjects" v-model="model.subjects" />
+    <FundingEdit label="Subjects" v-model="model.subjects" component="Default" />
     <FundingEdit label="Career Stages" v-model="model.careerStages" />
-    <FundingEdit label="Funding Scheme" v-model="model.fundingScheme" />
+    <FundingEdit label="Funding Scheme" v-model="model.fundingScheme" component="" />
     <FundingEdit label="Legal Type" v-model="model.legalType" />
     <FundingEdit label="Website" v-model="model.website" />
     <FundingEdit label="Running" v-model="model.running" /> <!-- bool -->
     <FundingEdit label="Call Volume Projects" v-model="model.callVolumeProjects" />
-    <FundingEdit label="Call Stages" v-model="model.callStages" />
+    <FundingEdit label="Call Stages" v-model="model.callStages" component="Default" />
     <FundingEdit label="Contacts" v-model="model.contacts" />
     <FundingEdit label="Amount" v-model="model.amount" />
     <FundingEdit label="Decision Processes" v-model="model.decisionProcesses" />
@@ -41,10 +40,11 @@
     <FundingEdit label="Max Project Duration" v-model="model.maxProjectDuration" /> <!-- date -->
     <FundingEdit label="Reporting Periods" v-model="model.reportingPeriods" component="LangTrans" />
     <FundingEdit label="Application Languages" v-model="model.applicationLanguages" />
-    <FundingEdit label="Part Of" v-model="model.partOf" />
-    <FundingEdit label="Thematic Orientations" v-model="model.thematicOrientations" component="LangTrans" />
+    <FundingEdit label="Part Of" v-model="model.partOf" component="Default" />
+    <FundingEdit label="Thematic Orientations" v-model="model.thematicOrientations" component="Default" />
   </v-container>
 
+  <hr />
   <pre>
     {{ model }}
   </pre>

@@ -58,6 +58,7 @@ function getItems (itms) {
       type: x.type,
       id: x.id,
       legalType: x.legalType,
+      partOf: x.partOf && x.partOf.id,
       fs: x.fundingScheme,
       name: x.name[0].text,
       duration: x.minProjectDuration && x.maxProjectDuration && `${x.minProjectDuration.years} - ${x.maxProjectDuration.years}`,
@@ -67,7 +68,6 @@ function getItems (itms) {
       acronym: x.acronym,
       running: x.running,
       amount: x.amount && x.amount.amount,
-      partOf: x.partOf && x.partOf.id,
     }
   })
 }
