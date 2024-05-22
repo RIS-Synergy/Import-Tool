@@ -18,7 +18,8 @@
         <template v-slot:default="{ isActive }">
           <v-card :title="x.item.id">
             <v-card-text>
-              <ProjectView :item="x.item.action" />
+              <!-- <ProjectView :item="x.item.action" /> -->
+              <ProjectView v-model="x.item.action" />
             </v-card-text>
 
             <v-card-actions>
