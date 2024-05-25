@@ -4,14 +4,16 @@
     <ProjectEdit
       label="Identifiers"
       v-model="model.identifiers"
-      component="Default"
+      component="TypeValues"
     />
     <ProjectEdit label="Type" v-model="model.type" />
     <ProjectEdit label="Acronym" v-model="model.acronym" />
     <ProjectEdit label="Title" v-model="model.title" component="LangTrans" />
     <ProjectEdit label="Start Date" v-model="model.startDate" />
     <ProjectEdit label="End Date" v-model="model.endDate" />
-    <ProjectEdit label="Subjects" v-model="model.subjects" />
+    <ProjectEdit label="Subjects" v-model="model.subjects"
+                 component="Fractions"
+    />
     <ProjectEdit
       label="Keyword"
       v-model="model.keyword"
@@ -24,11 +26,11 @@
     />
     <ProjectEdit label="Status" v-model="model.status" />
     <ProjectEdit label="URL" v-model="model.url" />
-    <ProjectEdit label="Team" v-model="model.team" component="Default" />
-    <ProjectEdit label="Funded" v-model="model.funded" component="Default" />
+    <ProjectEdit label="Team" v-model="model.team" component="Teams" />
+    <ProjectEdit label="Funded" v-model="model.funded" component="Fundeds" />
   </v-container>
   <hr />
-  <pre>
+  <pre v-if="false">
     {{ model }}
   </pre>
 </template>
@@ -38,10 +40,6 @@ const model = defineModel();
 </script>
 
 <style>
-/* .title {
-   font-weight: bold;
-   }
- */
 pre.all {
   background-color: #f5f5f5;
   font-size: 12px;
