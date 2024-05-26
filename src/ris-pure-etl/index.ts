@@ -83,11 +83,13 @@ function getIdentifiers (identifiers: RISIdentifer[]) {
   })
 }
 
-// Extract, transform, load
-export function projectETL (input: RIS): PURE {
-  var output = {} as PURE;
+type Settings = {
+  personUUID: string;
+}
 
-  // console.log(input)
+// Extract, transform, load
+export function projectETL (input: RIS, settings: Settings): PURE {
+  var output = {} as PURE;
 
   // constant for Projects
   output.typeDiscriminator = "AwardManagementProject";
@@ -113,7 +115,7 @@ export function projectETL (input: RIS): PURE {
       "typeDiscriminator": "InternalParticipantAssociation",
       "person": {
         "systemName": "Person",
-        "uuid": "1b8458ea-3853-4279-b45b-d055945269f3"
+        "uuid": settings.personUUID
       },
       "role": {
         "uri": "/dk/atira/pure/upmproject/roles/upmproject/pi",

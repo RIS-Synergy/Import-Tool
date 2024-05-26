@@ -5,6 +5,10 @@ import { projectETL } from '../src/ris-pure-etl/index'
 
 const p = projects.find(p => p.id === 'P34707')
 
+const settings = {
+  personUUID: '1b8458ea-3853-4279-b45b-d055945269f3'
+}
+
 describe('sample fwf project', () => {
   it('has an id and title', () => {
     expect(p.id).toBe('P34707')
@@ -12,7 +16,7 @@ describe('sample fwf project', () => {
   })
 
   it('apply the ETL project from FWF to PURE', () => {
-    const pure = projectETL(p)
+    const pure = projectETL(p, settings)
     expect(pure.typeDiscriminator).toEqual('AwardManagementProject')
 
     expect(pure).toEqual({
@@ -38,7 +42,7 @@ describe('sample fwf project', () => {
           "typeDiscriminator": "InternalParticipantAssociation",
           "person": {
             "systemName": "Person",
-            "uuid": "1b8458ea-3853-4279-b45b-d055945269f3"
+            "uuid": settings.personUUID
           },
           "role": {
             "uri": "/dk/atira/pure/upmproject/roles/upmproject/pi",

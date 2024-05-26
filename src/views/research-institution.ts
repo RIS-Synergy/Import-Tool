@@ -8,7 +8,7 @@ const router: Router = express.Router()
 
 router.get('/search', async (req: Request, res: Response) => {
   const result = await callRIApi('/projects/search', 'POST', {
-    size: 10,
+    size: 100,
     offset: 0,
     searchString: "10.55776/", // FWF id
   })
@@ -16,7 +16,9 @@ router.get('/search', async (req: Request, res: Response) => {
 })
 
 router.post('/upload', async (req: Request, res: Response) => {
-  const pure = projectETL(req.body)
+  console.log('settings', req.body.settings)
+  debugger
+  const pure = projectETL(req.body.ris, req.body.settings)
   const result = await callRIApi('/projects', 'PUT', pure)
   res.json(result)
 })
@@ -28,6 +30,32 @@ router.get('/organizations/:id', async (req: Request, res: Response) => {
 
 router.get('/persons/:id', async (req: Request, res: Response) => {
   const result = await callRIApi(`/persons/${req.params.id}`, 'GET')
+  res.json(result)
+})
+
+router.post('/persons/search', async (req: Request, res: Response) => {
+  const result = await callRIApi('/persons/search', 'POST', {
+    size: 10,
+    offset: 0,
+    // systemName: "Person",
+    searchString: req.body.searchString,
+  })
+  res.json({
+    items: result.items,
+    persons: result.items.map((item: any) => {
+      return {
+        pureId: item.pureId,
+        uuid: item.uuid,
+        name: item.name.firstName + ' ' + item.name.lastName,
+        user: item.user && item.user.uuid,
+        details: item,
+      }
+    })
+  })
+})
+
+router.put('/projects/:uuid', async (req: Request, res: Response) => {
+  const result = await callRIApi(`/projects/${req.params.uuid}`, 'PUT', req.body)
   res.json(result)
 })
 
