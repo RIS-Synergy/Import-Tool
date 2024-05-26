@@ -56,6 +56,10 @@
                 text="View"
                 variant="flat"
               ></v-btn>
+              <span class="similarity mr-2">
+                {{ (useSimilarity(searchString, p.name) * 100).toFixed(0) + '%' }}
+              </span>
+
               <v-icon v-if="selected === p"
                       @click="selected = null"
                       icon="mdi-checkbox-marked-circle" />
@@ -73,6 +77,7 @@
 </template>
 
 <script setup lang="ts">
+const xxx = useSimilarity('abc', 'abv')
 // use the store
 const { setPerson } = useProjectStore();
 
@@ -111,4 +116,9 @@ onMounted(() => {
 })
 </script>
 
-<style></style>
+<style scoped>
+.similarity {
+  font-size: 0.9em;
+  color: #676;
+}
+</style>
