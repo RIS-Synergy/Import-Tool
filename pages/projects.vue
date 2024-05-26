@@ -13,6 +13,11 @@
         ></v-btn>
       </NuxtLink>
     </template>
+
+    <template v-slot:item.PI="x">
+      <span v-html="email(x.item.PI)" />
+    </template>
+
   </v-data-table>
 </template>
 
@@ -45,6 +50,14 @@ function getItems (itms) {
 
 function linkToItem (id) {
   // to do: link to item: /projects/:id
+}
+
+function email (str) {
+  // highlisht with bold, given the domain matches "univie.ac.at"
+  if(!str) return str
+
+  const [name, domain] = str.split('@')
+  return domain === 'univie.ac.at' ? `<b>${name}</b>@${domain}` : str
 }
 
 const page = ref(1)
