@@ -73,6 +73,9 @@
 </template>
 
 <script setup lang="ts">
+// use the store
+const { setPerson } = useProjectStore();
+
 const model = defineModel();
 
 const searchString = ref(model.value.firstName + " " + model.value.familyName);
@@ -94,6 +97,14 @@ async function searchApi(str: string) {
 }
 
 const selected = ref(null);
+
+watch(selected, (val) => {
+  if (val) {
+    setPerson(val.uuid);
+  } else {
+    setPerson(null);
+  }
+});
 
 onMounted(() => {
   searchApi(searchString);

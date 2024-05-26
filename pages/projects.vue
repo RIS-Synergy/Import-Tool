@@ -5,38 +5,13 @@
     items-per-page="25"
   >
     <template v-slot:item.action="x">
-      <v-dialog>
-        <template v-slot:activator="{ props: activatorProps }">
-          <v-btn
-            size="small"
-            v-bind="activatorProps"
-            text="View"
-            variant="flat"
-          ></v-btn>
-        </template>
-
-        <template v-slot:default="{ isActive }">
-          <v-card :title="x.item.id">
-            <v-card-text>
-              <!-- <ProjectView :item="x.item.action" /> -->
-              <ProjectView v-model="x.item.action" />
-            </v-card-text>
-
-            <v-card-actions>
-              <v-btn
-                color="primary"
-                text="Upload to PURE"
-                @click="uploadToPure(x.item.action)"
-              ></v-btn>
-              <v-spacer></v-spacer>
-              <v-btn
-                text="Close"
-                @click="isActive.value = false"
-              ></v-btn>
-            </v-card-actions>
-          </v-card>
-        </template>
-      </v-dialog>
+      <NuxtLink :to="`/project/${x.item.id}`">
+        <v-btn
+          size="small"
+          text="View"
+          variant="flat"
+        ></v-btn>
+      </NuxtLink>
     </template>
   </v-data-table>
 </template>
@@ -66,6 +41,10 @@ function getItems (itms) {
       action: x
     }
   })
+}
+
+function linkToItem (id) {
+  // to do: link to item: /projects/:id
 }
 
 const page = ref(1)

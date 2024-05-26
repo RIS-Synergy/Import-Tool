@@ -72,4 +72,13 @@ function getItems (itms) {
   })
 }
 
+async function uploadToPure (item) {
+  console.log('uploading to pure', item)
+  // const x = await $fetch("/api/ri/upload", {
+  //   method: 'POST',
+  //   body: JSON.stringify(item)
+  // });
+  // console.log(x)
+}
+
 </script>
