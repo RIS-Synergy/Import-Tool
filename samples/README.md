@@ -1,2 +1,1 @@
-These samples are needed at the moment, neacsue the FWF api for /projects is not stable - not it's mot working,
-so we have to use these samples, othersie the ris-ui will not be able to work.
+These samples are needed now because the FWF API for /projects is not working. Otherwise, the RIS-UI will not work.

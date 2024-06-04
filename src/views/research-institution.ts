@@ -54,11 +54,18 @@ router.post('/persons/search', async (req: Request, res: Response) => {
   })
 })
 
+router.get('/projects/:uuid', async (req: Request, res: Response) => {
+  const result = await callRIApi(`/projects/${req.params.uuid}`, 'GET')
+  res.json(result)
+})
+
+// Update project
 router.put('/projects/:uuid', async (req: Request, res: Response) => {
   const result = await callRIApi(`/projects/${req.params.uuid}`, 'PUT', req.body)
   res.json(result)
 })
 
+// Sample error route
 router.get('/foo', (req: Request, res: Response) => {
   throw new Error('foo')
 })

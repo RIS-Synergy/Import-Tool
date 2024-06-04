@@ -47,6 +47,8 @@ describe('sample fwf project', () => {
           "role": {
             "uri": "/dk/atira/pure/upmproject/roles/upmproject/pi",
             "term": {
+              // "en_GB": "Principal Investigator",
+              // "de_DE": "Principal Investigator"
               "en_GB": "Project Lead",
               "de_DE": "Projektleiter*in"
             }
