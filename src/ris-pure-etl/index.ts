@@ -1,4 +1,5 @@
 import {classifications} from "./classifications";
+import * as yaml from 'yaml';
 
 type RIS = {
   id: string;
@@ -87,44 +88,108 @@ type Settings = {
   personUUID: string;
 }
 
-// Extract, transform, load
-export function projectETL (input: RIS, settings: Settings): PURE {
-  var output = {} as PURE;
 
-  // constant for Projects
-  output.typeDiscriminator = "AwardManagementProject";
-  output.systemName = "Project";
+const functions = {
+  getByLang: function (input: any, pass: string, lang: string): string {
+    // if (!input.title) return '`input.title` is not found';
+    const title = input[pass].find(t => t.lang === lang);
+    return title ? title.text : 'Title not found';
+  },
 
-  output.visibility = {
-    key: "FREE",
-    description: {
-      en_GB: "Public - No restriction",
-      de_DE: "Öffentlich - Keine Einschränkungen"
+  hello: function (input: any, world: string, and: string): string {
+    return `Hello ${world} and ${and}`;
+  }
+}
+
+
+export function replaceTags(obj: any, input: any, settings: any): any {
+  if (typeof obj === 'object' && obj !== null) {
+    for (const key in obj) {
+      if (typeof obj[key] === 'string') {
+        // Handle input placeholders
+        if (obj[key].startsWith('${input.')) {
+          const inputPath = obj[key].match(/\${input\.(.+)}/)?.[1];
+          if (inputPath) {
+            obj[key] = input[inputPath];
+          }
+        }
+        else if (obj[key].startsWith('${settings.')) {
+          const inputPath = obj[key].match(/\${settings\.(.+)}/)?.[1];
+          if (inputPath) {
+            obj[key] = settings[inputPath];
+          }
+        }
+        // Handle specific function calls
+        else if (obj[key].startsWith('!<fn>')) {
+          const match = obj[key].match(/!<fn>(.+)/);
+          if (match) {
+            // the name of the function
+            const [ fn ] = match[1].split(':').map(arg => arg.trim());
+            // the arguments of the function
+            const args = match[1].split(':').slice(1)
+            obj[key] = functions[fn](input, ...args);
+          }
+        }
+      } else {
+        obj[key] = replaceTags(obj[key], input, settings);
+      }
     }
   }
+  return obj;
+}
 
-  output.title = getLang(input.title)
 
-  output.period = {
-    startDate: input.startDate,
-    endDate: input.endDate
-  }
+export function projectETL2 (input: RIS, yamlContent: string, settings: Settings): PURE {
+  // Parse the YAML content
+  const parsedYaml = yaml.parse(yamlContent);
 
-  output.participants = [
-    {
-      "typeDiscriminator": "InternalParticipantAssociation",
-      "person": {
-        "systemName": "Person",
-        "uuid": settings.personUUID
-      },
-      "role": {
-        "uri": "/dk/atira/pure/upmproject/roles/upmproject/pi",
-        "term": {
-          "en_GB": "Project Lead",
-          "de_DE": "Projektleiter*in"
-        }
-      },
-      "organizations": [
+  // Process tags in the parsed YAML content
+  const processedYaml = replaceTags(parsedYaml, input, settings);
+
+  // console.log(processedYaml)
+
+  // Output the processed YAML content as JSON
+  return processedYaml.output
+}
+
+// Extract, transform, load
+export function projectETL (input: RIS, settings: Settings): PURE {
+    var output = {} as PURE;
+
+    // constant for Projects
+    output.typeDiscriminator = "AwardManagementProject";
+    output.systemName = "Project";
+
+    output.visibility = {
+      key: "FREE",
+      description: {
+        en_GB: "Public - No restriction",
+        de_DE: "Öffentlich - Keine Einschränkungen"
+      }
+    }
+
+    output.title = getLang(input.title)
+
+    output.period = {
+      startDate: input.startDate,
+      endDate: input.endDate
+    }
+
+    output.participants = [
+      {
+        "typeDiscriminator": "InternalParticipantAssociation",
+        "person": {
+          "systemName": "Person",
+          "uuid": settings.personUUID
+        },
+        "role": {
+          "uri": "/dk/atira/pure/upmproject/roles/upmproject/pi",
+          "term": {
+            "en_GB": "Project Lead",
+            "de_DE": "Projektleiter*in"
+          }
+        },
+        "organizations": [
         {
           "systemName": "Organization",
           "uuid": "b2a38757-9395-4089-a2ba-ef39502950c3"
