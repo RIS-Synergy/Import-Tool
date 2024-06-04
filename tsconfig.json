@@ -8,6 +8,8 @@
         //   "dom"
         // ],
         "esModuleInterop": true,
+      "resolveJsonModule": true,
+
         // "target": "es2020",
         // "module": "commonjs",
         // "moduleResolution": "node",
