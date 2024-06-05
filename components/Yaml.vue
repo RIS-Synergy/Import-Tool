@@ -1,6 +1,14 @@
 <template>
   <v-card>
-    <pre v-html="highlightedYaml"></pre>
+    <v-card-title>
+      <pre v-html="highlightedYaml"></pre>
+    </v-card-title>
+    <v-card-actions>
+      <v-spacer/>
+      <v-btn @click="emit('close')" >
+        Close
+      </v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -10,6 +18,8 @@ import { defineProps } from 'vue'
 import yaml from 'js-yaml'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
+
+const emit = defineEmits(['close'])
 
 const props = defineProps({
   json: {
@@ -29,7 +39,6 @@ const highlightedYaml = computed(() => {
 
 <style scoped>
 pre {
-  background-color: #f5f5f5;
   padding: 1em;
   border-radius: 8px;
   font-size: 1em;

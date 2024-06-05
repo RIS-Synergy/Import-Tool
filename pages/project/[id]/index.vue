@@ -2,7 +2,7 @@
   <div>
     <ProjectView v-if="data" v-model="data" />
     <v-card-actions class="my-3 mx-3">
-      <v-dialog>
+      <v-dialog max-width="1200">
         <template v-slot:activator="{ props: activatorProps }">
           <v-btn
             class="text-none"
@@ -17,7 +17,7 @@
         </template>
 
         <template v-slot:default="{ isActive }">
-          <Yaml :json="data" />
+          <Yaml :json="data" @close="isActive.value = false" />
         </template>
       </v-dialog>
 
