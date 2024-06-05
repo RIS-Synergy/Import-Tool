@@ -10,8 +10,8 @@ output:
     en_GB: "!<fn>getByLang:title:en"
     de_DE: "!<fn>getByLang:title:de"
   period:
-    startDate: "${input.startDate}"
-    endDate: "${input.endDate}"
+    startDate: ${input.startDate}
+    endDate: ${input.endDate}
   participants:
     - typeDiscriminator: "InternalParticipantAssociation"
       person:

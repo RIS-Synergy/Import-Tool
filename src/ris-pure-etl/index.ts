@@ -101,7 +101,6 @@ const functions = {
   }
 }
 
-
 export function replaceTags(obj: any, input: any, settings: any): any {
   if (typeof obj === 'object' && obj !== null) {
     for (const key in obj) {
@@ -138,15 +137,17 @@ export function replaceTags(obj: any, input: any, settings: any): any {
   return obj;
 }
 
+import { replacePlaceholders } from '../utils/yaml';
 
 export function projectETL2 (input: RIS, yamlContent: string, settings: Settings): PURE {
   // Parse the YAML content
-  const parsedYaml = yaml.parse(yamlContent);
+  var processedYaml = replacePlaceholders (yamlContent, {
+    input,
+    settings
+  });
 
   // Process tags in the parsed YAML content
-  const processedYaml = replaceTags(parsedYaml, input, settings);
-
-  // console.log(processedYaml)
+  processedYaml = replaceTags(processedYaml, input, settings);
 
   // Output the processed YAML content as JSON
   return processedYaml.output
