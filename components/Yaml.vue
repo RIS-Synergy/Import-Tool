@@ -1,46 +1,66 @@
 <template>
   <v-card>
     <v-card-title>
-      <pre v-html="highlightedYaml"></pre>
+      <v-tabs v-model="tab">
+        <v-tab :value="1">YAML</v-tab>
+        <v-tab :value="2">JSON</v-tab>
+      </v-tabs>
+      <v-tabs-window v-model="tab">
+        <v-tabs-window-item :value="1">
+          <pre v-html="highlightedYaml"></pre>
+        </v-tabs-window-item>
+        <v-tabs-window-item :value="2">
+          <pre v-html="highlightedJson"></pre>
+        </v-tabs-window-item>
+      </v-tabs-window>
     </v-card-title>
     <v-card-actions>
-      <v-spacer/>
-      <v-btn @click="emit('close')" >
-        Close
-      </v-btn>
+      <v-spacer />
+      <v-btn @click="emit('close')"> Close </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script setup>
-import { computed, watchEffect } from 'vue'
-import { defineProps } from 'vue'
-import yaml from 'js-yaml'
-import hljs from 'highlight.js'
-import 'highlight.js/styles/github.css'
+import { computed, watchEffect } from "vue";
+import yaml from "js-yaml";
+import hljs from "highlight.js";
+import "highlight.js/styles/github.css";
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(["close"]);
 
 const props = defineProps({
   json: {
     type: Object,
-    required: true
-  }
-})
+    required: true,
+  },
+});
+
+const tab = ref(1);
+
+const items = ["Appetizers", "Entrees", "Deserts", "Cocktails"];
 
 const formattedYaml = computed(() => {
-  return yaml.dump(props.json, { indent: 2 })
-})
+  return yaml.dump(props.json, { indent: 2 });
+});
+
+const formattedJson = computed(() => {
+  return props.json
+});
 
 const highlightedYaml = computed(() => {
-  return hljs.highlight(formattedYaml.value, { language: 'yaml' }).value
-})
+  return hljs.highlight(formattedYaml.value, { language: "yaml" }).value;
+});
+
+const highlightedJson = computed(() => {
+  return hljs.highlight(JSON.stringify(formattedJson.value, null, 2), { language: "json" }).value;
+});
 </script>
 
 <style scoped>
 pre {
   padding: 1em;
   border-radius: 8px;
-  font-size: 1em;
+  font-size: 0.8em;
 }
 </style>

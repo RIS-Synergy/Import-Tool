@@ -12,7 +12,7 @@
             v-bind="activatorProps"
             color="grey"
           >
-            json data
+            View Data
           </v-btn>
         </template>
 
