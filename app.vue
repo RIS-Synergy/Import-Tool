@@ -24,7 +24,9 @@
       </v-app-bar>
 
       <v-main>
-        <NuxtPage />
+        <ClientOnly>
+          <NuxtPage />
+        </ClientOnly>
       </v-main>
     </v-app>
   </NuxtLayout>
