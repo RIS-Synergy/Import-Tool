@@ -1,67 +1,7 @@
 import {classifications} from "./classifications";
 import * as yaml from 'yaml';
-
-type RIS = {
-  id: string;
-  startDate: string;
-  endDate: string;
-
-  title: LangText[];
-  identifiers: RISIdentifer[];
-}
-
-type PURE = {
-  typeDiscriminator: "AwardManagementProject"
-  systemName: "Project"
-
-  visibility: {
-    key: "FREE" | "CAMPUS" // or a few others
-    description: {
-      [key: string]: string
-    }
-  }
-
-  title: {
-    [key: string]: string
-  }
-
-  period: {
-    startDate: string;
-    endDate: string;
-  }
-
-  participants: any[]
-
-  type: {
-    uri: string;
-    term: {
-      [key: string]: string
-    }
-  }
-
-  managingOrganization: {
-    systemName: "Organization",
-    uuid: string
-  }
-
-  organizations: {
-    systemName: "Organization",
-    uuid: string
-  }[]
-
-  identifiers: any[]
-}
-
-type LangText = {
-  lang: string;
-  trans: "O";
-  text: string;
-}
-
-type RISIdentifer = {
-  type: 'CROSSREF_GRANTID' | 'PROJECT_NUMBER' | 'APPLICATION_NUMBER' | 'ORCID' | 'ROR' | 'RINGGOLD' | 'RIS_SYNERGY';
-  value: string;
-}
+import extraFunctions from '../functions';
+import {RIS, PURE, LangText, RISIdentifer, Settings} from "../types";
 
 function getLang (title: LangText[]): { [key: string]: string } {
   return {
@@ -84,13 +24,8 @@ function getIdentifiers (identifiers: RISIdentifer[]) {
   })
 }
 
-type Settings = {
-  personUUID: string;
-}
-
-
 const functions = {
-  getByLang: function (input: any, pass: string, lang: string): string {
+getByLang: function (input: any, pass: string, lang: string): string {
     // if (!input.title) return '`input.title` is not found';
     const title = input[pass].find(t => t.lang === lang);
     return title ? title.text : 'Title not found';
@@ -98,7 +33,9 @@ const functions = {
 
   hello: function (input: any, world: string, and: string): string {
     return `Hello ${world} and ${and}`;
-  }
+  },
+
+  ...extraFunctions
 }
 
 export function replaceTags(obj: any, input: any, settings: any): any {

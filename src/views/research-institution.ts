@@ -2,7 +2,7 @@ import express, { Router, Request, Response } from "express"
 
 import { unexpectedErrorHandler } from '../middleware/errorHandler'
 import { callRIApi } from '../utils/ri-api'
-import { projectETL } from '../ris-pure-etl/index'
+import { projectETL2 } from '../ris-pure-etl/index'
 
 const router: Router = express.Router()
 
@@ -18,7 +18,8 @@ router.get('/search', async (req: Request, res: Response) => {
 router.post('/upload', async (req: Request, res: Response) => {
   console.log('settings', req.body.settings)
   debugger
-  const pure = projectETL(req.body.ris, req.body.settings)
+  // XXX we have not yet used the version 2 of the ETL
+  const pure = projectETL2("", req.body.ris, req.body.settings)
   const result = await callRIApi('/projects', 'PUT', pure)
   res.json(result)
 })

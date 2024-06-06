@@ -2,25 +2,19 @@
     "compilerOptions": {
         "sourceMap": true,
         "outDir": "dist",
-        // "strict": true,
-        // "lib": [
-        //   "esnext",
-        //   "dom"
-        // ],
         "esModuleInterop": true,
-      "resolveJsonModule": true,
-
-        // "target": "es2020",
-        // "module": "commonjs",
-        // "moduleResolution": "node",
-        "types": ["node", "@types/express", "@types/node"],
-        // "typeRoots": [
-        //   "./types"
-        // ]
+        "resolveJsonModule": true,
+        "types": [
+            "node", "@types/express", "@types/node"
+        ],
+        "typeRoots": [
+            "src/types",
+            "node_modules/@types"
+        ],
         "rootDir": "src"
     },
     "include": [
-        "src/**/*"
+        "src/**/*.ts",
     ],
     "exclude": [
         "node_modules"
