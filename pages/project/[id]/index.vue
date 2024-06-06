@@ -27,6 +27,17 @@
         variant="flat"
         rounded
         width="12em"
+        color="primary"
+        :to="transformLink"
+      >
+        Transform
+      </v-btn>
+
+      <v-btn
+        class="text-none"
+        variant="flat"
+        rounded
+        width="12em"
         :disabled="!store.$state.personUUID"
         color="primary"
         @click="uploadToPure(data)"
@@ -40,9 +51,15 @@
 <script setup>
 const store = useProjectStore();
 const route = useRoute();
+const routes = useRouter();
+console.log("routes", routes);
+
 const id = route.params.id;
 const { data } = await useFetch(`/api/fa/projects/${id}`);
-// const { type } = data.value;
+
+const transformLink = computed(() => {
+  return { name: "project-id-transform", params: { id } };
+});
 
 async function uploadToPure(item) {
   const { personUUID } = store.$state;
