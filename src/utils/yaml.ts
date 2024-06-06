@@ -15,7 +15,7 @@ export function replacePlaceholders(yamlContent: string, data: any): any {
    * @param obj - The object to traverse
    * @returns - The object with placeholders replaced
    */
-  function traverseAndReplace(obj: any): any {
+  function traverseAndReplace(obj: Object): any {
     if (typeof obj === 'string') {
       // Regex to match placeholders like ${path.to.value}
       const regex = /\${(.*?)}/g;

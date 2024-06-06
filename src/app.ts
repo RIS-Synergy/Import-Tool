@@ -20,6 +20,9 @@ app.use('/fa', require('./views/funding-agency').default)
 // ri: research institution (Forschungsstätte)
 app.use('/ri', require('./views/research-institution').default)
 
+// transform: Transformations
+app.use('/transform', require('./views/transform').default)
+
 // error handler last
 app.use(unexpectedErrorHandler)
 

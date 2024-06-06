@@ -25,7 +25,7 @@ describe('YAML', () => {
   })
 
   it('transform ETL project from FWF to PURE', () => {
-    const pure = projectETL2(p, yamlContent, settings)
+    const pure = projectETL2(yamlContent, p, settings)
 
     expect(pure.typeDiscriminator).toEqual('AwardManagementProject')
 

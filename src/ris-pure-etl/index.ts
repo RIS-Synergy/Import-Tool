@@ -139,7 +139,7 @@ export function replaceTags(obj: any, input: any, settings: any): any {
 
 import { replacePlaceholders } from '../utils/yaml';
 
-export function projectETL2 (input: RIS, yamlContent: string, settings: Settings): PURE {
+export function projectETL2 (yamlContent: string, input: RIS, settings: Settings): PURE {
   // Parse the YAML content
   var processedYaml = replacePlaceholders (yamlContent, {
     input,
