@@ -13,10 +13,11 @@ files.forEach(file => {
   // ignore index.ts
   if (file.includes('index.ts')) return;
 
-  // ignore flycheck_ files (sometimes they happen when developing)
-  if (file.startsWith('flycheck_')) return;
+  var name = path.basename(file, '.ts');
 
-  const name = path.basename(file, '.ts');
+  // ignore flycheck_ files (sometimes they happen when developing)
+  if(name.startsWith('flycheck_')) name.replace('flycheck_', '');
+
   functions[name] = import(file).then(m => m.default);
 });
 

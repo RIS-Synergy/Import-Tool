@@ -2,7 +2,6 @@
   "name": "ris-api",
   "version": "1.0.0",
   "description": "RIS-Synergy API: Funder -> PURE interface",
-  "main": "ndex.js",
   "scripts": {
     "dev": "nodemon src/server.ts",
     "debug": "nodemon --exec node --inspect-brk -r ts-node/register scripts/create-project.ts",

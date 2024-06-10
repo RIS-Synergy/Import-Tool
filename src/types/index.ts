@@ -1,14 +1,30 @@
-export interface Settings {
-  personUUID: string;
+export type RISPerson {
+  type: 'PRINCIPAL_INVESTIGATOR'
+  person: {
+    electronicAddress: string
+    personName: {
+      familyName: string
+      firstName: string
+    }
+    identifier: {
+      type: 'ORCID'
+      value: string
+    }
+  }
 }
 
-export interface RIS = {
+export type RISImport = {
   id: string;
   startDate: string;
   endDate: string;
 
   title: LangText[];
   identifiers: RISIdentifer[];
+  team: RISPerson[];
+
+  function foo () {
+    return 'bar'
+  }
 }
 
 export type PURE = {
@@ -60,6 +76,7 @@ export type RISIdentifer = {
 
 export type Settings = {
   personUUID: string;
+  defaultPersonUUID: string;
 }
 
 export type LangText = {

@@ -1,7 +1,7 @@
 import {classifications} from "./classifications";
 import * as yaml from 'yaml';
 import extraFunctions from '../functions';
-import {RIS, PURE, LangText, RISIdentifer, Settings} from "../types";
+import {RISImport, PURE, LangText, RISIdentifer, Settings} from "../types";
 
 function getLang (title: LangText[]): { [key: string]: string } {
   return {
@@ -10,22 +10,8 @@ function getLang (title: LangText[]): { [key: string]: string } {
   }
 }
 
-function getIdentifiers (identifiers: RISIdentifer[]) {
-  return identifiers.map(i => {
-    const { term, uri } = classifications.find(c => c.id === i.type)
-    return {
-      typeDiscriminator: "ClassifiedId",
-      id: i.value,
-      type: {
-        uri,
-        term
-      }
-    }
-  })
-}
-
 const functions = {
-getByLang: function (input: any, pass: string, lang: string): string {
+  getByLang: function (input: any, pass: string, lang: string): string {
     // if (!input.title) return '`input.title` is not found';
     const title = input[pass].find(t => t.lang === lang);
     return title ? title.text : 'Title not found';
@@ -63,7 +49,17 @@ export function replaceTags(obj: any, input: any, settings: any): any {
             const [ fn ] = match[1].split(':').map(arg => arg.trim());
             // the arguments of the function
             const args = match[1].split(':').slice(1)
-            obj[key] = functions[fn](input, ...args);
+            // console.log('fn', fn)
+            // console.log('functions', functions)
+            console.log('functions[fn]', functions[fn])
+
+            const fun = functions[fn]
+            // if it's an async function
+            // if (fun.isFunction) {
+              // obj[key] = await fun(input, ...args);
+            // } else {
+              obj[key] = fun(input, ...args);
+            // }
           }
         }
       } else {
@@ -76,7 +72,7 @@ export function replaceTags(obj: any, input: any, settings: any): any {
 
 import { replacePlaceholders } from '../utils/yaml';
 
-export function projectETL2 (yamlContent: string, input: RIS, settings: Settings): PURE {
+export function projectETL2 (yamlContent: string, input: RISImport, settings: Settings): PURE {
   // Parse the YAML content
   var processedYaml = replacePlaceholders (yamlContent, {
     input,

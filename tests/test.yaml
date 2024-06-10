@@ -16,7 +16,8 @@ output:
     - typeDiscriminator: "InternalParticipantAssociation"
       person:
         systemName: "Person"
-        uuid: "${settings.personUUID}"
+        # uuid: "${settings.personUUID}"
+        uuid: "!<fn>getPersonUUID"
       role:
         uri: "/dk/atira/pure/upmproject/roles/upmproject/pi"
         term:
