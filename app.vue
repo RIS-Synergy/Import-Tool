@@ -1,5 +1,4 @@
 <template>
-  <NuxtLayout>
     <v-app>
       <v-navigation-drawer v-if="false"  v-model="drawer">
       </v-navigation-drawer>
@@ -25,11 +24,12 @@
 
       <v-main>
         <ClientOnly>
-          <NuxtPage />
+          <NuxtLayout>
+            <NuxtPage />
+          </NuxtLayout>
         </ClientOnly>
       </v-main>
     </v-app>
-  </NuxtLayout>
 </template>
 
 <script setup>

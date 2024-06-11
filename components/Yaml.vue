@@ -36,7 +36,7 @@ const props = defineProps({
   },
 });
 
-const tab = ref(1);
+const tab = ref(2);
 
 const items = ["Appetizers", "Entrees", "Deserts", "Cocktails"];
 
