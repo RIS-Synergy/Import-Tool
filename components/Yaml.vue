@@ -14,7 +14,8 @@
         </v-tabs-window-item>
       </v-tabs-window>
     </v-card-title>
-    <v-card-actions>
+    <v-card-actions v-if="false">
+      <!-- i dont know where 'close' is needed -->
       <v-spacer />
       <v-btn @click="emit('close')"> Close </v-btn>
     </v-card-actions>
@@ -34,11 +35,13 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  tab: {
+    type: Number,
+    default: 2,
+  }
 });
 
-const tab = ref(2);
-
-const items = ["Appetizers", "Entrees", "Deserts", "Cocktails"];
+const tab = ref(props.tab);
 
 const formattedYaml = computed(() => {
   return yaml.dump(props.json, { indent: 2 });

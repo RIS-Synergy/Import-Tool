@@ -69,6 +69,7 @@ async function uploadToPure(item) {
   const x = await $fetch("/api/ri/upload", {
     method: "POST",
     body: JSON.stringify({
+      input: data.value,
       ris: item,
       settings: {
         personUUID,

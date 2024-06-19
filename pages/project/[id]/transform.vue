@@ -1,9 +1,9 @@
 <template>
   <v-card>
-    <v-card-title>
+    <v-card-title v-if="false">
       {{ data.id }}
     </v-card-title>
-    <div class="mx-5 my-2" v-for="title in titles">
+    <div v-if="false" class="mx-5 my-2" v-for="title in titles">
       {{ title }}
     </div>
     <v-row dense>
@@ -18,10 +18,27 @@
       </v-col>
       <v-col>
         <v-btn class="ma-4" text="Transform" @click="loadTransformation" />
+
+        <v-dialog max-width="1200">
+          <template v-slot:activator="{ props: activatorProps }">
+            <v-btn v-bind="activatorProps">
+              View Input
+            </v-btn>
+          </template>
+
+          <template v-slot:default="{ isActive }">
+            <Yaml :json="data" @close="isActive.value = false" />
+          </template>
+        </v-dialog>
+
+        <SaveOrEditButton class="ml-4" />
       </v-col>
     </v-row>
     <v-card-text v-if="result">
-      <Yaml :json="result" />
+      <TransformDiff
+        :template="result.yamlTemplate"
+        :result="result.transformationResult"
+      />
     </v-card-text>
   </v-card>
 </template>
@@ -32,7 +49,7 @@ const route = useRoute();
 const id = route.params.id;
 const { data } = await useFetch(`/api/fa/projects/${id}`);
 
-const transformations = ["Default", "Foo", "Bar", "Fizz", "Buzz"];
+const transformations = ["Default", "Another Template"];
 const selectedTransformation = ref("Default");
 
 const result = ref(null);
@@ -60,6 +77,6 @@ onMounted(() => {
 });
 
 definePageMeta({
-  layout: "custom",
+  // layout: "custom", // TODO pause for now
 });
 </script>

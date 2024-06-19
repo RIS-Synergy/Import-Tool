@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 export const useProjectStore = defineStore('project', {
   state: () => ({
     personUUID: null
+    // transformedData: null
   }),
   getters: {
     doubleCount: (state) => state.count * 2,
@@ -11,5 +12,8 @@ export const useProjectStore = defineStore('project', {
     setPerson(uuid: string) {
       this.personUUID = uuid;
     },
+    // setTransformData (data: any) {
+    //   this.transformedData = data;
+    // }
   },
 })

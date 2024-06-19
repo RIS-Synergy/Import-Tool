@@ -22,7 +22,9 @@
 </template>
 
 <script setup>
-const { data: items } = await useFetch('http://localhost:3000/fwf-test/projects.json')
+// taking the project locally TODO
+// const { data: items } = await useFetch('http://localhost:3000/fwf-test/projects.json')
+const { data: items } = await useFetch('/api/fa/projects')
 
 function getLang (item, lang) {
   return item.find((x) => x.lang === lang).text
@@ -43,6 +45,8 @@ function getItems (itms) {
       id: x.id,
       title: getLang(x.title, 'en'),
       PI: x.team[0].person.electronicAddress,
+      start_date: x.startDate,
+      end_date: x.endDate,
       action: x
     }
   })

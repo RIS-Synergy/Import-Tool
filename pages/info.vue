@@ -9,5 +9,6 @@
 </template>
 
 <script setup>
-const { data: items } = await useFetch("http://localhost:3000/fwf-test/info.json");
+// const { data: items } = await useFetch("http://localhost:3000/fwf-test/info.json");
+const { data: items } = await useFetch("/api/fa/info");
 </script>
