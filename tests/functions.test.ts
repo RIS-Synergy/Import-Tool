@@ -5,7 +5,9 @@ import getPersonUUID from '../src/functions/getPersonUUID'
 describe('custom transform functions', () => {
   it('all the functions', () => {
     expect(Object.keys(functions)).toEqual([
-      'getPersonUUID'
+      'oefos2012',
+      'getPersonUUID',
+      'getIdentifier'
     ])
   })
 })

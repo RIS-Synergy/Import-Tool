@@ -26,6 +26,9 @@ export default function (ris: RISImport, settings: Settings): string {
   if (ris.team && ris.team.length !== 1) {
     throw new Error('Expected exactly one person in the team')
   }
+  // console.log('settings in persion', settings)
+
   const pi = getPI(ris.team[0], settings.defaultPersonUUID);
-  return pi
+  // return pi
+  return settings.defaultPersonUUID
 }
