@@ -1,7 +1,9 @@
 import {classifications} from "./classifications";
 import * as yaml from 'yaml';
+import * as Bluebird from 'bluebird';
 import extraFunctions from '../functions';
 import {RISImport, PURE, LangText, RISIdentifer, Settings} from "../types";
+import { awaitAllPromises } from '../utils/promise'
 
 function getLang (title: LangText[]): { [key: string]: string } {
   return {
@@ -11,20 +13,19 @@ function getLang (title: LangText[]): { [key: string]: string } {
 }
 
 const functions = {
-  getByLang: function (input: any, pass: string, lang: string): string {
-    // if (!input.title) return '`input.title` is not found';
+  getByLang: async function (input: any, settings: any, pass: string, lang: string): Promise<string> {
     const title = input[pass].find(t => t.lang === lang);
     return title ? title.text : 'Title not found';
   },
 
-  hello: function (input: any, world: string, and: string): string {
+  hello: function (input: any, settings: any, world: string, and: string): string {
     return `Hello ${world} and ${and}`;
   },
 
   ...extraFunctions
 }
 
-export function replaceTags(obj: any, input: any, settings: any): any {
+export async function replaceTags(obj: any, input: any, settings: any) {
   if (typeof obj === 'object' && obj !== null) {
     for (const key in obj) {
       if (typeof obj[key] === 'string') {
@@ -51,19 +52,21 @@ export function replaceTags(obj: any, input: any, settings: any): any {
             const args = match[1].split(':').slice(1)
             // console.log('fn', fn)
             // console.log('functions', functions)
-            console.log('functions[fn]', functions[fn])
+            // console.log('functions[fn]', functions[fn])
+            // console.log('args', args)
 
-            const fun = functions[fn]
+
+            const fun = await functions[fn]
             // if it's an async function
             // if (fun.isFunction) {
               // obj[key] = await fun(input, ...args);
             // } else {
-              obj[key] = fun(input, ...args);
+            obj[key] = await fun(input, settings, ...args);
             // }
           }
         }
       } else {
-        obj[key] = replaceTags(obj[key], input, settings);
+        obj[key] = await replaceTags(obj[key], input, settings);
       }
     }
   }
@@ -72,7 +75,21 @@ export function replaceTags(obj: any, input: any, settings: any): any {
 
 import { replacePlaceholders } from '../utils/yaml';
 
-export function projectETL2 (yamlContent: string, input: RISImport, settings: Settings): PURE {
+export async function allPromisesNested(obj) {
+  if (Array.isArray(obj)) {
+    return Promise.all(obj.map(allPromisesNested));
+  } else if (obj !== null && typeof obj === 'object') {
+    const entries = Object.entries(obj);
+    const resolvedEntries = await Promise.all(entries.map(async ([key, value]) => {
+      return [key, await allPromisesNested(value)];
+    }));
+    return Object.fromEntries(resolvedEntries);
+  } else {
+    return obj;
+  }
+}
+
+export async function projectETL2 (yamlContent: string, input: RISImport, settings: Settings): Promise<PURE> {
   // Parse the YAML content
   var processedYaml = replacePlaceholders (yamlContent, {
     input,
@@ -80,7 +97,8 @@ export function projectETL2 (yamlContent: string, input: RISImport, settings: Se
   });
 
   // Process tags in the parsed YAML content
-  processedYaml = replaceTags(processedYaml, input, settings);
+  processedYaml = await replaceTags(processedYaml, input, settings);
+  processedYaml = await allPromisesNested(await processedYaml);
 
   // Output the processed YAML content as JSON
   return processedYaml.output

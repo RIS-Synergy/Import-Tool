@@ -4,28 +4,31 @@ import * as yaml from 'yaml';
 
 import projects from './samples/fwf/projects'
 import { projectETL2, replaceTags } from '../src/ris-pure-etl/index'
+import { awaitAllPromises } from '../src/utils/promise'
 
 const p = projects.find(p => p.id === 'P34707')
 
 const yamlContent = fs.readFileSync('./tests/test.yaml', 'utf8')
 
 const settings = {
-  personUUID: '1b8458ea-3853-4279-b45b-d055945269f3'
+  personUUID: '0000-0002-0131-2191',
+  defaultPersonUUID: 'default'
 }
 
 describe('YAML', () => {
-  it('handle the custom functions', () => {
+  it('handle the custom functions', async () => {
     const input = {}
     const parsedYaml = yaml.parse(`output:
   another: "!<fn>hello:World:prosper"
 `);
-    const processedYaml = replaceTags(parsedYaml, input, settings);
-    const { output } = processedYaml;
-    expect(output.another).toEqual('Hello World and prosper')
+    const processedYaml = await replaceTags(parsedYaml, input, settings);
+    const { output } = await processedYaml;
+    const { another } = await output;
+    expect(another).toEqual('Hello World and prosper')
   })
 
-  it('transform ETL project from FWF to PURE', () => {
-    const pure = projectETL2(yamlContent, p, settings)
+  it('transform ETL project from FWF to PURE', async () => {
+    const pure = await projectETL2(yamlContent, p, settings)
 
     expect(pure.typeDiscriminator).toEqual('AwardManagementProject')
 
@@ -118,7 +121,18 @@ describe('YAML', () => {
           uri: "/dk/atira/pure/upm/classifiedsource/ris_id",
         },
         typeDiscriminator: "ClassifiedId",
-      }]
+      }],
+      keywordGroups: [
+          {
+              classifications: [],
+                logicalName: "oefos2012",
+                name: {
+                    de_DE: "ÖFOS 2012",
+                      en_GB: "Austrian Fields of Science 2012",
+                    },
+                typeDiscriminator: "ClassificationsKeywordGroup",
+              },
+          ]
     })
   })
 })

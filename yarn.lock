@@ -708,6 +708,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bluebird@npm:^3.7.2":
+  version: 3.7.2
+  resolution: "bluebird@npm:3.7.2"
+  checksum: 869417503c722e7dc54ca46715f70e15f4d9c602a423a02c825570862d12935be59ed9c7ba34a9b31f186c017c23cac6b54e35446f8353059c101da73eac22ef
+  languageName: node
+  linkType: hard
+
 "body-parser@npm:2.0.0-beta.2":
   version: 2.0.0-beta.2
   resolution: "body-parser@npm:2.0.0-beta.2"
@@ -2334,6 +2341,7 @@ __metadata:
   dependencies:
     "@types/express": ^4.17.21
     "@types/node": ^20.12.7
+    bluebird: ^3.7.2
     dotenv: ^16.4.5
     express: ">=5.0.0-beta.1"
     flat: ^6.0.1

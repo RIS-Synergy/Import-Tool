@@ -16,8 +16,8 @@ output:
     - typeDiscriminator: "InternalParticipantAssociation"
       person:
         systemName: "Person"
-        # uuid: "${settings.personUUID}"
-        uuid: "!<fn>getPersonUUID"
+        uuid: "${settings.personUUID}"
+        # uuid: "!<fn>getPersonUUID"
       role:
         uri: "/dk/atira/pure/upmproject/roles/upmproject/pi"
         term:
@@ -39,23 +39,30 @@ output:
       uuid: "b2a38757-9395-4089-a2ba-ef39502950c3"
   identifiers:
     - typeDiscriminator: ClassifiedId
-      id: 10.55776/P34707
+      id: "!<fn>getIdentifier:CROSSREF_GRANTID"
       type:
         uri: /dk/atira/pure/upm/classifiedsource/crossref_grant_id
         term:
           de_DE: Crossref grant ID
           en_GB: Crossref grant ID
     - typeDiscriminator: ClassifiedId
-      id: P 34707
+      id: "!<fn>getIdentifier:PROJECT_NUMBER"
       type:
         uri: /dk/atira/pure/upm/classifiedsource/internalprojectid
         term:
           de_DE: Projektnummer
           en_GB: Project ID
-    - id: 'ris:FWF:project:P34707'
+    - id: ris:FWF:project:${input.id}
       type:
         term:
           de_DE: RIS Synergy ID
           en_GB: RIS Synergy ID
         uri: /dk/atira/pure/upm/classifiedsource/ris_id
       typeDiscriminator: ClassifiedId
+  keywordGroups:
+  - typeDiscriminator: ClassificationsKeywordGroup
+    logicalName: oefos2012
+    name:
+      en_GB: Austrian Fields of Science 2012
+      de_DE: ÖFOS 2012
+    classifications: "!<fn>oefos2012"
