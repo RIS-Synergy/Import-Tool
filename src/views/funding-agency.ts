@@ -2,7 +2,10 @@ import express, { Router, Request, Response } from "express"
 
 import { unexpectedErrorHandler } from '../middleware/errorHandler'
 import { getAuthEndpoint } from '../utils/oauth2'
-import projects from '../../samples/projects.json'
+import { promises as fs } from 'fs'
+
+import { Logger } from "tslog";
+const log = new Logger({ name: 'view:funding-agency'});
 
 const router: Router = express.Router()
 
@@ -22,16 +25,37 @@ router.get('/fundings', async (req: Request, res: Response) => {
 })
 
 router.get('/projects/:id', async (req: Request, res: Response) => {
-  // ! RIS_URL_PROJECTS is not stable !
-  // ! use the local project samples for now !
-  // const result = await getAuthEndpoint(process.env.RIS_URL_PROJECTS + req.params.id)
-  const result = projects.find((project) => project.id === req.params.id)
-  res.json(result)
+  if(process.env.RIS_USE_DEV) {
+    // development
+    const jsonFile =  `./samples/projects/${process.env.RIS_USE_DEV}`
+    const projects = await fs.readFile(jsonFile).then((data) => JSON.parse(data.toString()))
+    const result = projects.find((project) => project.id === req.params.id)
+    log.warn(`Using test data '${process.env.RIS_USE_DEV}' for project ${req.params.id}`)
+    res.json(result)
+  } else {
+    // production
+    const result = await getAuthEndpoint(process.env.RIS_URL_PROJECTS + req.params.id)
+    res.json(result)
+  }
 })
 
 router.get('/projects', async (req: Request, res: Response) => {
-  // ! RIS_URL_PROJECTS is not working !
-  const result = await getAuthEndpoint(process.env.RIS_URL_PROJECTS)
+  // RIS_URL_PROJECTS is not working, use DEV if needed
+  if(process.env.RIS_USE_DEV) {
+    // development
+    const jsonFile =  `./samples/projects/${process.env.RIS_USE_DEV}`
+    const result = await fs.readFile(jsonFile).then((data) => JSON.parse(data.toString()))
+    log.warn(`Using test data '${process.env.RIS_USE_DEV}' for projects`)
+    res.json(result)
+  } else {
+    // production
+    const result = await getAuthEndpoint(process.env.RIS_URL_PROJECTS)
+    res.json(result)
+  }
+})
+
+router.get('/orgunits', async (req: Request, res: Response) => {
+  const result = await getAuthEndpoint(process.env.RIS_URL_ORGUNITS)
   res.json(result)
 })
 
