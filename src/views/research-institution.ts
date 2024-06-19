@@ -4,7 +4,34 @@ import { unexpectedErrorHandler } from '../middleware/errorHandler'
 import { callRIApi } from '../utils/ri-api'
 import { projectETL2 } from '../ris-pure-etl/index'
 
+import { promises as fs } from 'fs'
+
 const router: Router = express.Router()
+
+router.get('/project/:id', async (req: Request, res: Response) => {
+  const result = await callRIApi('/projects/search', 'POST', {
+    size: 10,
+    offset: 0,
+    searchString: req.params.id
+  })
+  console.log('result', result)
+
+  if (!result.items || result.items.length === 0) {
+    res.json({
+      error: `Research Institution could not find ${req.params.id}`,
+      uuid: null
+    })
+    return
+  }
+
+  const item = result.items[0]
+  const { uuid } = item
+  res.json({
+    count: result.count,
+    item,
+    uuid
+  })
+})
 
 router.get('/search', async (req: Request, res: Response) => {
   const result = await callRIApi('/projects/search', 'POST', {
@@ -16,10 +43,20 @@ router.get('/search', async (req: Request, res: Response) => {
 })
 
 router.post('/upload', async (req: Request, res: Response) => {
-  console.log('settings', req.body.settings)
-  debugger
+  // console.log('settings', req.body.settings)
+  // console.log('input', req.body.input)
+
+  const yamlBuffer = await fs.readFile('./tests/test.yaml')
+  const yamlContent = yamlBuffer.toString()
+
+  // console.log('yamlContent', yamlContent)
+
+
   // XXX we have not yet used the version 2 of the ETL
-  const pure = projectETL2("", req.body.ris, req.body.settings)
+  const pure = await projectETL2(yamlContent, req.body.ris, req.body.settings)
+
+  console.log('pure', pure)
+
   const result = await callRIApi('/projects', 'PUT', pure)
   res.json(result)
 })

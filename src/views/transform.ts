@@ -11,21 +11,11 @@ const router: Router = express.Router()
 router.post('/upload', async (req: Request, res: Response) => {
   const yamlBuffer = await fs.readFile('./tests/test.yaml')
   const yamlContent = yamlBuffer.toString()
-  // console.log(yamlContent)
-
-  const result = projectETL2(yamlContent, req.body.ris, req.body.settings)
-
-  //transform yaml to json
-  // const yamlJson = yaml.load(yamlContent)
-  // console.log(yamlJson)
-
-  // var processedYaml = replacePlaceholders (yamlContent, {
-  //   input,
-  //   settings
-  // });
-
-  // const result = replaceTags(yamlContent, req.body.ris, req.body.settings)
-  res.json(result)
+  const result = await projectETL2(yamlContent, req.body.ris, req.body.settings)
+  res.json({
+    yamlTemplate: yamlContent,
+    transformationResult: result
+  })
 })
 
 export default router
