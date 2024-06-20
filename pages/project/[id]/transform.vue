@@ -1,5 +1,4 @@
 <template>
-
   <v-card>
     <v-card-title v-if="false">
       {{ data.id }}
@@ -10,6 +9,12 @@
     <v-row class="ml-2 mt-2">
       <div>Settings</div>
       <pre>{{ store.settings }}</pre>
+    </v-row>
+    <v-row class="ml-2 mt-2">
+      <div>UUID: </div>
+      <div>
+        {{ uuid }}
+      </div>
     </v-row>
     <v-row dense>
       <v-col>
@@ -22,26 +27,6 @@
         ></v-select>
       </v-col>
       <v-col>
-        <v-btn class="ma-4" text="Transform" @click="loadTransformation" />
-
-        <v-dialog max-width="1200">
-          <template v-slot:activator="{ props: activatorProps }">
-            <v-btn v-bind="activatorProps">
-              View Input
-            </v-btn>
-          </template>
-
-          <template v-slot:default="{ isActive }">
-            <Yaml :json="ris" @close="isActive.value = false" />
-          </template>
-        </v-dialog>
-
-        <v-btn v-if="uuid" class="ma-4" text="Save" @click="save()" />
-        <v-btn v-else class="ma-4" text="Create" @click="save()" />
-
-        <div>
-          {{ uuid }}
-        </div>
       </v-col>
     </v-row>
     <v-card-text v-if="result">
@@ -50,6 +35,39 @@
         :result="result.transformationResult"
       />
     </v-card-text>
+    <v-card-actions class="my-3 mx-3">
+      <v-dialog max-width="1200">
+        <template v-slot:activator="{ props: activatorProps }">
+          <v-btn
+            class="text-none"
+            variant="flat"
+            rounded
+            width="12em"
+            v-bind="activatorProps"
+            color="grey"
+          >
+            View Data
+          </v-btn>
+        </template>
+
+        <template v-slot:default="{ isActive }">
+          <Yaml :json="ris" @close="isActive.value = false" />
+        </template>
+      </v-dialog>
+
+      <v-spacer></v-spacer>
+      <v-btn
+        class="text-none"
+        variant="flat"
+        rounded
+        width="12em"
+        color="primary"
+        @click="save"
+      >
+        <span v-if="uuid">Update Project</span>
+        <span v-else>Create new Project</span>
+      </v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -78,7 +96,7 @@ async function loadTransformation() {
     method: "POST",
     body: JSON.stringify({
       ris: ris.value,
-      settings
+      settings,
     }),
   });
   result.value = x;
@@ -94,10 +112,10 @@ definePageMeta({
 
 const uuid = (await getProjectUUID(id)).uuid;
 
-async function save (crud) { // create or edit
-  const result = await uploadToPure(ris.value, settings, uuid)
-  console.log("result", result)
+async function save(crud) {
+  // create or edit
+  const result = await uploadToPure(ris.value, settings, uuid);
+  console.log("result", result);
   // TODO redirect?
 }
-
 </script>
