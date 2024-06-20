@@ -6,6 +6,10 @@ import { projectETL2 } from '../ris-pure-etl/index'
 
 import { promises as fs } from 'fs'
 
+import { Logger } from "tslog";
+const log = new Logger({ name: 'view:ri'});
+
+
 const router: Router = express.Router()
 
 router.get('/project/:id', async (req: Request, res: Response) => {
@@ -14,7 +18,6 @@ router.get('/project/:id', async (req: Request, res: Response) => {
     offset: 0,
     searchString: req.params.id
   })
-  console.log('result', result)
 
   if (!result.items || result.items.length === 0) {
     res.json({
@@ -43,22 +46,22 @@ router.get('/search', async (req: Request, res: Response) => {
 })
 
 router.post('/upload', async (req: Request, res: Response) => {
-  // console.log('settings', req.body.settings)
-  // console.log('input', req.body.input)
+  const { ris, settings, uuid } = req.body
 
   const yamlBuffer = await fs.readFile('./tests/test.yaml')
   const yamlContent = yamlBuffer.toString()
 
-  // console.log('yamlContent', yamlContent)
+  const pure = await projectETL2(yamlContent, ris, settings)
 
-
-  // XXX we have not yet used the version 2 of the ETL
-  const pure = await projectETL2(yamlContent, req.body.ris, req.body.settings)
-
-  console.log('pure', pure)
-
-  const result = await callRIApi('/projects', 'PUT', pure)
-  res.json(result)
+  if (uuid) {
+    const result = await callRIApi(`/projects/${uuid}`, 'PUT', pure)
+    log.info('Update project', result.uuid)
+    return res.json(result)
+  } else {
+    const result = await callRIApi('/projects', 'PUT', pure)
+    log.info('Created project', result.uuid)
+    return res.json(result)
+  }
 })
 
 router.get('/organizations/:id', async (req: Request, res: Response) => {
