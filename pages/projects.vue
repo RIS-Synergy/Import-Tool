@@ -30,15 +30,6 @@ function getLang (item, lang) {
   return item.find((x) => x.lang === lang).text
 }
 
-async function uploadToPure (item) {
-  console.log('uploading to pure', item)
-  const x = await $fetch("/api/ri/upload", {
-    method: 'POST',
-    body: JSON.stringify(item)
-  });
-  console.log(x)
-}
-
 function getItems (itms) {
   return itms.map((x) => {
     return {

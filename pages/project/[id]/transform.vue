@@ -32,12 +32,12 @@
           </template>
 
           <template v-slot:default="{ isActive }">
-            <Yaml :json="data" @close="isActive.value = false" />
+            <Yaml :json="ris" @close="isActive.value = false" />
           </template>
         </v-dialog>
 
-        <v-btn v-if="uuid" class="ma-4" text="Save" @click="save('edit')" />
-        <v-btn v-else class="ma-4" text="Create" @click="save('create')" />
+        <v-btn v-if="uuid" class="ma-4" text="Save" @click="save()" />
+        <v-btn v-else class="ma-4" text="Create" @click="save()" />
 
         <div>
           {{ uuid }}
@@ -59,7 +59,7 @@ const route = useRoute();
 const { getProjectUUID, uploadToPure } = useResearchInstitution();
 
 const id = route.params.id;
-const { data } = await useFetch(`/api/fa/projects/${id}`);
+const { data: ris } = await useFetch(`/api/fa/projects/${id}`);
 
 const transformations = ["Default", "Another Template"];
 const selectedTransformation = ref("Default");
@@ -77,7 +77,7 @@ async function loadTransformation() {
   const x = await $fetch("/api/transform/upload", {
     method: "POST",
     body: JSON.stringify({
-      ris: data.value,
+      ris: ris.value,
       settings
     }),
   });
@@ -94,8 +94,10 @@ definePageMeta({
 
 const uuid = (await getProjectUUID(id)).uuid;
 
-function save (crud) { // create or edit
-  uploadToPure()
+async function save (crud) { // create or edit
+  const result = await uploadToPure(ris.value, settings, uuid)
+  console.log("result", result)
+  // TODO redirect?
 }
 
 </script>

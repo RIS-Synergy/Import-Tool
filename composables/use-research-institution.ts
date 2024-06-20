@@ -11,20 +11,16 @@ export const useResearchInstitution = () => {
     }
   }
 
-  const uploadToPure = async () => {
-    const { settings } = store.$state;
-
-    // console.log("uploading to pure", item);
-    // console.log("personUUID", personUUID);
-    const x = await $fetch("/api/ri/upload", {
+  const uploadToPure = async (ris, settings, uuid) => {
+    const result = await $fetch("/api/ri/upload", {
       method: "POST",
       body: JSON.stringify({
-        input: data.value,
-        ris: item,
+        ris,
         settings,
+        uuid
       }),
     });
-    console.log(x);
+    return result
   }
 
   return { getProjectUUID, uploadToPure }

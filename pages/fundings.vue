@@ -30,11 +30,6 @@
             </v-card-text>
 
             <v-card-actions>
-              <v-btn
-                color="primary"
-                text="Upload to PURE"
-                @click="uploadToPure(x.item.action)"
-              ></v-btn>
               <v-spacer></v-spacer>
               <v-btn
                 text="Close"
@@ -70,15 +65,6 @@ function getItems (itms) {
       amount: x.amount && x.amount.amount,
     }
   })
-}
-
-async function uploadToPure (item) {
-  console.log('uploading to pure', item)
-  // const x = await $fetch("/api/ri/upload", {
-  //   method: 'POST',
-  //   body: JSON.stringify(item)
-  // });
-  // console.log(x)
 }
 
 </script>
