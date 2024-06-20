@@ -23,5 +23,10 @@ export const useResearchInstitution = () => {
     return result
   }
 
-  return { getProjectUUID, uploadToPure }
+  const loadProject = async (id, store) => {
+    const { item, count } = await getProjectUUID(id)
+    store.pure = item
+  }
+
+  return { getProjectUUID, uploadToPure, loadProject }
 }

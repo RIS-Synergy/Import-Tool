@@ -74,6 +74,7 @@
 <script setup>
 const store = useProjectStore();
 const route = useRoute();
+const router = useRouter();
 const { getProjectUUID, uploadToPure } = useResearchInstitution();
 
 const id = route.params.id;
@@ -115,7 +116,9 @@ const uuid = (await getProjectUUID(id)).uuid;
 async function save(crud) {
   // create or edit
   const result = await uploadToPure(ris.value, settings, uuid);
-  console.log("result", result);
-  // TODO redirect?
+  store.setPure(result);
+
+  // redirect to project view
+  router.push({ name: "project-id-view", params: { id: route.params.id } });
 }
 </script>
