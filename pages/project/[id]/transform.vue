@@ -31,7 +31,12 @@
           </template>
         </v-dialog>
 
-        <SaveOrEditButton class="ml-4" />
+        <v-btn v-if="uuid" class="ma-4" text="Save" @click="save('edit')" />
+        <v-btn v-else class="ma-4" text="Create" @click="save('create')" />
+
+        <div>
+          {{ uuid }}
+        </div>
       </v-col>
     </v-row>
     <v-card-text v-if="result">
@@ -46,6 +51,8 @@
 <script setup>
 const store = useProjectStore();
 const route = useRoute();
+const { getProjectUUID, uploadToPure } = useResearchInstitution();
+
 const id = route.params.id;
 const { data } = await useFetch(`/api/fa/projects/${id}`);
 
@@ -79,4 +86,11 @@ onMounted(() => {
 definePageMeta({
   // layout: "custom", // TODO pause for now
 });
+
+const uuid = (await getProjectUUID(id)).uuid;
+
+function save (crud) { // create or edit
+  // uploadToPure ......
+}
+
 </script>
