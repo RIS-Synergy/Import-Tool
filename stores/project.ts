@@ -2,18 +2,16 @@ import { defineStore } from 'pinia'
 
 export const useProjectStore = defineStore('project', {
   state: () => ({
-    personUUID: null
-    // transformedData: null
+    settings: {
+      personUUID: null
+    }
   }),
   getters: {
-    doubleCount: (state) => state.count * 2,
+    double: (state) => state.count * 2,
   },
   actions: {
     setPerson(uuid: string) {
-      this.personUUID = uuid;
+      this.settings.personUUID = uuid;
     },
-    // setTransformData (data: any) {
-    //   this.transformedData = data;
-    // }
   },
 })

@@ -1,4 +1,5 @@
 <template>
+
   <v-card>
     <v-card-title v-if="false">
       {{ data.id }}
@@ -6,6 +7,10 @@
     <div v-if="false" class="mx-5 my-2" v-for="title in titles">
       {{ title }}
     </div>
+    <v-row class="ml-2 mt-2">
+      <div>Settings</div>
+      <pre>{{ store.settings }}</pre>
+    </v-row>
     <v-row dense>
       <v-col>
         <v-select
@@ -66,14 +71,14 @@ const titles = computed(() => {
   return data.value.title.map((x) => x.text);
 });
 
+const { settings } = store;
+
 async function loadTransformation() {
   const x = await $fetch("/api/transform/upload", {
     method: "POST",
     body: JSON.stringify({
       ris: data.value,
-      settings: {
-        personUUID: "12345",
-      },
+      settings
     }),
   });
   result.value = x;
@@ -90,7 +95,7 @@ definePageMeta({
 const uuid = (await getProjectUUID(id)).uuid;
 
 function save (crud) { // create or edit
-  // uploadToPure ......
+  uploadToPure()
 }
 
 </script>

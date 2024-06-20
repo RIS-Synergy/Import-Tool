@@ -38,7 +38,7 @@
         variant="flat"
         rounded
         width="12em"
-        :disabled="!store.$state.personUUID"
+        :disabled="!store.$state.settings.personUUID"
         color="primary"
         @click="uploadToPure(data)"
       >
