@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div v-if="store.pure.pureId">
     <h1>
       view page
     </h1>
-    <Yaml :json="store.pure" />
+    <a v-if="store.pure.pureId" class="" :href="blankLink" target="_blank">PURE url</a>
+      <Yaml :json="store.pure" />
   </div>
 </template>
 
@@ -18,9 +19,15 @@ definePageMeta({
   // layout: "custom"
 });
 
+const blankLink = computed(() => {
+  const pureId = store.pure.pureId;
+  const link = `https://cris-test.univie.ac.at/admin/editor/dk/atira/pure/modules/unifiedprojectmodel/external/model/project/editor/upmprojecteditor.xhtml?scheme=&type=&id=${pureId}`
+  console.log(link)
+  return link
+});
+
 
 onMounted(() => {
-  // console.log(store)
   if (!store.pure.pureId) {
     loadProject(id, store);
   }
