@@ -6,7 +6,8 @@
     "dev": "nodemon src/server.ts",
     "debug": "nodemon --exec node --inspect-brk -r ts-node/register scripts/create-project.ts",
     "test": "vitest",
-    "create-project": "ts-node ./scripts/create-project.ts"
+    "create-project": "ts-node ./scripts/create-project.ts",
+    "create-system-user": "ts-node ./scripts/create-system-user.ts"
   },
   "keywords": [],
   "author": "Kirill Stytsenko <kirill@styts.com>",

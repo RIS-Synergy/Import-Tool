@@ -75,24 +75,40 @@ router.get('/persons/:id', async (req: Request, res: Response) => {
 })
 
 router.post('/persons/search', async (req: Request, res: Response) => {
-  const result = await callRIApi('/persons/search', 'POST', {
-    size: 10,
-    offset: 0,
-    // systemName: "Person",
-    searchString: req.body.searchString,
-  })
-  res.json({
-    items: result.items,
-    persons: result.items.map((item: any) => {
-      return {
-        pureId: item.pureId,
-        uuid: item.uuid,
-        name: item.name.firstName + ' ' + item.name.lastName,
-        user: item.user && item.user.uuid,
-        details: item,
-      }
+  const entities = [
+    {
+      name: 'persons'
+    },
+    {
+      name: 'external-persons'
+    }
+  ]
+
+  var results = []
+
+  for (const entity of entities) {
+    const result = await callRIApi(`/${entity.name}/search`, 'POST', {
+      size: 10,
+      offset: 0,
+      searchString: req.body.searchString
     })
-  })
+
+    console.log(result)
+
+    result.items.map((item: any) => {
+      results.push({
+          pureId: item.pureId,
+          uuid: item.uuid,
+          name: item.name.firstName + ' ' + item.name.lastName,
+          user: item.user && item.user.uuid,
+          details: item,
+        entity,
+        systemName: item.systemName,
+      })
+    })
+  }
+
+  res.json(results)
 })
 
 router.get('/projects/:uuid', async (req: Request, res: Response) => {

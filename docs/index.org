@@ -24,3 +24,40 @@ Public, staging, api from the _forschungsdaten.at_ documentation harvested on [2
 ** Tests
 *** ./tests/samples
 These samples are important from the FWF test API.
+
+** PURE Api
+[2024-06-25 Tue 09:22]
+Create a system user in test and prod systems:
+
+https://cris-test.univie.ac.at/admin/workspace/administrator/category/pure-api/page/user-api-keys/
+
+Ensure your PURE API user has access to the `/users/*` permissions.
+
+Run this script and create a System User with the username and email address:
+
+yarn create-system-user <username> kirill.stytsenko@univie.ac.at
+
+Then, create a API Key
+
+User: <username>
+Description: API key for the RIS "Import Tool" (test)
+Accessible endpoints: /applications/*, /awards/*, /projects/*, /persons/*, /organizations/*, /external-organizations/*
+
+Finally, save the API key in the `.env` for the PURE_API_KEY.
+
+[2024-06-25 Tue 10:22]
+the user can be created with the UI:
+Create a username and email address.
+
+These Accessible endpoints have been selected:
+
+/applications/*
+/awards/*
+/external-organizations/*
+/external-persons/*
+/organizations/*
+/persons/*
+/projects/*
+/users/*
+
+Finally, save the API key in the `.env` for the PURE_API_KEY.
