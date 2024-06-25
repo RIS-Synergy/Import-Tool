@@ -9,7 +9,7 @@
     <v-list-item v-if="model.personName" title="First Name" :subtitle="model.personName.firstName" />
     <v-list-item v-if="model.personName" title="Family Name" :subtitle="model.personName.familyName" />
     <TypeValues v-if="model.identifier" v-model="model.identifier" />
-    <PureSearch v-model="model.personName" />
+    <PureSearchPersons v-model="model.personName" />
   </v-list>
 </template>
 
