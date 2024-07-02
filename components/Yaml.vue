@@ -1,5 +1,4 @@
 <template>
-  <v-card>
     <v-card-title>
       <v-tabs v-model="tab">
         <v-tab :value="1">YAML</v-tab>
@@ -19,7 +18,6 @@
       <v-spacer />
       <v-btn @click="emit('close')"> Close </v-btn>
     </v-card-actions>
-  </v-card>
 </template>
 
 <script setup>
