@@ -13,6 +13,8 @@
         <th class="text-left">Pure ID</th>
         <th class="text-left">System Name</th>
         <th class="text-left">Name</th>
+        <th class="text-left">User</th>
+        <th class="text-left">Organizations</th>
         <th class="text-left">Similarity</th>
         <th class="text-left">Select</th>
         <th class="text-left">Action</th>
@@ -23,6 +25,12 @@
         <td>{{ p.pureId }}</td>
         <td>{{ p.systemName }}</td>
         <td>{{ p.name }}</td>
+        <td>
+          <PureReference v-if="p.details.user" :data="p.details.user" />
+        </td>
+        <td>
+          <PureReference v-for="x in p.details.staffOrganizationAssociations" :data="x.organization" />
+        </td>
         <td>
           <span class="similarity mr-2">
             {{ (useSimilarity(searchString, p.name) * 100).toFixed(0) + "%" }}
@@ -41,7 +49,7 @@
           />
         </td>
         <td>
-          <v-dialog max-width="800">
+          <v-dialog max-width="1200">
             <template v-slot:activator="{ props: activatorProps }">
               <v-btn
                 v-bind="activatorProps"
@@ -69,16 +77,17 @@ const searchString = ref(model.value.firstName + " " + model.value.familyName);
 
 function searchSave() {
   // console.log('searchSave', searchString)
-  searchApi(searchString);
+  searchApi(searchString, 'persons');
 }
 
 const search = ref(null);
 
-async function searchApi(str: string) {
-  search.value = await $fetch("/api/ri/persons/search", {
+async function searchApi(str: string, entity: string) {
+  search.value = await $fetch("/api/ri/search", {
     method: "POST",
     body: JSON.stringify({
       searchString: str.value,
+      entity
     }),
   });
 }
@@ -94,7 +103,7 @@ watch(selected, (val) => {
 });
 
 onMounted(() => {
-  searchApi(searchString);
+  searchApi(searchString, 'persons');
 });
 </script>
 

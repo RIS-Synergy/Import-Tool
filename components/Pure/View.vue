@@ -1,16 +1,6 @@
 <template>
   <v-card :title="systemName">
-    <v-card-text>
-      <pre>
-        {{ data }}
-      </pre>
-    </v-card-text>
-
-    <v-card-actions>
-      <v-spacer></v-spacer>
-
-      <v-btn text="Select"></v-btn>
-    </v-card-actions>
+      <Yaml :json="data" />
   </v-card>
 </template>
 

@@ -37,7 +37,7 @@ const props = defineProps({
   },
   tab: {
     type: Number,
-    default: 2,
+    default: 1 // 2: JSON
   }
 });
 

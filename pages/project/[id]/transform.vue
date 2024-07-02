@@ -51,7 +51,9 @@
         </template>
 
         <template v-slot:default="{ isActive }">
-          <Yaml :json="ris" @close="isActive.value = false" />
+          <v-card>
+            <Yaml :json="ris" @close="isActive.value = false" />
+          </v-card>
         </template>
       </v-dialog>
 
