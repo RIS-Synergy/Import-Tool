@@ -23,6 +23,9 @@ app.use('/ri', require('./views/research-institution').default)
 // transform: Transformations
 app.use('/transform', require('./views/transform').default)
 
+// ÖFOS 2012
+app.use('/oefos', require('./views/oefos').default)
+
 // error handler last
 app.use(unexpectedErrorHandler)
 
