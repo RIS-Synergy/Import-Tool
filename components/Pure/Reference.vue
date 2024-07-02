@@ -5,12 +5,12 @@
         v-if="result"
         variant="flat"
         rounded
-        color="#ddd"
         size="small"
         class="ma-1"
+        :class="orgClass"
         v-bind="activatorProps"
       >
-        <span v-if="data.systemName === 'Organization'">
+        <span v-if="data.systemName === 'Organization'" >
           {{ orgShorten() }}
         </span>
         <span v-if="data.systemName === 'User'">
@@ -40,11 +40,23 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  period: {
+    type: Object,
+    required: false,
+  },
 });
 
 const { systemName, uuid } = props.data;
 
 const result = ref(null);
+
+const orgClass = computed(() => {
+  if (!props.period) return
+  const { startDate, endDate } = props.period;
+  return {
+    current: startDate && !endDate && true
+  };
+});
 
 function orgShorten () {
   const { name } = result.value
@@ -67,12 +79,14 @@ onMounted(() => {
 });
 </script>
 
-<style>
+<style scoped>
 .v-btn {
-  /* width: 10em; */
-  /* white-space: nowrap;
-     overflow: hidden;
-     text-overflow: ellipsis; */
-  /* max-width: 10em; */
+  color: #333;
+  background-color: #ccc;
+}
+
+.current {
+  color: green;
+  background-color: lightgreen;
 }
 </style>

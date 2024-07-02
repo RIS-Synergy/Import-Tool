@@ -29,7 +29,11 @@
           <PureReference v-if="p.details.user" :data="p.details.user" />
         </td>
         <td>
-          <PureReference v-for="x in p.details.staffOrganizationAssociations" :data="x.organization" />
+          <PureReference
+            v-for="x in p.details.staffOrganizationAssociations"
+            :data="x.organization"
+            :period="x.period"
+          />
         </td>
         <td>
           <span class="similarity mr-2">
