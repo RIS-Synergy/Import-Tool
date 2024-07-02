@@ -124,7 +124,22 @@ describe('YAML', () => {
       }],
       keywordGroups: [
           {
-              classifications: [],
+            classifications: [
+              {
+                term: {
+                  de_DE: "301108 Molekulare Pathologie",
+                  en_GB: "301108 Molecular pathology",
+                },
+                uri: "/dk/atira/pure/core/oefos2012/3/301108",
+              },
+              {
+                term: {
+                  de_DE: "301306 Medizinische Molekularbiologie",
+                  en_GB: "301306 Medical molecular biology",
+                },
+                uri: "/dk/atira/pure/core/oefos2012/3/301306",
+              },
+            ],
                 logicalName: "oefos2012",
                 name: {
                     de_DE: "ÖFOS 2012",

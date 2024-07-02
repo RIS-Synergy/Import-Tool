@@ -13,6 +13,10 @@ export type RISPerson {
   }
 }
 
+type RISSubjec {
+  value: string
+}
+
 export type RISImport = {
   id: string;
   startDate: string;
@@ -21,6 +25,7 @@ export type RISImport = {
   title: LangText[];
   identifiers: RISIdentifer[];
   team: RISPerson[];
+  subjects: RISSubject[];
 
   function foo () {
     return 'bar'

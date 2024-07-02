@@ -74,26 +74,54 @@ router.get('/persons/:id', async (req: Request, res: Response) => {
   res.json(result)
 })
 
-router.post('/persons/search', async (req: Request, res: Response) => {
-  const entities = [
+router.get('/reference/:systemName/:uuid', async (req: Request, res: Response) => {
+  const systemNameMapping = {
+    'Organization': 'organizations',
+    'User': 'users'
+  }
+
+  const result = await callRIApi(`/${systemNameMapping[req.params.systemName]}/${req.params.uuid}`, 'GET')
+  log.debug('Reference', req.params.systemName, 'received')
+  res.json(result)
+})
+
+router.post('/search', async (req: Request, res: Response) => {
+  const entities = {
+    persons: [
     {
-      name: 'persons'
+      name: 'persons',
+      // lookup: [ 'staffOrganizationAssociations', 'user' ]
     },
     {
-      name: 'external-persons'
+      name: 'external-persons',
+      lookup: 'externalOrganizations'
     }
-  ]
+    ],
+
+    // we have not used these yet
+    organizations: [
+    {
+      name: 'organizations'
+      // lookup: 'organizations'
+    },
+    {
+      name: 'external-organizations',
+      // lookup: 'externalOrganizations'
+    }],
+  }
 
   var results = []
 
-  for (const entity of entities) {
+  for (const entity of entities[req.body.entity]) {
+    console.log(entity, req.body)
+
     const result = await callRIApi(`/${entity.name}/search`, 'POST', {
       size: 10,
       offset: 0,
       searchString: req.body.searchString
     })
 
-    console.log(result)
+    // console.log(result)
 
     result.items.map((item: any) => {
       results.push({

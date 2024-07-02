@@ -42,6 +42,15 @@ function mapListToObject (source, key = 'Code') {
 const data_de = mapListToObject(loadCSVFile('DE'))
 const data_en = mapListToObject(loadCSVFile('EN'))
 
+export function getValue (id, lang) {
+  if (lang === 'DE') {
+    return data_de[id]
+  } else {
+    return data_en[id]
+  }
+}
+
+
 router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params
 
