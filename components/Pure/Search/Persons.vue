@@ -26,7 +26,11 @@
         <td>{{ p.systemName }}</td>
         <td>{{ p.name }}</td>
         <td>
-          <PureReference v-if="p.details.user" :data="p.details.user" />
+          <PureReference
+            v-if="p.details.user"
+            :data="p.details.user"
+            :email="props.email"
+          />
         </td>
         <td>
           <PureReference
@@ -76,6 +80,13 @@
 const { setPerson } = useProjectStore();
 
 const model = defineModel();
+
+const props = defineProps({
+  email: {
+    type: String,
+    required: false,
+  },
+});
 
 const searchString = ref(model.value.firstName + " " + model.value.familyName);
 

@@ -17,6 +17,7 @@
           {{ result.username }}
         </span>
       </v-btn>
+      <v-chip v-if="sameEmail" color="green" variant="flat">@</v-chip>
     </template>
 
     <template v-slot:default="{ isActive }">
@@ -42,6 +43,10 @@ const props = defineProps({
   },
   period: {
     type: Object,
+    required: false,
+  },
+  email: {
+    type: String,
     required: false,
   },
 });
@@ -72,6 +77,13 @@ function orgShorten () {
   return rest.length > numberOfText ? rest.slice(0, numberOfText) + '...' : rest
 }
 
+const sameEmail = computed(() => {
+  if (!props.email) return false
+  if (!result.value) return false
+  // compare both lowercase
+  return props.email.toLowerCase() === result.value.email.toLowerCase()
+});
+
 onMounted(() => {
   $fetch(`/api/ri/reference/${systemName}/${uuid}`).then(
     (res) => (result.value = res),
@@ -86,6 +98,11 @@ onMounted(() => {
 }
 
 .current {
+  color: green;
+  background-color: lightgreen;
+}
+
+.email {
   color: green;
   background-color: lightgreen;
 }
