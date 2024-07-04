@@ -2,7 +2,8 @@ import express, { Router, Request, Response } from "express"
 
 import { unexpectedErrorHandler } from '../middleware/errorHandler'
 import { callRIApi } from '../utils/ri-api'
-import { projectETL2 } from '../ris-pure-etl/index'
+import { projectETL2, projectETL2cluster } from '../ris-pure-etl/index'
+import { uploadProjectApplicationClusters } from '../ris-pure-etl/clusters'
 
 import { promises as fs } from 'fs'
 
@@ -48,7 +49,7 @@ router.get('/search', async (req: Request, res: Response) => {
 router.post('/upload', async (req: Request, res: Response) => {
   const { ris, settings, uuid } = req.body
 
-  const yamlBuffer = await fs.readFile('./tests/test.yaml')
+  const yamlBuffer = await fs.readFile('./resources/transformers/project.yaml')
   const yamlContent = yamlBuffer.toString()
 
   const pure = await projectETL2(yamlContent, ris, settings)
@@ -56,6 +57,7 @@ router.post('/upload', async (req: Request, res: Response) => {
   if (uuid) {
     const result = await callRIApi(`/projects/${uuid}`, 'PUT', pure)
     log.info('Update project', result.uuid)
+    await uploadProjectApplicationClusters(result)
     return res.json(result)
   } else {
     const result = await callRIApi('/projects', 'PUT', pure)
@@ -139,20 +141,72 @@ router.post('/search', async (req: Request, res: Response) => {
   res.json(results)
 })
 
-router.get('/projects/:uuid', async (req: Request, res: Response) => {
-  const result = await callRIApi(`/projects/${req.params.uuid}`, 'GET')
-  res.json(result)
+async function getProjectClusters (type: string, uuid: string) {
+  if (type !== 'AwardManagementProject') return
+
+  const clusters = await Promise.all([
+    callRIApi(`/projects/${uuid}/application-clusters`, 'GET'),
+    callRIApi(`/projects/${uuid}/award-clusters`, 'GET'),
+  ])
+  console.log('clusters', clusters)
+  return {
+    applicationClusters: clusters[0].items,
+    awardClusters: clusters[1].items
+  }
+}
+
+// GET for any concept with id or uuid
+router.get('/:concepts/:uuid', async (req: Request, res: Response) => {
+  const { concepts, uuid } = req.params
+  if (uuid.match(/^\d+$/)) {
+    // if it's numnber, search
+    const { items, count } = await callRIApi(`/${concepts}/search`, 'POST', {
+      size: 10,
+      offset: 0,
+      searchString: uuid
+    })
+    if (count === 0) {
+      res.json({
+        error: `Research Institution could not find ${req.params.id}`,
+        uuid: null
+      })
+      return
+    } else if (count === 1) {
+      console.log('we have a match')
+      const item = items[0]
+      console.log(await getProjectClusters(item.typeDiscriminator, item.uuid))
+      res.json(item)
+    } else {
+      console.log('we have multiple matches', items)
+      // find a matched pureId
+      const item = items.find((item: any) => item.pureId === uuid)
+      if (item) {
+        res.json(item)
+      } else {
+        res.json({
+          error: `Research Institution could not find ${uuid}`,
+          uuid: null
+        })
+      }
+    }
+  } else {
+    // if it's a uuid
+    console.log('uuid', uuid)
+
+    const result = await callRIApi(`/${concepts}/${uuid}`, 'GET')
+    res.json(result)
+  }
 })
 
-// Update project
-router.put('/projects/:uuid', async (req: Request, res: Response) => {
-  const result = await callRIApi(`/projects/${req.params.uuid}`, 'PUT', req.body)
+// PUT for any concept with uuid
+router.put('/:concepts/:uuid', async (req: Request, res: Response) => {
+  const result = await callRIApi(`/${req.params.concepts}/${req.params.uuid}`, 'PUT', req.body)
   res.json(result)
 })
 
 // Sample error route
-router.get('/foo', (req: Request, res: Response) => {
-  throw new Error('foo')
-})
+// router.get('/foo', (req: Request, res: Response) => {
+//   throw new Error('foo')
+// })
 
 export default router

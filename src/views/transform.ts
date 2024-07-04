@@ -9,7 +9,7 @@ import yaml from 'js-yaml'
 const router: Router = express.Router()
 
 router.post('/upload', async (req: Request, res: Response) => {
-  const yamlBuffer = await fs.readFile('./tests/test.yaml')
+  const yamlBuffer = await fs.readFile('./resources/transformers/project.yaml')
   const yamlContent = yamlBuffer.toString()
   const result = await projectETL2(yamlContent, req.body.ris, req.body.settings)
   res.json({

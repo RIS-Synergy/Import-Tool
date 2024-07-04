@@ -18,3 +18,5 @@ tests/samples/fwf/*
 
 # temporary view the results of a `create-...` script (projects, applications, grants)
 scripts/result.json
+# scpirt for custom uploads (from Chrome Debugger: node.js script)
+scripts/upload.js

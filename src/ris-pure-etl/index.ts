@@ -103,3 +103,19 @@ export async function projectETL2 (yamlContent: string, input: RISImport, settin
   // Output the processed YAML content as JSON
   return processedYaml.output
 }
+
+// same, except of the Types
+export async function projectETL2cluster (yamlContent: string, input: any, settings: any): Promise<PURE> {
+  // Parse the YAML content
+  var processedYaml = replacePlaceholders (yamlContent, {
+    input,
+    settings
+  });
+
+  // Process tags in the parsed YAML content
+  processedYaml = await replaceTags(processedYaml, input, settings);
+  processedYaml = await allPromisesNested(await processedYaml);
+
+  // Output the processed YAML content as JSON
+  return processedYaml.output
+}

@@ -8,12 +8,15 @@ import { awaitAllPromises } from '../src/utils/promise'
 
 const p = projects.find(p => p.id === 'P34707')
 
-const yamlContent = fs.readFileSync('./resources/transformers/project.yaml', 'utf8')
+const yamlContent = fs.readFileSync('./resources/transformers/application.yaml', 'utf8')
 
 const settings = {
   personUUID: '0000-0002-0131-2191',
   defaultPersonUUID: 'default'
 }
+
+console.log(yamlContent)
+
 
 describe('YAML', () => {
   it('handle the custom functions', async () => {
@@ -29,6 +32,8 @@ describe('YAML', () => {
 
   it('transform ETL project from FWF to PURE', async () => {
     const pure = await projectETL2(yamlContent, p, settings)
+
+    console.log(pure)
 
     expect(pure.typeDiscriminator).toEqual('AwardManagementProject')
 
@@ -106,9 +111,17 @@ describe('YAML', () => {
           {
             classifications: [
               {
+                term: {
+                  de_DE: "301108 Molekulare Pathologie",
+                  en_GB: "301108 Molecular pathology",
+                },
                 uri: "/dk/atira/pure/core/oefos2012/3/301108",
               },
               {
+                term: {
+                  de_DE: "301306 Medizinische Molekularbiologie",
+                  en_GB: "301306 Medical molecular biology",
+                },
                 uri: "/dk/atira/pure/core/oefos2012/3/301306",
               },
             ],

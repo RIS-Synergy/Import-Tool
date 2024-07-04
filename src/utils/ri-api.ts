@@ -14,7 +14,7 @@ export async function callRIApi (endpoint, method = 'POST', body = null) {
     body: method === 'GET' ? null : JSON.stringify(body),
   })
 
-  log.debug(`Received Research Institution URL: ${url}`)
+  // log.debug(`Received Research Institution URL: ${url}`)
 
   return response.json()
 }
