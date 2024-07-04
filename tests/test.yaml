@@ -17,20 +17,13 @@ output:
       person:
         systemName: "Person"
         uuid: "${settings.personUUID}"
-        # uuid: "!<fn>getPersonUUID"
       role:
         uri: "/dk/atira/pure/upmproject/roles/upmproject/pi"
-        term:
-          en_GB: "Project Lead"
-          de_DE: "Projektleiter*in"
       organizations:
         - systemName: "Organization"
           uuid: "b2a38757-9395-4089-a2ba-ef39502950c3"
   type:
     uri: "/dk/atira/pure/upmproject/upmprojecttypes/upmproject/research_funding"
-    term:
-      en_GB: "Research funding"
-      de_DE: "Forschungsförderung"
   managingOrganization:
     systemName: "Organization"
     uuid: "b2a38757-9395-4089-a2ba-ef39502950c3"
@@ -42,21 +35,12 @@ output:
       id: "!<fn>getIdentifier:CROSSREF_GRANTID"
       type:
         uri: /dk/atira/pure/upm/classifiedsource/crossref_grant_id
-        term:
-          de_DE: Crossref grant ID
-          en_GB: Crossref grant ID
     - typeDiscriminator: ClassifiedId
       id: "!<fn>getIdentifier:PROJECT_NUMBER"
       type:
         uri: /dk/atira/pure/upm/classifiedsource/internalprojectid
-        term:
-          de_DE: Projektnummer
-          en_GB: Project ID
     - id: ris:FWF:project:${input.id}
       type:
-        term:
-          de_DE: RIS Synergy ID
-          en_GB: RIS Synergy ID
         uri: /dk/atira/pure/upm/classifiedsource/ris_id
       typeDiscriminator: ClassifiedId
   keywordGroups:
