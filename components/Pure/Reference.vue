@@ -58,8 +58,10 @@ const result = ref(null);
 const orgClass = computed(() => {
   if (!props.period) return
   const { startDate, endDate } = props.period;
+  const current = startDate && !endDate && true
   return {
-    current: startDate && !endDate && true
+    current,
+    notCurrent: !current,
   };
 });
 
@@ -100,6 +102,10 @@ onMounted(() => {
 .current {
   color: green;
   background-color: lightgreen;
+}
+
+.notCurrent {
+  display: none;
 }
 
 .email {

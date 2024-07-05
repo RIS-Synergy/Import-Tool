@@ -42,7 +42,6 @@
 const store = useProjectStore();
 const route = useRoute();
 const routes = useRouter();
-console.log("routes", routes);
 
 const id = route.params.id;
 const { data } = await useFetch(`/api/fa/projects/${id}`);
@@ -50,5 +49,4 @@ const { data } = await useFetch(`/api/fa/projects/${id}`);
 const transformLink = computed(() => {
   return { name: "project-id-transform", params: { id } };
 });
-
 </script>

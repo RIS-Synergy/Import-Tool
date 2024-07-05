@@ -66,7 +66,6 @@
                 variant="flat"
               ></v-btn>
             </template>
-
             <PureView :data="p" />
           </v-dialog>
         </td>
