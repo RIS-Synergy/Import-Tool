@@ -24,12 +24,34 @@
       </v-dialog>
 
       <v-spacer></v-spacer>
+
+      <v-dialog max-width="800">
+        <template v-slot:activator="{ props: activatorProps }">
+          <v-btn
+            class="text-none"
+            variant="flat"
+            rounded
+            width="12em"
+            v-bind="activatorProps"
+            color="grey"
+          >
+            Settings
+          </v-btn>
+        </template>
+
+        <template v-slot:default="{ isActive }">
+          <v-card title="Settings">
+            <SettingsView />
+          </v-card>
+        </template>
+      </v-dialog>
       <v-btn
         class="text-none"
         variant="flat"
         rounded
         width="12em"
         color="primary"
+        :disabled="!store.noEmptySetings"
         :to="transformLink"
       >
         Transform

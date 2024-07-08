@@ -1,9 +1,9 @@
 <template>
-  <div v-if="store.pure.pureId">
+  <div v-if="store.pure && store.pure.pureId">
     <h1>
       view page
     </h1>
-    <a v-if="store.pure.pureId" class="" :href="blankLink" target="_blank">PURE url</a>
+    <a v-if="store.pure && store.pure.pureId" class="" :href="blankLink" target="_blank">PURE url</a>
       <Yaml :json="store.pure" />
   </div>
 </template>
@@ -28,7 +28,9 @@ const blankLink = computed(() => {
 
 
 onMounted(() => {
-  if (!store.pure.pureId) {
+  console.log('errors can crash here when opening the monitor after a break')
+  console.log("onMounted with store", store)
+  if (store && store.pure && !store.pure.pureId) {
     loadProject(id, store);
   }
 });
