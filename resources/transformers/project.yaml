@@ -16,20 +16,20 @@ output:
     - typeDiscriminator: "InternalParticipantAssociation"
       person:
         systemName: "Person"
-        uuid: "${settings.personUUID}"
+        uuid: "${settings.person}"
       role:
         uri: "/dk/atira/pure/upmproject/roles/upmproject/pi"
       organizations:
         - systemName: "Organization"
-          uuid: "b2a38757-9395-4089-a2ba-ef39502950c3"
+          uuid: "${settings.organization}"
   type:
     uri: "/dk/atira/pure/upmproject/upmprojecttypes/upmproject/research_funding"
   managingOrganization:
     systemName: "Organization"
-    uuid: "b2a38757-9395-4089-a2ba-ef39502950c3"
+    uuid: "${settings.organization}"
   organizations:
     - systemName: "Organization"
-      uuid: "b2a38757-9395-4089-a2ba-ef39502950c3"
+      uuid: "${settings.organization}"
   identifiers:
     - typeDiscriminator: ClassifiedId
       id: "!<fn>getIdentifier:CROSSREF_GRANTID"
@@ -46,7 +46,4 @@ output:
   keywordGroups:
   - typeDiscriminator: ClassificationsKeywordGroup
     logicalName: oefos2012
-    name:
-      en_GB: Austrian Fields of Science 2012
-      de_DE: ÖFOS 2012
     classifications: "!<fn>oefos2012"

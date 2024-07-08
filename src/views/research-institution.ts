@@ -62,6 +62,7 @@ router.post('/upload', async (req: Request, res: Response) => {
   } else {
     const result = await callRIApi('/projects', 'PUT', pure)
     log.info('Created project', result.uuid)
+    await uploadProjectApplicationClusters(result)
     return res.json(result)
   }
 })
@@ -203,10 +204,5 @@ router.put('/:concepts/:uuid', async (req: Request, res: Response) => {
   const result = await callRIApi(`/${req.params.concepts}/${req.params.uuid}`, 'PUT', req.body)
   res.json(result)
 })
-
-// Sample error route
-// router.get('/foo', (req: Request, res: Response) => {
-//   throw new Error('foo')
-// })
 
 export default router

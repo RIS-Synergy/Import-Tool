@@ -14,8 +14,8 @@
         "typeDiscriminator": "InternalApplicantAssociation"
     }],
     "title": {
-        "de_DE": "Kreativ",
-        "en_GB": "Creative"
+      "de_DE": "Kreativ (Application)",
+      "en_GB": "Creative (Application)"
     },
     "organizations": [{
         "systemName": "Organization",

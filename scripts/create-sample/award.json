@@ -1,0 +1,53 @@
+{
+    "typeDiscriminator": "AwardManagementAward",
+    "title": {
+        "de_DE": "Kreative (Award)",
+        "en_GB": "Creative (Award)"
+    },
+    "fundings": [{
+        "awardedAmount": {
+            "currency": "EUR",
+            "value": "100"
+        },
+        "classifications": [{
+            "uri": "/dk/atira/pure/upm/fundingcategory/fwf"
+        }],
+        "funder": {
+            "systemName": "ExternalOrganization",
+            "uuid": "63e8f578-86ce-40cf-914a-f24b88d9eb51"
+        },
+        "typeDiscriminator": "AwardFinancialFundingAssociation",
+        "visibility": {
+            "key": "BACKEND"
+        }
+    }],
+    "managingOrganization": {
+        "systemName": "Organization",
+        "uuid": "14ac95fe-8982-4b1f-858a-4adb320c4e9c"
+    },
+    "organizations": [{
+        "systemName": "Organization",
+        "uuid": "8b21d0c4-84f9-41e4-8224-8511cf7d9587"
+    }],
+    "visibility": {
+        "key": "CONFIDENTIAL"
+    },
+    "awardDate": "2024-01-01",
+    "awardHolders": [{
+        "organizations": [{
+            "systemName": "Organization",
+            "uuid": "8b21d0c4-84f9-41e4-8224-8511cf7d9587"
+        }],
+        "person": {
+            "systemName": "Person",
+            "uuid": "058d63cb-54e3-4359-ae1e-d7e1df8deac5"
+        },
+        "role": {
+            "uri": "/dk/atira/pure/award/roles/award/pi"
+        },
+        "typeDiscriminator": "InternalAwardHolderAssociation"
+    }],
+    "type": {
+        "uri": "/dk/atira/pure/award/awardtypes/award/research_funding/award"
+    }
+}

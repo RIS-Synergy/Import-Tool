@@ -10,8 +10,8 @@ output:
       uri: "/dk/atira/pure/application/roles/application/pi"
     typeDiscriminator: InternalApplicantAssociation
   title:
-    de_DE: Kreativ
-    en_GB: Creative
+    de_DE: Kreativ (Application)
+    en_GB: Creative (Application)
   organizations:
   - systemName: Organization
     uuid: 8b21d0c4-84f9-41e4-8224-8511cf7d9587
