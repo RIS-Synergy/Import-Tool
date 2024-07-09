@@ -38,6 +38,7 @@ function getItems (itms) {
       PI: x.team[0].person.electronicAddress,
       start_date: x.startDate,
       end_date: x.endDate,
+      status: x.status,
       action: x
     }
   })
