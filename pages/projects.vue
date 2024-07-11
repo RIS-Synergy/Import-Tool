@@ -31,7 +31,8 @@ function getLang (item, lang) {
 }
 
 function getItems (itms) {
-  return itms.map((x) => {
+  return itms.map((data) => {
+    const x = data.risData
     return {
       id: x.id,
       title: getLang(x.title, 'en'),

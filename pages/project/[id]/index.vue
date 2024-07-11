@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ProjectView v-if="data" v-model="data" />
+    <ProjectView v-if="data" v-model="data.risData" />
     <v-card-actions class="my-3 mx-3">
       <v-dialog max-width="1200">
         <template v-slot:activator="{ props: activatorProps }">
@@ -18,7 +18,7 @@
 
         <template v-slot:default="{ isActive }">
           <v-card title="RIS Project">
-            <Yaml :json="data" @close="isActive.value = false" />
+            <Yaml :json="data.risData" @close="isActive.value = false" />
           </v-card>
         </template>
       </v-dialog>
