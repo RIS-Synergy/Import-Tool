@@ -13,15 +13,15 @@ async function importAll () {
     // if not exists
     const projectExists = await prisma.project.findUnique({
       where: {
-        risid: project.id
+        risId: project.id
       }
     })
 
     if (!projectExists) {
       const newProject = await prisma.project.create({
         data: {
-          risid: project.id,
-          data: project
+          risId: project.id,
+          risData: project
         }
       })
       console.log(newProject)
@@ -30,6 +30,7 @@ async function importAll () {
     }
   })
 }
+
 async function main() {
   importAll()
   // ... you will write your Prisma Client queries here

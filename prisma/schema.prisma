@@ -12,8 +12,17 @@ datasource db {
 
 // RIS
 model Project {
-  id      Int     @id @default(autoincrement())
-  risid   String  @unique
+  id Int @id @default(autoincrement())
 
-  data   Json
+  risId   String @unique
+  risData Json   @default("{}")
+
+  crisId String?
+
+  createdDate  DateTime @default(now())
+  modifiedDate DateTime @updatedAt
 }
+
+// TODO templates
+
+// TODO functions

@@ -52,7 +52,7 @@ router.post('/upload', async (req: Request, res: Response) => {
   const yamlBuffer = await fs.readFile('./resources/transformers/project.yaml')
   const yamlContent = yamlBuffer.toString()
 
-  const pure = await projectETL2(yamlContent, ris, settings)
+  const pure = await projectETL2(yamlContent, ris.risData, settings)
 
   if (uuid) {
     const result = await callRIApi(`/projects/${uuid}`, 'PUT', pure)

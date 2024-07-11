@@ -10,8 +10,10 @@ const router: Router = express.Router()
 
 router.post('/upload', async (req: Request, res: Response) => {
   const yamlBuffer = await fs.readFile('./resources/transformers/project.yaml')
+  console.log(req.body)
+
   const yamlContent = yamlBuffer.toString()
-  const result = await projectETL2(yamlContent, req.body.ris, req.body.settings)
+  const result = await projectETL2(yamlContent, req.body.ris.risData, req.body.settings)
   res.json({
     yamlTemplate: yamlContent,
     transformationResult: result

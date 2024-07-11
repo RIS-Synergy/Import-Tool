@@ -1,5 +1,8 @@
 import express, { Router, Request, Response } from "express"
 
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
+
 import { unexpectedErrorHandler } from '../middleware/errorHandler'
 import { getAuthEndpoint } from '../utils/oauth2'
 import { promises as fs } from 'fs'
@@ -27,10 +30,18 @@ router.get('/fundings', async (req: Request, res: Response) => {
 router.get('/projects/:id', async (req: Request, res: Response) => {
   if(process.env.RIS_USE_DEV) {
     // development
-    const jsonFile =  `./samples/projects/${process.env.RIS_USE_DEV}`
-    const projects = await fs.readFile(jsonFile).then((data) => JSON.parse(data.toString()))
-    const result = projects.find((project) => project.id === req.params.id)
-    log.warn(`Using test data '${process.env.RIS_USE_DEV}' for project ${req.params.id}`)
+    // const jsonFile =  `./samples/projects/${process.env.RIS_USE_DEV}`
+    // const projects = await fs.readFile(jsonFile).then((data) => JSON.parse(data.toString()))
+    // const result = projects.find((project) => project.id === req.params.id)
+    // log.warn(`Using test data '${process.env.RIS_USE_DEV}' for project ${req.params.id}`)
+    // res.json(result)
+
+    const result = await prisma.project.findUnique({
+      where: {
+        risId: req.params.id
+      }
+    })
+
     res.json(result)
   } else {
     // production
@@ -43,9 +54,13 @@ router.get('/projects', async (req: Request, res: Response) => {
   // RIS_URL_PROJECTS is not working, use DEV if needed
   if(process.env.RIS_USE_DEV) {
     // development
-    const jsonFile =  `./samples/projects/${process.env.RIS_USE_DEV}`
-    const result = await fs.readFile(jsonFile).then((data) => JSON.parse(data.toString()))
-    log.warn(`Using test data '${process.env.RIS_USE_DEV}' for projects`)
+    // const jsonFile =  `./samples/projects/${process.env.RIS_USE_DEV}`
+    // const result = await fs.readFile(jsonFile).then((data) => JSON.parse(data.toString()))
+    // log.warn(`Using test data '${process.env.RIS_USE_DEV}' for projects`)
+    // res.json(result)
+
+    // use the DB
+    const result = await prisma.project.findMany()
     res.json(result)
   } else {
     // production
