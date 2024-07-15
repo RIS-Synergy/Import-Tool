@@ -60,7 +60,12 @@ router.get('/projects', async (req: Request, res: Response) => {
     // res.json(result)
 
     // use the DB
-    const result = await prisma.project.findMany()
+    const result = await prisma.project.findMany({
+      orderBy : {
+        modifiedDate: 'desc'
+      }
+    })
+
     res.json(result)
   } else {
     // production

@@ -10,6 +10,8 @@ import { promises as fs } from 'fs'
 import { Logger } from "tslog";
 const log = new Logger({ name: 'view:ri'});
 
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 
 const router: Router = express.Router()
 
@@ -46,6 +48,19 @@ router.get('/search', async (req: Request, res: Response) => {
   res.json(result)
 })
 
+async function updateCrisId (risId: string, crisId: string) {
+  log.info('Updating project', risId, 'with crisId', crisId)
+  const result = await prisma.project.update({
+    where: {
+      risId
+    },
+    data: {
+      crisId: String(crisId)
+    }
+  })
+  log.debug('Updated project', result)
+}
+
 router.post('/upload', async (req: Request, res: Response) => {
   const { ris, settings, uuid } = req.body
 
@@ -58,11 +73,13 @@ router.post('/upload', async (req: Request, res: Response) => {
     const result = await callRIApi(`/projects/${uuid}`, 'PUT', pure)
     log.info('Update project', result.uuid)
     await uploadProjectApplicationClusters(result)
+    await updateCrisId(ris.risData.id, result.pureId)
     return res.json(result)
   } else {
     const result = await callRIApi('/projects', 'PUT', pure)
     log.info('Created project', result.uuid)
     await uploadProjectApplicationClusters(result)
+    await updateCrisId(ris.risData.id, result.pureId)
     return res.json(result)
   }
 })
@@ -127,6 +144,8 @@ router.post('/search', async (req: Request, res: Response) => {
     // console.log(result)
 
     result.items.map((item: any) => {
+      console.log('user', item.user)
+
       results.push({
           pureId: item.pureId,
           uuid: item.uuid,
