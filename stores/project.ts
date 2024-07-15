@@ -5,12 +5,14 @@ type Pure = {
   uuid: string;
 }
 
+const cleanSettings = {
+  person: null,
+  organization: null
+}
+
 export const useProjectStore = defineStore('project', {
   state: () => ({
-    settings: {
-      person: null,
-      organization: null
-    },
+    settings: cleanSettings,
     pure: {
       item: null
     },
@@ -30,6 +32,9 @@ export const useProjectStore = defineStore('project', {
     },
     setPure(pure: Pure) {
       this.pure = pure;
+    },
+    resetSettings() {
+      this.settings = cleanSettings;
     }
   },
 })

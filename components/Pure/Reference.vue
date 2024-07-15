@@ -64,6 +64,10 @@ const props = defineProps({
     type: String,
     required: false,
   },
+  parentUuid : {
+    type: String,
+    required: false,
+  },
 });
 
 const { systemName, uuid } = props.data;
@@ -94,11 +98,17 @@ function orgShorten () {
   return rest.length > numberOfText ? rest.slice(0, numberOfText) + '...' : rest
 }
 
+const { setPerson } = useProjectStore();
+
 const sameEmail = computed(() => {
   if (!props.email) return false
   if (!result.value) return false
   // compare both lowercase
-  return props.email.toLowerCase() === result.value.email.toLowerCase()
+  const same = props.email.toLowerCase() === result.value.email.toLowerCase()
+  if (same) {
+    setPerson(props.parentUuid)
+  }
+  return same
 });
 
 onMounted(() => {

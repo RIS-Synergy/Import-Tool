@@ -40,7 +40,8 @@ function getItems (itms) {
       start_date: x.startDate,
       end_date: x.endDate,
       status: x.status,
-      action: x
+      action: x,
+      pureId: data.crisId
     }
   })
 }
@@ -58,4 +59,12 @@ function email (str) {
 }
 
 const page = ref(1)
+
+// set store settings to {}
+const { resetSettings } = useProjectStore();
+
+// when entering the page, reset the settings
+onMounted(() => {
+  resetSettings()
+})
 </script>

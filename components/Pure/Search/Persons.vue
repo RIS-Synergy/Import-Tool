@@ -30,6 +30,7 @@
             v-if="p.details.user"
             :data="p.details.user"
             :email="props.email"
+            :parentUuid="p.uuid"
           />
         </td>
         <td>
@@ -46,8 +47,8 @@
         </td>
         <td>
           <v-icon
-            v-if="selected === p"
-            @click="selected = null"
+            v-if="selected === p || settings.person === p.uuid"
+            @click="selected = null ; setPerson(null)"
             icon="mdi-checkbox-marked-circle"
           />
           <v-icon
@@ -76,7 +77,7 @@
 
 <script setup lang="ts">
 // use the store
-const { setPerson } = useProjectStore();
+const { setPerson, settings } = useProjectStore();
 
 const model = defineModel();
 
@@ -97,16 +98,22 @@ function searchSave() {
 const search = ref(null);
 
 async function searchApi(str: string, entity: string) {
-  search.value = await $fetch("/api/ri/search", {
+  const result = await $fetch("/api/ri/search", {
     method: "POST",
     body: JSON.stringify({
       searchString: str.value,
       entity
     }),
   });
+
+  console.log('result', result)
+
+  // assign values for setPerson when the email is matched with the search result
+  search.value = result;
 }
 
 const selected = ref(null);
+// const selected = ref(settings.person);
 
 watch(selected, (val) => {
   if (val) {

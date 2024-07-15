@@ -52,7 +52,7 @@
 
         <template v-slot:default="{ isActive }">
           <v-card>
-            <Yaml :json="ris" @close="isActive.value = false" />
+            <Yaml :json="ris.risData" @close="isActive.value = false" />
           </v-card>
         </template>
       </v-dialog>
@@ -117,7 +117,9 @@ const uuid = (await getProjectUUID(id)).uuid;
 
 async function save(crud) {
   // create or edit
-  const result = await uploadToPure(ris.value, settings, uuid);
+  console.log('ris', ris);
+
+  const result = await uploadToPure(ris.value.risData, settings, uuid);
   store.setPure(result);
 
   // redirect to project view
