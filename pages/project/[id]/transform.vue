@@ -119,7 +119,8 @@ async function save(crud) {
   // create or edit
   console.log('ris', ris);
 
-  const result = await uploadToPure(ris.value.risData, settings, uuid);
+  const result = await uploadToPure(ris.value, settings, uuid);
+  // const result = await uploadToPure(ris.value.risData, settings, uuid);
   store.setPure(result);
 
   // redirect to project view

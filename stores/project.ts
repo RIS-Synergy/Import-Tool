@@ -24,6 +24,14 @@ export const useProjectStore = defineStore('project', {
 
       return Object.values(state.settings)
         .every((value) => value !== null)
+    },
+    numberOfSettings: (state) => {
+      return Object.values(state.settings)
+        .filter((value) => value !== null)
+        .length
+    },
+    totalNumOfSettings: (state) => {
+      return Object.keys(state.settings).length
     }
   },
   actions: {
