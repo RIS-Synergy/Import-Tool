@@ -25,4 +25,8 @@ const id = route.params.id;
 const uuid = 'dac59f08-371d-46f0-935e-592304d68148'
 
 const { data } = useFetch(`/api/ri/projects/${uuid}`)
+
+definePageMeta({
+  layout: "project"
+});
 </script>

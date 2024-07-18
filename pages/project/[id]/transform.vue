@@ -1,34 +1,5 @@
 <template>
   <v-card>
-    <!-- <v-card-title v-if="false">
-         {{ data.id }}
-         </v-card-title>
-         <div v-if="false" class="mx-5 my-2" v-for="title in titles">
-         {{ title }}
-         </div>
-         <v-row class="ml-2 mt-2">
-         <div>Settings</div>
-         <pre>{{ store.settings }}</pre>
-         </v-row>
-         <v-row class="ml-2 mt-2">
-         <div>UUID: </div>
-         <div>
-         {{ uuid }}
-         </div>
-         </v-row>
-         <v-row dense>
-         <v-col>
-         <v-select
-         class="ma-4"
-         :items="transformations"
-         label="Transformation"
-         v-model="selectedTransformation"
-         hide-details
-         ></v-select>
-         </v-col>
-         <v-col>
-         </v-col>
-         </v-row> -->
     <v-card-text v-if="result">
       <TransformDiff
         :template="result.yamlTemplate"
@@ -126,4 +97,8 @@ async function save(crud) {
   // redirect to project view
   router.push({ name: "project-id-view", params: { id: route.params.id } });
 }
+
+definePageMeta({
+  layout: "project"
+});
 </script>

@@ -12,7 +12,7 @@
             v-bind="activatorProps"
             color="grey"
           >
-            View Data
+            RIS Data
           </v-btn>
         </template>
 
@@ -59,4 +59,7 @@ onBeforeRouteLeave((to, from, next) => {
   next();
 });
 
+definePageMeta({
+  layout: "project"
+});
 </script>

@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 type Pure = {
   pureId: number;
   uuid: string;
+  risData: object;
 }
 
 const cleanSettings = {

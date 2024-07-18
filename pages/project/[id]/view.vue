@@ -1,10 +1,7 @@
 <template>
   <div v-if="store.pure && store.pure.pureId">
-    <h1>
-      view page
-    </h1>
     <a v-if="store.pure && store.pure.pureId" class="" :href="blankLink" target="_blank">PURE url</a>
-      <Yaml :json="store.pure" />
+    <Yaml :json="store.pure" />
   </div>
 </template>
 
@@ -33,5 +30,9 @@ onMounted(() => {
   if (store && store.pure && !store.pure.pureId) {
     loadProject(id, store);
   }
+});
+
+definePageMeta({
+  layout: "project"
 });
 </script>
