@@ -14,7 +14,6 @@
       <Yaml :json="result" :tab="1" />
     </v-col>
   </v-row>
-
 </template>
 
 
@@ -37,7 +36,4 @@ const formattedJson = computed(() => {
   // return props.json
   return yaml.load(props.template);
 });
-
-
-
 </script>

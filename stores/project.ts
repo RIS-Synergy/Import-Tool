@@ -17,12 +17,10 @@ export const useProjectStore = defineStore('project', {
     pure: {
       item: null
     },
+    risData: {}
   }),
   getters: {
-    double: (state) => state.count * 2,
     noEmptySetings: (state) => {
-      console.log('state.settings', state.settings)
-
       return Object.values(state.settings)
         .every((value) => value !== null)
     },
@@ -33,6 +31,9 @@ export const useProjectStore = defineStore('project', {
     },
     totalNumOfSettings: (state) => {
       return Object.keys(state.settings).length
+    },
+    sameNum: (state) => {
+      return state.numberOfSettings === state.totalNumOfSettings
     }
   },
   actions: {

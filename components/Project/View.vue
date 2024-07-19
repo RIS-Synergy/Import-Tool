@@ -29,10 +29,10 @@
     <ProjectEdit label="Team" v-model="model.team" component="Teams" />
     <ProjectEdit label="Funded" v-model="model.funded" component="Fundeds" />
   </v-container>
-  <hr />
-  <pre v-if="false">
-    {{ model }}
-  </pre>
+  <!-- <hr />
+       <pre v-if="false">
+       {{ model }}
+       </pre> -->
 </template>
 
 <script setup>
