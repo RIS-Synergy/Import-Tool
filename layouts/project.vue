@@ -1,6 +1,12 @@
 <template>
   <v-app id="inspire">
     <v-navigation-drawer v-model="drawer">
+        <v-list-item class="my-2" title="Import Tool" subtitle="hello world" prepend-icon="mdi-home"></v-list-item>
+      <v-divider></v-divider>
+      <v-list-item to="/projects" title="Projects" />
+      <v-list-item :to="`/fundings`" link title="Fundings" />
+      <v-list-item :to="`/info`" link title="Info"></v-list-item>
+      <v-list-item :to="`/pure`" link title="Pure"></v-list-item>
     </v-navigation-drawer>
 
     <v-app-bar>
@@ -9,9 +15,7 @@
       </template>
 
         <v-app-bar-title>
-          <v-breadcrumbs
-            :items="breadcrumbs"
-          >
+          <v-breadcrumbs :items="breadcrumbs" >
             <template v-slot:divider>
               <v-icon icon="mdi-chevron-right"></v-icon>
             </template>
@@ -46,82 +50,55 @@
     </v-app-bar>
 
     <v-main>
-      <slot />
+      <slot v-if="store.risData" />
     </v-main>
 
     <TransformButton />
-    <!-- <v-footer
-         v-if="!canHaveButtons.includes(route.name) && store.sameNum"
-         app
-         >
-         <v-row justify="center" no-gutters>
-         <v-spacer></v-spacer>
-         <v-btn
-         class="text-none"
-         variant="flat"
-         rounded
-         width="12em"
-         color="primary"
-         @click="save"
-         >
-         <span v-if="uuid">Update Project</span>
-         <span v-else>Create new Project</span>
-         </v-btn>
-
-         <!-- <v-btn
-         v-for="link in links"
-         :key="link"
-         width="12em"
-         color="black"
-         class="mx-2"
-         rounded="xl"
-         variant="flat"
-         >
-         {{ link }}
-         </v-btn> -->
-    <!-- </v-row>
-         </v-footer> -->
   </v-app>
 </template>
 
 <script setup>
 const drawer = ref(false);
 
-// current url
 const route = useRoute()
-const id = route.params.id;
-
-const breadcrumbs = ref(null)
-
-const { getProjectUUID, uploadToPure } = useResearchInstitution();
-const uuid = (await getProjectUUID(id)).uuid;
-
 const store = useProjectStore();
 
-onMounted(async () => {
-  breadcrumbs.value = [
+console.log('route id', route.params.id)
+
+const data = ref(null)
+
+if (route.params.id) {
+  console.log('route id', route.params.id)
+
+  data.value = await $fetch(`/api/fa/projects/${route.params.id}`);
+  store.risData = data.value.risData;
+
+} else {
+  console.log('no route id')
+}
+
+// watch route
+watch (route, (newRoute) => {
+  console.log('newRoute', newRoute)
+})
+
+const breadcrumbs = computed(() => {
+  return [
     {
       title: 'Projects',
       to: '/projects',
+    },
+    {
+      title: store.risData.title[0].text,
+      to: route.path,
     }
   ]
-
-  const data = await $fetch(`/api/fa/projects/${id}`);
-  console.log(data)
-
-  store.risData = data.risData;
-
-  breadcrumbs.value.push({
-    to: route.path,
-    title: store.risData.title[0].text
-  })
 })
 
-onUpdated (() => {
-  console.log('updated')
-  console.log('route', route)
-
+const id = computed(() => {
+  return route.params.id
 })
+
 
 const canHaveButtons = [
   'project-id-view',
@@ -129,21 +106,7 @@ const canHaveButtons = [
   // 'project-id-transform'
 ]
 
-const links = [
-  'settings',
-  'transform?',
-  // 'About Us',
-  // 'Team',
-  // 'Services',
-  // 'Blog',
-  // 'Contact Us',
-]
-
-
 </script>
 
 <style scoped>
-.v-btn {
-  /* margin-right: 1em; */
-}
 </style>

@@ -106,7 +106,7 @@ async function searchApi(str: string, entity: string) {
     }),
   });
 
-  console.log('result', result)
+  // console.log('result', result)
 
   // assign values for setPerson when the email is matched with the search result
   search.value = result;
