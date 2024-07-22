@@ -23,8 +23,6 @@
     <template v-slot:default="{ isActive }">
       <v-card>
         <v-card-actions class="">
-          <!-- <v-btn text="Close" @click="isActive.value = false"></v-btn> -->
-          <!-- <v-spacer></v-spacer> -->
           <v-dialog max-width="800">
             <template v-slot:activator="{ props: activatorProps }">
               <v-btn class="float-right" v-bind="activatorProps">

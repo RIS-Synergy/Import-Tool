@@ -50,7 +50,9 @@
     </v-app-bar>
 
     <v-main>
-      <slot v-if="store.risData" />
+      <ClientOnly>
+        <slot v-if="store.risData" />
+      </ClientOnly>
     </v-main>
 
     <TransformButton />
@@ -83,16 +85,27 @@ watch (route, (newRoute) => {
 })
 
 const breadcrumbs = computed(() => {
-  return [
+  var result = [
     {
       title: 'Projects',
-      to: '/projects',
+      to: '/projects'
     },
-    {
-      title: store.risData.title[0].text,
-      to: route.path,
-    }
   ]
+  if (!store.risData) return result
+
+  var title = ''
+    try {
+      title = store.risData.title[0].text
+    } catch (e) {
+      console.log('title error', e)
+    }
+
+  result.push({
+    title,
+    to: route.path
+  })
+
+  return result
 })
 
 const id = computed(() => {

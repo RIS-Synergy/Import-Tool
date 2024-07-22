@@ -6,41 +6,6 @@
         :result="result.transformationResult"
       />
     </v-card-text>
-    <!-- <v-card-actions class="my-3 mx-3">
-         <v-dialog max-width="1200">
-         <template v-slot:activator="{ props: activatorProps }">
-         <v-btn
-         class="text-none"
-         variant="flat"
-         rounded
-         width="12em"
-         v-bind="activatorProps"
-         color="grey"
-         >
-         View Data
-         </v-btn>
-         </template>
-
-         <template v-slot:default="{ isActive }">
-         <v-card>
-         <Yaml :json="ris.risData" @close="isActive.value = false" />
-         </v-card>
-         </template>
-         </v-dialog>
-
-         <v-spacer></v-spacer>
-         <v-btn
-         class="text-none"
-         variant="flat"
-         rounded
-         width="12em"
-         color="primary"
-         @click="save"
-         >
-         <span v-if="uuid">Update Project</span>
-         <span v-else>Create new Project</span>
-         </v-btn>
-         </v-card-actions> -->
   </v-card>
 </template>
 

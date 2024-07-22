@@ -28,7 +28,10 @@
     </v-app-bar>
 
     <v-main>
+      <ClientOnly>
+
       <slot />
+      </ClientOnly>
     </v-main>
   </v-app>
 </template>

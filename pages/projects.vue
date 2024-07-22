@@ -1,8 +1,13 @@
 <template>
+  <!-- <v-skeleton-loader
+       type="table-row-divider@20"
+       ></v-skeleton-loader>
+  -->
   <v-data-table
     :items="getItems(items)"
     density="compact"
     items-per-page="25"
+    @update:modelValue="test"
   >
     <template v-slot:item.action="x">
       <NuxtLink :to="`/project/${x.item.id}`">
@@ -22,8 +27,7 @@
 </template>
 
 <script setup>
-// taking the project locally TODO
-// const { data: items } = await useFetch('http://localhost:3000/fwf-test/projects.json')
+// taking the project locally
 const { data: items } = await useFetch('/api/fa/projects')
 
 function getLang (item, lang) {
@@ -31,7 +35,7 @@ function getLang (item, lang) {
 }
 
 function getItems (itms) {
-  return itms.map((data) => {
+  const result = itms.map((data) => {
     const x = data.risData
     return {
       id: x.id,
@@ -44,12 +48,17 @@ function getItems (itms) {
       pureId: data.crisId
     }
   })
+  // console.log('getItems', result)
+  return result
 }
 
 function linkToItem (id) {
   // to do: link to item: /projects/:id
 }
 
+function test () {
+  console.log('test', arguments)
+}
 function email (str) {
   // highlisht with bold, given the domain matches "univie.ac.at"
   if(!str) return str
@@ -65,6 +74,6 @@ const { resetSettings } = useProjectStore();
 
 // when entering the page, reset the settings
 onMounted(() => {
-  resetSettings()
+  // resetSettings()
 })
 </script>
