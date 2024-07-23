@@ -6,6 +6,7 @@ describe('custom transform functions', () => {
   it('all the functions', () => {
     expect(Object.keys(functions)).toEqual([
       'oefos2012',
+      'keywords',
       'getPersonUUID',
       'getIdentifier'
     ])

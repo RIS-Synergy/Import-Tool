@@ -41,8 +41,8 @@ describe("Application", () => {
         },
       ],
       "title": {
-        "de_DE": "Kreativ",
-        "en_GB": "Creative",
+        "de_DE": "Kreativ (Application)",
+        "en_GB": "Creative (Application)",
       },
       "organizations": [
         {
@@ -70,7 +70,7 @@ describe("Application", () => {
             "uuid": "63e8f578-86ce-40cf-914a-f24b88d9eb51",
           },
           "visibility": {
-            "key": "BACKEND",
+            "key": "CONFIDENTIAL",
           },
           "typeDiscriminator": "ApplicationFinancialFundingAssociation",
         },

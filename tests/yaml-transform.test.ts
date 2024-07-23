@@ -11,7 +11,8 @@ const p = projects.find(p => p.id === 'P34707')
 const yamlContent = fs.readFileSync('./resources/transformers/project.yaml', 'utf8')
 
 const settings = {
-  personUUID: '0000-0002-0131-2191',
+  person: '0000-0002-0131-2191',
+  organization: 'b2a38757-9395-4089-a2ba-ef39502950c3',
   defaultPersonUUID: 'default'
 }
 
@@ -55,7 +56,7 @@ describe('YAML', () => {
           "typeDiscriminator": "InternalParticipantAssociation",
           "person": {
             "systemName": "Person",
-            "uuid": settings.personUUID
+            "uuid": settings.person
           },
           "role": {
             "uri": "/dk/atira/pure/upmproject/roles/upmproject/pi"
@@ -113,12 +114,22 @@ describe('YAML', () => {
               },
             ],
                 logicalName: "oefos2012",
-                name: {
-                    de_DE: "ÖFOS 2012",
-                      en_GB: "Austrian Fields of Science 2012",
-                    },
                 typeDiscriminator: "ClassificationsKeywordGroup",
               },
+        {
+                "keywords": [
+                  {
+                    "freeKeywords": [
+                      "Chronic Lymphocytic Leukemia",
+                      "DNA repair",
+                      "Translocation",
+                    ],
+                    "locale": "en_GB",
+                  },
+                ],
+                "logicalName": "keywordContainers",
+                "typeDiscriminator": "FreeKeywordsKeywordGroup",
+              }
           ]
     })
   })

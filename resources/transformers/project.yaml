@@ -47,3 +47,6 @@ output:
   - typeDiscriminator: ClassificationsKeywordGroup
     logicalName: oefos2012
     classifications: "!<fn>oefos2012"
+  - typeDiscriminator: FreeKeywordsKeywordGroup
+    logicalName: keywordContainers
+    keywords: "!<fn>keywords"

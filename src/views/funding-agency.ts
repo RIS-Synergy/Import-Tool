@@ -30,18 +30,11 @@ router.get('/fundings', async (req: Request, res: Response) => {
 router.get('/projects/:id', async (req: Request, res: Response) => {
   if(process.env.RIS_USE_DEV) {
     // development
-    // const jsonFile =  `./samples/projects/${process.env.RIS_USE_DEV}`
-    // const projects = await fs.readFile(jsonFile).then((data) => JSON.parse(data.toString()))
-    // const result = projects.find((project) => project.id === req.params.id)
-    // log.warn(`Using test data '${process.env.RIS_USE_DEV}' for project ${req.params.id}`)
-    // res.json(result)
-
     const result = await prisma.project.findUnique({
       where: {
         risId: req.params.id
       }
     })
-
     res.json(result)
   } else {
     // production
@@ -54,18 +47,11 @@ router.get('/projects', async (req: Request, res: Response) => {
   // RIS_URL_PROJECTS is not working, use DEV if needed
   if(process.env.RIS_USE_DEV) {
     // development
-    // const jsonFile =  `./samples/projects/${process.env.RIS_USE_DEV}`
-    // const result = await fs.readFile(jsonFile).then((data) => JSON.parse(data.toString()))
-    // log.warn(`Using test data '${process.env.RIS_USE_DEV}' for projects`)
-    // res.json(result)
-
-    // use the DB
     const result = await prisma.project.findMany({
       orderBy : {
         modifiedDate: 'desc'
       }
     })
-
     res.json(result)
   } else {
     // production
@@ -77,10 +63,6 @@ router.get('/projects', async (req: Request, res: Response) => {
 router.get('/orgunits', async (req: Request, res: Response) => {
   const result = await getAuthEndpoint(process.env.RIS_URL_ORGUNITS)
   res.json(result)
-})
-
-router.get('/foo', (req: Request, res: Response) => {
-  throw new Error('foo')
 })
 
 export default router

@@ -64,22 +64,26 @@ async function updateCrisId (risId: string, crisId: string) {
 router.post('/upload', async (req: Request, res: Response) => {
   const { ris, settings, uuid } = req.body
 
+  console.log('upload', ris, settings)
+
   const yamlBuffer = await fs.readFile('./resources/transformers/project.yaml')
   const yamlContent = yamlBuffer.toString()
 
-  const pure = await projectETL2(yamlContent, ris.risData, settings)
+
+  // const pure = await projectETL2(yamlContent, ris.risData, settings)
+  const pure = await projectETL2(yamlContent, ris, settings)
 
   if (uuid) {
     const result = await callRIApi(`/projects/${uuid}`, 'PUT', pure)
     log.info('Update project', result.uuid)
     await uploadProjectApplicationClusters(result)
-    await updateCrisId(ris.risData.id, result.pureId)
+    await updateCrisId(ris.id, result.pureId)
     return res.json(result)
   } else {
     const result = await callRIApi('/projects', 'PUT', pure)
     log.info('Created project', result.uuid)
     await uploadProjectApplicationClusters(result)
-    await updateCrisId(ris.risData.id, result.pureId)
+    await updateCrisId(ris.id, result.pureId)
     return res.json(result)
   }
 })

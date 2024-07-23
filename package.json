@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "RIS-Synergy API: Funder -> PURE interface",
   "scripts": {
-    "dev": "nodemon src/server.ts",
+    "dev": "DOTENV_CONFIG_PATH=../.env nodemon src/server.ts",
+    "dev-prod": "DOTENV_CONFIG_PATH=../.env.production nodemon src/server.ts",
     "debug": "nodemon --exec node --inspect-brk -r ts-node/register scripts/create-project.ts",
     "test": "vitest",
     "create-project": "ts-node ./scripts/create-project.ts",
