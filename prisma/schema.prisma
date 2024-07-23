@@ -17,13 +17,28 @@ model Project {
   risId   String @unique
   risData Json   @default("{}")
 
-  crisId String?
+  crisId   String?
   crisUUID String?
 
   createdDate  DateTime @default(now())
   modifiedDate DateTime @updatedAt
 }
 
-// TODO templates
+enum TemplateType {
+  PROJECT
+  APPLICATION
+  AWARD
+}
+
+model Template {
+  id Int @id @default(autoincrement())
+
+  templateType TemplateType
+  name         String
+  yamlTemplate String
+
+  createdDate  DateTime @default(now())
+  modifiedDate DateTime @updatedAt
+}
 
 // TODO functions
