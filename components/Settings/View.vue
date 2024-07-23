@@ -28,8 +28,6 @@ const props = defineProps({
 
 const storeObject = computed(() => {
   return Object.entries(store.settings).map(([key, value]) => {
-    console.log(key, value);
-
     return {
       label: key,
       value: value,

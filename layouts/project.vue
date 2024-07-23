@@ -1,52 +1,49 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer">
-        <v-list-item class="my-2" title="Import Tool" subtitle="hello world" prepend-icon="mdi-home"></v-list-item>
-      <v-divider></v-divider>
-      <v-list-item to="/projects" title="Projects" />
-      <v-list-item :to="`/fundings`" link title="Fundings" />
-      <v-list-item :to="`/info`" link title="Info"></v-list-item>
-      <v-list-item :to="`/pure`" link title="Pure"></v-list-item>
-    </v-navigation-drawer>
+    <ClientOnly>
+      <v-navigation-drawer v-model="drawer">
+        <v-list-item
+          class="my-2"
+          title="Import Tool"
+          subtitle="hello world"
+          prepend-icon="mdi-home"
+        ></v-list-item>
+        <v-divider></v-divider>
+        <v-list-item to="/projects" title="Projects" />
+        <v-list-item :to="`/fundings`" link title="Fundings" />
+        <v-list-item :to="`/info`" link title="Info"></v-list-item>
+        <v-list-item :to="`/pure`" link title="Pure"></v-list-item>
+      </v-navigation-drawer>
+    </ClientOnly>
 
     <v-app-bar>
       <template v-slot:prepend>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       </template>
 
-        <v-app-bar-title>
-          <v-breadcrumbs :items="breadcrumbs" >
-            <template v-slot:divider>
-              <v-icon icon="mdi-chevron-right"></v-icon>
-            </template>
-          </v-breadcrumbs>
-        </v-app-bar-title>
+      <v-app-bar-title>
+        <v-breadcrumbs :items="breadcrumbs">
+          <template v-slot:divider>
+            <v-icon icon="mdi-chevron-right"></v-icon>
+          </template>
+        </v-breadcrumbs>
+      </v-app-bar-title>
 
-        <template v-slot:extension>
+      <template v-slot:extension>
+        <ClientOnly>
           <v-tabs>
-            <v-tab
-              :to="`/project/` + id + `/risdata`">
-              RIS Data
+            <v-tab :to="`/project/` + id + `/risdata`"> RIS Data </v-tab>
+            <v-tab :to="`/project/` + id"> View </v-tab>
+            <v-tab :to="`/project/` + id + `/settings`">
+              Settings ({{ store.numberOfSettings }}/{{
+                store.totalNumOfSettings
+              }})
             </v-tab>
-            <v-tab
-              :to="`/project/` + id">
-              View
-            </v-tab>
-            <v-tab
-              :to="`/project/` + id + `/settings`">
-              Settings ({{store.numberOfSettings}}/{{store.totalNumOfSettings}})
-            </v-tab>
-            <v-tab
-              :to="`/project/` + id + `/transform`">
-              Transform
-            </v-tab>
-            <v-tab
-              :to="`/project/` + id + `/view`">
-              PURE
-            </v-tab>
+            <v-tab :to="`/project/` + id + `/transform`"> Transform </v-tab>
+            <v-tab :to="`/project/` + id + `/view`"> PURE </v-tab>
           </v-tabs>
-        </template>
-
+        </ClientOnly>
+      </template>
     </v-app-bar>
 
     <v-main>
@@ -62,64 +59,60 @@
 <script setup>
 const drawer = ref(false);
 
-const route = useRoute()
+const route = useRoute();
 const store = useProjectStore();
 
-console.log('route id', route.params.id)
+console.log("route id", route.params.id);
 
-const data = ref(null)
+const data = ref(null);
 
 if (route.params.id) {
-  console.log('route id', route.params.id)
+  console.log("route id", route.params.id);
 
   data.value = await $fetch(`/api/fa/projects/${route.params.id}`);
   store.risData = data.value.risData;
-
 } else {
-  console.log('no route id')
+  console.log("no route id");
 }
 
 // watch route
-watch (route, (newRoute) => {
-  console.log('newRoute', newRoute)
-})
+watch(route, (newRoute) => {
+  console.log("newRoute", newRoute);
+});
 
 const breadcrumbs = computed(() => {
   var result = [
     {
-      title: 'Projects',
-      to: '/projects'
+      title: "Projects",
+      to: "/projects",
     },
-  ]
-  if (!store.risData) return result
+  ];
+  if (!store.risData) return result;
 
-  var title = ''
-    try {
-      title = store.risData.title[0].text
-    } catch (e) {
-      console.log('title error', e)
-    }
+  var title = "";
+  try {
+    title = store.risData.title[0].text;
+  } catch (e) {
+    console.log("title error", e);
+    // return result
+    // title = ''
+  }
 
   result.push({
     title,
-    to: route.path
-  })
+    to: route.path,
+  });
 
-  return result
-})
+  return result;
+});
 
 const id = computed(() => {
-  return route.params.id
-})
-
+  return route.params.id;
+});
 
 const canHaveButtons = [
-  'project-id-view',
-  // 'project-id-settings',
-  // 'project-id-transform'
-]
-
+  "project-id-view",
+];
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -17,7 +17,7 @@ export const useProjectStore = defineStore('project', {
     pure: {
       item: null
     },
-    risData: {}
+    risData: null
   }),
   getters: {
     noEmptySetings: (state) => {
