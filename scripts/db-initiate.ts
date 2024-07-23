@@ -37,16 +37,24 @@ async function createTemplates () {
       id: 1,
       templateType: 'PROJECT',
       name: 'Project 1',
-      yamlTemplate: await fs.readFile('./resources/transformers/project.yaml', 'utf8')
+      description: 'Default project template',
+      yamlTemplate: await fs.readFile('./resources/transformers/project1.yaml', 'utf8')
     },
     {
       id: 2,
+      templateType: 'PROJECT',
+      name: 'Project 2',
+      description: 'Project template without `organization`',
+      yamlTemplate: await fs.readFile('./resources/transformers/project2.yaml', 'utf8')
+    },
+    {
+      id: 3,
       templateType: 'APPLICATION',
       name: 'Application 1',
       yamlTemplate: await fs.readFile('./resources/transformers/application.yaml', 'utf8')
     },
     {
-      id: 3,
+      id: 4,
       templateType: 'AWARD',
       name: 'Award 1',
       yamlTemplate: await fs.readFile('./resources/transformers/award.yaml', 'utf8')
@@ -64,6 +72,7 @@ async function createTemplates () {
       const newTemplate = await prisma.template.create({
         data: {
           name: template.name,
+          description: template.description,
           templateType: template.templateType as TemplateType,
           yamlTemplate: template.yamlTemplate
         }
@@ -82,8 +91,8 @@ function calculateCountOf (type: string) {
 }
 
 async function main() {
-  importProjects()
-  createTemplates()
+  await importProjects()
+  await createTemplates()
 
   calculateCountOf('project')
   calculateCountOf('template')

@@ -35,6 +35,7 @@ model Template {
 
   templateType TemplateType
   name         String
+  description  String @default("")
   yamlTemplate String
 
   createdDate  DateTime @default(now())
