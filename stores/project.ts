@@ -14,6 +14,7 @@ const cleanSettings = {
 export const useProjectStore = defineStore('project', {
   state: () => ({
     settings: cleanSettings,
+    templateId: 32, // default template XXX
     pure: {
       item: null
     },

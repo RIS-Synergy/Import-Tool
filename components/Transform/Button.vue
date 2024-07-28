@@ -34,14 +34,17 @@ const canHaveButtons = [
   'project-id-view',
 ]
 
-const { getProjectUUID, uploadToPure } = useResearchInstitution();
-const uuid = (await getProjectUUID(id)).uuid;
+const { uploadToPure } = useResearchInstitution();
+// const uuid = (await getProjectUUID(id)).uuid;
+
+// uuid is from the store
+const uuid = store.pure && store.pure.uuid;
 
 async function saveTransformUpload(crud) {
   // create or edit
   console.log('ris', store.risData);
 
-  const result = await uploadToPure(store.risData, store.settings, uuid);
+  const result = await uploadToPure(store.risData, store.settings, uuid, store.templateId);
   store.setPure(result);
 
   // redirect to project view

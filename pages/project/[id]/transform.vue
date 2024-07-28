@@ -1,12 +1,16 @@
 <template>
-  <v-card>
-    <v-card-text v-if="result">
+  <div>
+    <v-card-text v-if="true">
+      <TransformSelect
+        @change="loadTransformation($event)"
+      />
       <TransformDiff
+        v-if="result"
         :template="result.yamlTemplate"
         :result="result.transformationResult"
       />
     </v-card-text>
-  </v-card>
+  </div>
 </template>
 
 <script setup>
@@ -28,25 +32,24 @@ const titles = computed(() => {
   return data.value.title.map((x) => x.text);
 });
 
-const { settings } = store;
+const { settings, templateId } = store;
 
-async function loadTransformation() {
+async function loadTransformation(id) {
+  console.log("loadTransformation", id);
+
   const x = await $fetch("/api/transform/upload", {
     method: "POST",
     body: JSON.stringify({
       ris: ris.value,
       settings,
+      templateId: id,
     }),
   });
   result.value = x;
 }
 
 onMounted(() => {
-  loadTransformation();
-});
-
-definePageMeta({
-  // layout: "custom", // TODO pause for now
+  loadTransformation(32);
 });
 
 const uuid = (await getProjectUUID(id)).uuid;
@@ -56,7 +59,6 @@ async function save(crud) {
   console.log('ris', ris);
 
   const result = await uploadToPure(ris.value, settings, uuid);
-  // const result = await uploadToPure(ris.value.risData, settings, uuid);
   store.setPure(result);
 
   // redirect to project view

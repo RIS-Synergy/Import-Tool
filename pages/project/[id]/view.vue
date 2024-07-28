@@ -25,10 +25,6 @@ const route = useRoute();
 const { loadProject } = useResearchInstitution();
 const id = route.params.id;
 
-definePageMeta({
-  // layout: "custom"
-});
-
 const blankLink = computed(() => {
   const pureId = store.pure.pureId;
   const link = `https://cris-test.univie.ac.at/admin/editor/dk/atira/pure/modules/unifiedprojectmodel/external/model/project/editor/upmprojecteditor.xhtml?scheme=&type=&id=${pureId}`;
@@ -46,6 +42,11 @@ onMounted(() => {
 
 definePageMeta({
   layout: "project",
+});
+
+onBeforeRouteUpdate((to, from, next) => {
+  console.log("onBeforeRouteUpdate [view]", to, from);
+  next();
 });
 </script>
 
