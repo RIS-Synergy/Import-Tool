@@ -26,6 +26,9 @@ app.use('/transform', require('./views/transform').default)
 // ÖFOS 2012
 app.use('/oefos', require('./views/oefos').default)
 
+// Templates
+app.use('/templates', require('./views/templates').default)
+
 // error handler last
 app.use(unexpectedErrorHandler)
 

@@ -16,5 +16,11 @@ export async function callRIApi (endpoint, method = 'POST', body = null) {
 
   // log.debug(`Received Research Institution URL: ${url}`)
 
+  if (!response.ok) {
+    const error = await response.json()
+    log.error(`Error calling Research Institution API`, error)
+    return { error }
+  }
+
   return response.json()
 }

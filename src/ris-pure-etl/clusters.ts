@@ -32,7 +32,9 @@ export async function uploadProjectApplicationClusters (project: any) {
   if (!applicationClusters) {
     const data = await getApplicationData()
     const application = await callRIApi('/applications', 'PUT', data)
-    // console.log('application', application)
+
+    log.info('Application', application)
+
     applicationPureId = application.pureId
     project.applicationClusters = [
       {
@@ -54,6 +56,8 @@ export async function uploadProjectApplicationClusters (project: any) {
       }
     ]
   }
+
+  log.info(`Project uuid: ${project.uuid}`)
 
   const projectResult = await callRIApi(`/projects/${project.uuid}`, 'PUT', project)
   log.info(`Update Project ${projectResult.pureId} to include application and award clusters`, [

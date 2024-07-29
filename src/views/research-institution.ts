@@ -48,42 +48,55 @@ router.get('/search', async (req: Request, res: Response) => {
   res.json(result)
 })
 
-async function updateCrisId (risId: string, crisId: string) {
+async function updateCrisId (risId: string, crisId: string, uuid: string) {
   log.info('Updating project', risId, 'with crisId', crisId)
   const result = await prisma.project.update({
     where: {
-      risId
+      risId,
     },
     data: {
-      crisId: String(crisId)
+      crisId: String(crisId),
+      crisUUID: uuid
     }
   })
-  log.debug('Updated project', result)
+  log.debug('Updated Project database', result.id)
 }
 
 router.post('/upload', async (req: Request, res: Response) => {
-  const { ris, settings, uuid } = req.body
+  const { ris, settings, uuid, templateId } = req.body
 
-  console.log('upload', ris, settings)
+  // console.log('upload', ris, settings)
+  // const templateId = req.body.templateId
 
-  const yamlBuffer = await fs.readFile('./resources/transformers/project.yaml')
-  const yamlContent = yamlBuffer.toString()
+  // const yamlBuffer = await fs.readFile('./resources/transformers/project.yaml')
+  // const yamlContent = yamlBuffer.toString()
 
+  const template = await prisma.template.findUnique({
+    where: {
+      id: templateId
+    }
+  })
+  const yamlBuffer = template.yamlTemplate
+
+  log.debug('Template', template.id, template.name)
 
   // const pure = await projectETL2(yamlContent, ris.risData, settings)
-  const pure = await projectETL2(yamlContent, ris, settings)
+  const pure = await projectETL2(template.yamlTemplate, ris, settings)
+
+  log.debug('Pure', pure)
 
   if (uuid) {
     const result = await callRIApi(`/projects/${uuid}`, 'PUT', pure)
+    log.warn('Update project', result)
     log.info('Update project', result.uuid)
     await uploadProjectApplicationClusters(result)
-    await updateCrisId(ris.id, result.pureId)
+    await updateCrisId(ris.id, result.pureId, result.uuid)
     return res.json(result)
   } else {
     const result = await callRIApi('/projects', 'PUT', pure)
-    log.info('Created project', result.uuid)
+    log.info('Created new project', result)
     await uploadProjectApplicationClusters(result)
-    await updateCrisId(ris.id, result.pureId)
+    await updateCrisId(ris.id, result.pureId, result.uuid)
     return res.json(result)
   }
 })
