@@ -1,6 +1,6 @@
 <template>
   <v-footer
-    v-if="!canHaveButtons.includes(route.name) && store.sameNum"
+    v-if="canHaveButtons.includes(route.name) && store.sameNum"
     app
   >
     <v-row justify="center" no-gutters>
@@ -13,7 +13,7 @@
         color="primary"
         @click="saveTransformUpload"
       >
-        <span v-if="uuid">Update Project</span>
+        <span v-if="store.crisUUID">Update Project</span>
         <span v-else>Create new Project</span>
       </v-btn>
     </v-row>
@@ -29,22 +29,25 @@ const { id } = route.params
 
 const store = useProjectStore();
 
-// Exclude this page in footer button
-const canHaveButtons = [
-  'project-id-view',
+const canHaveButtons = [ // v-if="...
+  'project-id-transform',
 ]
+
+console.log('route name', route.name)
+
 
 const { uploadToPure } = useResearchInstitution();
 // const uuid = (await getProjectUUID(id)).uuid;
 
 // uuid is from the store
-const uuid = store.pure && store.pure.uuid;
+// const uuid = store.pure && store.pure.uuid;
+// const uuid = store.crisUUID
 
 async function saveTransformUpload(crud) {
   // create or edit
   console.log('ris', store.risData);
 
-  const result = await uploadToPure(store.risData, store.settings, uuid, store.templateId);
+  const result = await uploadToPure(store.risData, store.settings, store.crisUUID, store.templateId);
   store.setPure(result);
 
   // redirect to project view

@@ -1,11 +1,5 @@
 import { defineStore } from 'pinia'
 
-type Pure = {
-  pureId: number;
-  uuid: string;
-  risData: object;
-}
-
 const cleanSettings = {
   person: null,
   organization: null
@@ -16,9 +10,11 @@ export const useProjectStore = defineStore('project', {
     settings: cleanSettings,
     templateId: 32, // default template XXX
     pure: {
-      item: null
+      // item: null
     },
-    risData: null
+    risData: null,
+    crisId: null,
+    crisUUID: null
   }),
   getters: {
     noEmptySetings: (state) => {
@@ -35,7 +31,7 @@ export const useProjectStore = defineStore('project', {
     },
     sameNum: (state) => {
       return state.numberOfSettings === state.totalNumOfSettings
-    }
+    },
   },
   actions: {
     setPerson(uuid: string) {
