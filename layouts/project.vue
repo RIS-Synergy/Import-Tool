@@ -2,17 +2,7 @@
   <v-app id="inspire">
     <ClientOnly>
       <v-navigation-drawer v-model="drawer">
-        <v-list-item
-          class="my-2"
-          title="Import Tool"
-          subtitle="hello world"
-          prepend-icon="mdi-home"
-        ></v-list-item>
-        <v-divider></v-divider>
-        <v-list-item to="/projects" title="Projects" />
-        <v-list-item :to="`/fundings`" link title="Fundings" />
-        <v-list-item :to="`/info`" link title="Info"></v-list-item>
-        <v-list-item :to="`/pure`" link title="Pure"></v-list-item>
+        <NavMenu />
       </v-navigation-drawer>
     </ClientOnly>
 

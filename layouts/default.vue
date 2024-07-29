@@ -1,7 +1,9 @@
 <template>
   <v-app id="inspire">
     <ClientOnly>
-      <v-navigation-drawer v-model="drawer"> </v-navigation-drawer>
+      <v-navigation-drawer v-model="drawer">
+        <NavMenu />
+      </v-navigation-drawer>
     </ClientOnly>
 
     <v-app-bar>
@@ -9,14 +11,10 @@
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       </template>
 
-      <v-app-bar-title>Projects</v-app-bar-title>
+      <v-app-bar-title>
+        <span v-if="false">Import Tool</span>
+      </v-app-bar-title>
 
-      <template v-if="false" v-slot:append>
-        <v-btn :to="`/projects`"> projects </v-btn>
-        <v-btn :to="`/fundings`"> fundings </v-btn>
-        <v-btn :to="`/info`"> info </v-btn>
-        <v-btn :to="`/pure`"> Pure </v-btn>
-      </template>
     </v-app-bar>
 
     <v-main>
