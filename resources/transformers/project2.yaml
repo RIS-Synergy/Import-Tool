@@ -7,8 +7,8 @@ output:
       en_GB: "Public - No restriction"
       de_DE: "Öffentlich - Keine Einschränkungen"
   title:
-    en_GB: "!<fn>getByLang:title:en"
-    de_DE: "!<fn>getByLang:title:de"
+    en_GB: "Hello World!"
+    de_DE: "Hallo Welt!"
   period:
     startDate: ${input.startDate}
     endDate: ${input.endDate}
@@ -27,6 +27,9 @@ output:
   managingOrganization:
     systemName: "Organization"
     uuid: "${settings.organization}"
+  organizations:
+    - systemName: "Organization"
+      uuid: "${settings.organization}"
   identifiers:
     - typeDiscriminator: ClassifiedId
       id: "!<fn>getIdentifier:CROSSREF_GRANTID"
