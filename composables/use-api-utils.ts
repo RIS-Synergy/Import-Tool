@@ -7,5 +7,17 @@ export const useApiUtils = () => {
     return await $fetch(`/api/templates/${id}`)
   }
 
-  return { getTemplates }
+  const setProjectId = async (store, route) => {
+    const { id } = route.params
+    if (!id) {
+      console.log('no id', route.params.id)
+    } else {
+      console.log('id', id)
+      const data = await $fetch(`/api/fa/projects/${id}`)
+      store.risData = data.risData
+    }
+
+  }
+
+  return { getTemplates, getTemplateId, setProjectId }
 }

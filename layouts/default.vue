@@ -29,6 +29,12 @@
 
 <script setup>
 const drawer = ref(false);
+
+const route = useRoute();
+const store = useProjectStore();
+const { setProjectId } = useApiUtils();
+
+setProjectId(store, route);
 </script>
 
 <style scoped>

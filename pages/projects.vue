@@ -1,8 +1,4 @@
 <template>
-  <!-- <v-skeleton-loader
-       type="table-row-divider@20"
-       ></v-skeleton-loader>
-  -->
   <v-data-table
     :items="getItems(items)"
     density="compact"

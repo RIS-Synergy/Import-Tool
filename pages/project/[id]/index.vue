@@ -3,6 +3,7 @@
 </template>
 
 <script setup>
+const route = useRoute();
 const store = useProjectStore();
 
 definePageMeta({

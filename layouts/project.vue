@@ -59,26 +59,21 @@
 <script setup>
 const drawer = ref(false);
 
+const router = useRouter()
 const route = useRoute();
 const store = useProjectStore();
 
-console.log("route id", route.params.id);
+const { setProjectId } = useApiUtils();
 
-const data = ref(null);
+const id = computed(() => {
+  return router.currentRoute.value.params.id // router for layouts, route in a page
+});
 
-if (route.params.id) {
-  console.log("route id", route.params.id);
-
-  data.value = await $fetch(`/api/fa/projects/${route.params.id}`);
-  store.risData = data.value.risData;
+if (id) {
+  setProjectId(store, router.currentRoute.value);
 } else {
   console.log("no route id");
 }
-
-// watch route
-watch(route, (newRoute) => {
-  console.log("newRoute", newRoute);
-});
 
 const breadcrumbs = computed(() => {
   var result = [
@@ -106,9 +101,6 @@ const breadcrumbs = computed(() => {
   return result;
 });
 
-const id = computed(() => {
-  return route.params.id;
-});
 
 const canHaveButtons = [
   "project-id-view",
