@@ -1,8 +1,8 @@
 <template>
-  <div v-if="store.pure && store.pure.pureId">
+  <div v-if="hasCrisData">
     <div class="ma-3 right">
       <v-btn
-        v-if="store.pure && store.pure.pureId"
+        v-if="hasCrisData"
         class=""
         variant="flat"
         color="grey"
@@ -11,10 +11,10 @@
         target="_blank"
       >
         <v-icon class="mr-2"> mdi-open-in-new </v-icon>
-        PURE url
+        CRIS url
       </v-btn>
     </div>
-    <Yaml :json="store.pure" />
+    <Yaml :json="store.crisData" />
   </div>
 </template>
 
@@ -25,17 +25,22 @@ const route = useRoute();
 const { loadProject } = useResearchInstitution();
 const id = route.params.id;
 
+const { crisId, crisUUID } = store;
+
+const hasCrisData = computed(() => {
+  return store.crisData && store.crisId
+});
+
 const blankLink = computed(() => {
-  const pureId = store.pure.pureId;
-  const link = `https://cris-test.univie.ac.at/admin/editor/dk/atira/pure/modules/unifiedprojectmodel/external/model/project/editor/upmprojecteditor.xhtml?scheme=&type=&id=${pureId}`;
-  console.log(link);
+  // const pureId = store.pure.pureId;
+  const link = `https://cris-test.univie.ac.at/admin/editor/dk/atira/pure/modules/unifiedprojectmodel/external/model/project/editor/upmprojecteditor.xhtml?scheme=&type=&id=${crisId}`;
   return link;
 });
 
 onMounted(() => {
-  console.log("errors can crash here when opening the monitor after a break");
-  console.log("onMounted with store", store);
-  if (store && store.pure && !store.pure.pureId) {
+  // console.log("errors can crash here when opening the monitor after a break");
+  // console.log("onMounted with store", store);
+  if (store && store.crisId) {
     loadProject(id, store);
   }
 });

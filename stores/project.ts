@@ -9,12 +9,13 @@ export const useProjectStore = defineStore('project', {
   state: () => ({
     settings: cleanSettings,
     templateId: 32, // default template XXX
-    pure: {
-      // item: null
-    },
+    // pure: { // TODO remove, we are not using 'store.pure' anywhere
+    //   // item: null
+    // },
     risData: null,
     crisId: null,
-    crisUUID: null
+    crisUUID: null,
+    crisData: null
   }),
   getters: {
     noEmptySetings: (state) => {

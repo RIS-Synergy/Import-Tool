@@ -30,7 +30,9 @@
               }})
             </v-tab>
             <v-tab :to="`/project/` + id + `/transform`"> Transform </v-tab>
-            <v-tab :to="`/project/` + id + `/view`"> PURE </v-tab>
+            <v-tab
+              :disabled="!store.crisId"
+              :to="`/project/` + id + `/view`"> CRIS </v-tab>
           </v-tabs>
         </ClientOnly>
       </template>

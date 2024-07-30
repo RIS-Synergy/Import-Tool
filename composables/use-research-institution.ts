@@ -24,9 +24,9 @@ export const useResearchInstitution = () => {
     return result
   }
 
-  const loadProject = async (id, store) => {
-    const { item, count } = await getProjectUUID(id)
-    store.pure = item
+  const loadProject = async (risId, store) => {
+    const { item, count } = await getProjectUUID(risId)
+    store.crisData = item
   }
 
   return { getProjectUUID, uploadToPure, loadProject }

@@ -21,6 +21,7 @@ export const useApiUtils = () => {
       store.risData = null
       store.crisId = null
       store.crisUUID = null
+      store.crisData = null
     }
 
     const { id } = route.params
