@@ -50,11 +50,6 @@ export async function replaceTags(obj: any, input: any, settings: any) {
             const [ fn ] = match[1].split(':').map(arg => arg.trim());
             // the arguments of the function
             const args = match[1].split(':').slice(1)
-            // console.log('fn', fn)
-            // console.log('functions', functions)
-            // console.log('functions[fn]', functions[fn])
-            // console.log('args', args)
-
 
             const fun = await functions[fn]
             // if it's an async function
