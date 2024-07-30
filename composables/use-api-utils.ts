@@ -33,7 +33,6 @@ export const useApiUtils = () => {
       store.crisId = data.crisId
       store.crisUUID = data.crisUUID
     }
-
   }
 
   return { getTemplates, getTemplateId, setProjectId }

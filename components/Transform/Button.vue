@@ -1,6 +1,7 @@
 <template>
   <v-footer
     v-if="canHaveButtons.includes(route.name) && store.sameNum"
+    class="my-3"
     app
   >
     <v-row justify="center" no-gutters>
@@ -33,15 +34,7 @@ const canHaveButtons = [ // v-if="...
   'project-id-transform',
 ]
 
-console.log('route name', route.name)
-
-
 const { uploadToPure } = useResearchInstitution();
-// const uuid = (await getProjectUUID(id)).uuid;
-
-// uuid is from the store
-// const uuid = store.pure && store.pure.uuid;
-// const uuid = store.crisUUID
 
 async function saveTransformUpload(crud) {
   // create or edit

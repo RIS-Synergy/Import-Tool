@@ -12,7 +12,7 @@
       </template>
 
       <v-app-bar-title>
-        <span v-if="false">Import Tool</span>
+        {{ titleName }}
       </v-app-bar-title>
 
     </v-app-bar>
@@ -33,10 +33,18 @@ const store = useProjectStore();
 const { setProjectId } = useApiUtils();
 
 setProjectId(store, route);
+
+const router = useRouter();
+// console.log(router.currentRoute)
+
+const titleName = computed(() => {
+  const name = router.currentRoute.value.name;
+
+  // capital first letter
+  return name.charAt(0).toUpperCase() + name.slice(1);
+});
+
 </script>
 
 <style scoped>
-.v-btn {
-  margin-right: 1em;
-}
 </style>
