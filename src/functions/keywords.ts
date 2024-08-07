@@ -1,33 +1,30 @@
-import { RISImport, RISPerson, Settings } from '../types';
+import { RISImport, RISPerson, Settings, LangText } from '../types';
 
-type Text = {
-  lang: string;
-  text: string;
-  trans: string;
+// Function to get the locale string based on the language code
+function getLocale(lang: string): string {
+  return lang === 'en' ? 'en_GB' : 'de_DE';
 }
 
-// TODO support more (or any) languages
-function getLocale (lang: string): string {
-  return lang === 'en' ? 'en_GB' : 'de_DE'
-}
-
+// The main export function
 export default function (ris: RISImport, settings: Settings): any[] {
-  const { keyword } = ris
+  const { keyword } = ris;
 
-  var data = {}
-  keyword.forEach((k: Text) => {
+  // Initialize an object to store texts categorized by language
+  const data: { [lang: string]: string[] } = {};
+
+  // Organize keywords by language
+  keyword.forEach((k: LangText) => {
     if (!data[k.lang]) {
-      data[k.lang] = []
+      data[k.lang] = [];
     }
-    data[k.lang].push(k.text)
-  })
+    data[k.lang].push(k.text);
+  });
 
-  const result = Object.entries(data).map(([lang, texts]) => {
-    return {
-      locale: getLocale(lang),
-      freeKeywords: texts
-    }
-  })
+  // Convert the data object into an array of results
+  const result = Object.entries(data).map(([lang, texts]) => ({
+    locale: getLocale(lang),
+    freeKeywords: texts
+  }));
 
-  return result
+  return result;
 }

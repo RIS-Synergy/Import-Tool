@@ -8,7 +8,7 @@ import { awaitAllPromises } from '../src/utils/promise'
 
 const p = projects.find(p => p.id === 'P34707')
 
-const yamlContent = fs.readFileSync('./resources/transformers/project.yaml', 'utf8')
+const yamlContent = fs.readFileSync('./resources/transformers/project1.yaml', 'utf8')
 
 const settings = {
   person: '0000-0002-0131-2191',

@@ -4,10 +4,6 @@ import { getValue } from '../views/oefos'
 
 type Classification = {
   uri: string;
-  // term: {
-  //   en_GB: string;
-  //   de_DE: string;
-  // };
 }
 
 export default function (ris: RISImport, settings: Settings): Classification[] {
@@ -21,10 +17,6 @@ export default function (ris: RISImport, settings: Settings): Classification[] {
 
     return {
       uri: `/dk/atira/pure/core/oefos2012/${value[0]}/${value}`,
-      // term: {
-      //   en_GB: `${value} ${en.Titel}`,
-      //   de_DE: `${value} ${de.Titel}`
-      // }
     }
   })
 

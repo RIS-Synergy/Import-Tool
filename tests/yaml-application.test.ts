@@ -70,7 +70,7 @@ describe("Application", () => {
             "uuid": "63e8f578-86ce-40cf-914a-f24b88d9eb51",
           },
           "visibility": {
-            "key": "CONFIDENTIAL",
+            "key": "BACKEND",
           },
           "typeDiscriminator": "ApplicationFinancialFundingAssociation",
         },
