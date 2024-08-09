@@ -1,0 +1,22 @@
+# yarn is a package manager. The meaningful value is saved in the package.json.
+.yarn
+
+# docs are stored in org mode
+docs/*.html
+
+# environment files
+.env*
+
+# output directory
+dist/
+
+# package dependencies
+node-modules/
+
+# samples data (not sure if this is ok to include this in repo)
+tests/samples/fwf/*
+
+# temporary view the results of a `create-...` script (projects, applications, grants)
+scripts/result.json
+# scpirt for custom uploads (from Chrome Debugger: node.js script)
+scripts/upload.js

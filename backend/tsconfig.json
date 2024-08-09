@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "sourceMap": true,
+        "outDir": "dist",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "types": [
+            "node", "@types/express", "@types/node"
+        ],
+        "typeRoots": [
+            "src/types",
+            "node_modules/@types"
+        ],
+        "rootDir": "src"
+    },
+    "include": [
+        "src/**/*.ts",
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

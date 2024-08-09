@@ -1,0 +1,168 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// RIS
+model Project {
+  id      Int     @id @default(autoincrement())
+  risid   String  @unique
+
+  identifiers Identifier[]
+  type     ProjectType
+  acronym String
+  title  Text[]
+  startDate String
+  endDate String
+  subjects Subject[]
+  keyword Text[]
+  abstractPR Text[]
+  status  ProjectStatus @default(IN_PREPERATION)
+  url    String
+
+  team TeamMember[]
+  funded Funded[]
+}
+
+// Enumerations
+enum ProjectStatus {
+  IN_PREPERATION
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  REJECTED
+}
+
+enum ProjectType {
+  RESEARCH_PROJECT
+  CONTRACT_RESEARCH
+  COLLABORATIVE_RESEARCH
+}
+
+enum IdentifierType {
+  CROSSREF_GRANTID
+  PROJECT_NUMBER
+  APPLICATION_NUMBER
+  ORCID
+  ROR
+  RINGGOLD
+  RIS_SYNERGY
+}
+
+type Text {
+  lang String
+  trans Translation
+  text String
+}
+
+enum Translation {
+  O // Original
+  H // Human-Translated
+  M // Machine-Translated
+}
+
+type Subject {
+  value String
+  fraction Decimal
+}
+
+type OrgUnit { // todo
+  id String
+  name Text[]
+  type OrganisationType
+  acronym String
+  electronicAddress String
+  partOf OrgUnit
+  identifier Identifier[]
+  // address  todo
+  submissionSystem String
+  // level todo
+  startEnd String
+  endDate String
+  website String
+}
+
+enum OrganisationType {
+  UNIVERSITY
+  VICE_RECTORATE
+  FACULTY
+  SCHOOL
+  DEPARTMENT
+  UNIT
+  CENTRAL_SERVICES
+  UNIVERSITY_CENTRE
+  CLINIC
+  CLINICAL_UNIT
+}
+
+type TeamMember {
+  type ProjectTeam
+  person Person
+  affiliation OrgUnit
+}
+
+enum ProjectTeam {
+  PRINCIPAL_INVESTIGATOR
+}
+
+type PersonName {
+  familyName String
+  firstName String
+}
+
+type Person {
+  personId String
+  electronicAddress String
+  personName PersonName
+  identifiers Identifier[]
+}
+
+type Identifier {
+  type IdentifierType
+  value String
+}
+
+type Funded {
+  by OrgUnit
+  as Funding
+}
+
+type Funding {
+  id String
+  name Text
+  type FundingType
+  amount Volume
+  appliedAmount Volume
+  startDate String
+  endDate String
+  // partOf BaseFunding // todo
+  recipients Recipient[]
+}
+
+type Volume {
+  value Decimal
+  currency String
+}
+
+enum FundingType {
+  PROGRAMME
+  CALL
+  ONGOING_CALL
+  RESEARCH_CONTRACT
+  AWARD
+  GRANT
+  SCHOLARSHIP
+}
+
+type Recipient {
+  appliedAmount Volume
+  amount Volume
+  orgUnit OrgUnit
+}

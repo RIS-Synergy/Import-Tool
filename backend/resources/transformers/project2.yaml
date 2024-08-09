@@ -1,0 +1,52 @@
+output:
+  typeDiscriminator: "AwardManagementProject"
+  systemName: "Project"
+  visibility:
+    key: "FREE"
+    description:
+      en_GB: "Public - No restriction"
+      de_DE: "Öffentlich - Keine Einschränkungen"
+  title:
+    en_GB: "Hello World!"
+    de_DE: "Hallo Welt!"
+  period:
+    startDate: ${input.startDate}
+    endDate: ${input.endDate}
+  participants:
+    - typeDiscriminator: "InternalParticipantAssociation"
+      person:
+        systemName: "Person"
+        uuid: "${settings.person}"
+      role:
+        uri: "/dk/atira/pure/upmproject/roles/upmproject/pi"
+      organizations:
+        - systemName: "Organization"
+          uuid: "${settings.organization}"
+  type:
+    uri: "/dk/atira/pure/upmproject/upmprojecttypes/upmproject/research_funding"
+  managingOrganization:
+    systemName: "Organization"
+    uuid: "${settings.organization}"
+  organizations:
+    - systemName: "Organization"
+      uuid: "${settings.organization}"
+  identifiers:
+    - typeDiscriminator: ClassifiedId
+      id: "!<fn>getIdentifier:CROSSREF_GRANTID"
+      type:
+        uri: /dk/atira/pure/upm/classifiedsource/crossref_grant_id
+    - typeDiscriminator: ClassifiedId
+      id: "!<fn>getIdentifier:PROJECT_NUMBER"
+      type:
+        uri: /dk/atira/pure/upm/classifiedsource/internalprojectid
+    - id: ris:FWF:project:${input.id}
+      type:
+        uri: /dk/atira/pure/upm/classifiedsource/ris_id
+      typeDiscriminator: ClassifiedId
+  keywordGroups:
+  - typeDiscriminator: ClassificationsKeywordGroup
+    logicalName: oefos2012
+    classifications: "!<fn>oefos2012"
+  - typeDiscriminator: FreeKeywordsKeywordGroup
+    logicalName: keywordContainers
+    keywords: "!<fn>keywords"

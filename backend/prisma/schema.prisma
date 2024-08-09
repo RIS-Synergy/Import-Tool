@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// RIS
+model Project {
+  id Int @id @default(autoincrement())
+
+  risId   String @unique
+  risData Json   @default("{}")
+
+  crisId   String?
+  crisUUID String?
+
+  createdDate  DateTime @default(now())
+  modifiedDate DateTime @updatedAt
+}
+
+enum TemplateType {
+  PROJECT
+  APPLICATION
+  AWARD
+}
+
+model Template {
+  id Int @id @default(autoincrement())
+
+  templateType TemplateType
+  name         String
+  description  String @default("")
+  yamlTemplate String
+
+  createdDate  DateTime @default(now())
+  modifiedDate DateTime @updatedAt
+}
+
+// TODO functions
