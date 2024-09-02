@@ -1,20 +1,23 @@
-ARG NODE_VERSION=20
+FROM node:lts-slim
 
-FROM node:${NODE_VERSION}-slim as base
+# ENV NODE_ENV=development
 
-ENV NODE_ENV=development
-
-WORKDIR /src
+WORKDIR /app
 
 # Build
-FROM base as build
+# FROM base as build
 
-COPY --link package.json package-lock.json .
-RUN npm install
+COPY package.json yarn.lock ./
+# COPY yarn.lock .
+
+RUN yarn install --ignore-platform
+# RUN yarn install
+
+COPY . .
 
 # Run
-FROM base
+# FROM build
 
-COPY --from=build /src/node_modules /src/node_modules
+# COPY --from=build /src/node_modules /src/node_modules
 
-CMD [ "npm", "run", "dev" ]
+CMD [ "yarn", "dev" ]

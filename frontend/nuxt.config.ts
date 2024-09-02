@@ -10,6 +10,8 @@ export default defineNuxtConfig({
     dirs: ['~/components']
   },
 
+  compatibilityDate: "2024-08-20",
+
   // as per vuetify docs:
   build: {
     transpile: ['vuetify']
