@@ -8,12 +8,14 @@ services:
     shm_size: 128mb # set shared memory limit when using docker-compose
 
     volumes:
-      - ${RIS_DATA_VOLUME}:/var/lib/postgresql/data
+      - ris_db:/var/lib/postgresql/data
 
     environment:
       POSTGRES_USER: ris-user
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
       POSTGRES_DB: ris_db
+    secrets:
+      - db_password
 
   backend:
     build:
@@ -21,6 +23,8 @@ services:
     container_name: ris-backend
     volumes:
       - ./backend/:/app
+    secrets:
+      - db_password
     ports:
       - "3031:3001"
 
@@ -33,3 +37,10 @@ services:
     ports:
       - "3032:3000"
       - "24678:24678"
+
+secrets:
+   db_password:
+     file: secrets/db_password.txt
+
+volumes:
+    ris_db:
