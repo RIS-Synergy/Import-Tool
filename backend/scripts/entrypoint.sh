@@ -1,14 +1,28 @@
 #!/bin/bash
 
-echo 'hi0'
-env
-
 # Generate Prisma Client
 npx prisma generate
 
-# Migration
-DATABASE_URL=postgresql://ris-user:dummy@ris-db:5432/ris_db?schema=public yarn prisma migrate dev
-echo 'hi'
+# db password from docker secrets
+db_password=$(cat /run/secrets/db_password)
 
-echo 'hi2'
+# Set the DATABASE_URL
+export DATABASE_URL=postgresql://ris-user:${db_password}@ris-db:5432/ris_db?schema=public
+
+# Migration
+yarn prisma migrate dev
+
+if [ "$NODE_ENV" = "production" ]; then
+  echo '====================='
+  echo '+++  PRODUCTION  +++'
+  echo '====================='
+else
+  echo '====================='
+  echo $NODE_ENV
+  echo '====================='
+  env | sort
+  echo '====================='
+fi
+
+# run the main process
 yarn dev

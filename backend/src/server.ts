@@ -19,7 +19,7 @@ if (!process.env.DATABASE_URL) {
 
 if (!process.env.AUTH_CLIENT_SECRET) {
   // same for AUTH_CLIENT_SECRET
-  process.env.AUTH_CLIENT_SECRET = fs.readFileSync('/run/secrets/fa_api_cliet_secret', 'utf8').replace(/\n$/, '');
+  process.env.AUTH_CLIENT_SECRET = fs.readFileSync('/run/secrets/fa_api_client_secret', 'utf8').replace(/\n$/, '');
 }
 
 if (!process.env.PURE_API_KEY) {

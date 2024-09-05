@@ -9,7 +9,8 @@ COPY package.json yarn.lock ./
 
 RUN npm install
 
-RUN yarn add glob # glob has odd dependency requirements
+# glob has odd dependency requirements
+RUN yarn add glob
 
 COPY . .
 

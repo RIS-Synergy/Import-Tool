@@ -1,0 +1,12 @@
+services:
+  backend:
+    environment:
+      - NODE_ENV=development
+      - RIS_USE_DEV=1
+
+  frontend:
+    volumes:
+      - ../frontend/:/app
+    ports:
+      # - "3032:3000"
+      - "24678:24678"
