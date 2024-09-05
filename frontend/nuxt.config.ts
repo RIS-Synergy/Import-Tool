@@ -27,9 +27,7 @@ export default defineNuxtConfig({
   ],
   nitro: {
     routeRules: {
-      // '/api/**': { proxy: 'http://localhost:3001/**' },
-      // '/api/**': { proxy: 'http://localhost:3031/**' },
-      '/api/**': { proxy: 'http://backend:3001/**' },
+      '/api/**': { proxy: 'http://backend:3000/**' },
     }
   },
   vite: {

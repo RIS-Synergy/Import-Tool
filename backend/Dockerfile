@@ -7,8 +7,10 @@ WORKDIR /app
 
 COPY package.json yarn.lock ./
 
-RUN yarn install --ignore-platform
+RUN npm install
+
+RUN yarn add glob # glob has odd dependency requirements
 
 COPY . .
 
-CMD [ "yarn", "dev" ]
+ENTRYPOINT [ "./scripts/entrypoint.sh" ]

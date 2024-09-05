@@ -15,3 +15,11 @@ Run this command in development mode:
 ```
 docker compose up
 ```
+
+Open the browser: http://localhost:3032/
+
+Open the documentation (with Tob
+
+```
+typora README.md &
+```

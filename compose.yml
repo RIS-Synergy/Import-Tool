@@ -21,10 +21,20 @@ services:
     build:
       context: ./backend
     container_name: ris-backend
-    volumes:
-      - ./backend/:/app
+    depends_on:
+      - db
     secrets:
       - db_password
+      - fa_api_cliet_secret
+      - ri_api_key
+    environment:
+      - AUTH_SERVER=${AUTH_SERVER}
+      - AUTH_CLIENT_ID=${AUTH_CLIENT_ID}
+      - RIS_USE_DEV=${RIS_USE_DEV}
+      - RIS_URL_INFO=${RIS_URL_INFO}
+      - RIS_URL_FUNDINGS=${RIS_URL_FUNDINGS}
+      - RIS_URL_PROJECTS=${RIS_URL_PROJECTS}
+      - RIS_URL_ORGUNITS=${RIS_URL_ORGUNITS}
     ports:
       - "3031:3001"
 
@@ -41,6 +51,10 @@ services:
 secrets:
    db_password:
      file: secrets/db_password.txt
+   fa_api_cliet_secret:
+     file: secrets/fa_api_cliet_secret.txt
+   ri_api_key:
+     file: secrets/ri_api_key.txt
 
 volumes:
     ris_db:
