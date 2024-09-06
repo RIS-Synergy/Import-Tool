@@ -10,8 +10,8 @@ COPY package.json yarn.lock ./
 RUN npm install
 
 # glob has odd dependency requirements
-RUN yarn add glob
+# RUN yarn add glob
 
-COPY . .
+# COPY . .
 
 ENTRYPOINT [ "./scripts/entrypoint.sh" ]

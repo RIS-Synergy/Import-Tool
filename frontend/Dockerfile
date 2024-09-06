@@ -10,14 +10,16 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 # COPY yarn.lock .
 
-RUN yarn install --ignore-platform
+RUN npm install
+    # yarn install --ignore-platform
+# RUN yarn install --ignore-platform
 # RUN yarn install
 
-COPY . .
+# COPY . .
 
 # Run
 # FROM build
 
 # COPY --from=build /src/node_modules /src/node_modules
 
-CMD [ "yarn", "dev" ]
+ENTRYPOINT [ "yarn", "dev" ]
