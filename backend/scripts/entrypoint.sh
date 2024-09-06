@@ -9,6 +9,9 @@ db_password=$(cat /run/secrets/db_password)
 # Set the DATABASE_URL
 export DATABASE_URL=postgresql://ris-user:${db_password}@db:5432/ris_db?schema=public
 
+# write password to .env
+echo "DATABASE_URL=$DATABASE_URL" > .env
+
 # Migration
 yarn prisma migrate dev
 

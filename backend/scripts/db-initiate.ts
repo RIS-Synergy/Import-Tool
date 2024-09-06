@@ -3,8 +3,21 @@ import { PrismaClient, TemplateType } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-async function importProjects () {
+// only allowed in development mode
+if (process.env.NODE_ENV !== 'development') {
+  console.error('This script is only allowed in development mode')
+  process.exit(1)
+}
 
+// ensure we only have 0 projects, otherwise exit
+prisma.project.count().then((count) => {
+  if (count > 0) {
+    console.error('There are already projects in the database. Exiting...')
+    process.exit(1)
+  }
+})
+
+async function importProjects () {
   // development
   const jsonFile =  `./samples/projects/${process.env.RIS_USE_DEV}`
   const result = await fs.readFile(jsonFile).then((data) => JSON.parse(data.toString()))

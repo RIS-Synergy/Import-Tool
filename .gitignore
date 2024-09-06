@@ -1,6 +1,8 @@
+# Secrets, ouch!
 secrets/
+
 .env
-node_modules
+node_modules/
 
 # some editors use this
 .#*

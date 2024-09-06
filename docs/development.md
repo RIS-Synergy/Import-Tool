@@ -1,13 +1,15 @@
 # Development
 
-Link to docker: [docker](./docker.md)
-
----
-
 Run this command in development mode:
 
 ```
 docker compose -f ./compose/core.yml -f ./compose/development.yml up -d
+```
+
+You might want to initialize the samples from an earlier database projects' file from the FWF.
+
+```
+docker exec backend yarn db-init
 ```
 
 Open the browser: http://localhost:3032/
