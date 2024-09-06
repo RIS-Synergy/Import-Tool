@@ -6,6 +6,8 @@ import fs from "fs";
 // dotenv.config({ path: envFile });
 dotenv.config()
 
+// TODO comment this out leter, we don't needit herer anymore
+// these env vars are already being applied on in develipppmet mode
 if (!process.env.DATABASE_URL) {
   // run it from /run/secrets/db_password and omit the \n
   var db_password = fs.readFileSync('/run/secrets/db_password', 'utf8').replace(/\n$/, '');
@@ -14,7 +16,7 @@ if (!process.env.DATABASE_URL) {
   db_password = encodeURIComponent(db_password)
 
   // set the DATABASE_URL that will be used in prisma.schema
-  process.env.DATABASE_URL = `postgresql://ris-user:${db_password}@ris-db:5432/ris_db?schema=public`
+  process.env.DATABASE_URL = `postgresql://ris-user:${db_password}@ris_db:5432/ris_db?schema=public`
 }
 
 if (!process.env.AUTH_CLIENT_SECRET) {

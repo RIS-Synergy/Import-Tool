@@ -7,7 +7,7 @@ npx prisma generate
 db_password=$(cat /run/secrets/db_password)
 
 # Set the DATABASE_URL
-export DATABASE_URL=postgresql://ris-user:${db_password}@ris-db:5432/ris_db?schema=public
+export DATABASE_URL=postgresql://ris-user:${db_password}@db:5432/ris_db?schema=public
 
 # Migration
 yarn prisma migrate dev
@@ -18,11 +18,15 @@ if [ "$NODE_ENV" = "production" ]; then
   echo '====================='
 else
   echo '====================='
-  echo $NODE_ENV
+  echo Env: $NODE_ENV
   echo '====================='
   env | sort
   echo '====================='
 fi
+
+# if [ "$NODE_ENV" = "development" ]; then
+# else
+# fi
 
 # run the main process
 yarn dev
