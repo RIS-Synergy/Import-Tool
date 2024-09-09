@@ -12,6 +12,8 @@ You might want to initialize the samples from an earlier database projects' file
 docker exec backend yarn db-init
 ```
 
+---
+
 Open the browser: http://localhost:3032/
 
 ---
@@ -24,7 +26,7 @@ docker exec backend npm run db-init
 
 ---
 
-Open the documentation preview
+Open the documentation preview:
 
 ```
 typora README.md &
@@ -35,4 +37,25 @@ If you need to inspect the container:
 
 ```
 docker exec -it backend /bin/bash
+```
+
+---
+
+Open the UniVie VPN, which is required for their test CRIS system, using a
+Time-based one-time password (TOTP), a 6-digit code):
+
+```
+f5fpc -s -t vpn.univie.ac.at -d /etc/ssl/certs/ -u <username>@<code>
+```
+
+View the VPN connection:
+
+```
+f5fpc --info
+```
+
+Stop the VPN connection:
+
+```
+f5fpc --stop
 ```

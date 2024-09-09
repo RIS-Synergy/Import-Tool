@@ -49,7 +49,7 @@ async function loadTransformation(id) {
 }
 
 onMounted(() => {
-  loadTransformation(32);
+  loadTransformation(3); // TODO
 });
 
 const uuid = (await getProjectUUID(id)).uuid;
