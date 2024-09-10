@@ -2,7 +2,8 @@ import { describe, it, expect } from 'vitest'
 import * as fs from 'fs';
 import * as yaml from 'yaml';
 
-import projects from './samples/fwf/projects'
+const projectsFile = `./samples/projects/${process.env.RIS_USE_DEV}`
+const projects = JSON.parse(fs.readFileSync(projectsFile, 'utf8'))
 import { projectETL2, replaceTags } from '../src/ris-pure-etl/index'
 import { awaitAllPromises } from '../src/utils/promise'
 

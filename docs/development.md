@@ -60,9 +60,15 @@ Stop the VPN connection:
 f5fpc --stop
 ```
 
-# Testing
+## Testing
 
-Run the shell in the container, then run tests:
+Run the tests:
+
+```
+docker exec -it backend yarn test
+```
+
+Alternatively, run the shell in the container, then run tests:
 
 ```shell
 > docker exec -it backend /bin/bash
