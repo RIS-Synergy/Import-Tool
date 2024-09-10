@@ -7,7 +7,7 @@ const projects = JSON.parse(fs.readFileSync(projectsFile, 'utf8'))
 import { projectETL2, replaceTags } from '../src/ris-pure-etl/index'
 import { awaitAllPromises } from '../src/utils/promise'
 
-const p = projects.find(p => p.id === 'P34707')
+const p = projects.find(p => p.id === 'PUB3333')
 
 const yamlContent = fs.readFileSync('./resources/transformers/project1.yaml', 'utf8')
 
@@ -45,12 +45,12 @@ describe('YAML', () => {
         }
       },
       title: {
-        en_GB: "DNA repair pathway decisions in normal and malignant B cells",
-        de_DE: "DNA Reparatur in normalen und malignen B Zellen"
+        en_GB: "Test Project Number Three",
+        de_DE: "Test Projekt Nummer Drei"
       },
       period: {
-        startDate: "2022-03-15",
-        endDate: "2026-03-14"
+        startDate: "2021-02-02",
+        endDate: "2025-08-01"
       },
       participants: [
         {
@@ -85,20 +85,20 @@ describe('YAML', () => {
       ],
       identifiers: [{
         "typeDiscriminator": "ClassifiedId",
-        "id": '10.55776/P34707',
+        "id": '10.55776/PUB3333',
         "type": {
           "uri": "/dk/atira/pure/upm/classifiedsource/crossref_grant_id"
         }
       },
       {
         "typeDiscriminator": "ClassifiedId",
-        "id": 'P 34707',
+        "id": 'PUB3333',
         "type": {
           "uri": "/dk/atira/pure/upm/classifiedsource/internalprojectid"
         }
       },
       {
-        id: "ris:FWF:project:P34707",
+        id: "ris:FWF:project:PUB3333",
         type: {
           uri: "/dk/atira/pure/upm/classifiedsource/ris_id"
         },
@@ -108,10 +108,13 @@ describe('YAML', () => {
           {
             classifications: [
               {
-                uri: "/dk/atira/pure/core/oefos2012/3/301108",
+                uri: "/dk/atira/pure/core/oefos2012/6/601004",
               },
               {
-                uri: "/dk/atira/pure/core/oefos2012/3/301306",
+                uri: "/dk/atira/pure/core/oefos2012/6/601009",
+              },
+              {
+                uri: "/dk/atira/pure/core/oefos2012/6/601012",
               },
             ],
                 logicalName: "oefos2012",
@@ -121,10 +124,13 @@ describe('YAML', () => {
                 "keywords": [
                   {
                     "freeKeywords": [
-                      "Chronic Lymphocytic Leukemia",
-                      "DNA repair",
-                      "Translocation",
-                    ],
+                      "Manuscript studies",
+                      "Palaeography",
+                      "Textual criticism",
+                      "Middle Ages",
+                      "History of the book",
+                      "Medieval manuscripts"
+        ],
                     "locale": "en_GB",
                   },
                 ],
