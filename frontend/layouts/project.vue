@@ -1,10 +1,8 @@
 <template>
   <v-app id="inspire">
-    <ClientOnly>
       <v-navigation-drawer v-model="drawer">
         <NavMenu />
       </v-navigation-drawer>
-    </ClientOnly>
 
     <v-app-bar>
       <template v-slot:prepend>
@@ -20,7 +18,6 @@
       </v-app-bar-title>
 
       <template v-slot:extension>
-        <ClientOnly>
           <v-tabs>
             <v-tab :to="`/project/` + id + `/risdata`"> RIS Data </v-tab>
             <v-tab :to="`/project/` + id"> View </v-tab>
@@ -34,14 +31,11 @@
               :disabled="!store.crisId"
               :to="`/project/` + id + `/view`"> CRIS </v-tab>
           </v-tabs>
-        </ClientOnly>
       </template>
     </v-app-bar>
 
     <v-main>
-      <ClientOnly>
         <slot v-if="store.risData" />
-      </ClientOnly>
     </v-main>
 
     <TransformButton />
