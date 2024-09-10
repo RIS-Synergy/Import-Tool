@@ -2,13 +2,13 @@ import { defineStore } from 'pinia'
 
 const cleanSettings = {
   person: null,
-  organization: null
+  organization: null,
 }
 
 export const useProjectStore = defineStore('project', {
   state: () => ({
     settings: cleanSettings,
-    templateId: 32, // default template XXX
+    templateId: null, // default template XXX
     // pure: { // TODO remove, we are not using 'store.pure' anywhere
     //   // item: null
     // },
@@ -43,6 +43,10 @@ export const useProjectStore = defineStore('project', {
     },
     resetSettings() {
       this.settings = cleanSettings;
+    },
+    setSettings(config: { person: string, organization: string }) {
+      this.settings.person = config.valuePerson
+      this.settings.organization = config.valueOrganization
     }
   },
 })

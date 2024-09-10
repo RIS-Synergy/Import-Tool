@@ -1,5 +1,7 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
+console.log(process.env)
+
 export default defineNuxtConfig({
   devtools: { enabled: false },
 
@@ -16,6 +18,14 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify']
   },
+
+  runtimeConfig: {
+    public: {
+      valueOrganization: process.env.RIS_DEV_VALUE_ORGANIZATION,
+      valuePerson: process.env.RIS_DEV_VALUE_PERSON
+    }
+  },
+
   modules: [
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {

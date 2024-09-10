@@ -9,6 +9,10 @@ services:
   frontend:
     volumes:
       - ../frontend/:/app
+    environment:
+      - RIS_DEV_VALUE_PERSON=Person1-uuid-1234-abc
+      - RIS_DEV_VALUE_ORGANIZATION=Org1-uuid-6789-xyz
+
     ports:
       - "3032:3000"
       - "24678:24678"

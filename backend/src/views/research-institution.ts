@@ -16,6 +16,11 @@ const prisma = new PrismaClient()
 const router: Router = express.Router()
 
 router.get('/project/:id', async (req: Request, res: Response) => {
+  if (process.env.RIS_USE_DEV) {
+    // if development, don't call the CRIS API
+    res.json({})
+  }
+
   const result = await callRIApi('/projects/search', 'POST', {
     size: 10,
     offset: 0,
@@ -107,8 +112,12 @@ router.get('/organizations/:id', async (req: Request, res: Response) => {
 })
 
 router.get('/persons/:id', async (req: Request, res: Response) => {
-  const result = await callRIApi(`/persons/${req.params.id}`, 'GET')
-  res.json(result)
+  if (process.env.RIS_USE_DEV) {
+    return res.json({})
+  } else {
+    const result = await callRIApi(`/persons/${req.params.id}`, 'GET')
+    res.json(result)
+  }
 })
 
 router.get('/reference/:systemName/:uuid', async (req: Request, res: Response) => {

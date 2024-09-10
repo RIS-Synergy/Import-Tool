@@ -91,6 +91,11 @@ const breadcrumbs = computed(() => {
 const canHaveButtons = [
   "project-id-view",
 ];
+
+// Apply the runtime config to the store (settings: e.g. person and orgs)
+// This is only needed for RIS_DEV values
+const config = useRuntimeConfig()
+store.setSettings(config.public)
 </script>
 
 <style scoped></style>
