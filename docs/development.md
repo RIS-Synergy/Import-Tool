@@ -59,6 +59,13 @@ Stop the VPN connection:
 ```
 f5fpc --stop
 ```
+## Logging
+
+Run the logs (and follow the log output):
+
+```
+docker compose -f ./compose/core.yml -f ./compose/development.yml logs -f
+```
 
 ## Testing
 

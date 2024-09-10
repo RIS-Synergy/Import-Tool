@@ -11,7 +11,7 @@
     class="my-2"
     v-model="theme.global.current.dark"
     title="Dark Mode"
-    :prepend-icon="prepare_icon"
+    @prepend-icon="prepare_icon()"
     @click="toggleTheme" />
   <v-divider></v-divider>
   <v-list-item to="/projects" title="Projects" />

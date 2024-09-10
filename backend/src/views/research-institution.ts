@@ -40,12 +40,12 @@ router.get('/project/:id', async (req: Request, res: Response) => {
 })
 
 router.get('/search', async (req: Request, res: Response) => {
-  const result = await callRIApi('/projects/search', 'POST', {
-    size: 100,
-    offset: 0,
-    searchString: "10.55776/", // FWF id
-  })
-  res.json(result)
+    const result = await callRIApi('/projects/search', 'POST', {
+      size: 100,
+      offset: 0,
+      searchString: "10.55776/", // FWF id
+    })
+    res.json(result)
 })
 
 async function updateCrisId (risId: string, crisId: string, uuid: string) {
@@ -123,6 +123,11 @@ router.get('/reference/:systemName/:uuid', async (req: Request, res: Response) =
 })
 
 router.post('/search', async (req: Request, res: Response) => {
+  // if development, don't call the CRIS API
+  if (process.env.RIS_USE_DEV) {
+    res.json({})
+  }
+
   const entities = {
     persons: [
     {
