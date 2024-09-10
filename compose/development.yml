@@ -4,7 +4,7 @@ services:
       - ../backend/:/app
     environment:
       - NODE_ENV=development
-      - RIS_USE_DEV=2024-06-19_projects.json
+      - RIS_USE_DEV=2024-04-18_projects.json
 
   frontend:
     volumes:

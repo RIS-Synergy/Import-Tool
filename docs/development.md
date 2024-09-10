@@ -59,3 +59,14 @@ Stop the VPN connection:
 ```
 f5fpc --stop
 ```
+
+# Testing
+
+Run the shell in the container, then run tests:
+
+```shell
+> docker exec -it backend /bin/bash
+root@abcd123xyz# npm run test
+```
+
+When editing the files during development, the test process should update as you edit the tests.
