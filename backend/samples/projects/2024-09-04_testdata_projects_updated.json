@@ -1,0 +1,2961 @@
+[
+  {
+    "id": "PAT1111111",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/PAT1111111"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "PAT1111111"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/PAT1111111",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Testprojekt Nummer Eins"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number One"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.2,
+        "value": "103017"
+      },
+      {
+        "fraction": 0.2,
+        "value": "103032"
+      },
+      {
+        "fraction": 0.6,
+        "value": "103043"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Polymer Nanocomposites"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Thermoelectric Materials"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Quantum Dots"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Nanofluids"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Plasmonic Metamaterials"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Monte Carlo Simulations"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/PAT1111111",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "111111",
+          "electronicAddress": "personone@univie.ac.at",
+          "personName": {
+            "familyName": "Nachnameeins",
+            "firstName": "Bernhard"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-1111-1111"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/PAT1111111",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Einzelprojekte"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 253749.25
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "10",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Universität Wien"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/03prydq77"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": "PAT2222222",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/PAT2222222"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "PAT2222222"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/PAT2222222",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Zwei"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Two"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.1,
+        "value": "601005"
+      },
+      {
+        "fraction": 0.1,
+        "value": "601014"
+      },
+      {
+        "fraction": 0.8,
+        "value": "601016"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Austrian History"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Habsburg Empire"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Cultural Diversity"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Catholic Church"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/PAT2222222",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "222222",
+          "electronicAddress": " persontwo@uniins.ac.at",
+          "personName": {
+            "familyName": "Nachnamezwei",
+            "firstName": "Barbara"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-2222-2222"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/PAT2222222",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Einzelprojekte"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 532390.21
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "33",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Universität Innsbruck"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/054pv6659"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": "2023-05-01",
+    "endDate": "2027-11-31"
+  },
+  {
+    "id": "PUB3333",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/PUB3333"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "PUB3333"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/PUB3333",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Drei"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Three"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.05,
+        "value": "601004"
+      },
+      {
+        "fraction": 0.7,
+        "value": "601009"
+      },
+      {
+        "fraction": 0.25,
+        "value": "601012"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Manuscript studies"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Palaeography"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Textual criticism"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Middle Ages"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "History of the book"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Medieval manuscripts"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "ACTIVE",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/PUB3333",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "333333",
+          "electronicAddress": "personthree@uni-graz.at",
+          "personName": {
+            "familyName": "Nachnamedrei",
+            "firstName": "Fritz"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-3333-3333"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/PUB3333",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Buchpublikation"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 25000
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "25",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Universität Graz"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/01faaaf77"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": "2021-02-02",
+    "endDate": "2025-08-01"
+  },
+  {
+    "id": "TAI4444444",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/TAI4444444"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "TAI4444444"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/TAI4444444",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": " Test Projekt Nummer Vier"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": " Test Project Number Four"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.3,
+        "value": "106012"
+      },
+      {
+        "fraction": 0.5,
+        "value": "106022"
+      },
+      {
+        "fraction": 0.2,
+        "value": "106059"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Microbiome Structure"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Leech Bacterial Community"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Host-Microbe Interactions"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Gastropoda Symbionts"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/TAI4444444",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "444444",
+          "electronicAddress": "personfour@univie.ac.at",
+          "personName": {
+            "familyName": "Nachnamevier",
+            "firstName": "Susanne"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-4444-4444"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/TAI4444444",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "1000 Ideen"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 200000.0
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "10",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Universität Wien"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/03prydq77"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": " TAI5555555",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/TAI5555555"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "TAI5555555"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/TAI5555555",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Fünf"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Five"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.5,
+        "value": "107006"
+      },
+      {
+        "fraction": 0.2,
+        "value": "505041"
+      },
+      {
+        "fraction": 0.3,
+        "value": "507017"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Sustainable development"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Climate change mitigation"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Renewable energy"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Environmental policy"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Innovative technologies"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/TAI5555555",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "555555",
+          "electronicAddress": "personfive@fh-kaernten.at",
+          "personName": {
+            "familyName": "Nachnamefünf",
+            "firstName": "Peter"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-5555-5555"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/TAI5555555",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "1000 Ideen"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 250000.0
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "913",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "FH Kärnten"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/036w00e23"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": "TAI6666666",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/TAI6666666"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "TAI6666666"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/TAI6666666",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Sechs"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Six"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.25,
+        "value": "105105"
+      },
+      {
+        "fraction": 0.25,
+        "value": "105205"
+      },
+      {
+        "fraction": 0.25,
+        "value": "105206"
+      },
+      {
+        "fraction": 0.25,
+        "value": "507005"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Paleontology"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Biochemistry"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Ecophysiology"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Geoinformatics"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Environmental Monitoring"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Sustainable Development"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/TAI6666666",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "666666",
+          "electronicAddress": "personsix@uibk.ac.at",
+          "personName": {
+            "familyName": "Nachnamesechs",
+            "firstName": "Maria"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-6666-6666"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/TAI6666666",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "1000 Ideen"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 150000.5
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "33",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Universität Innsbruck"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/054pv6659"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": "PAT7777777",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/PAT7777777"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "PAT7777777"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/PAT7777777",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Sieben"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Seven"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.6,
+        "value": "504030"
+      },
+      {
+        "fraction": 0.4,
+        "value": "508009"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Digital Economy"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Marketing Strategy"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Organizational Behavior"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Innovation Management"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/PAT7777777",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "77777",
+          "electronicAddress": "personseven@fhstp.ac.at",
+          "personName": {
+            "familyName": "Nachnamesieben",
+            "firstName": "Markus"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-7777-7777"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/PAT7777777",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Einzelprojekte"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 499999.99
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "823",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "FH St. Pölten"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/039a2re55"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": "PAT8888888",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/PAT8888888"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "PAT8888888"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/PAT8888888",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Acht"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Eight"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.35,
+        "value": "102001"
+      },
+      {
+        "fraction": 0.3,
+        "value": "102019"
+      },
+      {
+        "fraction": 0.15,
+        "value": "103006"
+      },
+      {
+        "fraction": 0.2,
+        "value": "104008"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Nanostructures; Quantum Chemistry; Materials Science"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Machine Vision; Deep Learning; Computer Graphics"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/PAT8888888",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "888888",
+          "electronicAddress": "personeight@tuwien.ac.at",
+          "personName": {
+            "familyName": "Nachnameacht",
+            "firstName": "Alexandra"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-8888-8888"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/PAT8888888",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Einzelprojekte"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 453210.91
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "55",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Technische Universität Wien"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/04d836q62"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": "PAT9999999",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/PAT9999999"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "PAT9999999"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/PAT9999999",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Neun"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Nine"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.3,
+        "value": "501001"
+      },
+      {
+        "fraction": 0.3,
+        "value": "501006"
+      },
+      {
+        "fraction": 0.1,
+        "value": "501011"
+      },
+      {
+        "fraction": 0.3,
+        "value": "501026"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Visual Cognition"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Neural Plasticity"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Brain-Computer Interfaces"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Attentional Control"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Working Memory"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/PAT9999999",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "999999",
+          "electronicAddress": "personnine@uni-graz.at",
+          "personName": {
+            "familyName": "Nachnameneun",
+            "firstName": "Christine"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-9999-9999"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/PAT9999999",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Einzelprojekte"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 510000.0
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "25",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Universität Graz"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/01faaaf77"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": "PAT1010101",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/PAT1010101"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "PAT1010101"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/PAT1010101",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Zehn"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Ten"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.9,
+        "value": "103032"
+      },
+      {
+        "fraction": 0.1,
+        "value": "205017"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Superfluidity"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Vortex Stability"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Heat Transfer in Superfluids"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Critical Velocity Phenomena"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Non-Equilibrium Thermodynamics"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/PAT1010101",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "101010",
+          "electronicAddress": "personten@tugraz.at",
+          "personName": {
+            "familyName": "Nachnahmezehn",
+            "firstName": "Martina"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-1010-1010"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/PAT1010101",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Einzelprojekte"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 449922.0
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "6",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Technische Universität Graz"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/00d7xrm67"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": "PAT0110110",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/PAT0110110"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "PAT0110110"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/PAT0110110",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Elf"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Eleven"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.25,
+        "value": "301306"
+      },
+      {
+        "fraction": 0.25,
+        "value": "301904"
+      },
+      {
+        "fraction": 0.5,
+        "value": "302024"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Synthetic biology"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "CRISPR-Cas9 gene editing"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Bioinformatics and computational genomics"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Microbiome research"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/PAT0110110",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "011011",
+          "electronicAddress": "personeleven@medunigraz.at",
+          "personName": {
+            "familyName": "Nachnameelf",
+            "firstName": "Sabine"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-0110-0110"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/PAT0110110",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Einzelprojekte"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 450000.0
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "565",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Medizinische Universität Graz"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/02n0bts35"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": "PAT0120120",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/PAT0120120"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "PAT0120120"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/PAT0120120",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Zwölf"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Twelve"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 1,
+        "value": "103004"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Planetary science"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Aurora borealis research"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/PAT0120120",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "121212",
+          "electronicAddress": "persontwelve@uni-graz.at",
+          "personName": {
+            "familyName": "Nachnamezwölf",
+            "firstName": "Thomas"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-0120-0120"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/PAT0120120",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Einzelprojekte"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 449999.99
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "25",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Universität Graz"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/01faaaf77"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": "PAT0130130",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/PAT0130130"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "PAT0130130"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/PAT0130130",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Dreizehn"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Thirteen"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.15,
+        "value": "106002"
+      },
+      {
+        "fraction": 0.35,
+        "value": "106006"
+      },
+      {
+        "fraction": 0.35,
+        "value": "106023"
+      },
+      {
+        "fraction": 0.15,
+        "value": "106052"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Microscopy"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Biophysics"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Biochemistry"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Single molecule studies"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Fluorescence spectroscopy"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/PAT0130130",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "131313",
+          "electronicAddress": "personthirteen@jku.at",
+          "personName": {
+            "familyName": "Nachnamedreizehn",
+            "firstName": "Richard"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-0130-0130"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/PAT0130130",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Einzelprojekte"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 520908.19
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "110",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Universität Linz"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/052r2xn60"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": "PAT0140140",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/PAT0140140"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "PAT0140140"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/PAT0140140",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Vierzehn"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Fourteen"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 1,
+        "value": "101002"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Quantum Mechanics"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Theoretical Physics"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Mathematical Modeling"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/PAT0140140",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "141414",
+          "electronicAddress": "personfourteen@univie.ac.at",
+          "personName": {
+            "familyName": "Nachnamevierzehn",
+            "firstName": "Doris"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-0140-0140"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/PAT0140140",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Einzelprojekte"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 550000
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "10",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Universität Wien"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/03prydq77"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": "PAT0150150",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/PAT0150150"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "PAT0150150"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/PAT0150150",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Fünfzehn"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Fifteen"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Gene Editing"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Cancer Immunotherapy"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Synthetic Biology"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Personalized Medicine"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Stem Cell Therapy"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Bioinformatics"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/PAT0150150",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "151515",
+          "electronicAddress": "personfifteen@boku.ac.at",
+          "personName": {
+            "familyName": "Nachnamefünfzehn",
+            "firstName": "Charlie"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-0150-0150"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/PAT0150150",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Einzelprojekte"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 450000.0
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "10",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Universität Wien"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/03ef4a036"
+                  }
+                ]
+              }
+            },
+            {
+              "orgUnit": {
+                "id": "100",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Universität für Bodenkultur Wien"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/057ff4y42"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": "PAT0160160",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/PAT0160160"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "PAT0160160"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/PAT0160160",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Sechszehn"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Sixteen"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.25,
+        "value": "103017"
+      },
+      {
+        "fraction": 0.25,
+        "value": "103018"
+      },
+      {
+        "fraction": 0.5,
+        "value": "103043"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Neuromorphic Computing"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Quantum Dot Sensing"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Graphene-Based Sensors"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Optical Tomography"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Machine Learning for Materials Science"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Advanced Imaging Techniques"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/PAT0160160",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "161616",
+          "electronicAddress": "personsixteen@univie.ac.at",
+          "personName": {
+            "familyName": "Nachnamesechszehn",
+            "firstName": "Laura"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-0160-0160"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/PAT0160160",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Einzelprojekte"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 500000.0
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "10",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Universität Wien"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/048qkq105"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": "AR017",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/AR017"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "AR017"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/AR017",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Siebzehn"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Seventeen"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.15,
+        "value": "501001"
+      },
+      {
+        "fraction": 0.15,
+        "value": "503022"
+      },
+      {
+        "fraction": 0.15,
+        "value": "603101"
+      },
+      {
+        "fraction": 0.55,
+        "value": "604025"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Synchrotron Radiation"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Nanomaterials Characterization"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Condensed Matter Physics"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/AR017",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "171717",
+          "electronicAddress": "personseventeen@univie.ac.at",
+          "personName": {
+            "familyName": "Nachnamesiebzehn",
+            "firstName": "Lukas"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-0170-0170"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/AR017",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Forschung und Entwicklung von Materialien"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 540000.0
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "10",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Universität Wien"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/02y9j4f32"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": "PAT0180180",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/PAT0180180"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "PAT0180180"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/PAT0180180",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Achtzehn"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Eighteen"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.7,
+        "value": "206001"
+      },
+      {
+        "fraction": 0.2,
+        "value": "206003"
+      },
+      {
+        "fraction": 0.1,
+        "value": "302055"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Magnetic Resonance Imaging (MRI)"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Magneto-Electrostatic Tomography"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Nuclear Magnetic Resonance (NMR) Spectroscopy"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Biological Magnetics"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/PAT0180180",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "181818",
+          "electronicAddress": "personeighteen@univie.ac.at",
+          "personName": {
+            "familyName": "Nachnameachtzehn",
+            "firstName": "Amelie"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-0180-0180"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/PAT0180180",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Einzelprojekte"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 500000.0
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "10",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Universität Wien"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/02d0kps43"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": "PAT0190190",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/PAT0190190"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "PAT0190190"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/PAT0190190",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Neunzehn"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Nineteen"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.2,
+        "value": "106014"
+      },
+      {
+        "fraction": 0.3,
+        "value": "106022"
+      },
+      {
+        "fraction": 0.3,
+        "value": "106026"
+      },
+      {
+        "fraction": 0.2,
+        "value": "106059"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Microbiome Analysis"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Biofilm Formation"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Gene Expression Studies"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Environmental Toxicology"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Biodegradation Processes"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Ecological Modeling"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/PAT0190190",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "01919",
+          "electronicAddress": "personnineteen@univie.ac.at",
+          "personName": {
+            "familyName": "Nachnameneunzehn",
+            "firstName": "Martin"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-0190-0190"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/PAT0190190",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Einzelprojekte"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 750000.0
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "10",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Universität Wien"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/03prydq77"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  },
+  {
+    "id": "PAT0202020",
+    "identifiers": [
+      {
+        "type": "CROSSREF_GRANTID",
+        "value": "10.55776/PAT0202020"
+      },
+      {
+        "type": "PROJECT_NUMBER",
+        "value": "PAT0202020"
+      }
+    ],
+    "type": "RESEARCH_PROJECT",
+    "acronym": "10.55776/PAT0202020",
+    "title": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "Test Projekt Nummer Zwanzig"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Test Project Number Twenty"
+      }
+    ],
+    "subjects": [
+      {
+        "fraction": 0.2,
+        "value": "101018"
+      },
+      {
+        "fraction": 0.6,
+        "value": "202037"
+      },
+      {
+        "fraction": 0.2,
+        "value": "202038"
+      }
+    ],
+    "keyword": [
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Machine Learning"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Natural Language Processing"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Data Mining"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Computer Vision"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "Robotics"
+      }
+    ],
+    "abstractPR": [
+      {
+        "lang": "de",
+        "trans": "H",
+        "text": "NA"
+      },
+      {
+        "lang": "en",
+        "trans": "H",
+        "text": "NA"
+      }
+    ],
+    "status": "IN_PREPERATION",
+    "url": "https://fwf.ac.at/forschungsradar/10.55776/PAT0202020",
+    "team": [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "202020",
+          "electronicAddress": "personzwanzig@tuwien.ac.at",
+          "personName": {
+            "familyName": "Nachnamezwanzig",
+            "firstName": "Elisabeth"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-2020-2020"
+            }
+          ]
+        }
+      }
+    ],
+    "funded": [
+      {
+        "by": {
+          "id": "FWF",
+          "name": {
+            "lang": "de",
+            "trans": "O",
+            "text": "Österreichischer Wissenschaftsfonds FWF"
+          }
+        }
+      },
+      {
+        "as": {
+          "id": "10.55776/PAT0202020",
+          "type": "GRANT",
+          "name": {
+            "lang": "de",
+            "trans": "H",
+            "text": "Einzelprojekte"
+          },
+          "amount": {
+            "currency": "EUR",
+            "amount": 567890.5
+          },
+          "recipients": [
+            {
+              "orgUnit": {
+                "id": "55",
+                "name": [
+                  {
+                    "lang": "de",
+                    "trans": "O",
+                    "text": "Technische Universität Wien"
+                  }
+                ],
+                "identifiers": [
+                  {
+                    "type": "ROR",
+                    "value": "https://ror.org/04d836q62"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "startDate": null,
+    "endDate": null
+  }
+]
