@@ -1,5 +1,9 @@
 <template>
-  template detail
+  <v-container>
+    <pre>
+      {{ data }}
+    </pre>
+  </v-container>
 </template>
 
 <script setup>
@@ -7,8 +11,22 @@ const props = defineProps({
   // templateType: String
 })
 
+const templateType = computed(() => {
+  return route.name.split('-')[1]
+});
+
 const route = useRoute()
 console.log(route)
 
-// console.log('templateType', props.templateType, 'on route', route.fullPath)
+const { getTemplateId } = useApiUtils();
+const data = await getTemplateId(templateType.value, route.params.id);
+
+const store = useTemplateStore();
+store.templateTitle = data.name;
+store.templateId = data.id;
+
+// on route leave
+onBeforeRouteLeave((to, from) => {
+  store.reset();
+});
 </script>

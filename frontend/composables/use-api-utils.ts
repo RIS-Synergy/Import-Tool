@@ -3,8 +3,8 @@ export const useApiUtils = () => {
     return await $fetch(`/api/templates/${type}`)
   }
 
-  const getTemplateId = async (id) => {
-    return await $fetch(`/api/templates/${id}`)
+  const getTemplateId = async (type, id) => {
+    return await $fetch(`/api/templates/${type}/${id}`)
   }
 
   const setProjectId = async (store, route) => {
