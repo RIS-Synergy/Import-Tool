@@ -40,7 +40,7 @@ const emit = defineEmits(["change"]);
 const store = useProjectStore();
 
 const { getTemplates } = useApiUtils();
-templates.value = await getTemplates();
+templates.value = await getTemplates('project');
 
 const templateItems = computed(() => {
   return templates.value.map((x) => {

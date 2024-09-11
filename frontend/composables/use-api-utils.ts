@@ -1,6 +1,6 @@
 export const useApiUtils = () => {
-  const getTemplates = async () => {
-    return await $fetch(`/api/templates`)
+  const getTemplates = async (type) => {
+    return await $fetch(`/api/templates/${type}`)
   }
 
   const getTemplateId = async (id) => {
