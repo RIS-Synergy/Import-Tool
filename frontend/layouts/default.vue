@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-const drawer = ref(false);
+const drawer = ref(true);
 
 const route = useRoute();
 const store = useProjectStore();
