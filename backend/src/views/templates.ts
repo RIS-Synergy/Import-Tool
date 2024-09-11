@@ -29,7 +29,7 @@ router.get('/:type', async (req: Request, res: Response) => {
       templateType: typeMap[req.params.type]
     },
     orderBy: {
-      name: 'asc'
+      modifiedDate: 'desc'
     }
   })
 

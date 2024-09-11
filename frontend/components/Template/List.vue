@@ -1,21 +1,30 @@
 <template>
-  <div>
-    <h2>{{ templateType }} List</h2>
-    <!-- template list, type {{ props.templateType }} -->
+  <v-container>
+    <div class="text-h4 mb-2">Templates: {{ templateType }}</div>
+    <v-row>
 
-    <pre>
-      {{ data }}
-    </pre>
+      <v-col cols="6" v-for="item in data">
+        <v-card   >
+          <v-card-title>
+            {{ item.name }}
+          </v-card-title>
+          <v-card-text>
+            {{ item.description }}
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn :to="`${templateType}/${item.id}`">
+              Edit
+            </v-btn>
+            <v-btn :to="`${templateType}/${item.id}`">
+              View
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
 
-    <v-list>
-      <v-list-item>
-        <v-btn :to="`${templateType}/1`">
-          1
-        </v-btn>
-      </v-list-item>
-    </v-list>
-
-  </div>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup>
