@@ -7,6 +7,16 @@ export const useApiUtils = () => {
     return await $fetch(`/api/templates/${type}/${id}`)
   }
 
+  const createTemplate = async (templateType, name, description) => {
+    return await $fetch(`/api/templates`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, description, templateType })
+    })
+  }
+
   const verifyTemplate = async (text) => {
     return await $fetch(`/api/templates/verify`, {
       method: 'POST',
@@ -46,5 +56,5 @@ export const useApiUtils = () => {
     }
   }
 
-  return { getTemplates, getTemplateId, verifyTemplate, setProjectId }
+  return { getTemplates, getTemplateId, verifyTemplate, createTemplate, setProjectId }
 }

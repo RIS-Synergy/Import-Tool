@@ -15,6 +15,23 @@ const typeMap = {
   award: 'AWARD'
 }
 
+router.post('/', async (req: Request, res: Response) => {
+  // create a new template
+  log.info('create template')
+  const { name, description, templateType } = req.body
+
+  const result = await prisma.template.create({
+    data: {
+      name,
+      description,
+      templateType: typeMap[templateType],
+      yamlTemplate: 'output:\n'
+    }
+  })
+
+  res.json(result)
+})
+
 router.get('/:type', async (req: Request, res: Response) => {
   const templateType = typeMap[req.params.type]
 
