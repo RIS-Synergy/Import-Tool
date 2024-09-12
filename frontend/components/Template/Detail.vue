@@ -1,10 +1,14 @@
 <template>
   <v-container>
-    <Yaml :json="data.jsonTemplate" :tab="1" />
+    <v-row class="">
+      <v-spacer></v-spacer>
+      <!-- toggle edit btn -->
+      <v-btn @click="store.toggleEdit">
+        {{ store.isEdit ? 'View' : 'Edit' }}
+      </v-btn>
+    </v-row>
 
-    <pre>
-      {{ data }}
-    </pre>
+    <YamlEditor :data="data.jsonTemplate" />
   </v-container>
 </template>
 

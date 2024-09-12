@@ -52,7 +52,7 @@ router.get('/:type/:id', async (req: Request, res: Response) => {
 
   res.json({
     ...result,
-    jsonTemplate: yaml.load(result.yamlTemplate)
+    jsonTemplate: yaml.load(result.yamlTemplate).output
   })
 })
 

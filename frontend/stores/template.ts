@@ -4,7 +4,8 @@ export const useTemplateStore = defineStore('template', {
   state: () => ({
     templateType: null,
     templateId: null,
-    templateTitle: 'my template'
+    templateTitle: 'my template',
+    isEdit: true
   }),
   getters: {
     // noEmptySetings: (state) => {
@@ -38,5 +39,8 @@ export const useTemplateStore = defineStore('template', {
     //   this.settings.person = config.valuePerson
     //   this.settings.organization = config.valueOrganization
     // }
+    toggleEdit () {
+      this.isEdit = !this.isEdit
+    }
   },
 })
