@@ -7,6 +7,8 @@ const router: Router = express.Router()
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
+import yaml from 'js-yaml'
+
 const typeMap = {
   project: 'PROJECT',
   application: 'APPLICATION',
@@ -44,7 +46,14 @@ router.get('/:type/:id', async (req: Request, res: Response) => {
       id: Number(req.params.id)
     }
   })
-  res.json(result)
+
+  // add yaml
+  // result.jsonTemplate = yaml.load(result.yamlTemplate)
+
+  res.json({
+    ...result,
+    jsonTemplate: yaml.load(result.yamlTemplate)
+  })
 })
 
 export default router

@@ -1,5 +1,7 @@
 <template>
   <v-container>
+    <Yaml :json="data.jsonTemplate" :tab="1" />
+
     <pre>
       {{ data }}
     </pre>

@@ -13,7 +13,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn :to="`${templateType}/${item.id}`">
+            <v-btn v-if=false :to="`${templateType}/${item.id}`">
               Edit
             </v-btn>
             <v-btn :to="`${templateType}/${item.id}`">
