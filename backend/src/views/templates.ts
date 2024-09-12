@@ -56,4 +56,25 @@ router.get('/:type/:id', async (req: Request, res: Response) => {
   })
 })
 
+router.post('/verify', async (req: Request, res: Response) => {
+  // log.info('verify template')
+  const { text } = req.body
+  log.debug('====== text ======\n', text, '\n====== text ended ======')
+  var result
+
+  try {
+    result = yaml.load(text)
+    log.info('yaml is OK')
+  } catch (e) {
+    log.error('yaml error', e)
+    res.json({
+      error: e
+    })
+    return
+  }
+
+  // log.debug('json', result)
+  res.json(result)
+})
+
 export default router

@@ -7,6 +7,16 @@ export const useApiUtils = () => {
     return await $fetch(`/api/templates/${type}/${id}`)
   }
 
+  const verifyTemplate = async (text) => {
+    return await $fetch(`/api/templates/verify`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text })
+    })
+  }
+
   const setProjectId = async (store, route) => {
     const risId = store.risData && store.risData.id
     console.log(
@@ -36,5 +46,5 @@ export const useApiUtils = () => {
     }
   }
 
-  return { getTemplates, getTemplateId, setProjectId }
+  return { getTemplates, getTemplateId, verifyTemplate, setProjectId }
 }
