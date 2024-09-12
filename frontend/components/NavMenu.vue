@@ -71,8 +71,11 @@ function prepend_icon() {
 
 .smaller {
   font-size-adjust: 0.5;
-  margin-left: 0.8em;
 }
+.smaller :deep() .v-list-item-title {
+  /* background-color: #ff0000; */
+    margin-left: 1em;
+  }
 /* .v-list-item-title {
    font-size: 4px;
    } */
