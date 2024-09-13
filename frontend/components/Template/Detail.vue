@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <YamlEditor :data="data.jsonTemplate" />
+    <YamlEditor :data="data.yamlTemplate" />
   </v-container>
 </template>
 

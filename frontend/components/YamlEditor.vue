@@ -70,40 +70,24 @@ const props = defineProps({
 
 const store = useTemplateStore();
 
-const formattedYaml = computed(() => {
-  return yaml.dump(props.data, { indent: 2 });
-});
+// const formattedYaml = computed(() => {
+//   return yaml.dump(props.data, { indent: 2 });
+// });
 
-const textData = ref(formattedYaml.value);
+// const textData = ref(formattedYaml.value);
+const textData = ref(props.data);
 
 const options = {
-  enableBasicAutocompletion: true,
-  enableSnippets: true,
-  enableLiveAutocompletion: true,
-
-  addCommand: [
-    {
-      name: 'save',
-      bindKey: { win: 'Ctrl-S', mac: 'Command-S', linux: 'Ctrl-S' },
-      exec: () => {
-        console.log('save')
-      }
-    },
-    {
-      name: 'autoComplete',
-      bindKey: { win: 'Ctrl-Space', mac: 'Command-Space' },
-      exec: () => {
-        console.log('autoComplete')
-      }
-    }
-  ]
+  // enableBasicAutocompletion: true,
+  // enableSnippets: true,
+  // enableLiveAutocompletion: true,
 }
 
 const highlightedYaml = computed(() => {
-  return hljs.highlight(formattedYaml.value, {language: "yaml",}).value;
+  return hljs.highlight(textData.value, {language: "yaml",}).value;
 });
 
-const { verifyTemplate } = useApiUtils();
+const { verifyTemplate, updateTemplate } = useApiUtils();
 
 const error = ref(null);
 const okResult = ref(null);
@@ -117,6 +101,15 @@ async function save () {
     return;
   } else {
     okResult.value = result;
+  }
+
+  const updated = await updateTemplate(store.templateId, textData.value);
+  if (updated.error) {
+    error.value = updated.error;
+    return;
+  } else {
+    okResult.value = updated;
+    textData.value = updated.yamlTemplate
   }
 }
 

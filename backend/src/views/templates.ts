@@ -32,6 +32,38 @@ router.post('/', async (req: Request, res: Response) => {
   res.json(result)
 })
 
+router.put('/:id', async (req: Request, res: Response) => {
+  // update a template
+  log.info('update template')
+  const { text } = req.body
+  const { id } = req.params
+
+
+  log.info('text', text)
+  // var textYaml = yaml.dump(text, { indent: 2, lineWidth: -1 })
+
+  // replace any following visible signes
+  const textYaml = text.replace(/\n$/gm, '');
+
+  // remove any \w at the end of the line
+  // textYaml = textYaml.replace(/\\w/g, '')
+
+  log.info('yaml', textYaml)
+  const result = await prisma.template.update({
+    where: {
+      id: Number(id)
+    },
+    data: {
+      yamlTemplate: textYaml
+    }
+  })
+
+  res.json({
+    ...result,
+    yamlTemplate: text.replace(/\\n/g, '')
+  })
+})
+
 router.get('/:type', async (req: Request, res: Response) => {
   const templateType = typeMap[req.params.type]
 
@@ -69,7 +101,7 @@ router.get('/:type/:id', async (req: Request, res: Response) => {
 
   res.json({
     ...result,
-    jsonTemplate: yaml.load(result.yamlTemplate).output
+    // jsonTemplate: yaml.load(result.yamlTemplate)
   })
 })
 
