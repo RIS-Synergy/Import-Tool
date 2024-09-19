@@ -8,31 +8,22 @@
     :options="options.value"
     theme="github_light_default"
     onChange="textData = $event"
-    style="height: 60em" />
+    style="height: 60em"
+  />
 
   <v-row class="mt-2 mb-2">
     <v-spacer></v-spacer>
-    <v-btn variant="tonal" class="ml-2" @click="store.toggleEdit">
+    <v-btn variant="tonal" class="ml-2" @click="editOrView">
       {{ store.isEdit ? "Edit" : "View" }}
     </v-btn>
-    <v-btn
-      v-if="!store.isEdit"
-      color="primary"
-      class="ml-2"
-      @click="save"
-    >
+    <v-btn v-if="!store.isEdit" color="primary" class="ml-2" @click="save">
       Save
     </v-btn>
   </v-row>
 
-  <v-alert
-    v-if="error"
-    variant="outlined"
-    :title="error.name"
-    type="error"
-  >
+  <v-alert v-if="error" variant="outlined" :title="error.name" type="error">
     {{ error.reason }}
-    <br/>
+    <br />
     <pre>
       {{ error.mark }}
     </pre>
@@ -43,10 +34,10 @@
     variant="outlined"
     type="success"
   >
-    <pre>
+    <pre v-if="false">
       {{ okResult }}
     </pre>
-    </v-alert>
+  </v-alert>
 </template>
 
 <script setup>
@@ -54,10 +45,10 @@
 import yaml from "js-yaml";
 import hljs from "highlight.js";
 import "highlight.js/styles/github.css";
-import { VAceEditor } from 'vue3-ace-editor';
-import 'ace-builds/src-noconflict/mode-yaml';
-import 'ace-builds/src-noconflict/theme-github_light_default';
-import 'ace-builds/src-noconflict/theme-xcode';
+import { VAceEditor } from "vue3-ace-editor";
+import "ace-builds/src-noconflict/mode-yaml";
+import "ace-builds/src-noconflict/theme-github_light_default";
+import "ace-builds/src-noconflict/theme-xcode";
 
 const emit = defineEmits(["close", "save"]);
 
@@ -81,10 +72,10 @@ const options = {
   // enableBasicAutocompletion: true,
   // enableSnippets: true,
   // enableLiveAutocompletion: true,
-}
+};
 
 const highlightedYaml = computed(() => {
-  return hljs.highlight(textData.value, {language: "yaml",}).value;
+  return hljs.highlight(textData.value, { language: "yaml" }).value;
 });
 
 const { verifyTemplate, updateTemplate } = useApiUtils();
@@ -92,7 +83,13 @@ const { verifyTemplate, updateTemplate } = useApiUtils();
 const error = ref(null);
 const okResult = ref(null);
 
-async function save () {
+function editOrView() {
+  store.toggleEdit();
+  error.value = null;
+  okResult.value = null;
+}
+
+async function save() {
   error.value = null;
   okResult.value = null;
   const result = await verifyTemplate(textData.value);
@@ -109,10 +106,9 @@ async function save () {
     return;
   } else {
     okResult.value = updated;
-    textData.value = updated.yamlTemplate
+    textData.value = updated.yamlTemplate;
   }
 }
-
 </script>
 
 <style scoped>

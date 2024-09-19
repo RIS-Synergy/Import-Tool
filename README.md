@@ -39,7 +39,7 @@ The funding agency is the organization that provides the funding for the project
 The research institution is the organization that is conducting the research.
 
 **Project**:
-The project is the research project that is being conducted by the research institution**
+The project is the research project that is being conducted by the research institution.
 
 **ETL**: *Extract, *Transform*, *Load* is the process of extracting data from one system,
 transforming it, and loading it into another system.

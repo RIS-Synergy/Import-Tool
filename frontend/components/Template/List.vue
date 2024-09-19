@@ -54,7 +54,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn @click="create"> {{titleCreateOrUpdate}} </v-btn>
+            <v-btn @click="createOrUpdate"> {{titleCreateOrUpdate}} </v-btn>
           </v-card-actions>
         </v-card>
       </template>
@@ -89,7 +89,7 @@ function enableEditDialog(item) {
   store.templateId = item.id;
   dialog.value = true;
 }
-async function create() {
+async function createOrUpdate() {
   const { valid } = await form.value.validate();
 
   if (!valid) {
