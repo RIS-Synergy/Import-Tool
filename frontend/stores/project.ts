@@ -8,7 +8,13 @@ const cleanSettings = {
 export const useProjectStore = defineStore('project', {
   state: () => ({
     settings: cleanSettings,
-    templateId: null, // default template XXX
+
+    template: {
+      projectId: null,
+      applicationId: null,
+      awardId: null,
+    },
+    // templateId: null, // default template XXX
     // pure: { // TODO remove, we are not using 'store.pure' anywhere
     //   // item: null
     // },

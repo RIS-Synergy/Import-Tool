@@ -1,13 +1,12 @@
 <template>
-  <v-row>
-    <v-col cols="4">
       <v-select
         v-model="selectedTemplate"
         :items="templates"
+        autofocus
         item-title="name"
         item-value="id"
         item-text="description"
-        label="Project Template"
+        label="Template"
         persistent-hint
         hide-details
       >
@@ -15,32 +14,34 @@
           <v-list-item v-bind="props" :subtitle="item.raw.description" />
         </template>
       </v-select>
-    </v-col>
-    <v-col cols="4">
-      <!-- y -->
-    </v-col>
-    <v-col cols="4">
-      <!-- z -->
-    </v-col>
-  </v-row>
 </template>
 
 <script setup>
 const templates = ref([]);
 
 // XXX - default project, temporarlily for the demo
-const selectedTemplate = ref({
-  id: 32,
-  name: "Project 1",
+// const selectedTemplate = ref({
+//   id: 32,
+//   name: "Project 1",
+// });
+//
+// emit
+
+const selectedTemplate = ref(null);
+
+const props = defineProps({
+  templateType: String,
+  required: true
 });
 
-// emit
 const emit = defineEmits(["change"]);
 
 const store = useProjectStore();
 
 const { getTemplates } = useApiUtils();
-templates.value = await getTemplates('project');
+templates.value = await getTemplates(props.templateType);
+
+store.template.projectId = templates.value[0].id;
 
 const templateItems = computed(() => {
   return templates.value.map((x) => {
@@ -52,8 +53,12 @@ const templateItems = computed(() => {
   });
 });
 
+selectedTemplate.value = templateItems.value[0].value;
+
 watch(selectedTemplate, (newVal) => {
-  store.templateId = newVal;
+  const typeId = props.templateType + 'Id'
+  console.log('type', typeId, newVal)
+  store.template[typeId] = newVal;
   emit("change", newVal);
 });
 </script>

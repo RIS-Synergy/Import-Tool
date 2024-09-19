@@ -1,5 +1,49 @@
 <template>
-  <div>
+  <v-container>
+    <v-row>
+      <v-col cols="2" class="mt-4">
+        Project
+      </v-col>
+      <v-col cols="8">
+        <TransformSelect @change="loadTransformation($event)" templateType="project" />
+      </v-col>
+      <v-col cols="2" class="mt-2">
+        <v-btn variant="tonal">
+          View
+        </v-btn>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="2" class="mt-4">
+        Application
+      </v-col>
+      <v-col cols="8">
+        <TransformSelect @change="loadTransformation($event)" templateType="application" />
+      </v-col>
+      <v-col cols="2" class="mt-2">
+        <v-btn variant="tonal">
+          View
+        </v-btn>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="2" class="mt-4">
+        Award
+      </v-col>
+      <v-col cols="8">
+        <TransformSelect @change="loadTransformation($event)" templateType="award" />
+      </v-col>
+      <v-col cols="2" class="mt-2">
+        <v-btn variant="tonal">
+          View
+        </v-btn>
+      </v-col>
+    </v-row>
+  </v-container>
+
+  <div v-if="false">
     <v-card-text v-if="true">
       <TransformSelect
         @change="loadTransformation($event)"
@@ -49,22 +93,22 @@ async function loadTransformation(id) {
 }
 
 onMounted(() => {
-  loadTransformation(3); // TODO
+  // loadTransformation(3); // TODO
 });
 
 const uuid = (await getProjectUUID(id)).uuid;
 
-async function save(crud) {
-  // create or edit
-  console.log('ris', ris);
-
-  const result = await uploadToPure(ris.value, settings, uuid);
-  store.setPure(result);
-
-  // redirect to project view
-  router.push({ name: "project-id-view", params: { id: route.params.id } });
-}
-
+// async function save(crud) {
+//   // create or edit
+//   console.log('ris', ris);
+//
+//   const result = await uploadToPure(ris.value, settings, uuid);
+//   store.setPure(result);
+//
+//   // redirect to project view
+//   router.push({ name: "project-id-view", params: { id: route.params.id } });
+// }
+//
 definePageMeta({
   layout: "project"
 });
