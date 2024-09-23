@@ -4,6 +4,8 @@ import * as Bluebird from 'bluebird';
 import extraFunctions from '../functions';
 import {RISImport, PURE, LangText, RISIdentifer, Settings} from "../types";
 import { awaitAllPromises } from '../utils/promise'
+import { Logger } from 'tslog';
+const log = new Logger({ name: 'ETL' });
 
 function getLang (title: LangText[]): { [key: string]: string } {
   return {
@@ -14,6 +16,7 @@ function getLang (title: LangText[]): { [key: string]: string } {
 
 const functions = {
   getByLang: async function (input: any, settings: any, pass: string, lang: string): Promise<string> {
+    log.info('getByLang', pass, lang, input);
     const title = input[pass].find(t => t.lang === lang);
     return title ? title.text : 'Title not found';
   },

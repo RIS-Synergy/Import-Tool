@@ -19,14 +19,6 @@
 <script setup>
 const templates = ref([]);
 
-// XXX - default project, temporarlily for the demo
-// const selectedTemplate = ref({
-//   id: 32,
-//   name: "Project 1",
-// });
-//
-// emit
-
 const selectedTemplate = ref(null);
 
 const props = defineProps({
@@ -41,8 +33,6 @@ const store = useProjectStore();
 const { getTemplates } = useApiUtils();
 templates.value = await getTemplates(props.templateType);
 
-store.template.projectId = templates.value[0].id;
-
 const templateItems = computed(() => {
   return templates.value.map((x) => {
     return {
@@ -54,6 +44,10 @@ const templateItems = computed(() => {
 });
 
 selectedTemplate.value = templateItems.value[0].value;
+const typeId = props.templateType + 'Id'
+store.template[typeId] = selectedTemplate.value;
+
+// console.log(typeId, selectedTemplate.value)
 
 watch(selectedTemplate, (newVal) => {
   const typeId = props.templateType + 'Id'

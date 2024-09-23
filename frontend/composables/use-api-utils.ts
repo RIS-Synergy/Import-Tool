@@ -67,5 +67,29 @@ export const useApiUtils = () => {
     }
   }
 
-  return { getTemplates, getTemplateId, verifyTemplate, createTemplate, updateTemplate, setProjectId }
+  const loadTransformation = async (store, templateId) => {
+    if (!templateId) {
+      return
+    }
+
+    console.log("loadTransformation", templateId)
+
+    // const ris = store.risData.value
+    // const settings = store.settings.value
+
+    const x = await $fetch("/api/transform/upload", {
+      method: "POST",
+      body: JSON.stringify({
+        ris: store.risData,
+        settings: store.settings,
+        templateId
+      }),
+    });
+
+    store.template.data = x
+    // return x
+    // result.value = x;
+  }
+
+  return { getTemplates, getTemplateId, verifyTemplate, createTemplate, updateTemplate, setProjectId, loadTransformation }
 }

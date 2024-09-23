@@ -29,7 +29,7 @@ router.post('/upload', async (req: Request, res: Response) => {
 
   log.debug('Template', template.id, template.name)
 
-  const result = await projectETL2(template.yamlTemplate, req.body.ris.risData, req.body.settings)
+  const result = await projectETL2(template.yamlTemplate, req.body.ris, req.body.settings)
   res.json({
     yamlTemplate: template.yamlTemplate,
     transformationResult: result

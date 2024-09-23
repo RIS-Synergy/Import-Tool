@@ -1,53 +1,45 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="2" class="mt-4">
-        Project
-      </v-col>
+      <v-col cols="2" class="mt-4"> Project </v-col>
       <v-col cols="8">
-        <TransformSelect @change="loadTransformation($event)" templateType="project" />
+        <TransformSelect
+          templateType="project"
+        />
       </v-col>
       <v-col cols="2" class="mt-2">
-        <v-btn variant="tonal">
-          View
-        </v-btn>
+        <TransformDialog templateType="project" />
       </v-col>
     </v-row>
 
     <v-row>
-      <v-col cols="2" class="mt-4">
-        Application
-      </v-col>
+      <v-col cols="2" class="mt-4"> Application </v-col>
       <v-col cols="8">
-        <TransformSelect @change="loadTransformation($event)" templateType="application" />
+        <TransformSelect
+          templateType="application"
+        />
       </v-col>
       <v-col cols="2" class="mt-2">
-        <v-btn variant="tonal">
-          View
-        </v-btn>
+        <TransformDialog templateType="application" />
       </v-col>
     </v-row>
 
     <v-row>
-      <v-col cols="2" class="mt-4">
-        Award
-      </v-col>
+      <v-col cols="2" class="mt-4"> Award </v-col>
       <v-col cols="8">
-        <TransformSelect @change="loadTransformation($event)" templateType="award" />
+        <TransformSelect
+          templateType="award"
+        />
       </v-col>
       <v-col cols="2" class="mt-2">
-        <v-btn variant="tonal">
-          View
-        </v-btn>
+        <TransformDialog templateType="award" />
       </v-col>
     </v-row>
   </v-container>
 
   <div v-if="false">
     <v-card-text v-if="true">
-      <TransformSelect
-        @change="loadTransformation($event)"
-      />
+      <TransformSelect />
       <TransformDiff
         v-if="result"
         :template="result.yamlTemplate"
@@ -66,9 +58,9 @@ const { getProjectUUID, uploadToPure } = useResearchInstitution();
 const id = route.params.id;
 const { data: ris } = await useFetch(`/api/fa/projects/${id}`);
 
-const transformations = ["Default", "Another Template"];
-const selectedTransformation = ref("Default");
-
+// const transformations = ["Default", "Another Template"];
+// const selectedTransformation = ref("Default");
+//
 const result = ref(null);
 
 const titles = computed(() => {
@@ -78,24 +70,25 @@ const titles = computed(() => {
 
 const { settings, templateId } = store;
 
-async function loadTransformation(id) {
-  console.log("loadTransformation", id);
-
-  const x = await $fetch("/api/transform/upload", {
-    method: "POST",
-    body: JSON.stringify({
-      ris: ris.value,
-      settings,
-      templateId: id,
-    }),
-  });
-  result.value = x;
-}
-
-onMounted(() => {
-  // loadTransformation(3); // TODO
-});
-
+// async function loadTransformation(id) {
+//   return; // XXX
+//   console.log("loadTransformation", id);
+//
+//   const x = await $fetch("/api/transform/upload", {
+//     method: "POST",
+//     body: JSON.stringify({
+//       ris: ris.value,
+//       settings,
+//       templateId: id,
+//     }),
+//   });
+//   result.value = x;
+// }
+//
+// onMounted(() => {
+//   // loadTransformation(3); // TODO
+// });
+//
 const uuid = (await getProjectUUID(id)).uuid;
 
 // async function save(crud) {
@@ -110,6 +103,6 @@ const uuid = (await getProjectUUID(id)).uuid;
 // }
 //
 definePageMeta({
-  layout: "project"
+  layout: "project",
 });
 </script>
