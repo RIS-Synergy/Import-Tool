@@ -70,38 +70,8 @@ const titles = computed(() => {
 
 const { settings, templateId } = store;
 
-// async function loadTransformation(id) {
-//   return; // XXX
-//   console.log("loadTransformation", id);
-//
-//   const x = await $fetch("/api/transform/upload", {
-//     method: "POST",
-//     body: JSON.stringify({
-//       ris: ris.value,
-//       settings,
-//       templateId: id,
-//     }),
-//   });
-//   result.value = x;
-// }
-//
-// onMounted(() => {
-//   // loadTransformation(3); // TODO
-// });
-//
 const uuid = (await getProjectUUID(id)).uuid;
 
-// async function save(crud) {
-//   // create or edit
-//   console.log('ris', ris);
-//
-//   const result = await uploadToPure(ris.value, settings, uuid);
-//   store.setPure(result);
-//
-//   // redirect to project view
-//   router.push({ name: "project-id-view", params: { id: route.params.id } });
-// }
-//
 definePageMeta({
   layout: "project",
 });

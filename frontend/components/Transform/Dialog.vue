@@ -47,13 +47,4 @@ const { loadTransformation } = useApiUtils();
 function onClickView () {
   loadTransformation(store, id.value)
 }
-
-watch((isActive) => {
-  if (isActive) {
-    // loadTransformation(store, id.value);
-  } else {
-    // console.log("closing dialog");
-    // store.template.data = null;
-  }
-});
 </script>

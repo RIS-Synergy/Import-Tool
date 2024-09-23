@@ -1,19 +1,20 @@
 <template>
-      <v-select
-        v-model="selectedTemplate"
-        :items="templates"
-        autofocus
-        item-title="name"
-        item-value="id"
-        item-text="description"
-        label="Template"
-        persistent-hint
-        hide-details
-      >
-        <template v-slot:item="{ props, item }">
-          <v-list-item v-bind="props" :subtitle="item.raw.description" />
-        </template>
-      </v-select>
+  <v-select
+    v-model="selectedTemplate"
+    :items="templates"
+    autofocus
+    item-title="name"
+    item-value="id"
+    item-text="description"
+    label="Template"
+    persistent-hint
+    hide-details
+    @update:modelValue="saveToStore"
+  >
+    <template v-slot:item="{ props, item }">
+      <v-list-item v-bind="props" :subtitle="item.raw.description" />
+    </template>
+  </v-select>
 </template>
 
 <script setup>
@@ -23,7 +24,7 @@ const selectedTemplate = ref(null);
 
 const props = defineProps({
   templateType: String,
-  required: true
+  required: true,
 });
 
 const emit = defineEmits(["change"]);
@@ -44,15 +45,12 @@ const templateItems = computed(() => {
 });
 
 selectedTemplate.value = templateItems.value[0].value;
-const typeId = props.templateType + 'Id'
+const typeId = props.templateType + "Id";
 store.template[typeId] = selectedTemplate.value;
 
-// console.log(typeId, selectedTemplate.value)
-
-watch(selectedTemplate, (newVal) => {
-  const typeId = props.templateType + 'Id'
-  console.log('type', typeId, newVal)
-  store.template[typeId] = newVal;
-  emit("change", newVal);
-});
+function saveToStore() {
+  console.log("saveToStore", selectedTemplate.value);
+  const typeId = props.templateType + "Id";
+  store.template[typeId] = selectedTemplate.value;
+}
 </script>
