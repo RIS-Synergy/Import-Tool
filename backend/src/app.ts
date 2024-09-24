@@ -29,6 +29,10 @@ app.use('/oefos', require('./views/oefos').default)
 // Templates
 app.use('/templates', require('./views/templates').default)
 
+// if (process.env.NODE_ENV === 'development') {
+  app.use('/dev-cris-api', require('./views/dev-cris-api').default)
+// }
+
 // error handler last
 app.use(unexpectedErrorHandler)
 

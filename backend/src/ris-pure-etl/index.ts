@@ -16,7 +16,6 @@ function getLang (title: LangText[]): { [key: string]: string } {
 
 const functions = {
   getByLang: async function (input: any, settings: any, pass: string, lang: string): Promise<string> {
-    log.info('getByLang', pass, lang, input);
     const title = input[pass].find(t => t.lang === lang);
     return title ? title.text : 'Title not found';
   },

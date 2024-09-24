@@ -16,11 +16,6 @@ const prisma = new PrismaClient()
 const router: Router = express.Router()
 
 router.get('/project/:id', async (req: Request, res: Response) => {
-  if (process.env.RIS_USE_DEV) {
-    // if development, don't call the CRIS API
-    res.json({})
-  }
-
   const result = await callRIApi('/projects/search', 'POST', {
     size: 10,
     offset: 0,
@@ -68,7 +63,7 @@ async function updateCrisId (risId: string, crisId: string, uuid: string) {
 }
 
 router.post('/upload', async (req: Request, res: Response) => {
-  const { ris, settings, uuid, templateId } = req.body
+  const { ris, settings, uuid, template: templateId } = req.body
 
   // console.log('upload', ris, settings)
   // const templateId = req.body.templateId
@@ -78,7 +73,7 @@ router.post('/upload', async (req: Request, res: Response) => {
 
   const template = await prisma.template.findUnique({
     where: {
-      id: templateId
+      id: templateId.projectId
     }
   })
   const yamlBuffer = template.yamlTemplate

@@ -41,7 +41,7 @@ function getItems (itms) {
       end_date: x.endDate,
       status: x.status,
       action: x,
-      pureId: data.crisId
+      pureId: data.crisUUID
     }
   })
   // console.log('getItems', result)

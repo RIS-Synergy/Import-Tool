@@ -21,26 +21,31 @@
   </v-footer>
 </template>
 
-
 <script setup>
 const router = useRouter();
 
-const route = useRoute()
-const { id } = route.params
+const route = useRoute();
+const { id } = route.params;
 
 const store = useProjectStore();
 
-const canHaveButtons = [ // v-if="...
-  'project-id-transform',
-]
+const canHaveButtons = [
+  // v-if="...
+  "project-id-transform",
+];
 
 const { uploadToPure } = useResearchInstitution();
 
 async function saveTransformUpload(crud) {
   // create or edit
-  console.log('ris', store.risData);
+  console.log("ris", store.risData);
 
-  const result = await uploadToPure(store.risData, store.settings, store.crisUUID, store.templateId);
+  const result = await uploadToPure(
+    store.risData,
+    store.settings,
+    store.crisUUID,
+    store.template,
+  );
   store.setPure(result);
 
   // redirect to project view

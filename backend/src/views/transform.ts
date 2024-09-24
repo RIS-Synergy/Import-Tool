@@ -15,7 +15,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 router.post('/upload', async (req: Request, res: Response) => {
-  console.log('upload', req.body)
+  // console.log('upload', req.body)
 
   // const yamlBuffer = await fs.readFile('./resources/transformers/project.yaml')
   const template = await prisma.template.findFirst({
@@ -23,7 +23,7 @@ router.post('/upload', async (req: Request, res: Response) => {
       id: req.body.templateId
     }
   })
-  console.log('template', template)
+  // console.log('template', template)
 
   const yamlBuffer = template.yamlTemplate
 
