@@ -3,6 +3,7 @@
 Link to development: [docs/development](./docs/development.md)
 Link to docker: [docs/docker](./docs/docker.md)
 Link to production: [docs/production](./docs/production.md)
+Link to database: [docs/database](./docs/database.md)
 
 ## Getting Started
 

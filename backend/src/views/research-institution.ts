@@ -48,7 +48,7 @@ router.get('/search', async (req: Request, res: Response) => {
     res.json(result)
 })
 
-async function updateCrisId (risId: string, crisId: string, uuid: string) {
+async function updateCrisId (risId: string, crisId: string, uuid: string, settings: any, template: any) {
   log.info('Updating project', risId, 'with crisId', crisId)
   const result = await prisma.project.update({
     where: {
@@ -56,7 +56,9 @@ async function updateCrisId (risId: string, crisId: string, uuid: string) {
     },
     data: {
       crisId: String(crisId),
-      crisUUID: uuid
+      crisUUID: uuid,
+      settings,
+      template
     }
   })
   log.debug('Updated Project database', result.id)
@@ -85,18 +87,22 @@ router.post('/upload', async (req: Request, res: Response) => {
 
   log.debug('Pure', pure)
 
+  var templateData = {
+    ...req.body.template
+  }
+  delete templateData.data
   if (uuid) {
     const result = await callRIApi(`/projects/${uuid}`, 'PUT', pure)
     log.warn('Update project', result)
     log.info('Update project', result.uuid)
     await uploadProjectApplicationClusters(result)
-    await updateCrisId(ris.id, result.pureId, result.uuid)
+    await updateCrisId(ris.id, result.pureId, result.uuid, settings, templateData)
     return res.json(result)
   } else {
     const result = await callRIApi('/projects', 'PUT', pure)
     log.info('Created new project', result)
     await uploadProjectApplicationClusters(result)
-    await updateCrisId(ris.id, result.pureId, result.uuid)
+    await updateCrisId(ris.id, result.pureId, result.uuid, settings, templateData)
     return res.json(result)
   }
 })

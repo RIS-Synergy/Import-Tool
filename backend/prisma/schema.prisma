@@ -18,6 +18,9 @@ model Project {
   risId   String @unique
   risData Json   @default("{}")
 
+  settings Json   @default("{}")
+  template Json   @default("{}")
+
   crisId   String?
   crisUUID String?
 
