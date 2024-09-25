@@ -1,7 +1,5 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
-console.log(process.env)
-
 export default defineNuxtConfig({
   devtools: { enabled: false },
 
@@ -12,7 +10,7 @@ export default defineNuxtConfig({
     dirs: ['~/components']
   },
 
-   compatibilityDate: "2024-08-20",
+  compatibilityDate: "2024-08-20",
 
   // as per vuetify docs:
   build: {
@@ -33,7 +31,8 @@ export default defineNuxtConfig({
         config.plugins.push(vuetify({ autoImport: true }))
       })
     },
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt'
   ],
   nitro: {
     routeRules: {

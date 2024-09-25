@@ -8,6 +8,8 @@ const projects = JSON.parse(fs.readFileSync(projectsFile, 'utf8'))
 // find one project
 const projectID = 'PUB3333'
 
+console.log(process.env)
+
 const p = projects.find((p: any) => {
   return p.id === projectID
 })
@@ -19,3 +21,28 @@ describe('sample fwf project', () => {
     expect(p.title[1].text).toBe('Test Project Number Three')
   })
 })
+
+import { uploadProjectApplicationClusters } from '../src/ris-pure-etl/clusters'
+describe('access a project', () => {
+  it('has applications/awards clusters', async () => {
+    const result = await uploadProjectApplicationClusters(p)
+    // console.log(p, result)
+
+    expect(await result).toEqual({
+      ...p,
+      applicationClusters: [
+        {
+          systemName: "ApplicationCluster",
+          uuid: 1234,
+        }
+      ],
+      awardClusters: [
+        {
+          systemName: "AwardCluster",
+          uuid: 2345,
+        }
+      ]
+     })
+  })
+})
+

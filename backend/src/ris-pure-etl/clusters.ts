@@ -60,14 +60,16 @@ export async function uploadProjectApplicationClusters (project: any) {
   log.info(`Project uuid: ${project.uuid}`)
 
   const projectResult = await callRIApi(`/projects/${project.uuid}`, 'PUT', project)
-  log.info(`Update Project ${projectResult.pureId} to include application and award clusters`, [
-    {
-      ...projectResult.applicationClusters[0],
-      applicationPureId
-    },
-    {
-      ...projectResult.awardClusters[0],
-      awardPureId
-    }
-  ])
+  // log.info(`Update Project ${projectResult.pureId} to include application and award clusters`, [
+  //   {
+  //     ...projectResult.applicationClusters[0],
+  //     applicationPureId
+  //   },
+  //   {
+  //     ...projectResult.awardClusters[0],
+  //     awardPureId
+  //   }
+  // ])
+
+  return projectResult
 }

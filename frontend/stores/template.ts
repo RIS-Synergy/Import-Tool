@@ -43,4 +43,5 @@ export const useTemplateStore = defineStore('template', {
       this.isEdit = !this.isEdit
     }
   },
+  persist: true
 })

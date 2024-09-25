@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "RIS-Synergy API: Funder -> PURE interface",
   "scripts": {
-    "dev": "nodemon src/server.ts",
-    "debug": "nodemon --exec node --inspect-brk -r ts-node/register scripts/create-project.ts",
+    "dev": "nodemon --ignore ./tests src/server.ts",
+    "debug": "nodemon --exec node --inspect-brk=0.0.0.0 -r ts-node/register ./src/server.ts",
     "test": "vitest",
     "db-init": "ts-node ./scripts/db-initiate.ts",
     "create-project": "ts-node ./scripts/create-project.ts",

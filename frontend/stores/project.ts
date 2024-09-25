@@ -56,4 +56,5 @@ export const useProjectStore = defineStore('project', {
       this.settings.organization = config.valueOrganization
     }
   },
+  persist: true
 })
