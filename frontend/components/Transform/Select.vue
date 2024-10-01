@@ -44,7 +44,12 @@ const templateItems = computed(() => {
   });
 });
 
-selectedTemplate.value = templateItems.value[0].value;
+if (store.template[props.templateType + "Id"]) {
+  selectedTemplate.value = store.template[props.templateType + "Id"];
+} else {
+  selectedTemplate.value = templateItems.value[0].value;
+}
+
 const typeId = props.templateType + "Id";
 store.template[typeId] = selectedTemplate.value;
 

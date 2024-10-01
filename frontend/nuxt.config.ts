@@ -34,6 +34,9 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt'
   ],
+  piniaPluginPersistedstate: {
+    storage: 'localStorage',
+  },
   nitro: {
     routeRules: {
       '/api/**': { proxy: 'http://backend:3000/**' },
