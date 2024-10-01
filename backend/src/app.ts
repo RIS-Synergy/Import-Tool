@@ -7,6 +7,7 @@ const app = express()
 // middlewares
 app.use(express.json())
 
+
 // root url
 app.get('/', (_req: Request, res: Response) => {
   res.json({
@@ -25,6 +26,9 @@ app.use('/transform', require('./views/transform').default)
 
 // ÖFOS 2012
 app.use('/oefos', require('./views/oefos').default)
+
+// Project
+app.use('/project', require('./views/project').default)
 
 // Templates
 app.use('/templates', require('./views/templates').default)
