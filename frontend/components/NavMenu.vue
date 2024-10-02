@@ -57,8 +57,17 @@ import { useTheme } from "vuetify";
 
 const theme = useTheme();
 
+const store = useUserSettingsStore()
+
+// if (store.dark) {
+//   theme.global.name.value = "dark";
+// }
+// 
 function toggleTheme() {
+  console.log(theme)
+
   theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";
+  store.dark = !store.dark
 }
 
 function prepend_icon() {

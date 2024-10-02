@@ -1,9 +1,10 @@
 <template>
   <v-data-table
+    v-if="items"
     :items="getItems(items)"
     density="compact"
-    items-per-page="25"
-    @update:modelValue="test"
+    :items-per-page="store.itemsPerPage"
+    @update:itemsPerPage="updateItemsPerPage"
   >
     <template v-slot:item.action="x">
       <NuxtLink :to="`/project/${x.item.id}`">
@@ -48,13 +49,6 @@ function getItems (itms) {
   return result
 }
 
-function linkToItem (id) {
-  // to do: link to item: /projects/:id
-}
-
-function test () {
-  console.log('test', arguments)
-}
 function email (str) {
   // highlisht with bold, given the domain matches "univie.ac.at"
   if(!str) return str
@@ -65,11 +59,9 @@ function email (str) {
 
 const page = ref(1)
 
-// set store settings to {}
-const { resetSettings } = useProjectStore();
+const store = useUserSettingsStore();
+function updateItemsPerPage (idx) {
+  store.itemsPerPage = idx
+}
 
-// when entering the page, reset the settings
-onMounted(() => {
-  // resetSettings()
-})
 </script>
