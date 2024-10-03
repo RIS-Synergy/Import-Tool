@@ -52,7 +52,11 @@ router.get('/projects', async (req: Request, res: Response) => {
         modifiedDate: 'desc'
       }
     })
-    res.json(result)
+
+    res.json({
+      total: result.length,
+      items: result
+    })
   } else {
     // production
     const result = await getAuthEndpoint(process.env.RIS_URL_PROJECTS)
