@@ -1,72 +1,82 @@
 export const useApiUtils = () => {
   const getTemplates = async (type) => {
-    const result = await $fetch(`/api/templates/${type}`)
-    return result
-  }
+    const result = await $fetch(`/api/templates/${type}`);
+    return result;
+  };
 
   const getTemplateId = async (type, id) => {
-    return await $fetch(`/api/templates/${type}/${id}`)
-  }
+    return await $fetch(`/api/templates/${type}/${id}`);
+  };
 
   const createTemplate = async (templateType, name, description) => {
     return await $fetch(`/api/templates`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, description, templateType })
-    })
-  }
+      body: JSON.stringify({ name, description, templateType }),
+    });
+  };
 
   const updateTemplate = async (id, text) => {
     return await $fetch(`/api/templates/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ text })
-    })
-  }
+      body: JSON.stringify({ text }),
+    });
+  };
 
   const verifyTemplate = async (text) => {
     return await $fetch(`/api/templates/verify`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ text })
-    })
-  }
+      body: JSON.stringify({ text }),
+    });
+  };
 
   const setProjectId = async (store, route) => {
-    const risId = store.risData && store.risData.id
+    const risId = store.risData && store.risData.id;
 
     if (route.params.id !== risId) {
-      store.resetSettings()
-      store.risData = null
-      store.crisId = null
-      store.crisUUID = null
-      store.crisData = null
+      store.resetSettings();
+      store.risData = null;
+      store.crisId = null;
+      store.crisUUID = null;
+      store.crisData = null;
     }
 
-    const { id } = route.params
+    const { id } = route.params;
     if (!id) {
       // console.log('no id', route.params.id)
     } else {
       // console.log('id', id)
-      const data = await $fetch(`/api/fa/projects/${id}`)
-      store.risData = data.risData
-      store.crisId = data.crisId
-      store.crisUUID = data.crisUUID
+      const data = await $fetch(`/api/fa/projects/${id}`);
+      store.risData = data.risData;
+      store.crisId = data.crisId;
+      store.crisUUID = data.crisUUID;
     }
-  }
+  };
+
+  const getProjectsList = async ({ page, itemsPerPage, sortBy }) => {
+    const result = await $fetch(
+      // `/api/fa/projects?page=${page}&itemsPerPage=${itemsPerPage}&sortBy=${sortBy}`,
+      '/api/fa/projects',
+      {
+        query: { page, itemsPerPage, sortBy }
+      });
+    return result;
+  };
 
   const loadTransformation = async (store, templateId) => {
     if (!templateId) {
-      return
+      return;
     }
 
-    console.log("loadTransformation", templateId)
+    console.log("loadTransformation", templateId);
 
     // const ris = store.risData.value
     // const settings = store.settings.value
@@ -76,14 +86,23 @@ export const useApiUtils = () => {
       body: JSON.stringify({
         ris: store.risData,
         settings: store.settings,
-        templateId
+        templateId,
       }),
     });
 
-    store.template.data = x
+    store.template.data = x;
     // return x
     // result.value = x;
-  }
+  };
 
-  return { getTemplates, getTemplateId, verifyTemplate, createTemplate, updateTemplate, setProjectId, loadTransformation }
-}
+  return {
+    getTemplates,
+    getTemplateId,
+    verifyTemplate,
+    createTemplate,
+    updateTemplate,
+    setProjectId,
+    getProjectsList,
+    loadTransformation,
+  };
+};

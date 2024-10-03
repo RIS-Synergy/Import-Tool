@@ -38,28 +38,31 @@ const headers = [
   {
     title: "ID",
     align: "start",
-    sortable: false,
+    sortable: true,
     key: "id",
   },
-  { title: "Title", key: "title", align: "start" },
-  { title: "PI Name", key: "PI_name", align: "start" },
-  { title: "PI Email", key: "PI_email", align: "start" },
-  { title: "Start Date", key: "start_date", align: "start" },
-  { title: "End Date", key: "end_date", align: "start" },
-  { title: "Status", key: "status", align: "start" },
-  { title: "Action", key: "action", align: "start" },
-  { title: "Pure ID", key: "pureId", align: "start" },
+  { title: "Title", key: "title", align: "start", sortable: false },
+  { title: "PI Name", key: "PI_name", align: "start", sortable: false},
+  { title: "PI Email", key: "PI_email", align: "start", sortable: false},
+  { title: "Start Date", key: "start_date", align: "start", sortable: false},
+  { title: "End Date", key: "end_date", align: "start", sortable: false},
+  { title: "Status", key: "status", align: "start", sortable: false},
+  { title: "Action", key: "action", align: "start", sortable: false},
+  { title: "Pure ID", key: "pureId", align: "start", sortable: false},
 ];
 
 const loading = ref(false);
 const serverItems = ref([]);
 const totalItems = ref(0);
 
+const { getProjectsList } = useApiUtils()
 async function loadItems({ page, itemsPerPage, sortBy }) {
   loading.value = true;
 
-  const response = await fetch("/api/fa/projects");
-  const { total, items } = await response.json();
+  // const response = await getProjectsList fetch("/api/fa/projects");
+  // const { total, items } = await response.json();
+  const { total, items } = await getProjectsList({ page, itemsPerPage, sortBy });
+
   serverItems.value = getItems(items);
   totalItems.value = total;
   loading.value = false;
