@@ -5,6 +5,7 @@
     :items-length="totalItems"
     :items-per-page="store.itemsPerPage"
     :loading="loading"
+    :sort-by.sync="store.sortBy"
     @update:options="loadItems"
     @update:itemsPerPage="updateItemsPerPage"
   >
@@ -38,15 +39,15 @@ const headers = [
   {
     title: "ID",
     align: "start",
-    sortable: true,
+    sortable: false,
     key: "id",
   },
   { title: "Title", key: "title", align: "start", sortable: false },
   { title: "PI Name", key: "PI_name", align: "start", sortable: false},
   { title: "PI Email", key: "PI_email", align: "start", sortable: false},
-  { title: "Start Date", key: "start_date", align: "start", sortable: false},
-  { title: "End Date", key: "end_date", align: "start", sortable: false},
-  { title: "Status", key: "status", align: "start", sortable: false},
+  { title: "Start Date", key: "startDate", align: "start", sortable: true},
+  { title: "End Date", key: "endDate", align: "start", sortable: true},
+  { title: "Status", key: "status", align: "start", sortable: true},
   { title: "Action", key: "action", align: "start", sortable: false},
   { title: "Pure ID", key: "pureId", align: "start", sortable: false},
 ];
@@ -57,6 +58,9 @@ const totalItems = ref(0);
 
 const { getProjectsList } = useApiUtils()
 async function loadItems({ page, itemsPerPage, sortBy }) {
+  console.log('loadItems', page, itemsPerPage, sortBy)
+
+  store.sortBy = sortBy;
   loading.value = true;
 
   // const response = await getProjectsList fetch("/api/fa/projects");
@@ -80,8 +84,8 @@ function getItems(itms) {
       title: getLang(x.title, "en"),
       PI_email: x.team[0].person.electronicAddress,
       PI_name: x.team[0].person.personName.firstName + " " + x.team[0].person.personName.familyName,
-      start_date: x.startDate,
-      end_date: x.endDate,
+      startDate: x.startDate,
+      endDate: x.endDate,
       status: x.status,
       action: x,
       pureId: data.crisUUID,

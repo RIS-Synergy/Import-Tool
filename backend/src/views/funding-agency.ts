@@ -8,6 +8,7 @@ import { getAuthEndpoint } from "../utils/oauth2";
 import { promises as fs } from "fs";
 
 import { Logger } from "tslog";
+import { Sql } from "@prisma/client/runtime/library";
 const log = new Logger({ name: "view:funding-agency" });
 
 const router: Router = express.Router();
@@ -51,16 +52,13 @@ router.get("/projects", async (req: Request, res: Response) => {
   // RIS_URL_PROJECTS is not working, use DEV if needed
   if (process.env.RIS_USE_DEV) {
     try {
-      const {
-        page = 1,
-        itemsPerPage = 10,
-      } = req.query;
+      const { page = 1, itemsPerPage = 10 } = req.query;
 
-      var sortBy
+      var sortBy;
       if (req.query.sortBy) {
-        sortBy = JSON.parse(req.query.sortBy as string)
+        sortBy = JSON.parse(req.query.sortBy as string);
       } else {
-        sortBy = { key: 'id', order: 'asc' }
+        sortBy = { key: "startDate", order: "asc" };
       }
 
       const orderBy: any = {
@@ -73,11 +71,11 @@ router.get("/projects", async (req: Request, res: Response) => {
       const skip = (pageNumber - 1) * items;
       const take = items;
 
-      const projects = await prisma.project.findMany({
-        skip,
-        take,
-        orderBy
-      });
+      const projects = await prisma.$queryRawUnsafe(`
+    SELECT * FROM "Project" p
+ORDER BY p."risData"->>'${sortBy.key}' ${sortBy.order}
+OFFSET ${skip} LIMIT ${take}`);
+      log.debug(projects[0].risData[sortBy.key]);
 
       const totalProjects = await prisma.project.count();
 
