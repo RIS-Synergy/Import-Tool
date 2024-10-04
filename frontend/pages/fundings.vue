@@ -44,9 +44,10 @@
 </template>
 
 <script setup>
-const { data: items } = await useFetch('http://localhost:3000/fwf-test/fundings.json')
+const { data: items } = await useFetch('/api/fa/fundings')
 
 function getItems (itms) {
+  if (!itms) return []
   return itms.map((x) => {
     return {
       action: x,

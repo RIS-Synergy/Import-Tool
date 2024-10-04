@@ -49,52 +49,45 @@ router.get("/projects/:id", async (req: Request, res: Response) => {
 });
 
 router.get("/projects", async (req: Request, res: Response) => {
-  // RIS_URL_PROJECTS is not working, use DEV if needed
-  if (process.env.RIS_USE_DEV) {
-    try {
-      const { page = 1, itemsPerPage = 10 } = req.query;
+  try {
+    const { page = 1, itemsPerPage = 10 } = req.query;
 
-      var sortBy;
-      if (req.query.sortBy) {
-        sortBy = JSON.parse(req.query.sortBy as string);
-      } else {
-        sortBy = { key: "startDate", order: "asc" };
-      }
+    var sortBy;
+    if (req.query.sortBy) {
+      sortBy = JSON.parse(req.query.sortBy as string);
+    } else {
+      sortBy = { key: "startDate", order: "asc" };
+    }
 
-      const orderBy: any = {
-        [sortBy.key]: sortBy.order === "asc" ? "asc" : "desc",
-      };
+    const orderBy: any = {
+      [sortBy.key]: sortBy.order === "asc" ? "asc" : "desc",
+    };
 
-      const pageNumber = parseInt(page as string, 10);
-      const items = parseInt(itemsPerPage as string, 10);
+    const pageNumber = parseInt(page as string, 10);
+    const items = parseInt(itemsPerPage as string, 10);
 
-      const skip = (pageNumber - 1) * items;
-      const take = items;
+    const skip = (pageNumber - 1) * items;
+    const take = items;
 
-      const projects = await prisma.$queryRawUnsafe(`
+    const projects = await prisma.$queryRawUnsafe(`
     SELECT * FROM "Project" p
 ORDER BY p."risData"->>'${sortBy.key}' ${sortBy.order}
 OFFSET ${skip} LIMIT ${take}`);
-      log.debug(projects[0].risData[sortBy.key]);
+    log.debug(projects[0].risData[sortBy.key]);
 
-      const totalProjects = await prisma.project.count();
+    const totalProjects = await prisma.project.count();
 
-      res.json({
-        items: projects,
-        total: totalProjects,
-        page: pageNumber,
-        itemsPerPage: items,
-      });
-    } catch (error) {
-      console.error(error);
-      res
-        .status(500)
-        .json({ error: "An error occurred while fetching projects" });
-    }
-  } else {
-    // production
-    const result = await getAuthEndpoint(process.env.RIS_URL_PROJECTS);
-    res.json(result);
+    res.json({
+      items: projects,
+      total: totalProjects,
+      page: pageNumber,
+      itemsPerPage: items,
+    });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching projects" });
   }
 });
 

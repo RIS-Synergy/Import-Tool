@@ -8,8 +8,6 @@ const projects = JSON.parse(fs.readFileSync(projectsFile, 'utf8'))
 // find one project
 const projectID = 'PUB3333'
 
-console.log(process.env)
-
 const p = projects.find((p: any) => {
   return p.id === projectID
 })
@@ -42,7 +40,7 @@ describe('access a project', () => {
           uuid: 2345,
         }
       ]
-     })
+    })
   })
 })
 

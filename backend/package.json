@@ -10,7 +10,8 @@
     "create-project": "ts-node ./scripts/create-project.ts",
     "create-application": "ts-node ./scripts/create-application.ts",
     "create-award": "ts-node ./scripts/create-award.ts",
-    "create-system-user": "ts-node ./scripts/create-system-user.ts"
+    "create-system-user": "ts-node ./scripts/create-system-user.ts",
+    "copy": "ts-node ./scripts/copy-projects-from-fa.ts"
   },
   "keywords": [],
   "author": "Kirill Stytsenko <kirill@styts.com>",
