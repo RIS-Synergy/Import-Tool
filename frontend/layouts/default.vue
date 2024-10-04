@@ -15,6 +15,9 @@
         {{ titleName }}
       </v-app-bar-title>
 
+      <template v-slot:append>
+        <FilterButton v-if="needsFiltering" />
+      </template>
     </v-app-bar>
 
     <v-main>
@@ -35,13 +38,16 @@ const { setProjectId } = useApiUtils();
 setProjectId(store, route);
 
 const router = useRouter();
-// console.log(router.currentRoute)
 
 const titleName = computed(() => {
   const name = router.currentRoute.value.name;
 
   // capital first letter
   return name.charAt(0).toUpperCase() + name.slice(1);
+});
+
+const needsFiltering = computed(() => {
+  return router.currentRoute && router.currentRoute.value.name === "projects";
 });
 
 </script>
