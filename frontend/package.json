@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "rm -rf /tmp/nitro && nuxt dev",
+    "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -20,14 +20,13 @@
     "pinia-plugin-persistedstate": "^4.0.2",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
-    "vue3-ace-editor": "^2.2.4"
-  },
-  "devDependencies": {
+    "vue3-ace-editor": "^2.2.4",
     "sass": "^1.77.2",
     "vite-plugin-vuetify": "^2.0.3",
-    "vuetify": "^3.6.8"
+    "vuetify": "^3.6.8",
+    "@rollup/rollup-linux-x64-gnu": "4.9.5"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.9.5"
-  }
+  },
+  "packageManager": "pnpm@9.12.1+sha512.e5a7e52a4183a02d5931057f7a0dbff9d5e9ce3161e33fa68ae392125b79282a8a8a470a51dfc8a0ed86221442eb2fb57019b0990ed24fab519bf0e1bc5ccfc4"
 }

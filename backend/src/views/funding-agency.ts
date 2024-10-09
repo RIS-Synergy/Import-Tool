@@ -69,11 +69,13 @@ router.get("/projects", async (req: Request, res: Response) => {
     const skip = (pageNumber - 1) * items;
     const take = items;
 
-    const projects = await prisma.$queryRawUnsafe(`
+    const projects: Array<any> = await prisma.$queryRawUnsafe(`
     SELECT * FROM "Project" p
 ORDER BY p."risData"->>'${sortBy.key}' ${sortBy.order}
 OFFSET ${skip} LIMIT ${take}`);
-    log.debug(projects[0].risData[sortBy.key]);
+    if (projects && projects.length > 0) {
+      log.debug(projects[0].risData[sortBy.key]);
+    }
 
     const totalProjects = await prisma.project.count();
 
