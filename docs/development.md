@@ -41,6 +41,13 @@ docker exec -it backend /bin/bash
 
 ---
 
+Create some Projects from the FWF Funding Agency:
+
+```
+docker exec -it backend npm run copy
+```
+---
+
 Open the UniVie VPN, which is required for their test CRIS system, using a
 Time-based one-time password (TOTP), a 6-digit code):
 

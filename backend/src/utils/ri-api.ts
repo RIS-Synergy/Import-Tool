@@ -1,7 +1,7 @@
 import { Logger } from "tslog";
 const log = new Logger({ name: 'utils:ri-api'});
 
-export async function callRIApi (endpoint, method = 'POST', body = null) {
+export async function callRIApi (endpoint: string, method = 'POST', body = null) {
   const url = `${process.env.PURE_API_URL}${endpoint}`
   log.info('url', url)
 

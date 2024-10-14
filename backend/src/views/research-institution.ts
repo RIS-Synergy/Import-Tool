@@ -134,9 +134,9 @@ router.get('/reference/:systemName/:uuid', async (req: Request, res: Response) =
 
 router.post('/search', async (req: Request, res: Response) => {
   // if development, don't call the CRIS API
-  if (process.env.RIS_USE_DEV) {
-    res.json({})
-  }
+  // if (process.env.RIS_USE_DEV) {
+  //   return res.json({})
+  // }
 
   const entities = {
     persons: [
@@ -165,19 +165,15 @@ router.post('/search', async (req: Request, res: Response) => {
   var results = []
 
   for (const entity of entities[req.body.entity]) {
-    console.log(entity, req.body)
-
     const result = await callRIApi(`/${entity.name}/search`, 'POST', {
       size: 10,
       offset: 0,
       searchString: req.body.searchString
     })
 
-    // console.log(result)
+    log.info(`Number of "${entity.name}" users:`, results.length)
 
     result.items.map((item: any) => {
-      console.log('user', item.user)
-
       results.push({
           pureId: item.pureId,
           uuid: item.uuid,
