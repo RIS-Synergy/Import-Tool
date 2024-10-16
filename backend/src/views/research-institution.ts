@@ -8,7 +8,7 @@ import { uploadProjectApplicationClusters } from '../ris-pure-etl/clusters'
 import { promises as fs } from 'fs'
 
 import { Logger } from "tslog";
-const log = new Logger({ name: 'view:ri'});
+const log = new Logger({ name: 'view:ri' });
 
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
@@ -40,15 +40,15 @@ router.get('/project/:id', async (req: Request, res: Response) => {
 })
 
 router.get('/search', async (req: Request, res: Response) => {
-    const result = await callRIApi('/projects/search', 'POST', {
-      size: 100,
-      offset: 0,
-      searchString: "10.55776/", // FWF id
-    })
-    res.json(result)
+  const result = await callRIApi('/projects/search', 'POST', {
+    size: 100,
+    offset: 0,
+    searchString: "10.55776/", // FWF id
+  })
+  res.json(result)
 })
 
-async function updateCrisId (risId: string, crisId: string, uuid: string, settings: any, template: any) {
+async function updateCrisId(risId: string, crisId: string, uuid: string, settings: any, template: any) {
   log.info('Updating project', risId, 'with crisId', crisId)
   const result = await prisma.project.update({
     where: {
@@ -85,7 +85,7 @@ router.post('/upload', async (req: Request, res: Response) => {
   // const pure = await projectETL2(yamlContent, ris.risData, settings)
   const pure = await projectETL2(template.yamlTemplate, ris, settings)
 
-  log.debug('Pure', pure)
+  // log.debug('Pure', pure)
 
   var templateData = {
     ...req.body.template
@@ -140,26 +140,26 @@ router.post('/search', async (req: Request, res: Response) => {
 
   const entities = {
     persons: [
-    {
-      name: 'persons',
-      // lookup: [ 'staffOrganizationAssociations', 'user' ]
-    },
-    {
-      name: 'external-persons',
-      lookup: 'externalOrganizations'
-    }
+      {
+        name: 'persons',
+        // lookup: [ 'staffOrganizationAssociations', 'user' ]
+      },
+      {
+        name: 'external-persons',
+        lookup: 'externalOrganizations'
+      }
     ],
 
     // we have not used these yet
     organizations: [
-    {
-      name: 'organizations'
-      // lookup: 'organizations'
-    },
-    {
-      name: 'external-organizations',
-      // lookup: 'externalOrganizations'
-    }],
+      {
+        name: 'organizations'
+        // lookup: 'organizations'
+      },
+      {
+        name: 'external-organizations',
+        // lookup: 'externalOrganizations'
+      }],
   }
 
   var results = []
@@ -171,15 +171,15 @@ router.post('/search', async (req: Request, res: Response) => {
       searchString: req.body.searchString
     })
 
-    log.info(`Number of "${entity.name}" users:`, results.length)
+    // log.info(`Number of "${entity.name}" users:`, results.length)
 
     result.items.map((item: any) => {
       results.push({
-          pureId: item.pureId,
-          uuid: item.uuid,
-          name: item.name.firstName + ' ' + item.name.lastName,
-          user: item.user && item.user.uuid,
-          details: item,
+        pureId: item.pureId,
+        uuid: item.uuid,
+        name: item.name.firstName + ' ' + item.name.lastName,
+        user: item.user && item.user.uuid,
+        details: item,
         entity,
         systemName: item.systemName,
       })
@@ -189,7 +189,7 @@ router.post('/search', async (req: Request, res: Response) => {
   res.json(results)
 })
 
-async function getProjectClusters (type: string, uuid: string) {
+async function getProjectClusters(type: string, uuid: string) {
   if (type !== 'AwardManagementProject') return
 
   const clusters = await Promise.all([

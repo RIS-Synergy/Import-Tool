@@ -31,21 +31,13 @@ router.get("/fundings", async (req: Request, res: Response) => {
 });
 
 router.get("/projects/:id", async (req: Request, res: Response) => {
-  if (process.env.RIS_USE_DEV) {
-    // development
-    const result = await prisma.project.findUnique({
-      where: {
-        risId: req.params.id,
-      },
-    });
-    res.json(result);
-  } else {
-    // production
-    const result = await getAuthEndpoint(
-      process.env.RIS_URL_PROJECTS + req.params.id,
-    );
-    res.json(result);
-  }
+  /* We no longer use the RIS FundingAgency API, because we always save the data in the database */
+  const result = await prisma.project.findUnique({
+    where: {
+      risId: req.params.id,
+    },
+  });
+  res.json(result);
 });
 
 router.get("/projects", async (req: Request, res: Response) => {

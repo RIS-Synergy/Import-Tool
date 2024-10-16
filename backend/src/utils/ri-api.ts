@@ -1,11 +1,10 @@
 import { Logger } from "tslog";
-const log = new Logger({ name: 'utils:ri-api'});
+const log = new Logger({ name: 'utils:ri-api' });
 
-export async function callRIApi (endpoint: string, method = 'POST', body = null) {
+export async function callRIApi(endpoint: string, method = 'POST', body = null) {
   const url = `${process.env.PURE_API_URL}${endpoint}`
-  log.info('url', url)
 
-  const response = await fetch(url, {
+  let response = await fetch(url, {
     method,
     headers: {
       "Content-Type": "application/json",
@@ -14,13 +13,15 @@ export async function callRIApi (endpoint: string, method = 'POST', body = null)
     body: method === 'GET' ? null : JSON.stringify(body),
   })
 
-  // log.debug(`Received Research Institution URL: ${url}`)
+  log.debug(`Response ${method} to ${endpoint} with status ${response.status}`)
+
+  const data = await response.json().catch((error) => {
+    log.error(`Error parsing response from Research Institution API`, error)
+  })
 
   if (!response.ok) {
-    const error = await response.json()
-    log.error(`Error calling Research Institution API`, error)
-    return { error }
+    return { error: null }
   }
 
-  return response.json()
+  return data
 }
