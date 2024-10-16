@@ -14,23 +14,26 @@
       <v-card title="Filters">
         <v-card-text>
           <v-select
-            v-model="status"
+            v-model="store.projectFilters"
             :items="projectStatus"
             label="Status"
+            chips
+            multiple
             outlined
           ></v-select>
         </v-card-text>
 
         <v-card-actions>
+          <v-spacer></v-spacer>
           <v-btn
             text="Clear Filters"
             @click="clearFilters"
           </v-btn>
-          <v-spacer></v-spacer>
 
           <v-btn
+            v-if="false"
             text="Apply Filter"
-            @click="isActive.value = false"
+            @click="applyFiler(); isActive.value = false"
           ></v-btn>
         </v-card-actions>
       </v-card>
@@ -41,7 +44,7 @@
 <script setup>
 const dialog = ref(false);
 
-const status = ref(null);
+// const status = ref(null);
 
 const projectStatus = [
   "IN_PREPERATION",
@@ -52,16 +55,23 @@ const projectStatus = [
 ];
 
 function clearFilters () {
-  status.value = null;
+  store.projectFilters = [];
 
   dialog.value = false;
 }
 
 const filterIcon = computed(() => {
-  if (status.value) {
+  console.log(store.projectFilters.length)
+
+  if (store.projectFilters.length > 0) {
     return 'mdi-filter'
   } else {
     return 'mdi-filter-outline'
   }
 })
+
+const store = useUserSettingsStore()
+
+function applyFiler () {
+}
 </script>

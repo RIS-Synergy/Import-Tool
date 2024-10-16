@@ -16,7 +16,9 @@
       </v-app-bar-title>
 
       <template v-slot:append>
-        <FilterButton v-if="needsFiltering" />
+        <ClientOnly>
+          <FilterButton v-if="needsFiltering" />
+        </ClientOnly>
       </template>
     </v-app-bar>
 
@@ -49,8 +51,6 @@ const titleName = computed(() => {
 const needsFiltering = computed(() => {
   return router.currentRoute && router.currentRoute.value.name === "projects";
 });
-
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
