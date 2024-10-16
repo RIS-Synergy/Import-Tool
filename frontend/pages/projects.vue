@@ -63,9 +63,10 @@ async function loadItems({ page, itemsPerPage, sortBy }) {
   store.sortBy = sortBy;
   loading.value = true;
 
-  // const response = await getProjectsList fetch("/api/fa/projects");
-  // const { total, items } = await response.json();
-  const { total, items } = await getProjectsList({ page, itemsPerPage, sortBy });
+  const filters = {
+    status: store.projectFilters,
+  }
+  const { total, items } = await getProjectsList({ page, itemsPerPage, sortBy, filters });
 
   serverItems.value = getItems(items);
   totalItems.value = total;

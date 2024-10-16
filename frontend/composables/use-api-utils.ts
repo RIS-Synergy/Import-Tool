@@ -61,12 +61,11 @@ export const useApiUtils = () => {
     }
   };
 
-  const getProjectsList = async ({ page, itemsPerPage, sortBy }) => {
+  const getProjectsList = async ({ page, itemsPerPage, sortBy, filters }) => {
     const result = await $fetch(
-      // `/api/fa/projects?page=${page}&itemsPerPage=${itemsPerPage}&sortBy=${sortBy}`,
       '/api/fa/projects',
       {
-        query: { page, itemsPerPage, sortBy }
+        query: { page, itemsPerPage, sortBy, filters }
       });
     return result;
   };

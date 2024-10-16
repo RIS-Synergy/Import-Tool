@@ -40,15 +40,39 @@ router.get("/projects/:id", async (req: Request, res: Response) => {
   res.json(result);
 });
 
+type SortBy = {
+  key: string;
+  order: string;
+};
+
+type Filter = {
+  status: Array<string>;
+}
+
 router.get("/projects", async (req: Request, res: Response) => {
   try {
     const { page = 1, itemsPerPage = 10 } = req.query;
 
-    var sortBy;
+    var sortBy: SortBy;
     if (req.query.sortBy) {
       sortBy = JSON.parse(req.query.sortBy as string);
     } else {
       sortBy = { key: "startDate", order: "asc" };
+    }
+    var filters: Filter;
+    if (req.query.filters) {
+      filters = JSON.parse(req.query.filters as string);
+    } else {
+      filters = { status: []};
+    }
+
+    var whereFilters: string
+    if(filters.status.length === 0) {
+      whereFilters = ''
+    } else {
+      whereFilters = 'WHERE ' + filters.status.map((status) => {
+        return `p."risData"->>'status' = '${status}'`;
+      }).join(" OR ");
     }
 
     const orderBy: any = {
@@ -62,18 +86,23 @@ router.get("/projects", async (req: Request, res: Response) => {
     const take = items;
 
     const projects: Array<any> = await prisma.$queryRawUnsafe(`
-    SELECT * FROM "Project" p
+SELECT * FROM "Project" p
+${whereFilters}
 ORDER BY p."risData"->>'${sortBy.key}' ${sortBy.order}
 OFFSET ${skip} LIMIT ${take}`);
     if (projects && projects.length > 0) {
       log.debug(projects[0].risData[sortBy.key]);
     }
 
-    const totalProjects = await prisma.project.count();
+    // const totalProjects = await prisma.project.count();
+    const totalProjects = await prisma.$queryRawUnsafe(`
+SELECT COUNT(*) FROM "Project" p
+${whereFilters}
+`);
 
     res.json({
       items: projects,
-      total: totalProjects,
+      total: Number(totalProjects[0].count),
       page: pageNumber,
       itemsPerPage: items,
     });
