@@ -57,15 +57,14 @@ const serverItems = ref([]);
 const totalItems = ref(0);
 
 const { getProjectsList } = useApiUtils()
-async function loadItems({ page, itemsPerPage, sortBy }) {
-  console.log('loadItems', page, itemsPerPage, sortBy)
+async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
 
   store.sortBy = sortBy;
   loading.value = true;
 
-  const filters = {
-    status: store.projectFilters,
-  }
+  const filters = storeFilter || store.projectFilters;
+  console.log('loadItems', page, itemsPerPage, sortBy, filters)
+
   const { total, items } = await getProjectsList({ page, itemsPerPage, sortBy, filters });
 
   serverItems.value = getItems(items);
@@ -110,6 +109,10 @@ const store = useUserSettingsStore();
 function updateItemsPerPage(idx) {
   store.itemsPerPage = idx;
 }
+
+watch(store.projectFilters, () => {
+  loadItems({ page: 1, itemsPerPage: store.itemsPerPage, sortBy: store.sortBy }, store.projectFilters);
+}, { deep: true });
 </script>
 
 <style>

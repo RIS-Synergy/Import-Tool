@@ -13,27 +13,27 @@
     <template v-slot:default="{ isActive }">
       <v-card title="Filters">
         <v-card-text>
-          <v-select
-            v-model="store.projectFilters"
+            <v-select
+            v-model="store.projectFilters.status"
             :items="projectStatus"
             label="Status"
             chips
             multiple
             outlined
+            clearable
           ></v-select>
         </v-card-text>
 
-        <v-card-actions>
+        <v-card-actions v-if="false">
           <v-spacer></v-spacer>
           <v-btn
+            v-if="false"
             text="Clear Filters"
-            @click="clearFilters"
-          </v-btn>
-
+            @click="clearFilters" />
           <v-btn
             v-if="false"
             text="Apply Filter"
-            @click="applyFiler(); isActive.value = false"
+            @click="isActive.value = false"
           ></v-btn>
         </v-card-actions>
       </v-card>
@@ -55,15 +55,15 @@ const projectStatus = [
 ];
 
 function clearFilters () {
-  store.projectFilters = [];
+  store.projectFilters.status = [];
 
   dialog.value = false;
 }
 
 const filterIcon = computed(() => {
-  console.log(store.projectFilters.length)
+  console.log(store.projectFilters.status.length)
 
-  if (store.projectFilters.length > 0) {
+  if (store.projectFilters.status.length > 0) {
     return 'mdi-filter'
   } else {
     return 'mdi-filter-outline'
@@ -71,7 +71,9 @@ const filterIcon = computed(() => {
 })
 
 const store = useUserSettingsStore()
+const projectStore = useProjectStore()
 
-function applyFiler () {
-}
+watch(() => store.projectFilters, (value) => {
+  console.log(value.value, 'store.projectFilters')
+})
 </script>

@@ -5,7 +5,9 @@ export const useUserSettingsStore = defineStore('user-settings', {
     dark: true,
     itemsPerPage: 10,
     sortBy: [ { key: 'startDate', order: 'asc' } ],
-    projectFilters: []
+    projectFilters: {
+      status: [],
+    }
   }),
   actions: {
     // toggleDark() {
