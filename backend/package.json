@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nodemon --ignore ./tests src/server.ts",
     "debug": "nodemon --exec node --inspect-brk=0.0.0.0 -r ts-node/register ./src/server.ts",
-    "test": "RIS_USE_DEV=2024-09-04_testdata_projects_updated.json PURE_API_URL=http://backend:3000/dev-cris-api vitest",
+    "test": "vitest",
     "db-init": "ts-node ./scripts/db-initiate.ts",
     "create-project": "ts-node ./scripts/create-project.ts",
     "create-application": "ts-node ./scripts/create-application.ts",

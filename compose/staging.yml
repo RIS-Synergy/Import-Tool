@@ -1,0 +1,16 @@
+services:
+  backend:
+    volumes:
+      - ../backend/:/app
+    environment:
+      - NODE_ENV=staging
+
+  frontend:
+    volumes:
+      - ../frontend/:/app
+      - /app/node_modules/
+
+    ports:
+      - "3032:3000"
+      - "24678:24678"
+      - "9229:9229"
