@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x", "debian-openssl-1.1.x"]
 }
 
@@ -18,8 +18,7 @@ model Project {
   risId   String @unique
   risData Json   @default("{}")
 
-  settings Json   @default("{}")
-  template Json   @default("{}")
+  savedTemplate SavedTemplate[]
 
   crisId   String?
   crisUUID String?
@@ -39,11 +38,22 @@ model Template {
 
   templateType TemplateType
   name         String
-  description  String @default("")
+  description  String       @default("")
   yamlTemplate String
 
   createdDate  DateTime @default(now())
   modifiedDate DateTime @updatedAt
 }
 
-// TODO functions
+model SavedTemplate {
+  id Int @id @default(autoincrement())
+
+  projectId Int
+  project   Project @relation(fields: [projectId], references: [id])
+
+  settings Json @default("{}")
+  template Json @default("{}")
+  saveData Json @default("{}")
+
+  createdDate DateTime @default(now())
+}

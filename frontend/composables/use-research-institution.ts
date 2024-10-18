@@ -11,7 +11,12 @@ export const useResearchInstitution = () => {
     }
   }
 
-  const uploadToPure = async (ris, settings, uuid, template) => {
+  const uploadToPure = async (ris, settings, uuid, templateData) => {
+    var template = {
+      ...templateData,
+    }
+    delete template.data
+
     const result = await $fetch("/api/ri/upload", {
       method: "POST",
       body: JSON.stringify({
