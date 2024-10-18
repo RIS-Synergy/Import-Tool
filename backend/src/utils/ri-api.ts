@@ -4,6 +4,8 @@ const log = new Logger({ name: 'utils:ri-api' });
 export async function callRIApi(endpoint: string, method = 'POST', body = null) {
   const url = `${process.env.PURE_API_URL}${endpoint}`
 
+  log.debug(`Fetching ${method} to ${url}`)
+
   let response = await fetch(url, {
     method,
     headers: {

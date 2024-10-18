@@ -23,11 +23,16 @@ describe('sample fwf project', () => {
 import { uploadProjectApplicationClusters } from '../src/ris-pure-etl/clusters'
 describe('access a project', () => {
   it('has applications/awards clusters', async () => {
-    const result = await uploadProjectApplicationClusters(p)
+    const project = {
+      ...p,
+      uuid: 'test-uuid'
+    }
+    const result = await uploadProjectApplicationClusters(project)
     // console.log(p, result)
 
     expect(await result).toEqual({
       ...p,
+      uuid: 'test-uuid',
       applicationClusters: [
         {
           systemName: "ApplicationCluster",

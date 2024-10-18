@@ -2,8 +2,7 @@ import express, { Router, Request, Response } from "express"
 import { Logger } from "tslog";
 
 const router: Router = express.Router()
-
-const log = new Logger({ name: 'dev-cris-api'});
+const log = new Logger({ name: 'dev-cris-api' });
 
 router.get('/', async (req: Request, res: Response) => {
   res.json({
@@ -12,14 +11,12 @@ router.get('/', async (req: Request, res: Response) => {
 })
 
 router.put('/projects', async (req: Request, res: Response) => {
-  // log.debug('dev PUT project', req.body)
   res.json({
     uuid: 'abcd'
   })
 })
 
 router.post('/projects/search', async (req: Request, res: Response) => {
-  // log.debug('dev POST projects/search', req.body)
   res.json({
     count: 1,
     items: [
@@ -31,17 +28,14 @@ router.post('/projects/search', async (req: Request, res: Response) => {
 })
 
 router.put('/projects/:uuid', async (req: Request, res: Response) => {
-  // log.debug('dev PUT projects/:uuid', req.body)
-  // res.json({
-  //   pureId: '1234',
-  //   applicationClusters: [],
-  //   awardClusters: []
-  // })
-  res.json(req.body)
+  log.debug(`Dev PUT projects/${req.params.uuid}`, 'Body object size', Object.keys(req.body).length)
+  res.json({
+    ...req.body
+  })
 })
 
 router.put('/applications', async (req: Request, res: Response) => {
-  // log.debug('dev PUT applications', req.body)
+  log.debug('Dev PUT applications', 'Body object size', Object.keys(req.body).length)
   res.json({
     cluster: {
       uuid: 1234,
@@ -51,12 +45,59 @@ router.put('/applications', async (req: Request, res: Response) => {
 })
 
 router.put('/awards', async (req: Request, res: Response) => {
-  // log.debug('dev PUT awards', req.body)
+  log.debug('Dev PUT awards', 'Body object size', Object.keys(req.body).length)
   res.json({
     cluster: {
       uuid: 2345,
       systemName: "AwardCluster",
     }
+  })
+})
+
+router.post('/persons/search', async (req: Request, res: Response) => {
+  res.json({
+    items: [
+      {
+        pureId: '1234',
+        uuid: 'abcd',
+        name: {
+          firstName: 'John',
+          lastName: 'Doe',
+        },
+        user: {
+          uuid: 'efgh',
+        },
+        systemName: 'Person',
+        entity: 'persons'
+      }
+    ]
+  })
+})
+
+router.post('/external-persons/search', async (req: Request, res: Response) => {
+  res.json({
+    items: [
+      {
+        pureId: '1234',
+        uuid: 'abcd',
+        name: {
+          firstName: 'John',
+          lastName: 'Doe',
+        },
+        user: {
+          uuid: 'efgh'
+        },
+        systemName: 'ExternalPerson',
+        entity: 'external-persons'
+      }
+    ]
+  })
+})
+
+router.get('/:entity/:id', async (req: Request, res: Response) => {
+  res.json({
+    uuid: 'abcd-uuid',
+    email: 'john.doe@example.org'
   })
 })
 

@@ -33,7 +33,7 @@ export async function uploadProjectApplicationClusters (project: any) {
     const data = await getApplicationData()
     const application = await callRIApi('/applications', 'PUT', data)
 
-    log.info('Application', application)
+    // log.info('Application', application)
 
     applicationPureId = application.pureId
     project.applicationClusters = [
