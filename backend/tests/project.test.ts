@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import fs from 'fs'
+import { readFileSync } from 'fs'
 
 const projectsFile = `./samples/projects/${process.env.RIS_USE_DEV}`
 
-const projects = JSON.parse(fs.readFileSync(projectsFile, 'utf8'))
+const projects = JSON.parse(readFileSync(projectsFile, 'utf8'))
 
 // find one project
 const projectID = 'PUB3333'
