@@ -48,4 +48,3 @@ describe('access a project', () => {
     })
   })
 })
-

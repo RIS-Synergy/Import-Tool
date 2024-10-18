@@ -59,13 +59,13 @@ router.post('/persons/search', async (req: Request, res: Response) => {
     items: [
       {
         pureId: '1234',
-        uuid: 'abcd',
+        uuid: 'abcd-person',
         name: {
           firstName: 'John',
           lastName: 'Doe',
         },
         user: {
-          uuid: 'efgh',
+          uuid: 'efgh-user',
         },
         systemName: 'Person',
         entity: 'persons'
@@ -79,13 +79,13 @@ router.post('/external-persons/search', async (req: Request, res: Response) => {
     items: [
       {
         pureId: '1234',
-        uuid: 'abcd',
+        uuid: 'abcd-external-person',
         name: {
           firstName: 'John',
           lastName: 'Doe',
         },
         user: {
-          uuid: 'efgh'
+          uuid: 'efgh-external-user'
         },
         systemName: 'ExternalPerson',
         entity: 'external-persons'
