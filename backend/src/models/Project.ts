@@ -19,4 +19,17 @@ export class Project {
     }
     return null
   }
+
+  static getById = async (risId: string) => {
+    try {
+      return await prisma.project.findUnique({
+        where: {
+          risId: risId
+        }
+      })
+    } catch (error) {
+      log.error('Error getting project by ID', error)
+    }
+    return null
+  }
 }

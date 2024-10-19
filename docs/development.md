@@ -90,3 +90,17 @@ root@abcd123xyz# npm run test
 ```
 
 When editing the files during development, the test process should update as you edit the tests.
+
+### Running the test suite with an UI:
+
+```
+docker exec -it backend yarn vitest --ui --open=false --api.host=0.0.0.0
+```
+
+Then you can open http://172.20.0.3:51204/__vitest__/#/ to watch the tests as they are being edited.
+
+The IP adress is lightly different, find the right one:
+
+```
+docker inspect backend | grep IPAddress
+```
