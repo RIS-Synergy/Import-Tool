@@ -39,6 +39,9 @@ router.get('/project/:id', async (req: Request, res: Response) => {
   })
 })
 
+/**
+@deprecated
+**/
 router.get('/search', async (req: Request, res: Response) => {
   const result = await callRIApi('/projects/search', 'POST', {
     size: 100,

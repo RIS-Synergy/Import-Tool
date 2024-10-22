@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { readFileSync } from 'fs'
-import { Differ, findDeepDiff } from '../../src/utils/diff'
-import { Project } from '../../src/models/Project'
 import _ from 'lodash'
+import { Differ, findDeepDiff, runPipeline } from '../../src/utils/diff'
+import { Project } from '../../src/models/Project'
+import { templateData } from './crisTestData'
 
 const A = {
   foo: 'a',
@@ -19,15 +19,15 @@ const B = {
 }
 
 describe('Differ findDeepDiff', () => {
-  it('should return an empty array for equal objects', () => {
+  it('with identical objects: empty', () => {
     expect(findDeepDiff(A, A)).toEqual([])
   })
-  it('should return an empty array for equal objects', () => {
+  it('with different objects: one difference point', () => {
     expect(findDeepDiff(A, B)).toEqual(['foo'])
   })
 })
 
-describe('Diffs', () => {
+describe('Differ class', () => {
   it('trivial cases', () => {
     expect(new Differ(A, B).diff()).toEqual(new Set(['foo']))
     expect(new Differ(A, {}).diff()).toEqual(new Set(['foo', 'bar']))
@@ -36,8 +36,17 @@ describe('Diffs', () => {
     expect(new Differ(A, { foo: 'b', bar: {} }).diff()).toEqual(new Set(["foo", "bar.baz"]))
   })
 
-  describe('By Project Id', async () => {
+  // This might be needed to be fixed later
+  // But the risData side is more important
+  it.skip('trivial cases, reversed', () => {
+    expect(new Differ(B, A).diff()).toEqual(new Set(['foo'])) // reversed
+    // expect(new Differ({}, A).diff()).toEqual(new Set(['foo', 'bar'])) // reversed, XXX this does not work
+    expect(A).toEqual({ foo: 'a', bar: { baz: 'c' } })
+    expect(new Differ({ foo: 'a' }, A).diff()).toEqual(new Set(["bar"])) // reversed, XXX this does not work
+    expect(new Differ({ foo: 'b', bar: {} }, A).diff()).toEqual(new Set(["foo", "bar.baz"])) // reversed, XXX this does not work
+  })
 
+  describe('By Project Id', async () => {
     const project = await Project.getById('PUB3333')
     const risData: any = project.risData
 
@@ -67,5 +76,33 @@ describe('Diffs', () => {
       expect(new Differ(risData, secondData).diff()).toStrictEqual(new Set(["team.0.person.personName.firstName", "endDate"]))
       expect(new Differ(risData, secondData).diff()).toStrictEqual(new Set(["team.0.person.personName.firstName", "endDate"]))
     })
+  })
+})
+
+
+describe('runPipeline', () => {
+  it('pipeline', async () => {
+    const crisData = {
+      ...templateData,
+      crisHasThisButRisDataNot: 'hello'
+    }
+
+    const result = await runPipeline('PUD33', crisData)
+    expect(result).toEqual(new Set(["crisHasThisButRisDataNot"]))
+  })
+
+  it('CRIS data date has changed', async () => {
+    const result = await runPipeline('PUD33', {
+      ...templateData,
+      period: {
+        endDate: '2023-12-12'
+      }
+    })
+    expect(result).toEqual(new Set(["period.endDate"]))
+  })
+
+  it('CRIS and DB are the same', async () => {
+    const result = await runPipeline('PUD33', templateData)
+    expect(result).toEqual(new Set([]))
   })
 })

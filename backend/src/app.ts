@@ -34,8 +34,10 @@ app.use('/project', require('./views/project').default)
 app.use('/templates', require('./views/templates').default)
 
 // if (process.env.NODE_ENV === 'development') {
-  app.use('/dev-cris-api', require('./views/dev-cris-api').default)
+app.use('/dev-cris-api', require('./views/dev-cris-api').default)
 // }
+
+app.use('/diff', require('./views/diff').default)
 
 // error handler last
 app.use(unexpectedErrorHandler)
