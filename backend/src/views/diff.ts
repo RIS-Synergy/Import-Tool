@@ -9,6 +9,7 @@ import { runPipeline} from '../utils/diff'
 
 router.get('/:id', async (req: Request, res: Response) => {
   const result = await runPipeline(req.params.id)
+  log.info(`req: ${req.path}`, result)
   res.json(result)
 })
 

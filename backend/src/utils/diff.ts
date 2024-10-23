@@ -10,20 +10,6 @@ import { ResearchInstitution } from '../models/ResearchInstitution';
 import { projectETL2 } from '../ris-pure-etl/index'
 import { RISImport, Settings } from '../types';
 
-/*
-
-1) Get Project ID data from the Database
-
-2) Get Project ID data from the CRIS API
-
-3) Get the values from the SavedTemplate table and apply the template
-
-4) apply the template+settings to the Project.risData
-
-5) apply the diffs
-
-*/
-
 export function findDeepDiff(obj1, obj2) {
   // Helper function for recursion
   function getDiff(obj1, obj2, path) {
@@ -46,6 +32,45 @@ export function findDeepDiff(obj1, obj2) {
   // Start the comparison with the root level
   return getDiff(obj1, obj2, '');
 }
+
+// use _.get to retrun a list with the value differences
+export function getValues (sourceA, sourceB, path) {
+  var a, b
+  try {
+    a = _.get(sourceA, path)
+  } catch (e) {
+    log.error(`Can't get "${path}" from source "A"`, e)
+    return
+  }
+  try {
+    b = _.get(sourceB, path)
+  } catch (e) {
+    log.error(`Can't get "${path}" from source "B"`, e)
+    return
+  }
+  if (a === b) {
+    return null
+  }
+  log.debug('[DIFF]', `${path}: "${a}" -> "${b}"`)
+  return {
+    a,
+    b
+  }
+}
+
+/*
+
+1) Get Project ID data from the Database
+
+2) Get Project ID data from the CRIS API
+
+3) Get the values from the SavedTemplate table and apply the template
+
+4) apply the template+settings to the Project.risData
+
+5) apply the diffs
+
+*/
 
 export async function runPipeline(risId: string,
   // dbProject: any = {id: 0},
@@ -107,7 +132,19 @@ export async function runPipeline(risId: string,
   // const result = new Differ(appliedTemplate, crisData).diff()
   const result = new Differ(crisData, appliedTemplate).diff()
   // log.info('Differences', result)
-  return result
+
+  var diffList = []
+  result.forEach((item: string) => {
+    const { a, b } = getValues(crisData, appliedTemplate, item)
+    diffList.push({
+      a, b
+    })
+  })
+
+  return {
+    diffSet: result,
+    diffList
+  }
 }
 
 export class Differ {

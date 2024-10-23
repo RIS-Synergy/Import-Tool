@@ -53,7 +53,7 @@
 const store = useProjectStore();
 const route = useRoute();
 const router = useRouter();
-const { getProjectUUID, uploadToPure } = useResearchInstitution();
+const { getProjectUUID } = useResearchInstitution();
 
 const id = route.params.id;
 const { data: ris } = await useFetch(`/api/fa/projects/${id}`);

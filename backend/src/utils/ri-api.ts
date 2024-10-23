@@ -1,7 +1,16 @@
 import { Logger } from "tslog";
 const log = new Logger({ name: 'utils:ri-api' });
 
-export async function callRIApi(endpoint: string, method = 'POST', body = null) {
+type RISResult = {
+  error?: any
+  items?: any
+  count?: number
+}
+
+type CRISError = {
+  detail: string
+}
+export async function callRIApi(endpoint: string, method = 'POST', body = null): Promise<any> {
   const url = `${process.env.PURE_API_URL}${endpoint}`
 
   log.debug(`Fetching ${method} to ${url}`)
@@ -12,18 +21,46 @@ export async function callRIApi(endpoint: string, method = 'POST', body = null) 
       "Content-Type": "application/json",
       'api-key': process.env.PURE_API_KEY,
     },
+    // mode: 'no-cors',
+    // mode: 'cors',
     body: method === 'GET' ? null : JSON.stringify(body),
   })
 
-  log.debug(`Response ${method} to ${endpoint} with status ${response.status}`)
+  const contentType: string = response.headers.get("content-type")
+  log.debug(`Response ${method} to ${endpoint} with status ${response.status} with content-type: ${contentType}`)
+  console.log(response)
 
-  const data = await response.json().catch((error) => {
-    log.error(`Error parsing response from Research Institution API`, error)
-  })
+  if (response.redirected) {
+    const err: CRISError = {
+      detail: `Redirected to ${response.url}`
+    }
+    log.error(`Redirected to ${response.url}`)
+    return {
+      error: err
+    }
+  }
+  else if (contentType.startsWith('application/json')) {
+    const data = await response.json().catch((error) => {
+      log.error(`Error parsing response from Research Institution API`, error)
+      return { error }
+    })
 
-  if (!response.ok) {
-    return { error: null }
+    console.log(data)
+
+    if (!response.ok) {
+      return { error: data }
+    }
+
+    return data
+  }
+  // application/problem+json
+  else if (contentType.startsWith('application/problem+json')) {
+    const error = await response.json()
+    log.info(error.detail)
+    return { error }
   }
 
-  return data
+  return {
+    detail: `Unknown content-type: ${contentType}`
+  } as CRISError
 }

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import _ from 'lodash'
-import { Differ, findDeepDiff, runPipeline } from '../../src/utils/diff'
+import { Differ, findDeepDiff, runPipeline, getValues } from '../../src/utils/diff'
 import { Project } from '../../src/models/Project'
 import { templateData } from './crisTestData'
 
@@ -46,6 +46,27 @@ describe('Differ class', () => {
     expect(new Differ({ foo: 'b', bar: {} }, A).diff()).toEqual(new Set(["foo", "bar.baz"])) // reversed, XXX this does not work
   })
 
+  it('use _.get to retrun a list with the value differences', () => {
+    const newA = {
+      eq: 1,
+      bar: {
+        baz: 'c'
+      }
+    }
+    const newB = {
+      eq: 1,
+      bar: {
+        baz: 'd'
+      }
+    }
+
+    expect(getValues(A, B, 'foo')).toEqual({ a: 'a', b: 'b' })
+    expect(getValues(newA, newB, 'eq')).toEqual(null)
+    expect(getValues(newA, newB, 'bar.baz')).toEqual({ a: 'c', b: 'd' })
+    expect(getValues(newA, newB, 'bar')).toEqual({ a: { baz: 'c'}, b: { baz: 'd'} })
+    expect(getValues(newA, newB, 'none')).toEqual(null)
+  })
+
   describe('By Project Id', async () => {
     const project = await Project.getById('PUB3333')
     const risData: any = project.risData
@@ -87,22 +108,22 @@ describe('runPipeline', () => {
       crisHasThisButRisDataNot: 'hello'
     }
 
-    const result = await runPipeline('PUD33', crisData)
-    expect(result).toEqual(new Set(["crisHasThisButRisDataNot"]))
+    const { diffSet } = await runPipeline('PUD33', crisData)
+    expect(diffSet).toEqual(new Set(["crisHasThisButRisDataNot"]))
   })
 
   it('CRIS data date has changed', async () => {
-    const result = await runPipeline('PUD33', {
+    const { diffSet } = await runPipeline('PUD33', {
       ...templateData,
       period: {
         endDate: '2023-12-12'
       }
     })
-    expect(result).toEqual(new Set(["period.endDate"]))
+    expect(diffSet).toEqual(new Set(["period.endDate"]))
   })
 
   it('CRIS and DB are the same', async () => {
-    const result = await runPipeline('PUD33', templateData)
-    expect(result).toEqual(new Set([]))
+    const { diffSet } = await runPipeline('PUD33', templateData)
+    expect(diffSet).toEqual(new Set([]))
   })
 })

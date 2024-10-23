@@ -95,12 +95,18 @@ router.post('/upload', async (req: Request, res: Response) => {
 
   if (uuid) {
     const result = await callRIApi(`/projects/${uuid}`, 'PUT', pure)
+    if (result.error) {
+      return res.json(result)
+    }
     log.info('Update project', result.uuid)
     await uploadProjectApplicationClusters(result)
     await updateCrisId(ris.id, result, settings, req.body.template)
     return res.json(result)
   } else {
     const result = await callRIApi('/projects', 'PUT', pure)
+    if (result.error) {
+      return res.json(result)
+    }
     log.info('Created new project', result)
     await uploadProjectApplicationClusters(result)
     await updateCrisId(ris.id, result, settings, req.body.template)

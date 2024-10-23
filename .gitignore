@@ -4,5 +4,6 @@ secrets/
 .env
 node_modules/
 
+compose/*.env
 # some editors use this
 .#*

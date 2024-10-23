@@ -1,3 +1,5 @@
+// const errorStore = useErrorStore()
+
 export const useResearchInstitution = () => {
   const getProjectUUID = async (id) => {
     try {
@@ -26,6 +28,10 @@ export const useResearchInstitution = () => {
         template
       }),
     });
+
+    // if (result.error) {
+    //   console.error(result.error)
+    // }
     return result
   }
 

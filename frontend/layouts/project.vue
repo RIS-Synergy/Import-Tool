@@ -35,9 +35,10 @@
     </v-app-bar>
 
     <v-main>
-        <slot v-if="store.risData" />
+      <slot v-if="store.risData" />
     </v-main>
 
+    <Error />
     <TransformButton />
   </v-app>
 </template>
@@ -48,6 +49,8 @@ const drawer = ref(false);
 const router = useRouter()
 const route = useRoute();
 const store = useProjectStore();
+
+store.resetError()
 
 const { setProjectId } = useApiUtils();
 

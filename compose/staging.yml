@@ -4,6 +4,7 @@ services:
       - ../backend/:/app
     environment:
       - NODE_ENV=staging
+    env_file: "staging.env"
 
   frontend:
     volumes:

@@ -22,7 +22,9 @@ export const useProjectStore = defineStore('project', {
     risData: null,
     crisId: null,
     crisUUID: null,
-    crisData: null
+    crisData: null,
+
+    error: null,
   }),
   getters: {
     noEmptySetings: (state) => {
@@ -54,6 +56,13 @@ export const useProjectStore = defineStore('project', {
     setSettings(config: { person: string, organization: string }) {
       this.settings.person = config.valuePerson
       this.settings.organization = config.valueOrganization
+    },
+    setError(error: any, area: string) {
+      this.error = error;
+      this.error.area = area;
+    },
+    resetError () {
+      this.error = null
     }
   },
   persist: true

@@ -40,12 +40,17 @@ async function saveTransformUpload(crud) {
   // create or edit
   console.log("ris", store.risData);
 
+  store.error = null;
   const result = await uploadToPure(
     store.risData,
     store.settings,
     store.crisUUID,
     store.template,
   );
+  if (result.error) {
+    store.setError(result.error, 'uploadToPure');
+    return;
+  }
   store.setPure(result);
 
   // redirect to project view
