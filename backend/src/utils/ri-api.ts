@@ -28,7 +28,7 @@ export async function callRIApi(endpoint: string, method = 'POST', body = null):
 
   const contentType: string = response.headers.get("content-type")
   log.debug(`Response ${method} to ${endpoint} with status ${response.status} with content-type: ${contentType}`)
-  console.log(response)
+  // console.log(response)
 
   if (response.redirected) {
     const err: CRISError = {
@@ -41,7 +41,7 @@ export async function callRIApi(endpoint: string, method = 'POST', body = null):
   }
   else if (contentType.startsWith('application/json')) {
     const data = await response.json().catch((error) => {
-      log.error(`Error parsing response from Research Institution API`, error)
+      log.error(`Error parsing response from RI-API`, error)
       return { error }
     })
 
@@ -56,7 +56,7 @@ export async function callRIApi(endpoint: string, method = 'POST', body = null):
   // application/problem+json
   else if (contentType.startsWith('application/problem+json')) {
     const error = await response.json()
-    log.info(error.detail)
+    log.error(error)
     return { error }
   }
 

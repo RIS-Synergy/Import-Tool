@@ -5,6 +5,9 @@ const cleanSettings = {
   organization: null,
 }
 
+type Pure = {
+}
+
 export const useProjectStore = defineStore('project', {
   state: () => ({
     settings: cleanSettings,
@@ -48,14 +51,15 @@ export const useProjectStore = defineStore('project', {
       this.settings.person = uuid;
     },
     setPure(pure: Pure) {
-      this.pure = pure;
+      this.crisUUID = pure.uuid;
+      this.crisId = pure.pureId;
     },
     resetSettings() {
       this.settings = cleanSettings;
     },
     setSettings(config: { person: string, organization: string }) {
-      this.settings.person = config.valuePerson
-      this.settings.organization = config.valueOrganization
+      this.settings.person = config.valuePerson.length || null
+      this.settings.organization = config.valueOrganization.length || null
     },
     setError(error: any, area: string) {
       this.error = error;

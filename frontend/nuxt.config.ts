@@ -19,8 +19,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      valueOrganization: process.env.RIS_DEV_VALUE_ORGANIZATION,
-      valuePerson: process.env.RIS_DEV_VALUE_PERSON
+      valueOrganization: process.env.RIS_DEV_VALUE_ORGANIZATION || null,
+      valuePerson: process.env.RIS_DEV_VALUE_PERSON || null
     }
   },
 

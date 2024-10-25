@@ -12,6 +12,7 @@ const log = new Logger({ name: 'view:ri' });
 
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
+import { Project } from '../models/Project'
 
 const router: Router = express.Router()
 
@@ -99,8 +100,10 @@ router.post('/upload', async (req: Request, res: Response) => {
       return res.json(result)
     }
     log.info('Update project', result.uuid)
-    await uploadProjectApplicationClusters(result)
-    await updateCrisId(ris.id, result, settings, req.body.template)
+    Project.createOrUpdateCrisLink(ris.id, result)
+    // XXX pause Applications and Awards for now
+    // await uploadProjectApplicationClusters(result)
+    // await updateCrisId(ris.id, result, settings, req.body.template)
     return res.json(result)
   } else {
     const result = await callRIApi('/projects', 'PUT', pure)
@@ -108,8 +111,10 @@ router.post('/upload', async (req: Request, res: Response) => {
       return res.json(result)
     }
     log.info('Created new project', result)
-    await uploadProjectApplicationClusters(result)
-    await updateCrisId(ris.id, result, settings, req.body.template)
+    Project.createOrUpdateCrisLink(ris.id, result)
+    // XXX pause Applications and Awards for now
+    // await uploadProjectApplicationClusters(result)
+    // await updateCrisId(ris.id, result, settings, req.body.template)
     return res.json(result)
   }
 })

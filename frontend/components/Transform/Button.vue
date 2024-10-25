@@ -50,10 +50,10 @@ async function saveTransformUpload(crud) {
   if (result.error) {
     store.setError(result.error, 'uploadToPure');
     return;
+  } else {
+    store.setPure(result);
+    // redirect to project view
+    router.push({ name: "project-id-view", params: { id: route.params.id } });
   }
-  store.setPure(result);
-
-  // redirect to project view
-  router.push({ name: "project-id-view", params: { id: route.params.id } });
 }
 </script>
