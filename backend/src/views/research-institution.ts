@@ -125,12 +125,12 @@ router.get('/organizations/:id', async (req: Request, res: Response) => {
 })
 
 router.get('/persons/:id', async (req: Request, res: Response) => {
-  if (process.env.RIS_USE_DEV) {
-    return res.json({})
-  } else {
-    const result = await callRIApi(`/persons/${req.params.id}`, 'GET')
-    res.json(result)
-  }
+  // if (process.env.RIS_USE_DEV) {
+  //   return res.json({})
+  // } else {
+  const result = await callRIApi(`/persons/${req.params.id}`, 'GET')
+  res.json(result)
+  // }
 })
 
 router.get('/reference/:systemName/:uuid', async (req: Request, res: Response) => {

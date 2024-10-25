@@ -19,7 +19,7 @@ prisma.project.count().then((count) => {
 
 async function importProjects () {
   // development
-  const jsonFile =  `./samples/projects/${process.env.RIS_USE_DEV}`
+  const jsonFile =  `./samples/projects/${process.env.RIS_TEST_DATA}`
   const result = await fs.readFile(jsonFile).then((data) => JSON.parse(data.toString()))
 
   result.forEach(async (project) => {

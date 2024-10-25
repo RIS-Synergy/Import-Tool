@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { readFileSync } from 'fs'
 
-const projectsFile = `./samples/projects/${process.env.RIS_USE_DEV}`
+const projectsFile = `./samples/projects/${process.env.RIS_TEST_DATA}`
 
 const projects = JSON.parse(readFileSync(projectsFile, 'utf8'))
 
@@ -23,6 +23,12 @@ describe('sample fwf project', () => {
 import { uploadProjectApplicationClusters } from '../src/ris-pure-etl/clusters'
 describe('access a project', () => {
   it('has applications/awards clusters', async () => {
+
+    // skip this test in staging or production
+    if (process.env.NODE_ENV !== 'development') {
+      return
+    }
+
     const project = {
       ...p,
       uuid: 'test-uuid'

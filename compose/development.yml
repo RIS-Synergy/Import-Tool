@@ -4,7 +4,7 @@ services:
       - ../backend/:/app
     environment:
       - NODE_ENV=development
-      - RIS_USE_DEV=2024-09-04_testdata_projects_updated.json
+      - RIS_TEST_DATA=2024-09-04_testdata_projects_updated.json
       - PURE_API_URL=http://backend:3000/dev-cris-api
 
   frontend:
