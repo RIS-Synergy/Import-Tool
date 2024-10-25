@@ -1,12 +1,11 @@
 import _ from 'lodash';
-const { Logger } = require("tslog");
+import { Logger } from "tslog";
 const log = new Logger({ name: 'utils:diff' });
 
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 import { Project } from '../models/Project';
-import { ResearchInstitution } from '../models/ResearchInstitution';
 import { projectETL2 } from '../ris-pure-etl/index'
 import { RISImport, Settings } from '../types';
 
@@ -34,7 +33,7 @@ export function findDeepDiff(obj1, obj2) {
 }
 
 // use _.get to retrun a list with the value differences
-export function getValues (sourceA, sourceB, path) {
+export function getValues(sourceA, sourceB, path) {
   var a, b
   try {
     a = _.get(sourceA, path)
@@ -72,9 +71,45 @@ export function getValues (sourceA, sourceB, path) {
 
 */
 
+const omitList = new Set([
+  'pureId',
+  'uuid',
+  'createdBy',
+  'createdDate',
+  'modifiedBy',
+  'modifiedDate',
+  'portalUrl',
+  'version',
+  'participants.0.pureId',
+  'participants.0.name',
+  'participants.0.role.term',
+  'participants.0.person.uuid',
+  'participants.0.organizations.0.uuid',
+  'effectivePeriod',
+  'identifiers.0.pureId',
+  'identifiers.0.type.term',
+  'identifiers.1.pureId',
+  'identifiers.1.type.term',
+  'identifiers.2.pureId',
+  'identifiers.2.type.term',
+  'organizations.0.uuid',
+  'managingOrganization.uuid',
+  'type.term',
+  'keywordGroups.0.pureId',
+  'keywordGroups.0.name',
+  'keywordGroups.0.classifications.0.term',
+  'keywordGroups.0.classifications.1.term',
+  'keywordGroups.0.classifications.2.term',
+  'keywordGroups.0.classifications.3.term',
+  'keywordGroups.1.pureId',
+  'keywordGroups.1.name',
+  'keywordGroups.1.keywords.0.pureId',
+  'customDefinedFields'
+])
+
 export async function runPipeline(risId: string,
   // dbProject: any = {id: 0},
-  crisData: any = null) {
+  crisData: any) {
   // 1) Get Project ID data from the Database
   const dbProject = await Project.getById(risId);
   if (!dbProject) {
@@ -87,13 +122,13 @@ export async function runPipeline(risId: string,
   // }
 
   // 2) Get Project ID data from the CRIS API
-  if (!crisData) {
-    const CRIS = new ResearchInstitution();
-    crisData = await CRIS.getCategory('Project', risId);
-    log.info('CRIS Data from the Databaser')
-  } else {
-    log.info('CRIS Data runPipeline argument')
-  }
+  // if (!crisData) {
+  //   const CRIS = new ResearchInstitution();
+  //   crisData = await CRIS.getCategory('Project', risId);
+  //   log.info('CRIS Data from the Databaser')
+  // } else {
+  //   log.info('CRIS Data runPipeline argument')
+  // }
 
   // 3) Get the values from the SavedTemplate table and apply the template
   // last saved template most latest, for the Project of ID
@@ -130,8 +165,12 @@ export async function runPipeline(risId: string,
   // 5) apply the diffs
   // XXX note: the order is unexpected
   // const result = new Differ(appliedTemplate, crisData).diff()
-  const result = new Differ(crisData, appliedTemplate).diff()
+  let result = new Differ(crisData, appliedTemplate).diff()
   // log.info('Differences', result)
+
+  // apply omit list
+  result = new Omits().apply(result)
+  log.info('Omitted', result)
 
   var diffList = []
   result.forEach((item: string) => {
@@ -156,6 +195,22 @@ export class Differ {
     const list = findDeepDiff(this.a, this.b)
     list.forEach((item: string) => {
       result.add(item)
+    })
+    return result
+  }
+}
+
+class Omits {
+  constructor(public list = omitList) {
+  }
+
+  apply(data: Set<string>) {
+    // return data parts that are part of this.list
+    let result = new Set<string>()
+    data.forEach((item: string) => {
+      if (!this.list.has(item)) {
+        result.add(item)
+      }
     })
     return result
   }

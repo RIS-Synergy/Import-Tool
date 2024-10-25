@@ -100,7 +100,8 @@ router.post('/upload', async (req: Request, res: Response) => {
       return res.json(result)
     }
     log.info('Update project', result.uuid)
-    Project.createOrUpdateCrisLink(ris.id, result)
+    const project = new Project(ris.id)
+    project.createOrUpdateCrisLink(result)
     // XXX pause Applications and Awards for now
     // await uploadProjectApplicationClusters(result)
     // await updateCrisId(ris.id, result, settings, req.body.template)
@@ -111,7 +112,8 @@ router.post('/upload', async (req: Request, res: Response) => {
       return res.json(result)
     }
     log.info('Created new project', result)
-    Project.createOrUpdateCrisLink(ris.id, result)
+    const project = new Project(ris.id)
+    project.createOrUpdateCrisLink(result)
     // XXX pause Applications and Awards for now
     // await uploadProjectApplicationClusters(result)
     // await updateCrisId(ris.id, result, settings, req.body.template)

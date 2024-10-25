@@ -45,7 +45,7 @@ export async function callRIApi(endpoint: string, method = 'POST', body = null):
       return { error }
     })
 
-    console.log(data)
+    // console.log(data)
 
     if (!response.ok) {
       return { error: data }

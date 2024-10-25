@@ -4,9 +4,12 @@ import { Logger } from "tslog";
 const prisma = new PrismaClient()
 const log = new Logger({ name: 'model:Project' });
 
-export class Project {
-  constructor () {}
+import { ResearchInstitution } from './ResearchInstitution'
 
+export class Project {
+  constructor (public risId: string) {}
+
+  // @deprecated, delete it later. us getById, and even new Project(risId), not static
   static async ifExists(risId: string) {
     try {
       return await prisma.project.findUnique({
@@ -33,8 +36,7 @@ export class Project {
     return null
   }
 
-  static async createOrUpdateCrisLink(risId: string, crisData: any) {
-
+  async createOrUpdateCrisLink(crisData: any) {
     const data = {
       crisId: crisData.pureId.toString(),
       crisUUID: crisData.uuid
@@ -43,7 +45,7 @@ export class Project {
     try {
       const project = await prisma.project.update({
         where: {
-          risId
+          risId: this.risId
         },
         data
       })
@@ -52,5 +54,24 @@ export class Project {
       log.error('Error creating or updating project', error)
     }
     return null
+  }
+
+  get crisUUID() {
+    return prisma.project.findUnique({
+      where: {
+        risId: this.risId
+      }
+    }).then((project) => {
+      return project.crisUUID
+    }).catch((error) => {
+      log.error('Error getting crisUUID', error)
+      return null
+    })
+  }
+
+  async fetchCrisData() {
+    const ri = new ResearchInstitution()
+    const crisData = await ri.getProjectData(await this.crisUUID)
+    return crisData
   }
 }

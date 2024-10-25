@@ -42,4 +42,9 @@ export class ResearchInstitution {
     const result = await callRIApi(`/projects/${id}`, 'GET')
     return result
   }
+
+  getProjectData = async (uuid: string) => {
+    const result = await callRIApi(`/projects/${uuid}`, 'GET')
+    return result
+  }
 }

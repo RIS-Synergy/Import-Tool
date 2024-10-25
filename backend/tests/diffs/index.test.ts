@@ -127,3 +127,10 @@ describe('runPipeline', () => {
     expect(diffSet).toEqual(new Set([]))
   })
 })
+
+
+describe('Diff omits' () => {
+  // TODO
+  // it('omits', () => {
+  // })
+})
