@@ -129,8 +129,8 @@ describe('runPipeline', () => {
 })
 
 
-describe('Diff omits' () => {
+// describe('Diff omits' () => {
   // TODO
   // it('omits', () => {
   // })
-})
+// })

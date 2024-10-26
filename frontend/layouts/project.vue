@@ -18,19 +18,26 @@
       </v-app-bar-title>
 
       <template v-slot:extension>
-          <v-tabs>
+          <v-tabs v-model="tabLeft">
             <v-tab :to="`/project/` + id + `/risdata`"> RIS Data </v-tab>
             <v-tab :to="`/project/` + id"> View </v-tab>
             <v-tab :to="`/project/` + id + `/settings`">
               Settings ({{ store.numberOfSettings }}/{{
-                store.totalNumOfSettings
-              }})
+                                                     store.totalNumOfSettings
+                                                     }})
             </v-tab>
             <v-tab :to="`/project/` + id + `/transform`"> Transform </v-tab>
+          </v-tabs>
+          <v-spacer />
+          <v-tabs right v-model="tabRight">
             <v-tab
               :disabled="!store.crisId"
               :to="`/project/` + id + `/view`"> CRIS </v-tab>
+            <v-tab
+              :disabled="!store.crisId"
+              :to="`/project/` + id + `/diff`"> Diff </v-tab>
           </v-tabs>
+
       </template>
     </v-app-bar>
 
@@ -49,6 +56,21 @@ const drawer = ref(false);
 const router = useRouter()
 const route = useRoute();
 const store = useProjectStore();
+
+const tabLeft = ref(null);
+const tabRight = ref(null);
+
+// when one of the tabs changes, reset the other one
+watch(tabLeft, () => {
+  if (tabLeft.value !== null) {
+    tabRight.value = null;
+  }
+});
+watch(tabRight, () => {
+  if (tabRight.value !== null) {
+    tabLeft.value = null;
+  }
+});
 
 store.resetError()
 
