@@ -14,7 +14,13 @@ router.get('/:id', async (req: Request, res: Response) => {
   // log.info('CrisData', crisData)
   const result = await runPipeline(req.params.id, crisData)
   log.info(`req: ${req.path}`, result)
-  res.json(result)
+  res.json(result.diffList.map((x: any) => {
+    return {
+      cris: x.a,
+      ris: x.b,
+      path: x.path
+    }
+  }))
 })
 
 export default router

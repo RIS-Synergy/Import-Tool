@@ -1,5 +1,22 @@
 <template>
-  diff
+  <v-container>
+  <v-table>
+    <thead>
+      <tr>
+        <th>Template path</th>
+        <th>RIS Data</th>
+        <th>CRIS Data</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="diff in diffList" :key="diff.key">
+        <td>{{ diff.path }}</td>
+        <td>{{ diff.ris }}</td>
+        <td>{{ diff.cris }}</td>
+      </tr>
+    </tbody>
+  </v-table>
+  </v-container>
 </template>
 
 <script setup>
@@ -9,8 +26,13 @@ const route = useRoute();
 // const { loadProject } = useResearchInstitution();
 const id = route.params.id;
 
-onMounted(() => {
+const { getDiffs } = useApiUtils();
+const diffList = ref([]);
+
+onMounted(async () => {
   console.log("diff onMounted");
+
+  diffList.value = await getDiffs(id);
 });
 
 definePageMeta({
@@ -19,4 +41,8 @@ definePageMeta({
 </script>
 
 <style scoped>
+/* no idea why this is not 'bold' by default */
+.v-table > .v-table__wrapper > table > thead > tr > th {
+  font-weight: bold;
+}
 </style>

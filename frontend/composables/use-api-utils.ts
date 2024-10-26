@@ -94,6 +94,12 @@ export const useApiUtils = () => {
     // result.value = x;
   };
 
+  const getDiffs = async (risId) => {
+    const result = await $fetch(`/api/diff/${risId}`);
+    console.log("getDiffs", result);
+    return result;
+  }
+
   return {
     getTemplates,
     getTemplateId,
@@ -103,5 +109,6 @@ export const useApiUtils = () => {
     setProjectId,
     getProjectsList,
     loadTransformation,
+    getDiffs
   };
 };

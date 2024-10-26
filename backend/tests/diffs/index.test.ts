@@ -60,10 +60,10 @@ describe('Differ class', () => {
       }
     }
 
-    expect(getValues(A, B, 'foo')).toEqual({ a: 'a', b: 'b' })
+    expect(getValues(A, B, 'foo')).toEqual({ a: 'a', b: 'b', path: 'foo' })
     expect(getValues(newA, newB, 'eq')).toEqual(null)
-    expect(getValues(newA, newB, 'bar.baz')).toEqual({ a: 'c', b: 'd' })
-    expect(getValues(newA, newB, 'bar')).toEqual({ a: { baz: 'c'}, b: { baz: 'd'} })
+    expect(getValues(newA, newB, 'bar.baz')).toEqual({ a: 'c', b: 'd', path: 'bar.baz'})
+    expect(getValues(newA, newB, 'bar')).toEqual({ a: { baz: 'c'}, b: { baz: 'd'}, path: 'bar'})
     expect(getValues(newA, newB, 'none')).toEqual(null)
   })
 

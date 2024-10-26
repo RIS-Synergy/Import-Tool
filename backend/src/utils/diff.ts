@@ -53,7 +53,8 @@ export function getValues(sourceA, sourceB, path) {
   log.debug('[DIFF]', `${path}: "${a}" -> "${b}"`)
   return {
     a,
-    b
+    b,
+    path
   }
 }
 
@@ -163,25 +164,29 @@ export async function runPipeline(risId: string,
   // log.info('Applied Template', appliedTemplate)
 
   // 5) apply the diffs
-  // XXX note: the order is unexpected
-  // const result = new Differ(appliedTemplate, crisData).diff()
-  let result = new Differ(crisData, appliedTemplate).diff()
+  let diffSet = new Differ(crisData, appliedTemplate).diff()
   // log.info('Differences', result)
 
   // apply omit list
-  result = new Omits().apply(result)
-  log.info('Omitted', result)
+  diffSet = new Omits().apply(diffSet)
+  log.info('Omitted', diffSet)
 
   var diffList = []
-  result.forEach((item: string) => {
-    const { a, b } = getValues(crisData, appliedTemplate, item)
+  diffSet.forEach((item: string) => {
+    const { a, b, path } = getValues(crisData, appliedTemplate, item)
     diffList.push({
-      a, b
+      a,
+      b,
+      path
     })
   })
 
   return {
-    diffSet: result,
+    // sources: {
+    //   a: 'crisData',
+    //   b: 'risData'
+    // },
+    diffSet,
     diffList
   }
 }

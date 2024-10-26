@@ -57,8 +57,8 @@ const router = useRouter()
 const route = useRoute();
 const store = useProjectStore();
 
-const tabLeft = ref(null);
-const tabRight = ref(null);
+const tabLeft = ref(0);
+const tabRight = ref(0);
 
 // when one of the tabs changes, reset the other one
 watch(tabLeft, () => {
