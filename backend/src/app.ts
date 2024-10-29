@@ -37,7 +37,11 @@ app.use('/templates', require('./views/templates').default)
 app.use('/dev-cris-api', require('./views/dev-cris-api').default)
 // }
 
+// Differences
 app.use('/diff', require('./views/diff').default)
+
+// Authentication
+app.use('/auth', require('./views/auth').default)
 
 // error handler last
 app.use(unexpectedErrorHandler)
