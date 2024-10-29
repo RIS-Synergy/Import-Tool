@@ -13,7 +13,7 @@ router.get('/:id', async (req: Request, res: Response) => {
   const crisData = await project.fetchCrisData()
   // log.info('CrisData', crisData)
   const result = await runPipeline(req.params.id, crisData)
-  log.info(`req: ${req.path}`, result)
+  log.info(`req: ${req.path}`, 'DiffList', result.diffList)
   res.json(result.diffList.map((x: any) => {
     return {
       cris: x.a,

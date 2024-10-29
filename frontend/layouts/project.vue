@@ -34,7 +34,6 @@
               :disabled="!store.crisId"
               :to="`/project/` + id + `/view`"> CRIS </v-tab>
             <v-tab
-              :disabled="!store.crisId"
               :to="`/project/` + id + `/diff`"> Diff </v-tab>
           </v-tabs>
 

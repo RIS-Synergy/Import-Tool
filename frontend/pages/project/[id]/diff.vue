@@ -1,21 +1,26 @@
 <template>
   <v-container>
-  <v-table>
-    <thead>
-      <tr>
-        <th>Template path</th>
-        <th>RIS Data</th>
-        <th>CRIS Data</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="diff in diffList" :key="diff.key">
-        <td>{{ diff.path }}</td>
-        <td>{{ diff.ris }}</td>
-        <td>{{ diff.cris }}</td>
-      </tr>
-    </tbody>
-  </v-table>
+    <v-table v-if="hasAtLeastOne">
+      <thead>
+        <tr>
+          <th>Template path</th>
+          <th>RIS Data</th>
+          <th>CRIS Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="diff in diffList" :key="diff.key">
+          <td>{{ diff.path }}</td>
+          <td>{{ diff.ris }}</td>
+          <td>{{ diff.cris }}</td>
+        </tr>
+      </tbody>
+    </v-table>
+    <div v-else>
+      <v-alert type="success" variant="outlined"
+        >The CRIS Data is identical to the transformed template.</v-alert
+      >
+    </div>
   </v-container>
 </template>
 
@@ -33,6 +38,10 @@ onMounted(async () => {
   console.log("diff onMounted");
 
   diffList.value = await getDiffs(id);
+});
+
+const hasAtLeastOne = computed(() => {
+  return diffList.value.length > 0;
 });
 
 definePageMeta({
