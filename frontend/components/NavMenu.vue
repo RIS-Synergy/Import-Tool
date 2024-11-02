@@ -7,6 +7,8 @@
       prepend-icon="mdi-google-circles-extended"
     ></v-list-item>
     <v-divider></v-divider>
+    <User />
+    <v-divider></v-divider>
     <!-- dark mode switcher -->
     <v-list-item
       class="my-2"
