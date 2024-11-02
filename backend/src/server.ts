@@ -8,6 +8,8 @@ import { Logger } from "tslog"
 const log = new Logger({ name: "server" });
 const port = process.env.PORT || 3000
 
+Error.stackTraceLimit = 32;
+
 dotenv.config()
 importSecretsToProcess()
 

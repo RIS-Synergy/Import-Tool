@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs'
 import { PrismaClient, TemplateType } from '@prisma/client'
+import { hash } from '../src/utils/auth'
 
 const prisma = new PrismaClient()
 
@@ -16,6 +17,15 @@ prisma.project.count().then((count) => {
     process.exit(1)
   }
 })
+
+async function createUsers() {
+  await prisma.user.create({
+    data: { username: 'admin', password: hash('admin') }
+  })
+  await prisma.user.create({
+    data: { username: 'user', password: hash('password') }
+  })
+}
 
 async function importProjects () {
   // development
@@ -104,6 +114,7 @@ function calculateCountOf (type: string) {
 }
 
 async function main() {
+  await createUsers()
   await importProjects()
   await createTemplates()
 

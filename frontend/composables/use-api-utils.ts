@@ -100,6 +100,14 @@ export const useApiUtils = () => {
     return result;
   }
 
+  const submitLogin = async (username: string, password: string) => {
+    const result = await $fetch("/api/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+    });
+    return result;
+  }
+
   return {
     getTemplates,
     getTemplateId,
@@ -109,6 +117,7 @@ export const useApiUtils = () => {
     setProjectId,
     getProjectsList,
     loadTransformation,
-    getDiffs
+    getDiffs,
+    submitLogin
   };
 };
