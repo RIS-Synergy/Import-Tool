@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import { AuthenticationError } from '../utils/errors'
 
 import { PrismaClient } from '@prisma/client'
+import auth from '../middleware/auth'
 import { login } from './validators'
 import validator from '../middleware/validator'
 
@@ -65,6 +66,26 @@ router.post('/login', validator(login), async (req: Request, res: Response) => {
     user: {
       username: user.username,
     }
+  })
+})
+
+// refresh token
+router.get('/refresh', auth, async (req: Request, res: Response) => {
+  // const { token } = req.body
+  // log.info('req: /auth/refresh', req.headers)
+  const token = req.headers.authorization.split(' ')[1]
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
+  const { exp } = decodedToken
+  delete decodedToken.iat
+  delete decodedToken.exp
+  // log.info('decodedToken', decodedToken)
+  const newToken = jwt.sign(decodedToken, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN
+  })
+  const decodedTokenNew = jwt.verify(newToken, process.env.JWT_SECRET)
+  log.info('JWT expiration difference', decodedTokenNew.exp - exp)
+  res.json({
+    token: newToken
   })
 })
 

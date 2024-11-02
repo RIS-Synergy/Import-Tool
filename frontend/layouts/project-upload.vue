@@ -1,8 +1,8 @@
 <template>
   <v-app id="inspire">
-      <v-navigation-drawer v-model="drawer">
-        <NavMenu />
-      </v-navigation-drawer>
+    <v-navigation-drawer v-model="drawer">
+      <NavMenu />
+    </v-navigation-drawer>
 
     <v-app-bar>
       <template v-slot:prepend>
@@ -20,7 +20,7 @@
     </v-app-bar>
 
     <v-main>
-        <slot />
+      <slot />
     </v-main>
 
     <TransformButton />
@@ -28,6 +28,8 @@
 </template>
 
 <script setup>
+useCron()
+
 const drawer = ref(false);
 
 const breadcrumbs = computed(() => {

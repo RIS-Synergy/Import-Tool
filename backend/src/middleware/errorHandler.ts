@@ -9,9 +9,12 @@ export function unexpectedErrorHandler(err: Error, _req: Request, res: Response,
     return next(err)
   }
 
-  res.status(500)
 
   log.error('Unexpected Error', err)
+
+  // @ts-ignore
+  const status: any = err.status || 500
+  res.status(status)
 
   return res.json({
     error: {

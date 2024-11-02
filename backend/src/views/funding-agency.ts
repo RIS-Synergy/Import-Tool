@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 import { unexpectedErrorHandler } from "../middleware/errorHandler";
 import { getAuthEndpoint } from "../utils/oauth2";
 import { promises as fs } from "fs";
+import auth from '../middleware/auth'
 
 import { Logger } from "tslog";
 import { Sql } from "@prisma/client/runtime/library";
@@ -49,7 +50,7 @@ type Filter = {
   status: Array<string>;
 }
 
-router.get("/projects", async (req: Request, res: Response) => {
+router.get("/projects", auth, async (req: Request, res: Response) => {
   try {
     const { page = 1, itemsPerPage = 10 } = req.query;
 

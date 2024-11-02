@@ -1,3 +1,5 @@
+// const { token } = useUserSettingsStore();
+
 export const useApiUtils = () => {
   const getTemplates = async (type) => {
     const result = await $fetch(`/api/templates/${type}`);
@@ -62,11 +64,25 @@ export const useApiUtils = () => {
   };
 
   const getProjectsList = async ({ page, itemsPerPage, sortBy, filters }) => {
-    const result = await $fetch(
-      '/api/fa/projects',
-      {
-        query: { page, itemsPerPage, sortBy, filters }
-      });
+    const router = useRouter();
+    const { token } = useUserSettingsStore();
+    var result
+    try {
+      result = await $fetch(
+        '/api/fa/projects',
+        {
+          query: { page, itemsPerPage, sortBy, filters },
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+    } catch (e: any) {
+      console.error(e, result);
+      if (e.status === 401) {
+        console.error("Unauthorized")
+        router.push({ name: "login" });
+      }
+    }
     return result;
   };
 

@@ -50,6 +50,8 @@
 </template>
 
 <script setup>
+useCron()
+
 const drawer = ref(false);
 
 const router = useRouter()

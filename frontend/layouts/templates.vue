@@ -25,6 +25,8 @@
 </template>
 
 <script setup>
+useCron()
+
 const drawer = ref(true);
 
 // const router = useRouter()
