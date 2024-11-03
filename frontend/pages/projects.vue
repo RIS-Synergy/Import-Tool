@@ -9,13 +9,21 @@
     @update:options="loadItems"
     @update:itemsPerPage="updateItemsPerPage"
   >
-    <template v-slot:item.action="x">
-      <NuxtLink :to="`/project/${x.item.id}`">
-        <v-btn size="small" text="View" variant="flat"></v-btn>
-      </NuxtLink>
+    <template v-slot:item.id="x">
+      <NuxtLink :to="`/project/${x.item.id}`">{{ x.item.id }}</NuxtLink>
     </template>
     <template v-slot:item.PI_email="x">
       <span v-html="email(x.item.PI_email)" />
+    </template>
+    <template v-slot:item.startDate="x">
+      <div class="date">
+        {{ x.item.startDate }}
+      </div>
+    </template>
+    <template v-slot:item.endDate="x">
+      <div class="date">
+        {{ x.item.endDate }}
+      </div>
     </template>
     <template v-if="false" #item="{ item }">
       <v-col cols="12">
@@ -43,29 +51,33 @@ const headers = [
     key: "id",
   },
   { title: "Title", key: "title", align: "start", sortable: false },
-  { title: "PI Name", key: "PI_name", align: "start", sortable: false},
-  { title: "PI Email", key: "PI_email", align: "start", sortable: false},
-  { title: "Start Date", key: "startDate", align: "start", sortable: true},
-  { title: "End Date", key: "endDate", align: "start", sortable: true},
-  { title: "Status", key: "status", align: "start", sortable: true},
-  { title: "Action", key: "action", align: "start", sortable: false},
-  { title: "Pure ID", key: "pureId", align: "start", sortable: false},
+  { title: "PI Name", key: "PI_name", align: "start", sortable: false },
+  { title: "PI Email", key: "PI_email", align: "start", sortable: false },
+  { title: "Start Date", key: "startDate", align: "start", sortable: true },
+  { title: "End Date", key: "endDate", align: "start", sortable: true },
+  { title: "Status", key: "status", align: "start", sortable: true },
+  // { title: "Action", key: "action", align: "start", sortable: false},
+  { title: "Pure ID", key: "pureId", align: "start", sortable: false },
 ];
 
 const loading = ref(false);
 const serverItems = ref([]);
 const totalItems = ref(0);
 
-const { getProjectsList } = useApiUtils()
+const { getProjectsList } = useApiUtils();
 async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
-
   store.sortBy = sortBy;
   loading.value = true;
 
   const filters = storeFilter || store.projectFilters;
   // console.log('loadItems', page, itemsPerPage, sortBy, filters)
 
-  const { total, items } = await getProjectsList({ page, itemsPerPage, sortBy, filters });
+  const { total, items } = await getProjectsList({
+    page,
+    itemsPerPage,
+    sortBy,
+    filters,
+  });
 
   serverItems.value = getItems(items);
   totalItems.value = total;
@@ -83,11 +95,13 @@ function getItems(itms) {
       id: x.id,
       title: getLang(x.title, "en"),
       PI_email: x.team[0].person.electronicAddress,
-      PI_name: x.team[0].person.personName.firstName + " " + x.team[0].person.personName.familyName,
+      PI_name:
+        x.team[0].person.personName.firstName +
+        " " +
+        x.team[0].person.personName.familyName,
       startDate: x.startDate,
       endDate: x.endDate,
       status: x.status,
-      action: x,
       pureId: data.crisUUID,
     };
   });
@@ -110,10 +124,30 @@ function updateItemsPerPage(idx) {
   store.itemsPerPage = idx;
 }
 
-watch(store.projectFilters, () => {
-  loadItems({ page: 1, itemsPerPage: store.itemsPerPage, sortBy: store.sortBy }, store.projectFilters);
-}, { deep: true });
+watch(
+  store.projectFilters,
+  () => {
+    loadItems(
+      { page: 1, itemsPerPage: store.itemsPerPage, sortBy: store.sortBy },
+      store.projectFilters,
+    );
+  },
+  { deep: true },
+);
 </script>
 
-<style>
+<style scoped>
+a {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* make the dates a bit wider */
+.date {
+  min-width: 6em;
+}
 </style>
