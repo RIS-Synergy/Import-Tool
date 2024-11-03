@@ -1,43 +1,82 @@
 // const { token } = useUserSettingsStore();
 
+export async function apiCall (url = '', method = 'GET', data: any = {}) {
+  const router = useRouter();
+  const store = useUserSettingsStore();
+  var result: any;
+  try {
+    result = await $fetch(
+      `/api/${url}`,
+      {
+        method,
+        headers: {
+          Authorization: `Bearer ${store.token}`
+        },
+        ...data
+      });
+  } catch (e: any) {
+    if (e.status === 401) {
+      router.push({ name: "login" });
+    } else {
+      console.error(e, result);
+    }
+  }
+  // store.token = result.token
+  // debugger
+  if (result && result.token) {
+    store.setToken(result.token)
+  }
+  return result;
+}
+
 export const useApiUtils = () => {
-  const getTemplates = async (type) => {
-    const result = await $fetch(`/api/templates/${type}`);
+  const getTemplates = async (type: string) => {
+    const result = await apiCall(`templates/${type}`)
     return result;
   };
 
-  const getTemplateId = async (type, id) => {
-    return await $fetch(`/api/templates/${type}/${id}`);
+  const getTemplateId = async (type: string, id: string) => {
+    // return await $fetch(`/api/templates/${type}/${id}`);
+    return await apiCall(`templates/${type}/${id}`);
   };
 
   const createTemplate = async (templateType, name, description) => {
-    return await $fetch(`/api/templates`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, description, templateType }),
-    });
+    return await apiCall ('templates', 'POST', {
+      body: JSON.stringify({ name, description, templateType })
+    })
+    // return await $fetch(`/api/templates`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ name, description, templateType }),
+    // });
   };
 
   const updateTemplate = async (id, text) => {
-    return await $fetch(`/api/templates/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text }),
-    });
+    return await apiCall(`templates/${id}`, 'PUT', {
+      body: JSON.stringify({ text })
+    })
+    // return await $fetch(`/api/templates/${id}`, {
+    //   method: "PUT",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ text }),
+    // });
   };
 
   const verifyTemplate = async (text) => {
-    return await $fetch(`/api/templates/verify`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text }),
-    });
+    return await apiCall('templates/verify', 'POST', {
+      body: JSON.stringify({ text })
+    })
+    // return await $fetch(`/api/templates/verify`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ text }),
+    // });
   };
 
   const setProjectId = async (store, route) => {
@@ -56,7 +95,8 @@ export const useApiUtils = () => {
       // console.log('no id', route.params.id)
     } else {
       // console.log('id', id)
-      const data = await $fetch(`/api/fa/projects/${id}`);
+      // const data: any = await $fetch(`/api/fa/projects/${id}`);
+      const data: any = await apiCall(`fa/projects/${id}`)
       store.risData = data.risData;
       store.crisId = data.crisId;
       store.crisUUID = data.crisUUID;
@@ -64,25 +104,27 @@ export const useApiUtils = () => {
   };
 
   const getProjectsList = async ({ page, itemsPerPage, sortBy, filters }) => {
-    const router = useRouter();
-    const { token } = useUserSettingsStore();
-    var result
-    try {
-      result = await $fetch(
-        '/api/fa/projects',
-        {
-          query: { page, itemsPerPage, sortBy, filters },
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-    } catch (e: any) {
-      console.error(e, result);
-      if (e.status === 401) {
-        console.error("Unauthorized")
-        router.push({ name: "login" });
-      }
-    }
+    // const router = useRouter();
+    // const { token } = useUserSettingsStore();
+    // var result
+    // try {
+    //   result = await $fetch(
+    //     '/api/fa/projects',
+    //     {
+    //       query: { page, itemsPerPage, sortBy, filters },
+    //       headers: {
+    //         Authorization: `Bearer ${token}`
+    //       }
+    //     });
+    // } catch (e: any) {
+    //   console.error(e, result);
+    //   if (e.status === 401) {
+    //     console.error("Unauthorized")
+    //     router.push({ name: "login" });
+    //   }
+    // }
+    const data = { page, itemsPerPage, sortBy, filters };
+    const result = await apiCall('fa/projects', 'GET', { query: data })
     return result;
   };
 
@@ -96,31 +138,39 @@ export const useApiUtils = () => {
     // const ris = store.risData.value
     // const settings = store.settings.value
 
-    const x = await $fetch("/api/transform/upload", {
-      method: "POST",
-      body: JSON.stringify({
-        ris: store.risData,
-        settings: store.settings,
-        templateId,
-      }),
+    const x = await apiCall("transform/upload", "POST", {
+      ris: store.risData,
+      settings: store.settings,
+      templateId,
     });
+
+    // const x = await $fetch("/api/transform/upload", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     ris: store.risData,
+    //     settings: store.settings,
+    //     templateId,
+    //   }),
+    // });
 
     store.template.data = x;
     // return x
     // result.value = x;
   };
 
-  const getDiffs = async (risId) => {
-    const result = await $fetch(`/api/diff/${risId}`);
-    console.log("getDiffs", result);
+  const getDiffs = async (risId: string) => {
+    const result = await apiCall(`diff/${risId}`)
     return result;
   }
 
   const submitLogin = async (username: string, password: string) => {
-    const result = await $fetch("/api/auth/login", {
-      method: "POST",
+    const result = await apiCall("auth/login", "POST", {
       body: JSON.stringify({ username, password }),
     });
+    // const result = await $fetch("/api/auth/login", {
+    //   method: "POST",
+    //   body: JSON.stringify({ username, password }),
+    // });
     return result;
   }
 

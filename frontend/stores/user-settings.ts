@@ -4,7 +4,7 @@ export const useUserSettingsStore = defineStore('user-settings', {
   state: () => ({
     dark: true,
     itemsPerPage: 10,
-    sortBy: [ { key: 'startDate', order: 'asc' } ],
+    sortBy: [{ key: 'startDate', order: 'asc' }],
     projectFilters: {
       status: [],
     },
@@ -15,6 +15,10 @@ export const useUserSettingsStore = defineStore('user-settings', {
     //   theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";
     //   state.dark = theme.global.current.value.dark
     // }
+    setToken(token: string) {
+      // @ts-ignore
+      this.token = token
+    }
   },
   persist: true
 })

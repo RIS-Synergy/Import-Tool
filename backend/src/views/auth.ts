@@ -15,25 +15,25 @@ const log = new Logger({ name: 'view:auth' });
 
 const router: Router = express.Router()
 
-router.get('/', async (req: Request, res: Response) => {
-  log.info('req: /auth')
-  return res.json({})
-})
+// router.get('/', async (req: Request, res: Response) => {
+//   log.info('req: /auth')
+//   return res.json({})
+// })
 
-router.get('/session', async (req: Request, res: Response) => {
-  log.info('req: /auth/session')
-  return res.json({})
-})
+// router.get('/session', async (req: Request, res: Response) => {
+//   log.info('req: /auth/session')
+//   return res.json({})
+// })
 
-router.get('/providers', async (req: Request, res: Response) => {
-  log.info('req: /auth/providers')
-  return res.json({})
-})
+// router.get('/providers', async (req: Request, res: Response) => {
+//   log.info('req: /auth/providers')
+//   return res.json({})
+// })
 
-router.get('/signin', async (req: Request, res: Response) => {
-  log.info('req: /auth/signin')
-  return res.json({})
-})
+// router.get('/signin', async (req: Request, res: Response) => {
+//   log.info('req: /auth/signin')
+//   return res.json({})
+// })
 
 router.post('/login', validator(login), async (req: Request, res: Response) => {
   const { username, password } = req.body
@@ -83,7 +83,8 @@ router.get('/refresh', auth, async (req: Request, res: Response) => {
     expiresIn: process.env.JWT_EXPIRES_IN
   })
   const decodedTokenNew = jwt.verify(newToken, process.env.JWT_SECRET)
-  log.info('JWT expiration difference', decodedTokenNew.exp - exp)
+  // JWT expiration difference delta
+  log.debug('JWT refresh', decodedTokenNew.exp - exp)
   res.json({
     token: newToken
   })

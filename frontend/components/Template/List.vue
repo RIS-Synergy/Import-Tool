@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div v-if="fale" class="text-h4 mb-2">Templates: {{ templateType }}</div>
+    <div v-if="false" class="text-h4 mb-2">Templates: {{ templateType }}</div>
     <v-row>
       <v-col cols="6" v-for="item in data" :key="item.id">
         <v-card>
