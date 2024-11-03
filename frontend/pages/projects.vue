@@ -63,7 +63,7 @@ async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
   loading.value = true;
 
   const filters = storeFilter || store.projectFilters;
-  console.log('loadItems', page, itemsPerPage, sortBy, filters)
+  // console.log('loadItems', page, itemsPerPage, sortBy, filters)
 
   const { total, items } = await getProjectsList({ page, itemsPerPage, sortBy, filters });
 

@@ -61,7 +61,7 @@ function clearFilters () {
 }
 
 const filterIcon = computed(() => {
-  console.log(store.projectFilters.status.length)
+  // console.log(store.projectFilters.status.length)
 
   if (store.projectFilters.status.length > 0) {
     return 'mdi-filter'

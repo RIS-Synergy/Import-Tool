@@ -27,8 +27,7 @@ const store = useUserSettingsStore();
 
 async function login() {
   const result = await submitLogin(username.value, password.value);
-  console.log(result);
-  // store.user = result.user;
+  // console.log(result);
   store.setToken(result.token);
 
   // redirect

@@ -9,6 +9,5 @@ const refresh = async () => {
 };
 
 export default function() {
-  console.log('refresh token')
-  refresh() // XXX
+  refresh()
 }

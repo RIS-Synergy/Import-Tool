@@ -18,7 +18,7 @@ export async function apiCall (url = '', method = 'GET', data: any = {}) {
     if (e.status === 401) {
       router.push({ name: "login" });
     } else {
-      console.error(e, result);
+      console.warn(e, result);
     }
   }
   // store.token = result.token
