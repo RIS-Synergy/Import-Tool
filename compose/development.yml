@@ -7,7 +7,7 @@ services:
       - RIS_TEST_DATA=2024-09-04_testdata_projects_updated.json
       - PURE_API_URL=http://backend:3000/dev-cris-api
       - JWT_SECRET=nosecret
-      - JWT_EXPIRES_IN=1m
+      - JWT_EXPIRES_IN=10m
 
   frontend:
     volumes:

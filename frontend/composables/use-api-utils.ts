@@ -1,6 +1,6 @@
 // const { token } = useUserSettingsStore();
 
-export async function apiCall (url = '', method = 'GET', data: any = {}) {
+export async function apiCall(url = '', method = 'GET', data: any = {}) {
   const router = useRouter();
   const store = useUserSettingsStore();
   var result: any;
@@ -41,7 +41,7 @@ export const useApiUtils = () => {
   };
 
   const createTemplate = async (templateType, name, description) => {
-    return await apiCall ('templates', 'POST', {
+    return await apiCall('templates', 'POST', {
       body: JSON.stringify({ name, description, templateType })
     })
     // return await $fetch(`/api/templates`, {
@@ -174,7 +174,75 @@ export const useApiUtils = () => {
     return result;
   }
 
+  const updatePassword = async (oldPassword: string, newPassword: string) => {
+    const result = await apiCall("auth/update_password", "POST", {
+      body: JSON.stringify({ oldPassword, newPassword }),
+    });
+
+    // redirect
+    if (result.success) {
+      const router = useRouter();
+      router.push({ name: "login" });
+      return true
+    } else {
+      console.log("Password update failed", result)
+      return false
+    }
+  }
+
+  const searchApi = async (str: string, entity: string) => {
+    const result = await apiCall("ri/search", "POST", {
+      body: JSON.stringify({
+        searchString: str,
+        entity
+      }),
+    });
+    return result;
+  }
+
+  const riReference = async (systemName: string, uuid: string) => {
+    const result = await apiCall(`ri/reference/${systemName}/${uuid}`)
+    return result;
+  }
+
+  const getProjectUUID = async (id: string) => {
+    const item = `ris:FWF:project:${id}`;
+    try {
+      // try to find the ID as a search in the RI API
+      const item = `ris:FWF:project:${id}`;
+      const result = await apiCall(`ri/project/${item}`);
+      return result
+    } catch(error) {
+      // unknown error
+      return { uuid: null }
+    }
+  }
+
+  const loadProject = async (risId: string) => {
+    const store = useProjectStore()
+    const { item, count } = await getProjectUUID(risId)
+    store.crisData = item
+  }
+
+  const uploadToPure = async (ris, settings, uuid, templateData) => {
+    var template = {
+      ...templateData,
+    }
+    delete template.data
+
+    const result = await apiCall("ri/upload", "POST", {
+      body: JSON.stringify({
+        ris,
+        settings,
+        uuid,
+        template
+      }),
+    })
+    return result
+  }
+
   return {
+    // apiCall,
     getTemplates,
     getTemplateId,
     verifyTemplate,
@@ -184,6 +252,12 @@ export const useApiUtils = () => {
     getProjectsList,
     loadTransformation,
     getDiffs,
-    submitLogin
+    submitLogin,
+    updatePassword,
+    searchApi,
+    riReference,
+    getProjectUUID,
+    loadProject,
+    uploadToPure
   };
 };

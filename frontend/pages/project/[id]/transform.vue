@@ -53,10 +53,10 @@
 const store = useProjectStore();
 const route = useRoute();
 const router = useRouter();
-const { getProjectUUID } = useResearchInstitution();
+const { getProjectUUID } = useApiUtils();
 
 const id = route.params.id;
-const { data: ris } = await useFetch(`/api/fa/projects/${id}`);
+// const { data: ris } = await useFetch(`/api/fa/projects/${id}`);
 
 // const transformations = ["Default", "Another Template"];
 // const selectedTransformation = ref("Default");

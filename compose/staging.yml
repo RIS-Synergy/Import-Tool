@@ -4,7 +4,7 @@ services:
       - ../backend/:/app
     environment:
       - NODE_ENV=staging
-      - RIS_TEST_DATA=2024-09-04_testdata_projects_updated.json
+      - JWT_EXPIRES_IN=10m
     env_file: "staging.env"
 
   frontend:

@@ -8,16 +8,15 @@ export const useUserSettingsStore = defineStore('user-settings', {
     projectFilters: {
       status: [],
     },
-    token: null
+    token: null,
+    user: null
   }),
   actions: {
-    // toggleDark() {
-    //   theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";
-    //   state.dark = theme.global.current.value.dark
-    // }
-    setToken(token: string) {
-      // @ts-ignore
+    setToken(token: any) {
       this.token = token
+    },
+    setUser(user: any) {
+      this.user = user
     }
   },
   persist: true

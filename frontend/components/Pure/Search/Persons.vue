@@ -92,23 +92,15 @@ const searchString = ref(model.value.firstName + " " + model.value.familyName);
 
 function searchSave() {
   // console.log('searchSave', searchString)
-  searchApi(searchString, 'persons');
+  searchApiPost(searchString, 'persons');
 }
 
 const search = ref(null);
 
-async function searchApi(str: string, entity: string) {
-  const result = await $fetch("/api/ri/search", {
-    method: "POST",
-    body: JSON.stringify({
-      searchString: str.value,
-      entity
-    }),
-  });
+const { searchApi } = useApiUtils();
 
-  // console.log('result', result)
-
-  // assign values for setPerson when the email is matched with the search result
+async function searchApiPost(str: string, entity: string) {
+  const result = await searchApi(str.value, entity);
   search.value = result;
 }
 
@@ -124,7 +116,7 @@ watch(selected, (val) => {
 });
 
 onMounted(() => {
-  searchApi(searchString, 'persons');
+  searchApiPost(searchString, 'persons');
 });
 </script>
 

@@ -7,7 +7,15 @@
       prepend-icon="mdi-google-circles-extended"
     ></v-list-item>
     <v-divider></v-divider>
-    <User />
+    <v-list-item>
+      <!-- <UserLable /> -->
+      User
+      <template v-slot:append>
+        <!-- <v-btn icon="mdi-menu-down" size="small" variant="text"></v-btn> -->
+        <UserButton />
+      </template>
+    </v-list-item>
+
     <v-divider></v-divider>
     <!-- dark mode switcher -->
     <v-list-item
@@ -19,12 +27,7 @@
     />
     <v-divider></v-divider>
     <v-list-item to="/projects" title="Projects" />
-    <v-list-item
-      class="smaller"
-      :to="`/project/upload`"
-      link
-      title="Upload"
-    />
+    <v-list-item class="smaller" :to="`/project/upload`" link title="Upload" />
     <v-divider></v-divider>
     <v-list-item type="subheader" class="subheader"> Templates </v-list-item>
     <v-list-item
@@ -59,17 +62,17 @@ import { useTheme } from "vuetify";
 
 const theme = useTheme();
 
-const store = useUserSettingsStore()
+const store = useUserSettingsStore();
 
 // if (store.dark) {
 //   theme.global.name.value = "dark";
 // }
-// 
+//
 function toggleTheme() {
-  console.log(theme)
+  console.log(theme);
 
   theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";
-  store.dark = !store.dark
+  store.dark = !store.dark;
 }
 
 function prepend_icon() {
@@ -91,8 +94,8 @@ function prepend_icon() {
 }
 .smaller :deep() .v-list-item-title {
   /* background-color: #ff0000; */
-    margin-left: 1em;
-  }
+  margin-left: 1em;
+}
 /* .v-list-item-title {
    font-size: 4px;
    } */

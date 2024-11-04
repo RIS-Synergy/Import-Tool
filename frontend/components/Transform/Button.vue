@@ -34,11 +34,11 @@ const canHaveButtons = [
   "project-id-transform",
 ];
 
-const { uploadToPure } = useResearchInstitution();
+const { uploadToPure } = useApiUtils();
 
 async function saveTransformUpload(crud) {
   // create or edit
-  console.log("ris", store.risData);
+  // console.log("ris", store.risData);
 
   store.error = null;
   const result = await uploadToPure(

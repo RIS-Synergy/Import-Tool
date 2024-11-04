@@ -109,10 +109,13 @@ const sameEmail = computed(() => {
   return same;
 });
 
-onMounted(() => {
-  $fetch(`/api/ri/reference/${systemName}/${uuid}`).then(
-    (res) => (result.value = res),
-  );
+onMounted(async () => {
+  const { riReference } = useApiUtils();
+  const res = await riReference(systemName, uuid);
+  // $fetch(`/api/ri/reference/${systemName}/${uuid}`).then(
+  //   (res) => (result.value = res),
+  // );
+  result.value = res;
 });
 </script>
 

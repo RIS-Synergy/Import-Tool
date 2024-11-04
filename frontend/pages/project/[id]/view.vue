@@ -22,7 +22,7 @@
 const store = useProjectStore();
 const route = useRoute();
 
-const { loadProject } = useResearchInstitution();
+const { loadProject } = useApiUtils();
 const id = route.params.id;
 
 const { crisId, crisUUID } = store;
@@ -41,7 +41,7 @@ onMounted(() => {
   // console.log("errors can crash here when opening the monitor after a break");
   // console.log("onMounted with store", store);
   if (store && store.crisId) {
-    loadProject(id, store);
+    loadProject(id);
   }
 });
 

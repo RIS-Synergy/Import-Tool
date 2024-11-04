@@ -29,6 +29,7 @@ async function login() {
   const result = await submitLogin(username.value, password.value);
   // console.log(result);
   store.setToken(result.token);
+  store.setUser(result.user);
 
   // redirect
   router.push({ name: "projects" });
