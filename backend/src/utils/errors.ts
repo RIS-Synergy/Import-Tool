@@ -40,6 +40,14 @@ export class AuthenticationError extends CustomError {
   status = 401
   constructor(message = 'Authentication Error') {
     super(message)
-    Object.setPrototypeOf(this, BadRequestError.prototype)
+    Object.setPrototypeOf(this, AuthenticationError.prototype)
+  }
+}
+
+export class ResearchInstitutionError extends CustomError {
+  status = 422
+  constructor(message = 'Research Institution Error') {
+    super(message)
+    Object.setPrototypeOf(this, ResearchInstitutionError.prototype)
   }
 }

@@ -3,6 +3,7 @@
 export async function apiCall(url = '', method = 'GET', data: any = {}) {
   const router = useRouter();
   const store = useUserSettingsStore();
+  const snackbar = useSnackbar();
   var result: any;
   try {
     result = await $fetch(
@@ -17,11 +18,15 @@ export async function apiCall(url = '', method = 'GET', data: any = {}) {
   } catch (e: any) {
     if (e.status === 401) {
       router.push({ name: "login" });
+    }
+    else if (e.status === 422) {
+      snackbar.error(e.data.message, 'ResearchInstitutionError')
     } else {
       console.warn(e, result);
+      snackbar.error(e, 'apiCallError')
     }
   }
-  // store.token = result.token
+
   // debugger
   if (result && result.token) {
     store.setToken(result.token)
@@ -139,9 +144,14 @@ export const useApiUtils = () => {
     // const settings = store.settings.value
 
     const x = await apiCall("transform/upload", "POST", {
-      ris: store.risData,
-      settings: store.settings,
-      templateId,
+        body: JSON.stringify({
+          ris: store.risData,
+          settings: store.settings,
+          templateId,
+        }),
+      // ris: store.risData,
+      // settings: store.settings,
+      // templateId,
     });
 
     // const x = await $fetch("/api/transform/upload", {

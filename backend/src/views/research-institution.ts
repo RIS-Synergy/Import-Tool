@@ -103,8 +103,8 @@ router.post('/upload', async (req: Request, res: Response) => {
     const project = new Project(ris.id)
     project.createOrUpdateCrisLink(result)
     // XXX pause Applications and Awards for now
-    // await uploadProjectApplicationClusters(result)
-    // await updateCrisId(ris.id, result, settings, req.body.template)
+    await uploadProjectApplicationClusters(result)
+    await updateCrisId(ris.id, result, settings, req.body.template)
     return res.json(result)
   } else {
     const result = await callRIApi('/projects', 'PUT', pure)
@@ -115,8 +115,8 @@ router.post('/upload', async (req: Request, res: Response) => {
     const project = new Project(ris.id)
     project.createOrUpdateCrisLink(result)
     // XXX pause Applications and Awards for now
-    // await uploadProjectApplicationClusters(result)
-    // await updateCrisId(ris.id, result, settings, req.body.template)
+    await uploadProjectApplicationClusters(result)
+    await updateCrisId(ris.id, result, settings, req.body.template)
     return res.json(result)
   }
 })

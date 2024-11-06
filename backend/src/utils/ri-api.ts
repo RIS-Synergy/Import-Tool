@@ -1,6 +1,8 @@
 import { Logger } from "tslog";
 const log = new Logger({ name: 'utils:ri-api' });
 
+import { ResearchInstitutionError } from '../utils/errors'
+
 type RISResult = {
   error?: any
   items?: any
@@ -56,8 +58,7 @@ export async function callRIApi(endpoint: string, method = 'POST', body = null):
   // application/problem+json
   else if (contentType.startsWith('application/problem+json')) {
     const error = await response.json()
-    log.error(error)
-    return { error }
+    throw new ResearchInstitutionError(error.title)
   }
 
   return {
