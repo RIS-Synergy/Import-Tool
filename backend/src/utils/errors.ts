@@ -46,7 +46,10 @@ export class AuthenticationError extends CustomError {
 
 export class ResearchInstitutionError extends CustomError {
   status = 422
-  constructor(message = 'Research Institution Error') {
+  constructor(public message = 'Research Institution Error',
+              public method: string,
+              public endpoint: string,
+              public apiStatus: number) {
     super(message)
     Object.setPrototypeOf(this, ResearchInstitutionError.prototype)
   }

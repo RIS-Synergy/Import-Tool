@@ -58,7 +58,7 @@ export async function callRIApi(endpoint: string, method = 'POST', body = null):
   // application/problem+json
   else if (contentType.startsWith('application/problem+json')) {
     const error = await response.json()
-    throw new ResearchInstitutionError(error.title)
+    throw new ResearchInstitutionError(error.title, method, endpoint, response.status)
   }
 
   return {

@@ -20,7 +20,7 @@ export async function apiCall(url = '', method = 'GET', data: any = {}) {
       router.push({ name: "login" });
     }
     else if (e.status === 422) {
-      snackbar.error(e.data.message, 'ResearchInstitutionError')
+      snackbar.error(e.data, 'ResearchInstitutionError')
     } else {
       console.warn(e, result);
       snackbar.error(e, 'apiCallError')
