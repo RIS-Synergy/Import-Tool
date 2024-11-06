@@ -3,6 +3,7 @@
     <ClientOnly>
       <NuxtPage />
     </ClientOnly>
+    <Snackbar />
   </NuxtLayout>
 </template>
 

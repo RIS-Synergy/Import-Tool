@@ -175,7 +175,7 @@ export const useApiUtils = () => {
   }
 
   const updatePassword = async (oldPassword: string, newPassword: string) => {
-    const result = await apiCall("auth/update_password", "POST", {
+    const result = await apiCall("auth/password", "POST", {
       body: JSON.stringify({ oldPassword, newPassword }),
     });
 

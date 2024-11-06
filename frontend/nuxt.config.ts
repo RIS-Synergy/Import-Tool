@@ -24,6 +24,10 @@ export default defineNuxtConfig({
     }
   },
 
+  plugins: [
+    '~/plugins/event-bus.ts',
+  ],
+
   modules: [
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {

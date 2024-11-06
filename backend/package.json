@@ -8,6 +8,7 @@
     "test": "vitest",
     "test:docker": "vitest --ui --open=false --api.host=0.0.0.0",
     "db-init": "ts-node ./scripts/db-initiate.ts",
+    "db-user": "ts-node ./scripts/db-user.ts",
     "create-project": "ts-node ./scripts/create-project.ts",
     "create-application": "ts-node ./scripts/create-application.ts",
     "create-award": "ts-node ./scripts/create-award.ts",

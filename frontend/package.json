@@ -17,6 +17,7 @@
     "highlight.js": "^11.9.0",
     "js-yaml": "^4.1.0",
     "jsonwebtoken": "^9.0.2",
+    "mitt": "^3.0.1",
     "nuxt": "^3.11.2",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^4.0.2",

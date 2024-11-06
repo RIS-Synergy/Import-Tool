@@ -91,3 +91,23 @@ router.get('/refresh', auth, async (req: Request, res: Response) => {
 })
 
 export default router
+
+// update password
+router.post('/password', async (req: Request, res: Response) => {
+  const { oldPassword, newPassword } = req.body
+
+  const username = jwt.decode(req.headers.authorization.split(' ')[1]).user.username
+  // if the passwords match, update prisma
+  // if not, return an error
+
+  const user = await prisma.user.update({
+    where: {
+      username
+    },
+    data: {
+      password: bcrypt.hashSync(newPassword, 8)
+    }
+  })
+
+  res.json({ success: true })
+})
