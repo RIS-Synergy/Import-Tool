@@ -81,7 +81,7 @@ const titleCreateOrUpdate = computed(() => {
   return store.templateId ? "Update" : "Create";
 });
 
-const { createTemplate } = useApiUtils();
+const { createOrUpdateTemplate } = useApiUtils();
 
 function enableEditDialog(item) {
   name.value = item.name;
@@ -96,12 +96,15 @@ async function createOrUpdate() {
     console.log("Form is not valid");
     return;
   } else {
-    const result = await createTemplate(
+    const result = await createOrUpdateTemplate(
       props.templateType,
+      store.templateId,
       name.value,
       description.value,
     );
     console.log("result", result);
+    name.value = "";
+    description.value = "";
     dialog.value = false;
     getListData();
   }

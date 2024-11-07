@@ -45,9 +45,9 @@ export const useApiUtils = () => {
     return await apiCall(`templates/${type}/${id}`);
   };
 
-  const createTemplate = async (templateType, name, description) => {
+  const createOrUpdateTemplate = async (templateType, templateId, name, description) => {
     return await apiCall('templates', 'POST', {
-      body: JSON.stringify({ name, description, templateType })
+      body: JSON.stringify({ name, description, templateId, templateType })
     })
     // return await $fetch(`/api/templates`, {
     //   method: "POST",
@@ -256,7 +256,7 @@ export const useApiUtils = () => {
     getTemplates,
     getTemplateId,
     verifyTemplate,
-    createTemplate,
+    createOrUpdateTemplate,
     updateTemplate,
     setProjectId,
     getProjectsList,

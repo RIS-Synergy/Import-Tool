@@ -17,17 +17,58 @@ const typeMap = {
 
 router.post('/', async (req: Request, res: Response) => {
   // create a new template
-  log.info('create template')
-  const { name, description, templateType } = req.body
+  log.info('create or update template')
+  const { name, description, templateId, templateType } = req.body
 
-  const result = await prisma.template.create({
-    data: {
-      name,
-      description,
-      templateType: typeMap[templateType],
-      yamlTemplate: 'output:\n'
-    }
-  })
+  var result = null
+  if (!templateId) {
+    // create
+    result = await prisma.template.create({
+      data: {
+        name,
+        description,
+        templateType: typeMap[templateType],
+        yamlTemplate: 'output:\n'
+      }
+    })
+  } else {
+    // update
+    result = await prisma.template.update({
+      where: {
+        id: Number(templateId)
+      },
+      data: {
+        name,
+        description,
+        templateType: typeMap[templateType],
+      }
+    })
+  }
+
+  // const result = await prisma.template.create({
+  //   data: {
+  //     name,
+  //     description,
+  //     templateType: typeMap[templateType],
+  //     yamlTemplate: 'output:\n'
+  //   }
+  // })
+  // const result = await prisma.template.upsert({
+  //   where: templateId && {
+  //     id: templateId
+  //   } || null,
+  //   update: {
+  //     name,
+  //     description,
+  //     templateType: typeMap[templateType],
+  //   },
+  //   create: {
+  //     name,
+  //     description,
+  //     templateType: typeMap[templateType],
+  //     yamlTemplate: 'output:\n'
+  //   }
+  // })
 
   res.json(result)
 })
