@@ -105,7 +105,9 @@ const omitList = new Set([
   'keywordGroups.1.pureId',
   'keywordGroups.1.name',
   'keywordGroups.1.keywords.0.pureId',
-  'customDefinedFields'
+  'customDefinedFields',
+  'applicationClusters',
+  'awardClusters'
 ])
 
 export async function runPipeline(risId: string,
