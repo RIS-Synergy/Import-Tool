@@ -51,25 +51,17 @@ export async function callRIApi(endpoint: string, method = 'POST', body = null):
       return { error }
     })
 
-    // console.log(data)
-
     if (!response.ok) {
       return { error: data }
     }
 
     return data
   }
-  // application/problem+json
   else if (contentType.startsWith('application/problem+json')) {
     const error = await response.json()
     log.error(`Error from RI-API`, error)
     throw new ResearchInstitutionError(error.detail || error.title, method, endpoint, response.status)
   }
-  // } else if (response.status === 500) {
-  //   const error = await response.json()
-  //   log.error(`Error from RI-API`, error)
-  //   throw new ResearchInstitutionError(error.detail, method, endpoint, error.status)
-  // }
 
   return {
     detail: `Unknown content-type: ${contentType}`
