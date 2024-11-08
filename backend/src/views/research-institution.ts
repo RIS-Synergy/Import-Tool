@@ -103,7 +103,7 @@ router.post('/upload', async (req: Request, res: Response) => {
     const project = new Project(ris.id)
     project.createOrUpdateCrisLink(result)
     // XXX pause Applications and Awards for now
-    await uploadProjectApplicationClusters(result)
+    await uploadProjectApplicationClusters(result, templateId, ris, settings)
     await updateCrisId(ris.id, result, settings, req.body.template)
     return res.json(result)
   } else {
@@ -115,7 +115,7 @@ router.post('/upload', async (req: Request, res: Response) => {
     const project = new Project(ris.id)
     project.createOrUpdateCrisLink(result)
     // XXX pause Applications and Awards for now
-    await uploadProjectApplicationClusters(result)
+    await uploadProjectApplicationClusters(result, templateId, ris, settings)
     await updateCrisId(ris.id, result, settings, req.body.template)
     return res.json(result)
   }

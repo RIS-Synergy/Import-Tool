@@ -32,6 +32,10 @@ export async function callRIApi(endpoint: string, method = 'POST', body = null):
   log.debug(`Response ${method} to ${endpoint} with status ${response.status} with content-type: ${contentType}`)
   // console.log(response)
 
+  if (response.status === 500) {
+    log.warn('Body status 500 >>>>>>>>>>', body)
+  }
+
   if (response.redirected) {
     const err: CRISError = {
       detail: `Redirected to ${response.url}`
@@ -58,8 +62,14 @@ export async function callRIApi(endpoint: string, method = 'POST', body = null):
   // application/problem+json
   else if (contentType.startsWith('application/problem+json')) {
     const error = await response.json()
-    throw new ResearchInstitutionError(error.title, method, endpoint, response.status)
+    log.error(`Error from RI-API`, error)
+    throw new ResearchInstitutionError(error.detail || error.title, method, endpoint, response.status)
   }
+  // } else if (response.status === 500) {
+  //   const error = await response.json()
+  //   log.error(`Error from RI-API`, error)
+  //   throw new ResearchInstitutionError(error.detail, method, endpoint, error.status)
+  // }
 
   return {
     detail: `Unknown content-type: ${contentType}`

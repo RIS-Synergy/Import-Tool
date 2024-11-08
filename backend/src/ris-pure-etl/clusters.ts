@@ -6,21 +6,22 @@ const log = new Logger({ name: 'view:ri'});
 import { projectETL2cluster } from '../ris-pure-etl/index'
 import { callRIApi } from '../utils/ri-api'
 
-async function getApplicationData () {
-  const yamlBuffer = await fs.readFile('./resources/transformers/application.yaml')
-  const yamlContent = yamlBuffer.toString()
-  const pure = await projectETL2cluster(yamlContent, {}, {})
+import { Template } from '../models/Template'
+
+async function getApplicationData (applicationId: number, ris: any, settings: any) {
+  // const yamlBuffer = await fs.readFile('./resources/transformers/application.yaml')
+  const template = await Template.getById(applicationId)
+  const pure = await projectETL2cluster(template.yamlTemplate, ris, settings)
   return pure
 }
 
-async function getAwardData () {
-  const yamlBuffer = await fs.readFile('./resources/transformers/award.yaml')
-  const yamlContent = yamlBuffer.toString()
-  const pure = await projectETL2cluster(yamlContent, {}, {})
+async function getAwardData (awardId: number, ris, settings) {
+  const template = await Template.getById(awardId)
+  const pure = await projectETL2cluster(template.yamlTemplate, ris, settings)
   return pure
 }
 
-export async function uploadProjectApplicationClusters (project: any) {
+export async function uploadProjectApplicationClusters (project: any, template: any, ris, settings) {
   const { applicationClusters, awardClusters } = project
 
   if (applicationClusters && awardClusters) {
@@ -30,7 +31,9 @@ export async function uploadProjectApplicationClusters (project: any) {
 
   var applicationPureId = null
   if (!applicationClusters) {
-    const data = await getApplicationData()
+    const data = await getApplicationData(template.applicationId, ris, settings)
+    console.log('Application data', data)
+
     const application = await callRIApi('/applications', 'PUT', data)
 
     // log.info('Application', application)
@@ -46,7 +49,7 @@ export async function uploadProjectApplicationClusters (project: any) {
 
   var awardPureId = null
   if (!awardClusters) {
-    const data = await getAwardData()
+    const data = await getAwardData(template.awardId, ris, settings)
     const award = await callRIApi('/awards', 'PUT', data)
     awardPureId = award.pureId
     project.awardClusters = [

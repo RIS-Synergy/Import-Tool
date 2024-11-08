@@ -58,8 +58,8 @@ export const useProjectStore = defineStore('project', {
       this.settings = cleanSettings;
     },
     setSettings(config: { person: string, organization: string }) {
-      this.settings.person = config.valuePerson.length || null
-      this.settings.organization = config.valueOrganization.length || null
+      this.settings.person = config.valuePerson || null
+      this.settings.organization = config.valueOrganization || null
     },
     setError(error: any, area: string) {
       this.error = error;
