@@ -4,7 +4,7 @@ services:
       - ../backend/:/app
     environment:
       - NODE_ENV=staging
-      - JWT_EXPIRES_IN=10m
+      - JWT_EXPIRES_IN=1h
     env_file: "staging.env"
 
   frontend:

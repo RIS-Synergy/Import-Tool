@@ -62,7 +62,7 @@ const props = defineProps({
   },
   parentUuid: {
     type: String,
-    required: false,
+    required: false
   },
 });
 
@@ -73,10 +73,11 @@ const result = ref(null);
 const orgClass = computed(() => {
   if (!props.period) return;
   const { startDate, endDate } = props.period;
-  const current = startDate && !endDate && true;
+  const current = endDate.startsWith("9999-") || !endDate;
   return {
     current,
-    notCurrent: !current,
+    // disable this after removing the organizations that have more than 1 sasme org units.
+    // notCurrent: !current
   };
 });
 

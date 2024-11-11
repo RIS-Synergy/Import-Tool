@@ -35,7 +35,9 @@
         </td>
         <td>
           <PureReference
-            v-for="x in p.details.staffOrganizationAssociations"
+            v-for="x in setOfOrganization(
+              p.details.staffOrganizationAssociations,
+            )"
             :data="x.organization"
             :period="x.period"
           />
@@ -48,7 +50,10 @@
         <td>
           <v-icon
             v-if="selected === p || settings.person === p.uuid"
-            @click="selected = null ; setPerson(null)"
+            @click="
+              selected = null;
+              setPerson(null);
+            "
             icon="mdi-checkbox-marked-circle"
           />
           <v-icon
@@ -77,7 +82,7 @@
 
 <script setup lang="ts">
 // use the store
-const { setPerson, settings } = useProjectStore();
+const { setPerson, settings, setOrganization } = useProjectStore();
 
 const model = defineModel();
 
@@ -90,9 +95,37 @@ const props = defineProps({
 
 const searchString = ref(model.value.firstName + " " + model.value.familyName);
 
+const config = useRuntimeConfig();
+
 function searchSave() {
   // console.log('searchSave', searchString)
-  searchApiPost(searchString, 'persons');
+  searchApiPost(searchString, "persons");
+}
+
+function setOfOrganization(items) {
+  if (!items) return [];
+
+  // the organization UUID is already set in the environmnent settings (like in Development), ignore.
+  if (config.valueOrganization) {
+    return;
+  }
+
+  const setOfOrgUnits = new Set();
+  const result = [];
+  for (const item of items) {
+    const { uuid } = item.organization;
+    if (!setOfOrgUnits.has(uuid)) {
+      setOfOrgUnits.add(uuid);
+      result.push(item);
+    }
+  }
+
+  if (setOfOrgUnits.size === 1) {
+    const value = setOfOrgUnits.values().next().value;
+    setOrganization(value);
+  }
+
+  return result;
 }
 
 const search = ref(null);
@@ -116,7 +149,7 @@ watch(selected, (val) => {
 });
 
 onMounted(() => {
-  searchApiPost(searchString, 'persons');
+  searchApiPost(searchString, "persons");
 });
 </script>
 

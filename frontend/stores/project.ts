@@ -50,6 +50,9 @@ export const useProjectStore = defineStore('project', {
     setPerson(uuid: string) {
       this.settings.person = uuid;
     },
+    setOrganization (uuid: string) {
+      this.settings.organization = uuid;
+    },
     setPure(pure: Pure) {
       this.crisUUID = pure.uuid;
       this.crisId = pure.pureId;
