@@ -26,7 +26,8 @@ export type RISImport = {
   identifiers: RISIdentifer[];
   team: RISPerson[];
   subjects: RISSubject[];
-  keyword: LangText[]
+  keyword: LangText[];
+  funded: any;
 
   function foo () {
     return 'bar'

@@ -1,6 +1,8 @@
 <template>
   <div v-if="hasCrisData">
     <div class="ma-3 right">
+      <PureCluster entity-types="applications" cluster-type="applicationClusters" />
+      <PureCluster entity-types="awards" cluster-type="awardClusters" />
       <v-btn
         v-if="hasCrisData"
         class=""

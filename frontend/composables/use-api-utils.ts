@@ -251,6 +251,17 @@ export const useApiUtils = () => {
     return result
   }
 
+  const searchRIApi = async (entityType: string, searchString: string, uuid: string) => {
+    const result = await apiCall("ri/searchCluster", "POST", {
+      body: JSON.stringify({
+        entityType,
+        searchString,
+        uuid
+      }),
+    });
+    return result;
+  }
+
   return {
     // apiCall,
     getTemplates,
@@ -268,6 +279,7 @@ export const useApiUtils = () => {
     riReference,
     getProjectUUID,
     loadProject,
-    uploadToPure
+    uploadToPure,
+    searchRIApi
   };
 };

@@ -16,6 +16,25 @@ import { Project } from '../models/Project'
 
 const router: Router = express.Router()
 
+router.post('/searchCluster', async (req: Request, res: Response) => {
+  const { searchString, uuid } = req.body
+  const entityType = req.body.entityType
+
+  const result = await callRIApi(`/${entityType}/search`, 'POST', {
+    size: 100,
+    offset: 0,
+    searchString
+  })
+  const item = result.items[0]
+
+  // find uniqie list of items, that have x.cluster.uuid that is the same as the searchString
+  if (item.cluster && item.cluster.uuid === uuid) {
+    return res.json(result.items[0])
+  }
+
+  return res.json(result.items)
+})
+
 router.get('/project/:id', async (req: Request, res: Response) => {
   const result = await callRIApi('/projects/search', 'POST', {
     size: 10,
@@ -38,18 +57,6 @@ router.get('/project/:id', async (req: Request, res: Response) => {
     item,
     uuid
   })
-})
-
-/**
-@deprecated
-**/
-router.get('/search', async (req: Request, res: Response) => {
-  const result = await callRIApi('/projects/search', 'POST', {
-    size: 100,
-    offset: 0,
-    searchString: "10.55776/", // FWF id
-  })
-  res.json(result)
 })
 
 async function updateCrisId(risId: string, resultData: any, settings: any, template: any) {
