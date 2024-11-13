@@ -49,6 +49,8 @@
       title="Awards / Grants"
     />
     <v-divider></v-divider>
+    <v-list-item :to="`/searchCRIS`" link title="CRIS Search" />
+    <v-divider></v-divider>
     <v-list-item :to="`/functions`" link title="Functions" />
     <v-divider></v-divider>
     <v-list-item :to="`/fundings`" link title="Fundings" />

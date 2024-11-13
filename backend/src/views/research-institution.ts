@@ -16,6 +16,35 @@ import { Project } from '../models/Project'
 
 const router: Router = express.Router()
 
+router.post('/searchAny', async (req: Request, res: Response) => {
+  const entityTypes = [
+    'projects',
+    'applications',
+    'awards'
+  ]
+  const { searchString } = req.body
+  const results = []
+
+  for (const entityType of entityTypes) {
+    const result = await callRIApi(`/${entityType}/search`, 'POST', {
+      size: 10,
+      offset: 0,
+      searchString
+    })
+
+    result.items.map((item: any) => {
+      results.push({
+        pureId: item.pureId,
+        uuid: item.uuid,
+        name: item.name,
+        entity: entityType
+      })
+    })
+  }
+
+  return res.json(results)
+})
+
 router.post('/searchCluster', async (req: Request, res: Response) => {
   const { searchString, uuid } = req.body
   const entityType = req.body.entityType

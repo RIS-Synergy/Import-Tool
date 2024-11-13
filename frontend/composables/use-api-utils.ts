@@ -251,12 +251,21 @@ export const useApiUtils = () => {
     return result
   }
 
-  const searchRIApi = async (entityType: string, searchString: string, uuid: string) => {
-    const result = await apiCall("ri/searchCluster", "POST", {
+  const searchRIApi = async (entityType: string, searchString: string, uuid: string, endpoint: string = "searchCluster") => {
+    const result = await apiCall(`ri/${endpoint}`, "POST", {
       body: JSON.stringify({
         entityType,
         searchString,
         uuid
+      }),
+    });
+    return result;
+  }
+
+  const searchAny = async (searchString: string, uuid: string, endpoint: string = "searchCluster") => {
+    const result = await apiCall(`ri/searchAny`, "POST", {
+      body: JSON.stringify({
+        searchString,
       }),
     });
     return result;
@@ -280,6 +289,7 @@ export const useApiUtils = () => {
     getProjectUUID,
     loadProject,
     uploadToPure,
-    searchRIApi
+    searchRIApi,
+    searchAny
   };
 };
