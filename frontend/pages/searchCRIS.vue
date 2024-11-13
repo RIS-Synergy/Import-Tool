@@ -20,13 +20,14 @@
         </v-btn>
       </v-col>
     </v-row>
-    <i>Count: {{ result.length }}</i>
+    <div class="modDate">Count: {{ result.length }}</div>
     <v-table v-if="result.length">
       <thead>
         <tr>
           <th>CRIS ID</th>
           <th>CRIS UUID</th>
           <th>Entity</th>
+          <th>Modified</th>
           <th></th>
         </tr>
       </thead>
@@ -35,10 +36,11 @@
           <td>{{ item.pureId }}</td>
           <td>{{ item.uuid }}</td>
           <td>{{ item.entity }}</td>
+          <td class="modDate">{{ modDate(item.modifiedDate) }}</td>
+          <td>
           <v-dialog max-width="1400">
             <template v-slot:activator="{ props: activatorProps }">
               <v-btn
-                class="mt-2"
                 v-bind="activatorProps"
                 text="View"
                 variant="outlined"
@@ -52,7 +54,7 @@
               />
             </template>
           </v-dialog>
-
+          </td>
         </tr>
       </tbody>
     </v-table>
@@ -68,4 +70,19 @@ const { searchAny } = useApiUtils();
 async function startSearch() {
   result.value = await searchAny(search.value);
 }
+
+import { formatDistance } from "date-fns";
+
+function modDate (date) {
+  return formatDistance(date, new Date(), { addSuffix: true })
+}
+
 </script>
+
+<style scoped>
+/* italic and grey */
+.modDate {
+  font-style: italic;
+  color: #666;
+}
+</style>

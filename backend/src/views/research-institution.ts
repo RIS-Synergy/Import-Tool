@@ -37,12 +37,18 @@ router.post('/searchAny', async (req: Request, res: Response) => {
         pureId: item.pureId,
         uuid: item.uuid,
         name: item.name,
-        entity: entityType
+        entity: entityType,
+        modifiedDate: item.modifiedDate,
       })
     })
   }
 
-  return res.json(results)
+  // order by item.modifiedDate
+  const sortedResults = results.sort((a, b) => {
+    return new Date(b.modifiedDate).getTime() - new Date(a.modifiedDate).getTime()
+  })
+
+  return res.json(sortedResults)
 })
 
 router.post('/searchCluster', async (req: Request, res: Response) => {
