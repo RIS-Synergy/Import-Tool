@@ -343,4 +343,10 @@ router.put('/:concepts/:uuid', async (req: Request, res: Response) => {
   res.json(result)
 })
 
+router.get('/:concepts/:uuid', async (req: Request, res: Response) => {
+  const result = await callRIApi(`/${req.params.concepts}/${req.params.uuid}`, 'GET')
+  res.json(result)
+})
+
+
 export default router
