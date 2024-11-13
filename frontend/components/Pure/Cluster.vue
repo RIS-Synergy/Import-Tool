@@ -53,10 +53,9 @@ if (clusterUUID.value) {
     </template>
 
     <template v-slot:default="{ isActive }">
-      <v-card :title="data.systemName">
-        <v-card-text>
-          <Yaml :json="data" />
-        </v-card-text>
+      <!-- <v-card :title="data.systemName"> -->
+      <v-card>
+         <Yaml :json="data" />
       </v-card>
     </template>
   </v-dialog>

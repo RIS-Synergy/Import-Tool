@@ -65,9 +65,7 @@ async function updateCrisId(risId: string, resultData: any, settings: any, templ
   log.info('template', template)
   log.info('settings', settings)
 
-
   let saveData = resultData
-  log.info('SaveData', saveData)
 
   const result = await prisma.project.update({
     where: {
@@ -89,44 +87,87 @@ async function updateCrisId(risId: string, resultData: any, settings: any, templ
   log.debug('Updated Project database', result.id)
 }
 
-router.post('/upload', async (req: Request, res: Response) => {
-  const { ris, settings, uuid, template: templateId } = req.body
+async function createOrUpdateProject(isNew: boolean, uuid: string | undefined, pure: any, risId: string, templateId: any, ris: any, settings: any) {
+  const apiEndpoint = isNew ? '/projects' : `/projects/${uuid}`;
+  const method = 'PUT';
+  const result = await callRIApi(apiEndpoint, method, pure);
 
-  const template = await prisma.template.findUnique({
-    where: {
-      id: templateId.projectId
-    }
-  })
-  log.debug('Template', template.id, template.name)
-
-  const pure = await projectETL2(template.yamlTemplate, ris, settings)
-
-  if (uuid) {
-    const result = await callRIApi(`/projects/${uuid}`, 'PUT', pure)
-    if (result.error) {
-      return res.json(result)
-    }
-    log.info('Update project', result.uuid)
-    const project = new Project(ris.id)
-    project.createOrUpdateCrisLink(result)
-    // XXX pause Applications and Awards for now
-    await uploadProjectApplicationClusters(result, templateId, ris, settings)
-    await updateCrisId(ris.id, result, settings, req.body.template)
-    return res.json(result)
-  } else {
-    const result = await callRIApi('/projects', 'PUT', pure)
-    if (result.error) {
-      return res.json(result)
-    }
-    log.info('Created new project', result)
-    const project = new Project(ris.id)
-    project.createOrUpdateCrisLink(result)
-    // XXX pause Applications and Awards for now
-    await uploadProjectApplicationClusters(result, templateId, ris, settings)
-    await updateCrisId(ris.id, result, settings, req.body.template)
-    return res.json(result)
+  if (result.error) {
+    return result;
   }
-})
+
+  log.info(isNew ? 'Created new project' : 'Updated project', result);
+  const project = new Project(risId);
+  project.createOrUpdateCrisLink(result);
+  await uploadProjectApplicationClusters(result, templateId, ris, settings);
+  await updateCrisId(risId, result, settings, templateId);
+
+  return result;
+}
+
+router.post('/upload', async (req: Request, res: Response) => {
+  const { ris, settings, uuid, template: templateId } = req.body;
+
+  if (!ris || !settings || !templateId) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+    const template = await prisma.template.findUnique({
+      where: { id: templateId.projectId }
+    });
+    if (!template) {
+      return res.status(404).json({ error: 'Template not found' });
+    }
+
+    log.debug('Template', template.id, template.name);
+    const pure = await projectETL2(template.yamlTemplate, ris, settings);
+    const isNew = !uuid;
+    const result = await createOrUpdateProject(isNew, uuid, pure, ris.id, templateId, ris, settings);
+
+    return res.json(result);
+  } catch (error) {
+    log.error('Error processing upload', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// router.post('/upload', async (req: Request, res: Response) => {
+//   const { ris, settings, uuid, template: templateId } = req.body
+
+//   const template = await prisma.template.findUnique({
+//     where: {
+//       id: templateId.projectId
+//     }
+//   })
+//   log.debug('Template', template.id, template.name)
+
+//   const pure = await projectETL2(template.yamlTemplate, ris, settings)
+
+//   if (uuid) {
+//     const result = await callRIApi(`/projects/${uuid}`, 'PUT', pure)
+//     if (result.error) {
+//       return res.json(result)
+//     }
+//     log.info('Update project', result.uuid)
+//     const project = new Project(ris.id)
+//     project.createOrUpdateCrisLink(result)
+//     await uploadProjectApplicationClusters(result, templateId, ris, settings)
+//     await updateCrisId(ris.id, result, settings, req.body.template)
+//     return res.json(result)
+//   } else {
+//     const result = await callRIApi('/projects', 'PUT', pure)
+//     if (result.error) {
+//       return res.json(result)
+//     }
+//     log.info('Created new project', result)
+//     const project = new Project(ris.id)
+//     project.createOrUpdateCrisLink(result)
+//     await uploadProjectApplicationClusters(result, templateId, ris, settings)
+//     await updateCrisId(ris.id, result, settings, req.body.template)
+//     return res.json(result)
+//   }
+// })
 
 router.get('/organizations/:id', async (req: Request, res: Response) => {
   const result = await callRIApi(`/organizations/${req.params.id}`, 'GET')

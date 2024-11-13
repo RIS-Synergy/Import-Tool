@@ -1,92 +1,57 @@
-import { promises as fs } from 'fs'
-
 import { Logger } from "tslog";
-const log = new Logger({ name: 'view:ri' });
+const log = new Logger({ name: 'clusters' });
 
 import { projectETL2cluster } from '../ris-pure-etl/index'
 import { callRIApi } from '../utils/ri-api'
 
 import { Template } from '../models/Template'
 
-export async function uploadProjectApplicationClusters(project: any, template: any, ris, settings) {
-  const { applicationClusters, awardClusters } = project
+async function findClusterEntityUUID (apiPath, title, uuid) {
+  const result = await callRIApi(`${apiPath}/search`, 'POST', {
+    size: 100,
+    offset: 0,
+    searchString: title
+  })
+  const item = result.items[0]
 
-  var applicationUUID
-  var awardUUID
-  if (applicationClusters && awardClusters) {
-    // log.warn ('Application and Award clusters', applicationClusters, awardClusters)
-    // GET
-    //   ​/projects​/{uuid}​/application-clusters
-    // Get the application clusters for the project
-    // applicationUUID = await callRIApi(`/projects/${project.uuid}/application-clusters`, 'GET')
-    // const foo = await callRIApi(`/applications/${applicationClusters[0].uuid}`, 'GET')
-    // log.warn('foo: ', foo)
-
-    // GET
-    //   ​/projects​/{uuid}​/award-clusters
-    // Get the award clusters for the project
-    // awardUUID = await callRIApi(`/projects/${project.uuid}/award-clusters`, 'GET')
-    // log.info(`Award UUID: ${awardUUID}`)
+  // find uniqie list of items, that have x.cluster.uuid that is the same as the searchString
+  if (item.cluster && item.cluster.uuid === uuid) {
+    return result.items[0].uuid
   }
 
-  log.debug('applicaiton', applicationClusters)
-  log.debug('award', awardClusters)
+  return null
+}
 
-  var applicationPureId = null
-  if (!applicationClusters) {
-    const { yamlTemplate } = await Template.getById(template.applicationId)
-    const data = await projectETL2cluster(yamlTemplate, ris, settings)
-    const application = await callRIApi('/applications', 'PUT', data)
-    applicationPureId = application.pureId
-    project.applicationClusters = [
+export async function uploadProjectApplicationClusters(project, template, ris, settings) {
+  const { applicationClusters, awardClusters } = project;
+
+  await handleCluster(applicationClusters, template.applicationId, "ApplicationCluster", "/applications", project, ris, settings);
+  await handleCluster(awardClusters, template.awardId, "AwardCluster", "/awards", project, ris, settings);
+
+  log.info(`Project uuid: ${project.uuid}`);
+}
+
+async function handleCluster(cluster, templateId, systemName, apiPath, project, ris, settings) {
+  const { yamlTemplate } = await Template.getById(templateId);
+  const data = await projectETL2cluster(yamlTemplate, ris, settings);
+
+  if (!cluster) {
+    log.info(`No ${systemName.toLowerCase()}. Creating a new one.`);
+    const response = await callRIApi(apiPath, 'PUT', data);
+
+    project[`${systemName.toLowerCase()}s`] = [
       {
-        uuid: application.cluster.uuid,
-        systemName: "ApplicationCluster",
+        uuid: response.cluster.uuid,
+        systemName: systemName,
       }
-    ]
+    ];
   } else {
-    // update the applicationClusters
-    // const applicationCluster = applicationClusters[0]
-    // const { yamlTemplate } = await Template.getById(template.applicationId)
-    // const data = await projectETL2cluster(yamlTemplate, ris, settings)
-    // const application = await callRIApi(`/applications/${applicationCluster.uuid}`, 'PUT', data)
-  }
+    log.info(`${systemName} found. Updating...`);
+    const existingCluster = cluster[0]; // Assuming we update the first cluster in the array
+    const title = project.title.en_GB
+    const uuid = await findClusterEntityUUID(apiPath, title, existingCluster.uuid);
 
-  var awardPureId = null
-  if (!awardClusters) {
-    const { yamlTemplate } = await Template.getById(template.awardId)
-    const data = await projectETL2cluster(yamlTemplate, ris, settings)
-    const award = await callRIApi('/awards', 'PUT', data)
-    awardPureId = award.pureId
-    project.awardClusters = [
-      {
-        uuid: award.cluster.uuid,
-        systemName: "AwardCluster",
-      }
-    ]
-  } else {
-    // update the awardClusters
-    // const awardCluster = awardClusters[0]
-    // const { yamlTemplate } = await Template.getById(template.awardId)
-    // const data = await projectETL2cluster(yamlTemplate, ris, settings)
-    // const award = await callRIApi(`/awards/${awardCluster.uuid}`, 'PUT', data)
-  }
-
-  log.info(`Project uuid: ${project.uuid}`)
-
-  if (!applicationUUID && !awardUUID) {
-    const projectResult = await callRIApi(`/projects/${project.uuid}`, 'PUT', project)
-    log.debug(`Update Project ${projectResult.pureId} to include application and award clusters`, [
-      {
-        ...projectResult.applicationClusters[0],
-        applicationPureId
-      },
-      {
-        ...projectResult.awardClusters[0],
-        awardPureId
-      }
-    ])
-
-    return projectResult
+    await callRIApi(`${apiPath}/${uuid}`, 'PUT', data);
+    log.info(`${systemName} updated with UUID: ${uuid}`);
   }
 }
