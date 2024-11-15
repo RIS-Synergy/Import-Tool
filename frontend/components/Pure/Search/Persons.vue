@@ -12,6 +12,7 @@
       <tr>
         <th class="text-left">Pure ID</th>
         <th class="text-left">System Name</th>
+        <th class="text-left">Marker</th>
         <th class="text-left">Name</th>
         <th class="text-left">User</th>
         <th class="text-left">Organizations</th>
@@ -24,6 +25,9 @@
       <tr v-for="(p, itm) in search" :key="itm">
         <td>{{ p.pureId }}</td>
         <td>{{ p.systemName }}</td>
+        <td>
+          <Marker marker-type="orcid" :data="p.details" />
+        </td>
         <td>{{ p.name }}</td>
         <td>
           <PureReference

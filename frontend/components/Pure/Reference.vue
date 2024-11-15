@@ -17,7 +17,7 @@
           {{ result.username }}
         </span>
       </v-btn>
-      <v-chip v-if="sameEmail" color="green" variant="flat">@</v-chip>
+      <v-chip v-if="sameEmail" color="green">@</v-chip>
     </template>
 
     <template v-slot:default="{ isActive }">
@@ -73,6 +73,7 @@ const result = ref(null);
 const orgClass = computed(() => {
   if (!props.period) return;
   const { startDate, endDate } = props.period;
+  if (!endDate) return { current: true }
   const current = endDate.startsWith("9999-") || !endDate;
   return {
     current,

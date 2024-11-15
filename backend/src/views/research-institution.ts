@@ -20,7 +20,9 @@ router.post('/searchAny', async (req: Request, res: Response) => {
   const entityTypes = [
     'projects',
     'applications',
-    'awards'
+    'awards',
+    'persons',
+    'external-persons',
   ]
   const { searchString } = req.body
   const results = []
