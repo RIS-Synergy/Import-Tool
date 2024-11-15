@@ -1,6 +1,7 @@
 import express, { Router, Request, Response } from "express";
 
 import { PrismaClient } from "@prisma/client";
+// const prisma = new PrismaClient({ log: ['query', 'info', 'warn', 'error'], });
 const prisma = new PrismaClient();
 
 import { unexpectedErrorHandler } from "../middleware/errorHandler";
@@ -48,6 +49,7 @@ type SortBy = {
 
 type Filter = {
   status: Array<string>;
+  piDomain: string;
 }
 
 router.get("/projects", async (req: Request, res: Response) => {
@@ -64,14 +66,16 @@ router.get("/projects", async (req: Request, res: Response) => {
     if (req.query.filters) {
       filters = JSON.parse(req.query.filters as string);
     } else {
-      filters = { status: []};
+      filters = { status: [], piDomain: "" };
     }
 
+    console.log(filters)
+
     var whereFilters: string
-    if(filters.status.length === 0) {
-      whereFilters = ''
+    if (filters.status.length === 0) {
+      whereFilters = '1=1'
     } else {
-      whereFilters = 'WHERE ' + filters.status.map((status) => {
+      whereFilters = '' + filters.status.map((status) => {
         return `p."risData"->>'status' = '${status}'`;
       }).join(" OR ");
     }
@@ -88,7 +92,7 @@ router.get("/projects", async (req: Request, res: Response) => {
 
     const projects: Array<any> = await prisma.$queryRawUnsafe(`
 SELECT * FROM "Project" p
-${whereFilters}
+WHERE p."risData" #>> '{team,0,person,electronicAddress}' LIKE '%@${filters.piDomain}' AND (${whereFilters})
 ORDER BY p."risData"->>'${sortBy.key}' ${sortBy.order}
 OFFSET ${skip} LIMIT ${take}`);
     if (projects && projects.length > 0) {
@@ -98,7 +102,7 @@ OFFSET ${skip} LIMIT ${take}`);
     // const totalProjects = await prisma.project.count();
     const totalProjects = await prisma.$queryRawUnsafe(`
 SELECT COUNT(*) FROM "Project" p
-${whereFilters}
+WHERE p."risData" #>> '{team,0,person,electronicAddress}' LIKE '%@${filters.piDomain}' AND (${whereFilters})
 `);
 
     res.json({

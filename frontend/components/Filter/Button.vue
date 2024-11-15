@@ -21,6 +21,14 @@
             multiple
             outlined
             clearable
+            ></v-select>
+            <v-select
+            v-model="store.projectFilters.piDomain"
+            :items="projectStatusDomain"
+            label="PI Domain"
+            chips
+            outlined
+            clearable
           ></v-select>
         </v-card-text>
 
@@ -54,8 +62,20 @@ const projectStatus = [
   "REJECTED",
 ];
 
+const projectStatusDomain = [
+  {
+    value: 'univie.ac.at',
+    title: 'University of Vienna'
+  },
+  {
+    value: 'plus.ac.at',
+    title: 'Universität Salzburg'
+  }
+];
+
 function clearFilters () {
   store.projectFilters.status = [];
+  store.projectFilters.piDomain = [];
 
   dialog.value = false;
 }
