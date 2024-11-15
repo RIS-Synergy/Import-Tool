@@ -272,7 +272,6 @@ export const useApiUtils = () => {
   }
 
   const riEntityUUID = async (entityType: string, uuid: string) => {
-    debugger
     const result = await apiCall(`ri/${entityType}/${uuid}`)
     return result;
   }

@@ -16,8 +16,16 @@ function getLang (title: LangText[]): { [key: string]: string } {
 
 const functions = {
   getByLang: async function (input: any, settings: any, pass: string, lang: string): Promise<string> {
-    const title = input[pass].find(t => t.lang === lang);
-    return title ? title.text : 'Title not found';
+    var title = input[pass].find(t => t.lang === lang);
+
+    if (!title || !title.text) {
+      return 'Title not found';
+    }
+
+    // replace title with \r\n with <br>
+    title = title.text.replace(/\r\n/g, '<br/>');
+
+    return title
   },
 
   hello: function (input: any, settings: any, world: string, and: string): string {
