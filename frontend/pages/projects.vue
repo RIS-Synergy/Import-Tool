@@ -15,6 +15,9 @@
     <!-- <template v-slot:item.PI_email="x">
          <span v-html="email(x.item.PI_email)" />
          </template> -->
+    <template v-slot:item.crisStatus="x">
+      <StatusColumn :data="x.internalItem.raw.crisStatus" />
+    </template>
     <template v-slot:item.startDate="x">
       <div class="date">
         {{ x.item.startDate }}
@@ -58,6 +61,7 @@ const headers = [
   { title: "Status", key: "status", align: "start", sortable: true },
   // { title: "Action", key: "action", align: "start", sortable: false},
   // { title: "Pure ID", key: "pureId", align: "start", sortable: false },
+  { title: "CRIS", key: "crisStatus", align: "start", sortable: false },
 ];
 
 const loading = ref(false);
@@ -103,6 +107,10 @@ function getItems(itms) {
       endDate: x.endDate,
       status: x.status,
       // pureId: data.crisUUID,
+      crisStatus: {
+        uuid: data.crisUUID,
+        crisId: data.crisId, // the crisId might not be so interesting, when we already have the uuid
+      },
     };
   });
   // console.log('getItems', result)
