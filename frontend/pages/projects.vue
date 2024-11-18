@@ -12,9 +12,9 @@
     <template v-slot:item.id="x">
       <NuxtLink :to="`/project/${x.item.id}`">{{ x.item.id }}</NuxtLink>
     </template>
-    <template v-slot:item.PI_email="x">
-      <span v-html="email(x.item.PI_email)" />
-    </template>
+    <!-- <template v-slot:item.PI_email="x">
+         <span v-html="email(x.item.PI_email)" />
+         </template> -->
     <template v-slot:item.startDate="x">
       <div class="date">
         {{ x.item.startDate }}
@@ -52,12 +52,12 @@ const headers = [
   },
   { title: "Title", key: "title", align: "start", sortable: false },
   { title: "PI Name", key: "PI_name", align: "start", sortable: false },
-  { title: "PI Email", key: "PI_email", align: "start", sortable: false },
+  // { title: "PI Email", key: "PI_email", align: "start", sortable: false },
   { title: "Start Date", key: "startDate", align: "start", sortable: true },
   { title: "End Date", key: "endDate", align: "start", sortable: true },
   { title: "Status", key: "status", align: "start", sortable: true },
   // { title: "Action", key: "action", align: "start", sortable: false},
-  { title: "Pure ID", key: "pureId", align: "start", sortable: false },
+  // { title: "Pure ID", key: "pureId", align: "start", sortable: false },
 ];
 
 const loading = ref(false);
@@ -94,7 +94,7 @@ function getItems(itms) {
     return {
       id: x.id,
       title: getLang(x.title, "en"),
-      PI_email: x.team[0].person.electronicAddress,
+      // PI_email: x.team[0].person.electronicAddress,
       PI_name:
         x.team[0].person.personName.firstName +
         " " +
@@ -102,7 +102,7 @@ function getItems(itms) {
       startDate: x.startDate,
       endDate: x.endDate,
       status: x.status,
-      pureId: data.crisUUID,
+      // pureId: data.crisUUID,
     };
   });
   // console.log('getItems', result)
@@ -114,7 +114,8 @@ function email(str) {
   if (!str) return str;
 
   const [name, domain] = str.split("@");
-  return domain === "univie.ac.at" ? `<b>${name}</b>@${domain}` : str;
+  // return domain === "univie.ac.at" ? `<b>${name}</b>@${domain}` : str;
+  return str;
 }
 
 const page = ref(1);
