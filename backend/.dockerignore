@@ -17,6 +17,9 @@ build/
 .dockerignore
 Dockerfile
 
+# AI Tools
+.aider*
+
 # **/.classpath
 # **/.dockerignore
 # **/.env

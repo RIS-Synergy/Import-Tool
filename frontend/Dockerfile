@@ -1,24 +1,17 @@
 FROM node:lts-slim
 
+# Set working directory
 WORKDIR /app
 
-# install pnpm
-RUN npm install -g pnpm
+# Install dependencies
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-COPY package.json ./
-# COPY package.json pnpm-lock.yaml ./
-# COPY package.json pnpm-lock.yaml ./
-# COPY package.json yarn.lock ./
-
-# RUN yarn add @rollup/rollup-linux-x64-gnu@^4.24.0
-
-# RUN yarn install
-RUN pnpm install
-
+# Copy the application code
 COPY . .
 
-# ENTRYPOINT [ "npm", "run", "dev" ]
-# ENTRYPOINT [ "yarn", "dev" ]
-ENTRYPOINT [ "pnpm", "dev" ]
+# Expose the development server port
+EXPOSE 3000
 
-# ENTRYPOINT [ "./scripts/entrypoint.sh" ]
+# Run the development server
+CMD ["yarn", "dev"]

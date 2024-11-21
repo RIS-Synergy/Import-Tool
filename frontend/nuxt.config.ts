@@ -43,7 +43,7 @@ export default defineNuxtConfig({
   },
   nitro: {
     routeRules: {
-      '/api/**': { proxy: 'http://backend:3000/**' },
+      '/api/**': { proxy: process.env.BACKEND_API_PROXY }
     }
   },
   vite: {
