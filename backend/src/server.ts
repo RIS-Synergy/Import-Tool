@@ -11,7 +11,7 @@ const port = process.env.PORT || 3000
 Error.stackTraceLimit = 32;
 
 dotenv.config()
-importSecretsToProcess()
+// importSecretsToProcess()
 
 app.listen(port, () => {
   console.log(`RIS-Synergy API listening on port ${port}`)

@@ -1,8 +1,8 @@
 import prompts from 'prompts';
 import { FundingAgency } from '../src/models/FundingAgency';
-import { importSecretsToProcess } from "../src/utils/secrets";
 
-importSecretsToProcess()
+// import { importSecretsToProcess } from "../src/utils/secrets";
+// importSecretsToProcess()
 
 async function main () {
   const { value } = await prompts({

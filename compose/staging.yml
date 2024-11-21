@@ -1,11 +1,11 @@
 services:
   backend:
-    volumes:
-      - ../backend/:/app
-    environment:
-      - NODE_ENV=staging
-      - JWT_EXPIRES_IN=1h
-    env_file: "staging.env"
+    # volumes:
+    #   - ../backend/:/app
+    # environment:
+    #   - NODE_ENV=staging
+    #   - JWT_EXPIRES_IN=1h
+    # env_file: "staging.env"
 
   frontend:
     volumes:

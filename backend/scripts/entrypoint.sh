@@ -4,7 +4,7 @@
 npx prisma generate
 
 # db password from docker secrets
-db_password=$(cat /run/secrets/db_password)
+db_password=dummy
 
 # Set the DATABASE_URL
 export DATABASE_URL=postgresql://ris-user:${db_password}@db:5432/ris_db?schema=public
@@ -23,13 +23,22 @@ else
   echo '====================='
   echo Env: $NODE_ENV
   echo '====================='
-  env | sort
+  # Process environment variables
+  env | sort | while IFS= read -r line; do
+      if [[ $line == RIS_FA_API_KEY=* ]]; then
+          echo "RIS_FA_API_KEY=*****"
+      elif [[ $line == RIS_RI_API_KEY=* ]]; then
+          echo "RIS_RI_API_KEY=*****"
+      elif [[ $line == JWT_SECRET=* ]]; then
+          echo "JWT_SECRET=*****"
+      elif [[ $line == DATABASE_PASSWORD=* ]]; then
+          echo "DATABASE_PASSWORD=*****"
+      else
+          echo "$line"
+      fi
+  done
   echo '====================='
 fi
-
-# if [ "$NODE_ENV" = "development" ]; then
-# else
-# fi
 
 # run the main process
 yarn dev

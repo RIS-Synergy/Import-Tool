@@ -15,34 +15,37 @@ services:
 
     environment:
       POSTGRES_USER: ris-user
-      POSTGRES_PASSWORD: $${DATABASE_PASSWORD || dummy}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ris_db
 
   backend:
     restart: unless-stopped
     build:
-      context: ../backend
+      context: ./backend
     container_name: backend
     depends_on:
       - db
     env_file: .env
-    environment:
-      - NODE_ENV=production
     ports:
       - "3031:3001"
     volumes:
-      - ../backend/:/app
+      - ./backend/:/app
 
   frontend:
     restart: unless-stopped
     build:
-      context: ../frontend
+      context: ./frontend
     container_name: frontend
     depends_on:
       - backend
-    # ports:
-      # - "3032:3000"
-      # - "24678:24678"
+    env_file: .env
+    ports:
+      - "3032:3000"
+      - "24678:24678"
+      - "9229:9229"
+    volumes:
+      - ./frontend/:/app
+      # - /app/node_modules/
 
 volumes:
     data:
