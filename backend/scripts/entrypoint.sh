@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO this might be deleted later
+
 # Generate Prisma Client
 npx prisma generate
 
@@ -39,6 +41,3 @@ else
   done
   echo '====================='
 fi
-
-# run the main process
-yarn dev

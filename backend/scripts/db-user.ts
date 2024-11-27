@@ -5,21 +5,6 @@ import prompts from 'prompts';
 
 const prisma = new PrismaClient()
 
-// ensure we have extra arguments and if not, show info and quit
-// if (process.argv.length <= 2) {
-//   // console.error('Usage: node db-user.js <username> <password>')
-//   console.error('Usage: node db-user.js')
-//   process.exit(1)
-// }
-
-// script argument username
-// const newUsername = process.argv[2]
-// const newPassword = process.argv[3]
-
-// var username
-// var password
-
-
 async function createUsers() {
   var { username } = await prompts({
     type: 'text',

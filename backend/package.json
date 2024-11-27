@@ -4,6 +4,7 @@
   "description": "RIS-Synergy API: Funder -> PURE interface",
   "scripts": {
     "dev": "PORT=3001 nodemon --ignore ./tests src/server.ts",
+    "docker": "ts-node ./src/server.ts",
     "debug": "nodemon --exec node --inspect-brk=0.0.0.0 -r ts-node/register ./src/server.ts",
     "test": "vitest",
     "test:docker": "vitest --ui --open=false --api.host=0.0.0.0",

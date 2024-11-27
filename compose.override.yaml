@@ -1,0 +1,26 @@
+# This is for development!
+#
+# Production would compose the main file, followed by another yaml file:
+#
+# docker --context ... compose \
+#  -f compose.yaml -f compose.production.yaml \
+
+services:
+  backend:
+    volumes:
+      - ./backend/:/app
+    environment:
+      - PORT=3001
+
+  frontend:
+    environment:
+      - NODE_ENV=development
+      - BACKEND_API_PROXY=http://backend:3001/**
+    ports:
+      - "3032:3000"
+      - "24678:24678"
+      - "9229:9229"
+    volumes:
+      - ./frontend/:/app
+      - /app/node_modules
+      - /app/.nuxt

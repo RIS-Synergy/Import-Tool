@@ -3,9 +3,9 @@ FROM node:lts-slim
 
 # Install required system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-openssl \
-&& apt-get clean \
-&& rm -rf /var/lib/apt/lists/*
+  openssl \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /app
@@ -19,9 +19,10 @@ RUN yarn install --frozen-lockfile
 # Copy application source code
 COPY . .
 
-# Ensure the entrypoint script is executable
-RUN chmod +x ./scripts/entrypoint.sh
+# Generate Prisma client
+RUN npx prisma generate
 
-# Set the default entrypoint
-# ENTRYPOINT ["./scripts/entrypoint.sh"]
-RUN ["./scripts/entrypoint.sh"]
+EXPOSE 3000
+
+# Currenttly runs 'ts-node ./src/server.ts', will need to `build` later. TODO
+CMD ["yarn", "docker"]
