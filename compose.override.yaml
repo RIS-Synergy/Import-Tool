@@ -10,7 +10,10 @@ services:
     volumes:
       - ./backend/:/app
     environment:
+      - NODE_ENV=development
       - PORT=3001
+    command: >
+      sh -c "yarn dev"
 
   frontend:
     environment:

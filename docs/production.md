@@ -49,3 +49,13 @@ docker --context rissynergy-test-univie compose \
   -f compose.yaml -f compose.production.yaml \
   exec -it backend yarn db-user
 ```
+
+## Projects (samples)
+
+Create projects data:
+
+```
+docker --context rissynergy-test-univie compose \
+  -f compose.yaml -f compose.production.yaml \
+  exec -it backend yarn copy
+```

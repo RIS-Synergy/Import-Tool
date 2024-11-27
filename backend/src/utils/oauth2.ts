@@ -3,6 +3,8 @@ import { ofetch } from "ofetch";
 import { Logger } from "tslog";
 const log = new Logger({ name: 'utils:oauth2'});
 
+import { envLogs } from "./env-logs";
+
 export async function getAuthEndpoint (url: string) {
   try {
     /* First we need to get the OAuth2 token */
@@ -15,7 +17,8 @@ export async function getAuthEndpoint (url: string) {
       body: new URLSearchParams({
         grant_type: 'client_credentials',
         client_id: process.env.AUTH_CLIENT_ID,
-        client_secret: process.env.AUTH_CLIENT_SECRET
+        // client_secret: process.env.AUTH_CLIENT_SECRET
+        client_secret: process.env.RIS_FA_API_KEY
       })
     });
 
