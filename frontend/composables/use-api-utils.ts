@@ -276,6 +276,11 @@ export const useApiUtils = () => {
     return result;
   }
 
+  const faApi = async (str: string) => {
+    const result = await apiCall(`fa/${str}`)
+    return result;
+  }
+
   return {
     // apiCall,
     getTemplates,
@@ -296,6 +301,7 @@ export const useApiUtils = () => {
     uploadToPure,
     searchRIApi,
     searchAny,
-    riEntityUUID
+    riEntityUUID,
+    faApi,
   };
 };

@@ -1,14 +1,10 @@
 <template>
-  <v-data-table :items="[items]">
-    <template v-slot:item="{ item }">
-      <pre>
-        {{ item }}
-      </pre>
-    </template>
-  </v-data-table>
+    <Yaml :json="data" />
 </template>
 
 <script setup>
 // const { data: items } = await useFetch("http://localhost:3000/fwf-test/info.json");
-const { data: items } = await useFetch("/api/fa/info");
+// const { data: items } = await useFetch("/api/fa/info");
+const { faApi } = useApiUtils();
+const data = await faApi('info');
 </script>
