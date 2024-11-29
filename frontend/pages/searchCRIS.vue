@@ -26,7 +26,7 @@
         <tr>
           <th>CRIS ID</th>
           <th>CRIS UUID</th>
-          <th>Name</th>
+          <th>Name or Title</th>
           <th>Entity</th>
           <th>Modified</th>
           <th></th>
@@ -39,7 +39,8 @@
           <td>
             <span v-if="item.name">{{ item.name.firstName + ' ' }}</span>
             <span v-if="item.name">{{ item.name.lastName }}</span>
-            <span v-if="item.title">{{ item.title.de_DE || item.title.en_GB }}</span>
+            <span v-if="item.title && item.title.en_GB"><span class="grey">en</span> {{ item.title.en_GB }}</span>
+            <span v-if="item.title && item.title.de_DE"><br/><span class="grey">de</span> {{ item.title.de_DE }}</span>
           </td>
           <td>{{ item.entity }}</td>
           <td class="modDate">{{ modDate(item.modifiedDate) }}</td>
@@ -86,5 +87,9 @@ function modDate(date) {
 .modDate {
   font-style: italic;
   color: #666;
+}
+
+.grey {
+  color: #999;
 }
 </style>
