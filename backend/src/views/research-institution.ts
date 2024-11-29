@@ -39,6 +39,7 @@ router.post('/searchAny', async (req: Request, res: Response) => {
         pureId: item.pureId,
         uuid: item.uuid,
         name: item.name,
+        title: item.title,
         entity: entityType,
         modifiedDate: item.modifiedDate,
       })

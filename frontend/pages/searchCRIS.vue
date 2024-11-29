@@ -26,6 +26,7 @@
         <tr>
           <th>CRIS ID</th>
           <th>CRIS UUID</th>
+          <th>Name</th>
           <th>Entity</th>
           <th>Modified</th>
           <th></th>
@@ -35,25 +36,27 @@
         <tr v-for="item in result" key="item.uuid">
           <td>{{ item.pureId }}</td>
           <td>{{ item.uuid }}</td>
+          <td>
+            <span v-if="item.name">{{ item.name.firstName + ' ' }}</span>
+            <span v-if="item.name">{{ item.name.lastName }}</span>
+            <span v-if="item.title">{{ item.title.de_DE || item.title.en_GB }}</span>
+          </td>
           <td>{{ item.entity }}</td>
           <td class="modDate">{{ modDate(item.modifiedDate) }}</td>
           <td>
-          <v-dialog max-width="1400">
-            <template v-slot:activator="{ props: activatorProps }">
-              <v-btn
-                v-bind="activatorProps"
-                text="View"
-                variant="outlined"
-              ></v-btn>
-            </template>
+            <v-dialog max-width="1400">
+              <template v-slot:activator="{ props: activatorProps }">
+                <v-btn
+                  v-bind="activatorProps"
+                  text="View"
+                  variant="outlined"
+                ></v-btn>
+              </template>
 
-            <template v-slot:default="{ isActive }">
-              <PureUUID
-                :uuid="item.uuid"
-                :entity="item.entity"
-              />
-            </template>
-          </v-dialog>
+              <template v-slot:default="{ isActive }">
+                <PureUUID :uuid="item.uuid" :entity="item.entity" />
+              </template>
+            </v-dialog>
           </td>
         </tr>
       </tbody>
@@ -73,10 +76,9 @@ async function startSearch() {
 
 import { formatDistance } from "date-fns";
 
-function modDate (date) {
-  return formatDistance(date, new Date(), { addSuffix: true })
+function modDate(date) {
+  return formatDistance(date, new Date(), { addSuffix: true });
 }
-
 </script>
 
 <style scoped>
