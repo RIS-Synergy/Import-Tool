@@ -25,33 +25,35 @@ router.post('/searchAny', async (req: Request, res: Response) => {
     'external-persons',
   ]
   const { searchString } = req.body
-  const results = []
+  var results = []
 
-  for (const entityType of entityTypes) {
-    const result = await callRIApi(`/${entityType}/search`, 'POST', {
+  const promises = entityTypes.map(entityType =>
+    callRIApi(`/${entityType}/search`, 'POST', {
       size: 10,
       offset: 0,
       searchString
+    }).then((result: any) => {
+      result.items.map((item: any) => {
+        results.push({
+          pureId: item.pureId,
+          uuid: item.uuid,
+          name: item.name,
+          title: item.title,
+          entity: entityType,
+          modifiedDate: item.modifiedDate,
+        });
+      });
     })
+  );
 
-    result.items.map((item: any) => {
-      results.push({
-        pureId: item.pureId,
-        uuid: item.uuid,
-        name: item.name,
-        title: item.title,
-        entity: entityType,
-        modifiedDate: item.modifiedDate,
-      })
-    })
-  }
+  await Promise.all(promises);
 
   // order by item.modifiedDate
   const sortedResults = results.sort((a, b) => {
-    return new Date(b.modifiedDate).getTime() - new Date(a.modifiedDate).getTime()
-  })
+    return new Date(b.modifiedDate).getTime() - new Date(a.modifiedDate).getTime();
+  });
 
-  return res.json(sortedResults)
+  return res.json(sortedResults);
 })
 
 router.post('/searchCluster', async (req: Request, res: Response) => {
