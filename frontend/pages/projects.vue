@@ -6,6 +6,7 @@
     :items-per-page="store.itemsPerPage"
     :loading="loading"
     :sort-by.sync="store.sortBy"
+    :items-per-page-options="items_per_page_options"
     @update:options="loadItems"
     @update:itemsPerPage="updateItemsPerPage"
   >
@@ -143,6 +144,13 @@ watch(
   },
   { deep: true },
 );
+
+const items_per_page_options = [
+  {value: 10, title: '10'},
+  {value: 15, title: '15'},
+  {value: 20, title: '20'},
+  {value: 25, title: '25'},
+]
 </script>
 
 <style scoped>
