@@ -7,6 +7,7 @@ describe('custom transform functions', () => {
     expect(Object.keys(functions)).toEqual([
       'oefos2012',
       'keywords',
+      'grantAmount',
       'getPersonUUID',
       'getIdentifier'
     ])

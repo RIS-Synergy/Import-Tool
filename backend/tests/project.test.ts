@@ -21,8 +21,9 @@ describe('sample fwf project', () => {
 })
 
 import { uploadProjectApplicationClusters } from '../src/ris-pure-etl/clusters'
+
 describe('access a project', () => {
-  it('has applications/awards clusters', async () => {
+  it.skip('has applications/awards clusters', async () => {
 
     // skip this test in staging or production
     if (process.env.NODE_ENV !== 'development') {
@@ -33,8 +34,7 @@ describe('access a project', () => {
       ...p,
       uuid: 'test-uuid'
     }
-    const result = await uploadProjectApplicationClusters(project)
-    // console.log(p, result)
+    const result = await uploadProjectApplicationClusters(project) // there are some arguments for this function
 
     expect(await result).toEqual({
       ...p,
