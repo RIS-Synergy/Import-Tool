@@ -281,6 +281,11 @@ export const useApiUtils = () => {
     return result;
   }
 
+  const diffRILikelihood = async (risId: string) => {
+    const result = await apiCall(`diff/likelihood/${risId}`)
+    return result;
+  }
+
   return {
     // apiCall,
     getTemplates,
@@ -303,5 +308,6 @@ export const useApiUtils = () => {
     searchAny,
     riEntityUUID,
     faApi,
+    diffRILikelihood
   };
 };

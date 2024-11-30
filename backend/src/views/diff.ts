@@ -23,4 +23,15 @@ router.get('/:id', async (req: Request, res: Response) => {
   }))
 })
 
+router.get('/likelihood/:id', async (req: Request, res: Response) => {
+  console.log('Likelihood', req.params.id)
+  const likelihood = Math.random()
+
+  // sleep 1 - 2 seconds randomly
+  const sleep = Math.random() * 1000 + 1000
+  await new Promise(resolve => setTimeout(resolve, sleep))
+
+  res.json({ likelihood })
+})
+
 export default router

@@ -17,7 +17,7 @@
          <span v-html="email(x.item.PI_email)" />
          </template> -->
     <template v-slot:item.crisStatus="x">
-      <StatusColumn :data="x.internalItem.raw.crisStatus" />
+      <StatusColumn :data="x.internalItem.raw.crisStatus" :id="x.item.id || null" />
     </template>
     <template v-slot:item.startDate="x">
       <div class="date">
