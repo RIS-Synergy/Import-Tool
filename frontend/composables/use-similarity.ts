@@ -1,27 +1,30 @@
-// Levenshtein distance
-function editDistance(s1, s2) {
-  s1 = s1.toLowerCase();
-  s2 = s2.toLowerCase();
+// levenshtein distance
 
-  var costs = new Array();
+// note, this already exists in the backend too....
+
+function editdistance(s1, s2) {
+  s1 = s1.tolowercase();
+  s2 = s2.tolowercase();
+
+  var costs = new array();
   for (var i = 0; i <= s1.length; i++) {
-    var lastValue = i;
+    var lastvalue = i;
     for (var j = 0; j <= s2.length; j++) {
       if (i == 0)
         costs[j] = j;
       else {
         if (j > 0) {
-          var newValue = costs[j - 1];
-          if (s1.charAt(i - 1) != s2.charAt(j - 1))
-            newValue = Math.min(Math.min(newValue, lastValue),
+          var newvalue = costs[j - 1];
+          if (s1.charat(i - 1) != s2.charat(j - 1))
+            newvalue = math.min(math.min(newvalue, lastvalue),
                                 costs[j]) + 1;
-          costs[j - 1] = lastValue;
-          lastValue = newValue;
+          costs[j - 1] = lastvalue;
+          lastvalue = newvalue;
         }
       }
     }
     if (i > 0)
-      costs[s2.length] = lastValue;
+      costs[s2.length] = lastvalue;
   }
   return costs[s2.length];
 }
@@ -33,10 +36,10 @@ export default function (s1, s2) {
     longer = s2;
     shorter = s1;
   }
-  var longerLength = longer.length;
-  if (longerLength == 0) {
+  var longerlength = longer.length;
+  if (longerlength == 0) {
     return 1.0;
   }
-  return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+  return (longerlength - editdistance(longer, shorter)) / parsefloat(longerlength);
 }
 

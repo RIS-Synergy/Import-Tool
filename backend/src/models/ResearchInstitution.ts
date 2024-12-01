@@ -47,4 +47,40 @@ export class ResearchInstitution {
     const result = await callRIApi(`/projects/${uuid}`, 'GET')
     return result
   }
+
+  entityTypes = [
+    'projects',
+    'applications',
+    'awards',
+    'persons',
+    'external-persons',
+  ]
+
+  async searchCategories(searchString: string, entityTypes: string[] = this.entityTypes) {
+    var results = []
+
+    const promises = entityTypes.map(entityType =>
+      callRIApi(`/${entityType}/search`, 'POST', {
+        size: 10,
+        offset: 0,
+        searchString
+      }).then((result: any) => {
+        // console.log('SearchResults', result)
+
+        result.items.map((item: any) => {
+          results.push({
+            ...item,
+            // pureId: item.pureId,
+            // uuid: item.uuid,
+            // name: item.name,
+            // title: item.title,
+            // entity: entityType,
+            // modifiedDate: item.modifiedDate,
+          });
+        });
+      })
+                                    );
+    await Promise.all(promises);
+    return results
+  }
 }

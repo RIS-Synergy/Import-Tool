@@ -17,6 +17,7 @@ import { Project } from '../models/Project'
 const router: Router = express.Router()
 
 router.post('/searchAny', async (req: Request, res: Response) => {
+  // TODO there is a class for this already in ResearchInstitution.searchCategories
   const entityTypes = [
     'projects',
     'applications',
