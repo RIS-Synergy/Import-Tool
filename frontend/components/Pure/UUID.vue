@@ -13,7 +13,7 @@ const props = defineProps({
   entity: {
     type: String,
     required: true,
-  },
+  }
 });
 
 const data = ref({});

@@ -28,7 +28,6 @@ router.get('/:id', async (req: Request, res: Response) => {
 })
 
 router.get('/likelihood/:id', async (req: Request, res: Response) => {
-  console.log('Likelihood', req.params.id)
   const id = req.params.id
 
   // get title: en_GB and de_DE from prisma
@@ -54,23 +53,18 @@ router.get('/likelihood/:id', async (req: Request, res: Response) => {
           lang,
           diff,
           text: crisText,
-          systemName: item.systemName
+          systemName: item.systemName,
+          modifiedDate: item.modifiedDate,
+          entity: item.systemName.toLowerCase() + 's'
         })
       }
     }
   }
 
-  res.json(totalResults)
-
-  // console.log('TotalResults', totalResults.length, totalResults)
-
-  // const likelihood = Math.random()
-
-  // // sleep 1 - 2 seconds randomly
-  // const sleep = Math.random() * 1000 + 1000
-  // await new Promise(resolve => setTimeout(resolve, sleep))
-
-  // res.json({ likelihood })
+  // sort by date desc
+  res.json(totalResults.sort((a, b) => {
+    return new Date(b.modifiedDate).getTime() - new Date(a.modifiedDate).getTime()
+  }))
 })
 
 export default router
