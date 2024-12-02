@@ -79,7 +79,7 @@ function groupAndSortResults(results: any[]) {
   for (const key in grouped) {
     const texts = []
     const value = grouped[key]
-    log.warn(value)
+    log.warn(value.map((x: any) => x.risText))
     for (const val in value) {
       const v = value[val]
       log.info(v)
