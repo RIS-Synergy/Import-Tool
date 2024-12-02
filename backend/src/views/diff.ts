@@ -1,13 +1,13 @@
 import express, { Router, Request, Response } from "express"
 
 import { Logger } from "tslog";
-const log = new Logger({ name: 'view:transform'});
+const log = new Logger({ name: 'view:transform' });
 import { Project } from '../models/Project';
 import similarity from '../utils/similarity'
 
 const router: Router = express.Router()
 
-import { runPipeline} from '../utils/diff'
+import { runPipeline } from '../utils/diff'
 
 import { ResearchInstitution } from '../models/ResearchInstitution'
 const ri = new ResearchInstitution()
@@ -28,43 +28,85 @@ router.get('/:id', async (req: Request, res: Response) => {
 })
 
 router.get('/likelihood/:id', async (req: Request, res: Response) => {
-  const id = req.params.id
+  const id = req.params.id;
+  const data = (await Project.getById(id)).risData as any;
+  const texts = data.title.map((t: any) => t.text);
+  log.info(texts);
 
-  // get title: en_GB and de_DE from prisma
-  const data = (await Project.getById(id)).risData as any
-  const text = data.title[0].text // this is just one, but we have both english and german (2 texts)
-  log.info(text)
+  const searchResults = await ri.searchCategories(texts.join(' '), ['projects', 'applications', 'awards']);
+  const totalResults = calculateSimilarityResults(texts, searchResults, 0.8);
+  const groupedResults = groupAndSortResults(totalResults);
 
-  const searchResults = await ri.searchCategories(text, ['projects', 'applications', 'awards'])
+  // log.debug(groupedResults);
+  res.json(groupedResults);
+});
 
-  const maxDiffQuota = 0.8
-  const totalResults = []
-
+function calculateSimilarityResults(texts: string[], searchResults: any[], maxDiffQuota: number) {
+  const results = [];
   for (const item of searchResults) {
-    // for en, de, ...
-    for (const [ lang, crisText ] of Object.entries(item.title)) {
-      const diff = similarity(text, crisText)
-      // console.log(lang, similarity(text, crisText))
-      if (diff > maxDiffQuota) {
-        totalResults.push({
-          uuid: item.uuid,
-          pureId: item.pureId,
-          title: item.title,
-          lang,
-          diff,
-          text: crisText,
-          systemName: item.systemName,
-          modifiedDate: item.modifiedDate,
-          entity: item.systemName.toLowerCase() + 's'
-        })
+    for (const text of texts) {
+      for (const [lang, crisText] of Object.entries(item.title)) {
+        const diff = similarity(text, crisText);
+        if (diff > maxDiffQuota) {
+          results.push({
+            uuid: item.uuid,
+            pureId: item.pureId,
+            lang,
+            diff,
+            risText: text,
+            crisText,
+            systemName: item.systemName,
+            modifiedDate: item.modifiedDate,
+            entity: item.systemName.toLowerCase() + 's'
+          });
+        }
       }
     }
   }
+  return results
+}
 
-  // sort by date desc
-  res.json(totalResults.sort((a, b) => {
-    return new Date(b.modifiedDate).getTime() - new Date(a.modifiedDate).getTime()
-  }))
-})
+function groupAndSortResults(results: any[]) {
+  const grouped = results.reduce((acc, result) => {
+    if (!acc[result.pureId]) {
+      acc[result.pureId] = [];
+    }
+    acc[result.pureId].push(result);
+    return acc;
+  }, {});
+
+  const result = []
+  for (const key in grouped) {
+    const texts = []
+    const value = grouped[key]
+    log.warn(value)
+    for (const val in value) {
+      const v = value[val]
+      log.info(v)
+      texts.push({
+        lang: v.lang,
+        diff: v.diff,
+        crisText: v.crisText,
+      })
+    }
+    result.push({
+      pureId: key,
+      uuid: value[0].uuid,
+      risText: value[0].risText,
+      texts,
+      systemName: value[0].systemName,
+      modifiedDate: value[0].modifiedDate,
+      entity: value[0].entity,
+    });
+    // console.log(key);
+    log.info(result)
+  }
+
+  // sort by results modifiedDate desc
+  result.sort((a, b) => new Date(b.modifiedDate).getTime() - new Date(a.modifiedDate).getTime());
+
+  return result
+  // return grouped;
+}
 
 export default router

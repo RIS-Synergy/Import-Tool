@@ -32,9 +32,9 @@ const likely = ref(false);
 if (!props.data.uuid) {
   likelihood.value = await diffRILikelihood(props.id).then((result) => {
     console.log("likelihood", result);
-    // if it has over 0.8 likelihood, it is likely
-    if (result.find(x => x.diff > 0.8)) {
-      likely.value = true;
+    // result is a object with keys
+    if (result.length) {
+      likely.value = true
     }
     loading.value = false;
     return result;

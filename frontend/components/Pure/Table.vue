@@ -1,55 +1,36 @@
 <template>
-  <v-table v-if="data.length">
-    <thead>
-      <tr>
-        <th>CRIS ID, UUID</th>
-        <th>Name or Title</th>
-        <th>Entity</th>
-        <th>Modified</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="item in data" key="item.uuid">
-        <td>
-          <b>{{ item.pureId }}</b
-          ><br />
-          {{ item.uuid }}
-        </td>
-        <td>
-          <span v-if="item.name">{{ item.name.firstName + " " }}</span>
-          <span v-if="item.name">{{ item.name.lastName }}</span>
-          <span v-if="item.title && item.title.en_GB"
-            ><span class="grey">en</span> {{ item.title.en_GB }}</span
-          >
-          <span v-if="item.title && item.title.de_DE"
-            ><br /><span class="grey">de</span> {{ item.title.de_DE }}</span
-          >
-        </td>
-        <td>{{ item.entity || item.systemName }}</td>
-        <td class="modDate">{{ modDate(item.modifiedDate) }}</td>
-        <td>
-          <v-dialog max-width="1400">
-            <template v-slot:activator="{ props: activatorProps }">
-              <v-btn
-                v-bind="activatorProps"
-                text="View"
-                variant="outlined"
-              ></v-btn>
-            </template>
+  <div v-if="data.length">
+    <v-card v-for="item in data" :key="item.uuid" class="mb-4">
+      <v-card-title>
+        <b>{{ item.pureId }}</b
+        ><br />
+      </v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col class="bold" cols="2">entity</v-col>
+          <v-col cols="10">{{ item.entity }}</v-col>
+        </v-row>
+        <Yaml :json="item" />
+      </v-card-text>
+      <v-card-actions>
+        <v-dialog max-width="1400">
+          <template v-slot:activator="{ props: activatorProps }">
+            <v-btn
+              v-bind="activatorProps"
+              text="View"
+              variant="outlined"
+            ></v-btn>
+          </template>
 
-            <template v-slot:default="{ isActive }">
-              <PureUUID
-                :uuid="item.uuid"
-                :entity="item.entity"
-                :underItem="true"
-              />
-            </template>
-          </v-dialog>
-        </td>
-      </tr>
-    </tbody>
-  </v-table>
+          <template v-slot:default="{ isActive }">
+            <div v-for="x in item.results">
+              <PureUUID :uuid="x.uuid" :entity="x.entity" />
+            </div>
+          </template>
+        </v-dialog>
+      </v-card-actions>
+    </v-card>
+  </div>
   <!-- <Yaml :json="data" /> -->
 </template>
 
@@ -74,5 +55,9 @@ function modDate(date) {
 
 .grey {
   color: #999;
+}
+
+.bold {
+  font-weight: 900;
 }
 </style>
