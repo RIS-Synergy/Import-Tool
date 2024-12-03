@@ -6,6 +6,12 @@ type RISystemID = 'Pure' | 'Custom'
 type Category = 'Project' | 'Application' | 'Award'
 type risId = string
 
+type Note = {
+  uuid: string
+  text: string
+  username: string
+}
+
 class RISystem {
   systemId: RISystemID
   categoryRequestMap: Map<Category, string> = new Map()
@@ -82,5 +88,14 @@ export class ResearchInstitution {
                                     );
     await Promise.all(promises);
     return results
+  }
+
+  async addNote(note: Note) {
+    const result = await callRIApi(`/projects/${note.uuid}/notes`, 'PUT', {
+      text: note.text,
+      date: new Date().toISOString(),
+      username: note.username
+    })
+    log.debug('Note added', result)
   }
 }

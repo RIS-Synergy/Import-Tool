@@ -13,8 +13,11 @@ const log = new Logger({ name: 'view:ri' });
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 import { Project } from '../models/Project'
+import { ResearchInstitution } from "../models/ResearchInstitution"
 
 const router: Router = express.Router()
+
+const ri = new ResearchInstitution()
 
 router.post('/searchAny', async (req: Request, res: Response) => {
   // TODO there is a class for this already in ResearchInstitution.searchCategories
@@ -140,8 +143,16 @@ async function createOrUpdateProject(isNew: boolean, uuid: string | undefined, p
   log.info(isNew ? 'Created new project' : 'Updated project', result);
   const project = new Project(risId);
   project.createOrUpdateCrisLink(result);
-  await uploadProjectApplicationClusters(result, templateId, ris, settings);
+  const proj = await uploadProjectApplicationClusters(result, templateId, ris, settings);
   await updateCrisId(risId, result, settings, templateId);
+  await ri.addNote({
+    uuid: proj.uuid,
+    username: 'RIS-Synergy API',
+    // date as YYYY-MM-DD
+    text: `Updated on ${new Date().toISOString().split('T')[0]}.
+
+Source: FWF.`
+  })
 
   return result;
 }

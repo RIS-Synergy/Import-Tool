@@ -29,6 +29,7 @@ export async function uploadProjectApplicationClusters(project, template, ris, s
   await handleCluster(awardClusters, template.awardId, "AwardCluster", "/awards", project, ris, settings);
 
   log.info(`Project uuid: ${project.uuid}`);
+  return project;
 }
 
 async function handleCluster(cluster, templateId, systemName, apiPath, project, ris, settings) {
