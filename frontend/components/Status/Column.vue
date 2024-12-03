@@ -1,18 +1,8 @@
 <template>
-  <StatusActive
-    v-if="data.uuid"
-    :data="data"
-  />
-  <span v-else>
-    <v-progress-circular v-if="loading" color="#ffaa60" size="25" indeterminate>
-    </v-progress-circular>
-    <StatusLikely
-      :data = "likelihood"
-      v-else-if="likely"
-    />
-    <v-chip v-else class="text-none" color="#ffaa60">
-      unknown
-    </v-chip>
+  <StatusActive v-if="data.uuid" :data="data" />
+  <span v-if="!data.uuid">
+    <StatusLikely :data="likelihood" v-if="!loading && likely" />
+    <v-chip v-else class="text-none" color="#ffaa60"> unknown </v-chip>
   </span>
 </template>
 
@@ -31,19 +21,14 @@ const likely = ref(false);
 
 if (!props.data.uuid) {
   likelihood.value = await diffRILikelihood(props.id).then((result) => {
-    console.log("likelihood", result);
     // result is a object with keys
     if (result.length) {
-      likely.value = true
+      likely.value = true;
     }
     loading.value = false;
     return result;
   });
 }
-
-onMounted(() => {
-  console.log("mounted", props.id);
-});
 </script>
 
 <style scoped>

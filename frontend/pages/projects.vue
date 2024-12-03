@@ -16,9 +16,6 @@
     <!-- <template v-slot:item.PI_email="x">
          <span v-html="email(x.item.PI_email)" />
          </template> -->
-    <template v-slot:item.crisStatus="x">
-      <StatusColumn :data="x.internalItem.raw.crisStatus" :id="x.item.id || null" />
-    </template>
     <template v-slot:item.startDate="x">
       <div class="date">
         {{ x.item.startDate }}
@@ -42,6 +39,9 @@
           <ProjectCard :data="item" />
         </v-card>
       </v-col>
+    </template>
+    <template v-slot:item.crisStatus="x">
+      <StatusColumn :data="x.internalItem.raw.crisStatus" :id="x.item.id || null" />
     </template>
   </v-data-table-server>
 </template>

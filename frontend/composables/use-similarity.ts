@@ -1,30 +1,30 @@
-// levenshtein distance
+// Levenshtein distance
 
-// note, this already exists in the backend too....
+// note, this already exists in the frontend too....
 
-function editdistance(s1, s2) {
-  s1 = s1.tolowercase();
-  s2 = s2.tolowercase();
+function editDistance(s1, s2) {
+  s1 = s1.toLowerCase();
+  s2 = s2.toLowerCase();
 
-  var costs = new array();
+  var costs = new Array();
   for (var i = 0; i <= s1.length; i++) {
-    var lastvalue = i;
+    var lastValue = i;
     for (var j = 0; j <= s2.length; j++) {
       if (i == 0)
         costs[j] = j;
       else {
         if (j > 0) {
-          var newvalue = costs[j - 1];
-          if (s1.charat(i - 1) != s2.charat(j - 1))
-            newvalue = math.min(math.min(newvalue, lastvalue),
+          var newValue = costs[j - 1];
+          if (s1.charAt(i - 1) != s2.charAt(j - 1))
+            newValue = Math.min(Math.min(newValue, lastValue),
                                 costs[j]) + 1;
-          costs[j - 1] = lastvalue;
-          lastvalue = newvalue;
+          costs[j - 1] = lastValue;
+          lastValue = newValue;
         }
       }
     }
     if (i > 0)
-      costs[s2.length] = lastvalue;
+      costs[s2.length] = lastValue;
   }
   return costs[s2.length];
 }
@@ -36,10 +36,9 @@ export default function (s1, s2) {
     longer = s2;
     shorter = s1;
   }
-  var longerlength = longer.length;
-  if (longerlength == 0) {
+  var longerLength = longer.length;
+  if (longerLength == 0) {
     return 1.0;
   }
-  return (longerlength - editdistance(longer, shorter)) / parsefloat(longerlength);
+  return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
 }
-
