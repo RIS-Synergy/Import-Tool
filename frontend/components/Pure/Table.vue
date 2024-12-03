@@ -23,10 +23,20 @@
         <v-row dense>
           <v-col class="bold" cols="2">Title</v-col>
           <v-col cols="10">
-            <div v-for="t in item.texts">
-              <span class="grey">{{t.lang}}</span>
-              <span class="ml-2">{{t.diff}}</span><br/>
-              {{t.crisText}}
+            <div v-for="t, idx in item.texts">
+              <v-chip size="small" color="blue">{{ t.lang }}</v-chip>
+              <v-chip class="ml-1" :color="diffColor(t.diff)" size="small">{{
+                // percent
+                100 * t.diff.toFixed(2).toString() + "%"
+              }}</v-chip
+              ><br />
+              <!-- last title text lower padding (margin down, md) -->
+              <div v-if="idx !== item.texts.length - 1" class="mb-1 pb-1">
+                {{ t.crisText }}
+              </div>
+              <div v-else class="pb-1">
+                {{ t.crisText }}
+              </div>
             </div>
           </v-col>
         </v-row>
@@ -54,6 +64,14 @@ const props = defineProps({
 
 function modDate(date) {
   return formatDistance(date, new Date(), { addSuffix: true });
+}
+
+function diffColor (val) {
+  if (val === 1) {
+    return 'green'
+  } else {
+    return 'orange'
+  }
 }
 </script>
 
