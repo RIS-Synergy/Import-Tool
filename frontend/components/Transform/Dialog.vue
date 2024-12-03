@@ -17,7 +17,6 @@
             :template="store.template.data.yamlTemplate"
             :result="store.template.data.transformationResult"
           />
-
         </v-card-text>
 
         <v-card-actions>

@@ -41,7 +41,6 @@ export const useApiUtils = () => {
   };
 
   const getTemplateId = async (type: string, id: string) => {
-    // return await $fetch(`/api/templates/${type}/${id}`);
     return await apiCall(`templates/${type}/${id}`);
   };
 
@@ -49,39 +48,18 @@ export const useApiUtils = () => {
     return await apiCall('templates', 'POST', {
       body: JSON.stringify({ name, description, templateId, templateType })
     })
-    // return await $fetch(`/api/templates`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ name, description, templateType }),
-    // });
   };
 
   const updateTemplate = async (id, text) => {
     return await apiCall(`templates/${id}`, 'PUT', {
       body: JSON.stringify({ text })
     })
-    // return await $fetch(`/api/templates/${id}`, {
-    //   method: "PUT",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ text }),
-    // });
   };
 
   const verifyTemplate = async (text) => {
     return await apiCall('templates/verify', 'POST', {
       body: JSON.stringify({ text })
     })
-    // return await $fetch(`/api/templates/verify`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ text }),
-    // });
   };
 
   const setProjectId = async (store, route) => {
@@ -109,27 +87,9 @@ export const useApiUtils = () => {
   };
 
   const getProjectsList = async ({ page, itemsPerPage, sortBy, filters }) => {
-    // const router = useRouter();
-    // const { token } = useUserSettingsStore();
-    // var result
-    // try {
-    //   result = await $fetch(
-    //     '/api/fa/projects',
-    //     {
-    //       query: { page, itemsPerPage, sortBy, filters },
-    //       headers: {
-    //         Authorization: `Bearer ${token}`
-    //       }
-    //     });
-    // } catch (e: any) {
-    //   console.error(e, result);
-    //   if (e.status === 401) {
-    //     console.error("Unauthorized")
-    //     router.push({ name: "login" });
-    //   }
-    // }
-    const data = { page, itemsPerPage, sortBy, filters };
-    const result = await apiCall('fa/projects', 'GET', { query: data })
+    const result = await apiCall('fa/projects', 'GET', { query: {
+      page, itemsPerPage, sortBy, filters
+    } })
     return result;
   };
 
@@ -149,23 +109,9 @@ export const useApiUtils = () => {
           settings: store.settings,
           templateId,
         }),
-      // ris: store.risData,
-      // settings: store.settings,
-      // templateId,
     });
 
-    // const x = await $fetch("/api/transform/upload", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     ris: store.risData,
-    //     settings: store.settings,
-    //     templateId,
-    //   }),
-    // });
-
     store.template.data = x;
-    // return x
-    // result.value = x;
   };
 
   const getDiffs = async (risId: string) => {
@@ -177,10 +123,6 @@ export const useApiUtils = () => {
     const result = await apiCall("auth/login", "POST", {
       body: JSON.stringify({ username, password }),
     });
-    // const result = await $fetch("/api/auth/login", {
-    //   method: "POST",
-    //   body: JSON.stringify({ username, password }),
-    // });
     return result;
   }
 
@@ -287,7 +229,6 @@ export const useApiUtils = () => {
   }
 
   return {
-    // apiCall,
     getTemplates,
     getTemplateId,
     verifyTemplate,
