@@ -1,11 +1,8 @@
 import express, { Router, Request, Response } from "express"
 
-import { unexpectedErrorHandler } from '../middleware/errorHandler'
 import { callRIApi } from '../utils/ri-api'
-import { projectETL2, projectETL2cluster } from '../ris-pure-etl/index'
+import { projectETL2 } from '../ris-pure-etl/index'
 import { uploadProjectApplicationClusters } from '../ris-pure-etl/clusters'
-
-import { promises as fs } from 'fs'
 
 import { Logger } from "tslog";
 const log = new Logger({ name: 'view:ri' });
@@ -184,55 +181,14 @@ router.post('/upload', async (req: Request, res: Response) => {
   }
 });
 
-// router.post('/upload', async (req: Request, res: Response) => {
-//   const { ris, settings, uuid, template: templateId } = req.body
-
-//   const template = await prisma.template.findUnique({
-//     where: {
-//       id: templateId.projectId
-//     }
-//   })
-//   log.debug('Template', template.id, template.name)
-
-//   const pure = await projectETL2(template.yamlTemplate, ris, settings)
-
-//   if (uuid) {
-//     const result = await callRIApi(`/projects/${uuid}`, 'PUT', pure)
-//     if (result.error) {
-//       return res.json(result)
-//     }
-//     log.info('Update project', result.uuid)
-//     const project = new Project(ris.id)
-//     project.createOrUpdateCrisLink(result)
-//     await uploadProjectApplicationClusters(result, templateId, ris, settings)
-//     await updateCrisId(ris.id, result, settings, req.body.template)
-//     return res.json(result)
-//   } else {
-//     const result = await callRIApi('/projects', 'PUT', pure)
-//     if (result.error) {
-//       return res.json(result)
-//     }
-//     log.info('Created new project', result)
-//     const project = new Project(ris.id)
-//     project.createOrUpdateCrisLink(result)
-//     await uploadProjectApplicationClusters(result, templateId, ris, settings)
-//     await updateCrisId(ris.id, result, settings, req.body.template)
-//     return res.json(result)
-//   }
-// })
-
 router.get('/organizations/:id', async (req: Request, res: Response) => {
   const result = await callRIApi(`/organizations/${req.params.id}`, 'GET')
   res.json(result)
 })
 
 router.get('/persons/:id', async (req: Request, res: Response) => {
-  // if (process.env.RIS_USE_DEV) {
-  //   return res.json({})
-  // } else {
   const result = await callRIApi(`/persons/${req.params.id}`, 'GET')
   res.json(result)
-  // }
 })
 
 router.get('/reference/:systemName/:uuid', async (req: Request, res: Response) => {
@@ -247,16 +203,10 @@ router.get('/reference/:systemName/:uuid', async (req: Request, res: Response) =
 })
 
 router.post('/search', async (req: Request, res: Response) => {
-  // if development, don't call the CRIS API
-  // if (process.env.RIS_USE_DEV) {
-  //   return res.json({})
-  // }
-
   const entities = {
     persons: [
       {
         name: 'persons',
-        // lookup: [ 'staffOrganizationAssociations', 'user' ]
       },
       {
         name: 'external-persons',
@@ -268,11 +218,9 @@ router.post('/search', async (req: Request, res: Response) => {
     organizations: [
       {
         name: 'organizations'
-        // lookup: 'organizations'
       },
       {
         name: 'external-organizations',
-        // lookup: 'externalOrganizations'
       }],
   }
 
@@ -370,6 +318,5 @@ router.get('/:concepts/:uuid', async (req: Request, res: Response) => {
   const result = await callRIApi(`/${req.params.concepts}/${req.params.uuid}`, 'GET')
   res.json(result)
 })
-
 
 export default router

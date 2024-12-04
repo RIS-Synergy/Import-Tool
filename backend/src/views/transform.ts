@@ -1,7 +1,6 @@
 import express, { Router, Request, Response } from "express"
 
 import { unexpectedErrorHandler } from '../middleware/errorHandler'
-// import { callRIApi } from '../utils/ri-api'
 import { projectETL2, replaceTags } from '../ris-pure-etl/index'
 import { promises as fs } from 'fs'
 import yaml from 'js-yaml'

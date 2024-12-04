@@ -1,4 +1,3 @@
-import {classifications} from "./classifications";
 import * as yaml from 'yaml';
 import * as Bluebird from 'bluebird';
 import extraFunctions from '../functions';
