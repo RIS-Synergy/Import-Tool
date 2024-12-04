@@ -186,10 +186,6 @@ export async function runPipeline(risId: string,
   })
 
   return {
-    // sources: {
-    //   a: 'crisData',
-    //   b: 'risData'
-    // },
     diffSet,
     diffList
   }
