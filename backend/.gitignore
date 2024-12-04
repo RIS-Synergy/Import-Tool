@@ -15,6 +15,7 @@ node-modules/
 
 # samples data (not sure if this is ok to include this in repo)
 tests/samples/fwf/*
+tests/coverage/
 
 # temporary view the results of a `create-...` script (projects, applications, grants)
 scripts/result.json

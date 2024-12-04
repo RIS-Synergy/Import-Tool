@@ -1,4 +1,4 @@
-export type RISPerson {
+export type RISPerson = {
   type: 'PRINCIPAL_INVESTIGATOR'
   person: {
     electronicAddress: string
@@ -13,7 +13,7 @@ export type RISPerson {
   }
 }
 
-type RISSubjec {
+type RISSubjec = {
   value: string
 }
 
@@ -28,10 +28,6 @@ export type RISImport = {
   subjects: RISSubject[];
   keyword: LangText[];
   funded: any;
-
-  function foo () {
-    return 'bar'
-  }
 }
 
 export type PURE = {
