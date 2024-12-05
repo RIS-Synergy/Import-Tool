@@ -6,7 +6,7 @@
     <v-col class="mt-" cols="2">
       <v-switch
         v-model="active"
-        density="dense"
+        density="compact"
         color="primary" />
     </v-col>
   </v-row>
@@ -20,7 +20,7 @@
           <v-col cols="1">
             <v-icon
               v-if="selected === template.id"
-              @click=" selected = null; setSelect(null); "
+              @click="selected = null"
               icon="mdi-checkbox-marked-circle"
             />
             <v-icon
@@ -55,20 +55,31 @@ const props = defineProps({
   },
 });
 
+const store = useProjectStore();
+
+const typeId = props.templateType + "Id";
+
 const templates = ref([]);
 const active = ref(true);
-const selected = ref(null);
+const selected = ref(store.template[typeId]);
 
 const { getTemplates } = useApiUtils();
 templates.value = await getTemplates(props.templateType);
 
-function setSelect () {
-  console.log("setSelect", selected.value);
+function setSelect (val) {
+  console.log("setSelect", val);
+  store.template[typeId] = val;
+}
+
+function saveToStore() {
+  console.log("saveToStore", selectedTemplate.value);
+  const typeId = props.templateType + "Id";
+  store.template[typeId] = selectedTemplate.value;
 }
 
 watch(selected, (val) => {
   if (val) {
-    setSelect(val.id);
+    setSelect(val);
   } else {
     setSelect(null);
   }

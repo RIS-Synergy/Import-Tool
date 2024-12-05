@@ -1,9 +1,5 @@
 <template>
-  <v-footer
-    v-if="canHaveButtons.includes(route.name) && store.sameNum"
-    class="my-3"
-    app
-  >
+  <v-footer v-if="store.sameNum" class="my-3" app>
     <v-row justify="center" no-gutters>
       <v-spacer></v-spacer>
       <v-btn
@@ -29,10 +25,10 @@ const { id } = route.params;
 
 const store = useProjectStore();
 
-const canHaveButtons = [
-  // v-if="...
-  "project-id-transform",
-];
+// const canHaveButtons = [
+//   // v-if="...
+//   "project-id-transform",
+// ];
 
 const { uploadToPure } = useApiUtils();
 
@@ -48,7 +44,7 @@ async function saveTransformUpload(crud) {
     store.template,
   );
   if (result.error) {
-    store.setError(result.error, 'uploadToPure');
+    store.setError(result.error, "uploadToPure");
     return;
   } else {
     store.setPure(result);

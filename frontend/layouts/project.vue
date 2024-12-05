@@ -45,7 +45,6 @@
     </v-main>
 
     <Error />
-    <TransformButton />
   </v-app>
 </template>
 

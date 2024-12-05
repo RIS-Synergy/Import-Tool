@@ -4,6 +4,7 @@
     <TransformEntity title="Application" templateType="application" />
     <TransformEntity title="Award" templateType="award" />
   </v-container>
+  <TransformButton />
 </template>
 
 <script setup>
