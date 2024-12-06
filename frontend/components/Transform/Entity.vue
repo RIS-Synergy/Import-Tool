@@ -43,6 +43,10 @@
       </v-card-text>
     </v-card>
     <TransformDetails :entityType="templateType" :crisEntities="props.crisEntities" />
+    <!-- unfortunate limitations for now of backend diff runPipeline -->
+    <PureDiff
+      v-if="templateType === 'project'"
+      :templateId="templateId" />
 </template>
 
 <script setup>
@@ -66,7 +70,7 @@ const store = useProjectStore();
 const typeId = props.templateType + "Id";
 
 const templates = ref([]);
-const active = ref(true);
+const active = ref(false);
 const selected = ref(store.template[typeId]);
 
 const { getTemplates } = useApiUtils();
@@ -104,8 +108,29 @@ watch(selected, (val) => {
 watch (active, (val) => {
   if (!val) {
     selected.value = null;
-  }}
+}}
 );
+
+const templateId = computed(() => {
+  return store.template[typeId];
+});
+
+function sameTemplateAsSelected () {
+  // console.log(templateId.value)
+  // console.log(templates.value)
+  // debugger
+
+  if (props.templateType === "project") {
+    active.value = true;
+  }
+
+  if (templates.value.includes(templateId.value)) {
+    debugger
+    active.value = true;
+  }
+};
+
+sameTemplateAsSelected()
 </script>
 
 <style scoped>

@@ -131,7 +131,7 @@ async function updateCrisId(risId: string, resultData: any, settings: any, templ
 async function createOrUpdateProject(isNew: boolean, uuid: string | undefined, pure: any, risId: string, templateId: any, ris: any, settings: any) {
   const apiEndpoint = isNew ? '/projects' : `/projects/${uuid}`;
   const method = 'PUT';
-  const result = await callRIApi(apiEndpoint, method, pure);
+  let result = await callRIApi(apiEndpoint, method, pure);
 
   if (result.error) {
     return result;
@@ -139,9 +139,9 @@ async function createOrUpdateProject(isNew: boolean, uuid: string | undefined, p
 
   log.info(isNew ? 'Created new project' : 'Updated project', result);
   const project = new Project(risId);
-  project.createOrUpdateCrisLink(result);
+  // project.createOrUpdateCrisLink(result);
   const proj = await uploadProjectApplicationClusters(result, templateId, ris, settings);
-  await updateCrisId(risId, result, settings, templateId);
+  await updateCrisId(risId, proj, settings, templateId);
   await ri.addNote({
     uuid: proj.uuid,
     username: 'RIS-Synergy API',
@@ -151,6 +151,10 @@ async function createOrUpdateProject(isNew: boolean, uuid: string | undefined, p
 Source: FWF.`
   })
 
+  // log.info('XXXXXXXXXXXXXX', proj, result)
+  log.info('XXXXXXXXXXXXXX', proj)
+
+  // result = await callRIApi(apiEndpoint, method, pure);
   return result;
 }
 

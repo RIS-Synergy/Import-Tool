@@ -16,6 +16,10 @@ router.get('/:id', async (req: Request, res: Response) => {
   const project = new Project(req.params.id)
   const crisData = await project.fetchCrisData()
   // log.info('CrisData', crisData)
+  if (!crisData) {
+    res.json({})
+    return
+  }
   const result = await runPipeline(req.params.id, crisData)
   log.info(`req: ${req.path}`, 'DiffList', result.diffList)
   res.json(result.diffList.map((x: any) => {
@@ -31,7 +35,7 @@ router.get('/likelihood/:id', async (req: Request, res: Response) => {
   const id = req.params.id;
   const data = (await Project.getById(id)).risData as any;
   const texts = data.title.map((t: any) => t.text);
-  log.info(texts);
+  // log.info(texts);
 
   const searchResults = await ri.searchCategories(texts.join(' '), ['projects', 'applications', 'awards']);
   const totalResults = calculateSimilarityResults(texts, searchResults, 0.8);
@@ -46,6 +50,8 @@ function calculateSimilarityResults(texts: string[], searchResults: any[], maxDi
   for (const item of searchResults) {
     for (const text of texts) {
       for (const [lang, crisText] of Object.entries(item.title)) {
+        log.info(item)
+
         const diff = similarity(text, crisText);
         if (diff > maxDiffQuota) {
           results.push({
@@ -57,6 +63,7 @@ function calculateSimilarityResults(texts: string[], searchResults: any[], maxDi
             crisText,
             systemName: item.systemName,
             modifiedDate: item.modifiedDate,
+            identifiers: item.identifiers,
             entity: item.systemName.toLowerCase() + 's'
           });
         }
@@ -79,10 +86,10 @@ function groupAndSortResults(results: any[]) {
   for (const key in grouped) {
     const texts = []
     const value = grouped[key]
-    log.warn(value.map((x: any) => x.risText))
+    // log.trace(value.map((x: any) => x.risText))
     for (const val in value) {
       const v = value[val]
-      log.info(v)
+      // log.trace(v)
       texts.push({
         lang: v.lang,
         diff: v.diff,
@@ -97,9 +104,10 @@ function groupAndSortResults(results: any[]) {
       systemName: value[0].systemName,
       modifiedDate: value[0].modifiedDate,
       entity: value[0].entity,
+      identifiers: value[0].identifiers
     });
     // console.log(key);
-    log.info(result)
+    // log.info(result)
   }
 
   // sort by results modifiedDate desc

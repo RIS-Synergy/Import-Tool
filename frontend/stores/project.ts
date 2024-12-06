@@ -6,6 +6,8 @@ const cleanSettings = {
 }
 
 type Pure = {
+  uuid: string,
+  pureId: string,
 }
 
 export const useProjectStore = defineStore('project', {

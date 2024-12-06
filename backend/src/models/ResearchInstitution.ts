@@ -50,7 +50,13 @@ export class ResearchInstitution {
   }
 
   getProjectData = async (uuid: string) => {
-    const result = await callRIApi(`/projects/${uuid}`, 'GET')
+    let result: any
+    try {
+      result = await callRIApi(`/projects/${uuid}`, 'GET')
+    } catch (error) {
+      log.error('Error getting project data', error)
+      return null
+    }
     return result
   }
 

@@ -15,7 +15,7 @@ type CRISError = {
 export async function callRIApi(endpoint: string, method = 'POST', body = null): Promise<any> {
   const url = `${process.env.PURE_API_URL}${endpoint}`
 
-  log.debug(`Fetching ${method} to ${url}`)
+  log.debug(`>>> ${method} ${endpoint}`)
 
   let response = await fetch(url, {
     method,
@@ -29,7 +29,8 @@ export async function callRIApi(endpoint: string, method = 'POST', body = null):
   })
 
   const contentType: string = response.headers.get("content-type")
-  log.debug(`Response ${method} to ${endpoint} with status ${response.status} with content-type: ${contentType}`)
+  log.debug(`<<< ${response.status} ${endpoint}`)
+// ${response.status}, with content-type: ${contentType}`)
   // console.log(response)
 
   if (response.status === 500) {
