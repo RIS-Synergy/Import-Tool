@@ -13,6 +13,7 @@
     <v-card
       v-if="active"
       class="mb-2"
+      :class="templateClass(template.id)"
       elevation="1"
       v-for="template in templates" key="template.id">
       <v-card-text>
@@ -41,6 +42,7 @@
         </v-row>
       </v-card-text>
     </v-card>
+    <TransformDetails :entityType="templateType" :crisEntities="props.crisEntities" />
 </template>
 
 <script setup>
@@ -51,6 +53,10 @@ const props = defineProps({
   },
   templateType: {
     type: String,
+    required: true,
+  },
+  crisEntities: {
+    type: Array,
     required: true,
   },
 });
@@ -77,6 +83,16 @@ function saveToStore() {
   store.template[typeId] = selectedTemplate.value;
 }
 
+function templateClass (id) {
+  let hidden = false;
+  if (selected.value && selected.value !== id) {
+    hidden = true;
+  }
+  return {
+    hidden
+  }
+}
+
 watch(selected, (val) => {
   if (val) {
     setSelect(val);
@@ -95,5 +111,9 @@ watch (active, (val) => {
 <style scoped>
 .v-card {
   /* border-color: #eee; */
+}
+
+.hidden {
+  display: none;
 }
 </style>

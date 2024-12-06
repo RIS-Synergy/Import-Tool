@@ -1,5 +1,3 @@
-// const { token } = useUserSettingsStore();
-
 export async function apiCall(url = '', method = 'GET', data: any = {}) {
   const router = useRouter();
   const store = useUserSettingsStore();

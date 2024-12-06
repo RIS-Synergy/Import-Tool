@@ -70,7 +70,7 @@ export const useProjectStore = defineStore('project', {
     },
     resetError () {
       this.error = null
-    }
+    },
   },
   persist: true
 })

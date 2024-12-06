@@ -25,17 +25,10 @@ const { id } = route.params;
 
 const store = useProjectStore();
 
-// const canHaveButtons = [
-//   // v-if="...
-//   "project-id-transform",
-// ];
-
 const { uploadToPure } = useApiUtils();
 
 async function saveTransformUpload(crud) {
   // create or edit
-  // console.log("ris", store.risData);
-
   store.error = null;
   const result = await uploadToPure(
     store.risData,
