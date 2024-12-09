@@ -1,12 +1,12 @@
 <template>
   <v-card v-if="templateId" color="text-orange">
     <v-alert v-if="hasAtLeastOne" type="warning" variant="outlined"
-    >The CRIS Data is different to the latest transformed template.</v-alert
-                                                                   >
+      >The CRIS Data is different to the latest transformed template.</v-alert
+    >
     <div v-else>
       <v-alert type="success" variant="outlined"
-      >The CRIS Data is identical to the latest transformed template.</v-alert
-                                                                     >
+        >The CRIS Data is identical to the latest transformed template.</v-alert
+      >
     </div>
     <v-table v-if="hasAtLeastOne">
       <thead>

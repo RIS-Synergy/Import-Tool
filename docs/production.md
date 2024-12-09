@@ -59,3 +59,37 @@ docker --context rissynergy-test-univie compose \
   -f compose.yaml -f compose.production.yaml \
   exec -it backend yarn copy
 ```
+
+
+## Update Release
+
+Build:
+
+```
+docker --context rissynergy-test-univie compose \
+  -f compose.yaml -f compose.production.yaml \
+  build
+```
+
+Then `up`:
+
+```
+docker --context rissynergy-test-univie compose \
+  -f compose.yaml -f compose.production.yaml \
+  up -d --force-recreate
+```
+
+(Optional) Follow the logs:
+
+```
+docker --context rissynergy-test-univie compose \
+  -f compose.yaml -f compose.production.yaml \
+  logs -n 0 -f
+```
+
+(Optional) Remove old Docker data:
+
+```
+docker --context rissynergy-test-univie \
+  system prune -f
+```
