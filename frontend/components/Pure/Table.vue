@@ -2,23 +2,15 @@
   <div v-if="data.length">
     <v-card v-for="item in data" :key="item.uuid" class="mb-4">
       <v-card-text>
-        <v-row v-if="risIdentifier(item)" dense>
-          <v-col style="margin: auto" class="bold" cols="2">RIS ID</v-col>
-          <v-col cols="10">
-            <v-chip
-              color="purple-darken-4"
-            >{{risIdentifier(item)}}</v-chip>
-          </v-col>
-        </v-row>
-          <v-row dense>
+        <v-row dense>
           <v-col class="bold" cols="2">CRIS ID</v-col>
           <v-col cols="7">{{ item.pureId }}</v-col>
           <v-col cols="3">
             <PureButton
-              class="right mr-2"
+              class="right mr-3"
               :pureId="item.pureId"
               :entityType="item.systemName.toLowerCase()"
-          /></v-col>
+            /></v-col>
         </v-row>
         <v-row dense>
           <v-col class="bold" cols="2">CRIS UUID</v-col>
@@ -27,6 +19,14 @@
         <v-row v-if="false">
           <v-col class="bold" cols="2">risText</v-col>
           <v-col cols="10">{{ item.risText }}</v-col>
+        </v-row>
+        <v-row v-if="risIdentifier(item)" dense>
+          <v-col style="margin: auto" class="bold" cols="2">RIS ID</v-col>
+          <v-col cols="10">
+            <v-chip
+              color="purple-darken-4"
+            >{{risIdentifier(item)}}</v-chip>
+          </v-col>
         </v-row>
         <v-row dense>
           <v-col class="bold" cols="2">Title</v-col>
@@ -85,20 +85,12 @@ function diffColor (val) {
 function risIdentifier (item) {
   const ris = 'RIS ID'
   try {
-    // console.log(item.identifiers)
     for (const t of item.identifiers) {
-      // console.log("t", t)
       const ris_id = t.type.term.en_GB
       if (ris_id === ris) {
         return t.id
       }
     }
-    // console.log("t", t.type.term.en_GB === ris)
-    // return item.identifiers.find((t) => {
-    //   const id = t.type.term.en_GB
-    //   // console.log("t", t.type.term.en_gb === ris)
-    //   return id === ris
-    // })
   } catch (e) {
     return null
   }
@@ -121,7 +113,6 @@ function risIdentifier (item) {
 }
 .right {
   float: right;
-  /* absolute */
   position: absolute;
   right: 0;
 }

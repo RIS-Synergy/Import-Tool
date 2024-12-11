@@ -20,10 +20,6 @@ export const useProjectStore = defineStore('project', {
       awardId: null,
       data: null,
     },
-    // templateId: null, // default template XXX
-    // pure: { // TODO remove, we are not using 'store.pure' anywhere
-    //   // item: null
-    // },
     risData: null,
     crisId: null,
     crisUUID: null,
