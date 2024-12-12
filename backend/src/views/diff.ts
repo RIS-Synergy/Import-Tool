@@ -65,7 +65,9 @@ function calculateSimilarityResults(texts: string[], searchResults: any[], maxDi
             modifiedDate: item.modifiedDate,
             createdDate: item.createdDate,
             identifiers: item.identifiers,
-            entity: item.systemName.toLowerCase() + 's'
+            entity: item.systemName.toLowerCase() + 's',
+            awardCluster: item.awardClusters && item.awardClusters[0] || null,
+            applicationCluster: item.applicationClusters && item.applicationClusters[0] || null,
           });
         }
       }
@@ -106,7 +108,9 @@ function groupAndSortResults(results: any[]) {
       modifiedDate: value[0].modifiedDate,
       createdDate: value[0].createdDate,
       entity: value[0].entity,
-      identifiers: value[0].identifiers
+      identifiers: value[0].identifiers,
+      awardCluster: value[0].awardCluster,
+      applicationCluster: value[0].applicationCluster,
     });
     // console.log(key);
     // log.info(result)

@@ -2,15 +2,19 @@
   <div v-if="data.length">
     <v-card v-for="item in data" :key="item.uuid" class="mb-4">
       <v-card-text>
-        <v-row dense>
-          <v-col class="bold" cols="2">CRIS ID</v-col>
-          <v-col cols="7">{{ item.pureId }}</v-col>
+        <v-row v-if="!isTransformPage" dense>
+          <v-col class="bold" cols="2">Entity</v-col>
+          <v-col cols="7">{{ item.systemName }}</v-col>
           <v-col cols="3">
             <PureButton
               class="right mr-3"
               :pureId="item.pureId"
               :entityType="item.systemName.toLowerCase()"
             /></v-col>
+        </v-row>
+        <v-row dense>
+          <v-col class="bold" cols="2">CRIS ID</v-col>
+          <v-col cols="7">{{ item.pureId }}</v-col>
         </v-row>
         <v-row dense>
           <v-col class="bold" cols="2">CRIS UUID</v-col>
@@ -23,15 +27,26 @@
         <v-row v-if="risIdentifier(item)" dense>
           <v-col style="margin: auto" class="bold" cols="2">RIS ID</v-col>
           <v-col cols="10">
-            <v-chip
-              color="purple-darken-4"
-            >{{risIdentifier(item)}}</v-chip>
+            <v-chip color="purple-darken-4">{{ risIdentifier(item) }}</v-chip>
+          </v-col>
+        </v-row>
+        <v-row dense v-if="item.applicationCluster || item.awardCluster">
+          <v-col class="bold" cols="2">Cluster</v-col>
+          <v-col cols="10">
+            <v-chip size="small" class="mr-1" color="blue-darken-4">
+              Application
+              <!-- {{ item.applicationCluster }} -->
+            </v-chip>
+            <v-chip size="small" color="blue-darken-4">
+              Award
+              <!-- {{ item.awardCluster }} -->
+            </v-chip>
           </v-col>
         </v-row>
         <v-row dense>
           <v-col class="bold" cols="2">Title</v-col>
           <v-col cols="10">
-            <div v-for="t, idx in item.texts">
+            <div v-for="(t, idx) in item.texts">
               <v-chip size="small" color="blue">{{ t.lang }}</v-chip>
               <v-chip class="ml-1" :color="diffColor(t.diff)" size="small">{{
                 // percent
@@ -49,10 +64,6 @@
           </v-col>
         </v-row>
         <v-row dense>
-          <v-col class="bold" cols="2">Entity</v-col>
-          <v-col cols="10">{{ item.systemName }}</v-col>
-        </v-row>
-        <v-row dense>
           <v-col class="bold" cols="2">Created Date</v-col>
           <v-col cols="10">{{ modDate(item.createdDate) }}</v-col>
         </v-row>
@@ -64,19 +75,29 @@
           <v-col class="bold" cols="2">Select</v-col>
           <v-col cols="10">
             <v-icon
-              v-if="store.templateSelect[item.systemName.toLowerCase()] && store.templateSelect[item.systemName.toLowerCase()] === item.uuid"
+              v-if="
+                store.templateSelect[item.systemName.toLowerCase()] &&
+                store.templateSelect[item.systemName.toLowerCase()] ===
+                  item.uuid
+              "
               @click="store.selectTemplate(item.systemName.toLowerCase(), null)"
               icon="mdi-checkbox-marked-circle"
             />
             <v-icon
               v-else
-              @click="store.selectTemplate(item.systemName.toLowerCase(), item.uuid)"
+              @click="
+                store.selectTemplate(item.systemName.toLowerCase(), item.uuid)
+              "
               icon="mdi-checkbox-blank-circle-outline"
             />
           </v-col>
         </v-row>
         <TransformButton
-          v-if="isTransformPage && entitySelected(item.systemName.toLowerCase()) && item.uuid === store.templateSelect[item.systemName.toLowerCase()]"
+          v-if="
+            isTransformPage &&
+            entitySelected(item.systemName.toLowerCase()) &&
+            item.uuid === store.templateSelect[item.systemName.toLowerCase()]
+          "
           class="mt-2"
           :entityType="item.systemName.toLowerCase()"
           :uuid="item.uuid"
@@ -98,25 +119,25 @@ function modDate(date) {
   return formatDistance(date, new Date(), { addSuffix: true });
 }
 
-function diffColor (val) {
+function diffColor(val) {
   if (val === 1) {
-    return 'green'
+    return "green";
   } else {
-    return 'orange'
+    return "orange";
   }
 }
 
-function risIdentifier (item) {
-  const ris = 'RIS ID'
+function risIdentifier(item) {
+  const ris = "RIS ID";
   try {
     for (const t of item.identifiers) {
-      const ris_id = t.type.term.en_GB
+      const ris_id = t.type.term.en_GB;
       if (ris_id === ris) {
-        return t.id
+        return t.id;
       }
     }
   } catch (e) {
-    return null
+    return null;
   }
 }
 
@@ -124,13 +145,13 @@ const router = useRouter();
 // only one a page witth transform
 const isTransformPage = computed(() => {
   const route = router.currentRoute.value;
-  return route.name === "project-id-transform"
-})
+  return route.name === "project-id-transform";
+});
 
 const store = useProjectStore();
 
-function entitySelected (entity) {
-  return !!store.template[entity + "Id"]
+function entitySelected(entity) {
+  return !!store.template[entity + "Id"];
 }
 
 // function selectUUID (uuid) {
