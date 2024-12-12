@@ -10,7 +10,7 @@
         color="primary"
         @click="saveTransformUpload"
       >
-        <span v-if="store.crisUUID">Update {{ entityTitle }}</span>
+        <span v-if="uuid">Update {{ entityTitle }}</span>
         <span v-else>Create new {{entityTitle}}</span>
       </v-btn>
     </v-row>
@@ -22,6 +22,9 @@ const props = defineProps({
   entityType: {
     type: String,
     required: true,
+  },
+  uuid: {
+    type: String,
   },
 });
 const router = useRouter();
@@ -39,9 +42,10 @@ async function saveTransformUpload(crud) {
   const result = await uploadToPure(
     store.risData,
     store.settings,
-    store.crisUUID,
+    // XXX store.crisUUID, // changed this to uuid
+    props.uuid,
     store.template,
-    entityType
+    props.entityType
   );
   if (result.error) {
     store.setError(result.error, "uploadToPure");

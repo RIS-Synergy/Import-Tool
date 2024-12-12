@@ -53,14 +53,19 @@
           <v-col cols="10">{{ item.systemName }}</v-col>
         </v-row>
         <v-row dense>
+          <v-col class="bold" cols="2">Created Date</v-col>
+          <v-col cols="10">{{ modDate(item.createdDate) }}</v-col>
+        </v-row>
+        <v-row dense>
           <v-col class="bold" cols="2">Modified Date</v-col>
           <v-col cols="10">{{ modDate(item.modifiedDate) }}</v-col>
         </v-row>
         <!-- <Yaml :json="item" /> -->
         <TransformButton
-          v-if="isTransformPage"
+          v-if="isTransformPage && entitySelected(item.systemName.toLowerCase())"
           class="mt-2"
           :entityType="item.systemName.toLowerCase()"
+          :uuid="item.uuid"
         />
       </v-card-text>
     </v-card>
@@ -107,6 +112,12 @@ const isTransformPage = computed(() => {
   const route = router.currentRoute.value;
   return route.name === "project-id-transform"
 })
+
+const store = useProjectStore();
+
+function entitySelected (entity) {
+  return !!store.template[entity + "Id"]
+}
 </script>
 
 <style scoped>

@@ -63,6 +63,7 @@ function calculateSimilarityResults(texts: string[], searchResults: any[], maxDi
             crisText,
             systemName: item.systemName,
             modifiedDate: item.modifiedDate,
+            createdDate: item.createdDate,
             identifiers: item.identifiers,
             entity: item.systemName.toLowerCase() + 's'
           });
@@ -103,6 +104,7 @@ function groupAndSortResults(results: any[]) {
       texts,
       systemName: value[0].systemName,
       modifiedDate: value[0].modifiedDate,
+      createdDate: value[0].createdDate,
       entity: value[0].entity,
       identifiers: value[0].identifiers
     });

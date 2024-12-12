@@ -6,11 +6,11 @@
       class="mb-2"
       :templateId="templateId"
     />
-    <TransformButton
-      v-if="canCreateNew()"
-      class="mt-2"
-      :entityType="entityType"
-    />
+    <!-- <TransformButton
+         v-if="canCreateNew()"
+         class="mt-2"
+         :entityType="entityType"
+         /> -->
   </div>
 </template>
 

@@ -128,8 +128,8 @@ async function updateCrisId(risId: string, resultData: any, settings: any, templ
   log.debug('Updated Project database', result.id)
 }
 
-async function createOrUpdateProject(isNew: boolean, uuid: string | undefined, pure: any, risId: string, templateId: any, ris: any, settings: any) {
-  const apiEndpoint = isNew ? '/projects' : `/projects/${uuid}`;
+async function createOrUpdateProject(uuid: string | undefined, pure: any, risId: string, templateId: any, ris: any, settings: any, entity: string) {
+  const apiEndpoint = uuid ? `/${entity}s` : `/${entity}s/${uuid}`;
   const method = 'PUT';
   let result = await callRIApi(apiEndpoint, method, pure);
 
@@ -137,31 +137,39 @@ async function createOrUpdateProject(isNew: boolean, uuid: string | undefined, p
     return result;
   }
 
-  log.info(isNew ? 'Created new project' : 'Updated project', result);
-  const project = new Project(risId);
+  log.info(!uuid ? `Created new ${entity}` : `Updated ${entity}`, result);
+  // const project = new Project(risId);
   // project.createOrUpdateCrisLink(result);
-  const proj = await uploadProjectApplicationClusters(result, templateId, ris, settings);
-  await updateCrisId(risId, proj, settings, templateId);
+  // const proj = await uploadProjectApplicationClusters(result, templateId, ris, settings);
+
+  // save into the database
+  await updateCrisId(risId, result, settings, templateId);
+
+  // add note
+  const source = 'FWF'
+  const prefix = uuid ? 'Updated' : 'Created';
   await ri.addNote({
-    uuid: proj.uuid,
+    uuid: result.uuid,
     username: 'RIS-Synergy API',
     // date as YYYY-MM-DD
-    text: `Updated on ${new Date().toISOString().split('T')[0]}.
+    text: prefix + ` on ${new Date().toISOString().split('T')[0]}.
 
-Source: FWF.`
+Source: ${source}.`
   })
 
   // log.info('XXXXXXXXXXXXXX', proj, result)
-  log.info('XXXXXXXXXXXXXX', proj)
+  log.info('XXXXXXXXXXXXXX', result)
 
   // result = await callRIApi(apiEndpoint, method, pure);
   return result;
 }
 
 router.post('/upload', async (req: Request, res: Response) => {
-  const { ris, settings, uuid, template: templateId } = req.body;
+  const { ris, settings, uuid, template: templateId, entity } = req.body;
 
-  if (!ris || !settings || !templateId) {
+  log.info('Upload request', uuid, templateId, entity);
+
+  if (!ris || !settings || !templateId || !entity) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
@@ -175,9 +183,10 @@ router.post('/upload', async (req: Request, res: Response) => {
 
     log.debug('Template', template.id, template.name);
     const pure = await projectETL2(template.yamlTemplate, ris, settings);
-    const isNew = !uuid;
-    const result = await createOrUpdateProject(isNew, uuid, pure, ris.id, templateId, ris, settings);
+    log.debug('Pure data', pure);
+    // return res.json({ pause: true }) // XXX just for debugging
 
+    const result = await createOrUpdateProject(uuid, pure, ris.id, templateId, ris, settings, entity);
     return res.json(result);
   } catch (error) {
     log.error('Error processing upload', error);
