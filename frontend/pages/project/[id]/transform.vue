@@ -16,7 +16,6 @@
       :crisEntities="getCrisEntities('awards')"
     />
   </v-container>
-  <TransformButton />
 </template>
 
 <script setup>

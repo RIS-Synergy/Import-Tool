@@ -57,6 +57,11 @@
           <v-col cols="10">{{ modDate(item.modifiedDate) }}</v-col>
         </v-row>
         <!-- <Yaml :json="item" /> -->
+        <TransformButton
+          v-if="isTransformPage"
+          class="mt-2"
+          :entityType="item.systemName.toLowerCase()"
+        />
       </v-card-text>
     </v-card>
   </div>
@@ -95,6 +100,13 @@ function risIdentifier (item) {
     return null
   }
 }
+
+const router = useRouter();
+// only one a page witth transform
+const isTransformPage = computed(() => {
+  const route = router.currentRoute.value;
+  return route.name === "project-id-transform"
+})
 </script>
 
 <style scoped>

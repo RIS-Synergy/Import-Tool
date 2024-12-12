@@ -1,5 +1,5 @@
 <template>
-  <v-footer v-if="store.sameNum" class="my-3" app>
+  <!-- <v-footer v-if="store.sameNum" class="my-3" app> -->
     <v-row justify="center" no-gutters>
       <v-spacer></v-spacer>
       <v-btn
@@ -10,14 +10,20 @@
         color="primary"
         @click="saveTransformUpload"
       >
-        <span v-if="store.crisUUID">Update Project</span>
-        <span v-else>Create new Project</span>
+        <span v-if="store.crisUUID">Update {{ entityTitle }}</span>
+        <span v-else>Create new {{entityTitle}}</span>
       </v-btn>
     </v-row>
-  </v-footer>
+    <!-- </v-footer> -->
 </template>
 
 <script setup>
+const props = defineProps({
+  entityType: {
+    type: String,
+    required: true,
+  },
+});
 const router = useRouter();
 
 const route = useRoute();
@@ -35,6 +41,7 @@ async function saveTransformUpload(crud) {
     store.settings,
     store.crisUUID,
     store.template,
+    entityType
   );
   if (result.error) {
     store.setError(result.error, "uploadToPure");
@@ -45,4 +52,8 @@ async function saveTransformUpload(crud) {
     router.push({ name: "project-id-view", params: { id: route.params.id } });
   }
 }
+
+const entityTitle = computed(() => {
+  return props.entityType.charAt(0).toUpperCase() + props.entityType.slice(1);
+});
 </script>

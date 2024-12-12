@@ -174,7 +174,7 @@ export const useApiUtils = () => {
     store.crisData = item
   }
 
-  const uploadToPure = async (ris, settings, uuid, templateData) => {
+  const uploadToPure = async (ris, settings, uuid, templateData, entity) => {
     var template = {
       ...templateData,
     }
@@ -185,7 +185,8 @@ export const useApiUtils = () => {
         ris,
         settings,
         uuid,
-        template
+        template,
+        entity
       }),
     })
     return result

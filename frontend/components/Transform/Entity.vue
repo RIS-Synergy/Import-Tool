@@ -36,11 +36,6 @@
     :crisEntities="props.crisEntities"
   />
   <!-- unfortunate limitations for now of backend diff runPipeline -->
-  <PureDiff
-    v-if="templateType === 'project'"
-    class="mb-2"
-    :templateId="templateId"
-  />
 </template>
 
 <script setup>
