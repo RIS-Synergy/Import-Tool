@@ -60,7 +60,21 @@
           <v-col class="bold" cols="2">Modified Date</v-col>
           <v-col cols="10">{{ modDate(item.modifiedDate) }}</v-col>
         </v-row>
-        <!-- <Yaml :json="item" /> -->
+        <v-row v-if="isTransformPage" dense>
+          <v-col class="bold" cols="2">Select</v-col>
+          <v-col cols="10">
+            <v-icon
+              v-if="store.templateSelect[item.systemName.toLowerCase()] && store.templateSelect[item.systemName.toLowerCase()] === item.uuid"
+              @click="store.selectTemplate(item.systemName.toLowerCase(), null)"
+              icon="mdi-checkbox-marked-circle"
+            />
+            <v-icon
+              v-else
+              @click="store.selectTemplate(item.systemName.toLowerCase(), item.uuid)"
+              icon="mdi-checkbox-blank-circle-outline"
+            />
+          </v-col>
+        </v-row>
         <TransformButton
           v-if="isTransformPage && entitySelected(item.systemName.toLowerCase())"
           class="mt-2"
@@ -118,6 +132,10 @@ const store = useProjectStore();
 function entitySelected (entity) {
   return !!store.template[entity + "Id"]
 }
+
+// function selectUUID (uuid) {
+//   store.template[props.templateType + "Id"] = uuid
+// }
 </script>
 
 <style scoped>

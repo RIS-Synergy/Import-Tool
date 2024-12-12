@@ -20,6 +20,13 @@ export const useProjectStore = defineStore('project', {
       awardId: null,
       data: null,
     },
+
+    templateSelect: {
+      project: null,
+      application: null,
+      award: null,
+    },
+
     risData: null,
     crisId: null,
     crisUUID: null,
@@ -69,6 +76,9 @@ export const useProjectStore = defineStore('project', {
     resetError () {
       this.error = null
     },
+    selectTemplate(type: string, uuid: any) {
+      this.templateSelect[type] = uuid;
+    }
   },
   persist: true
 })

@@ -1,11 +1,11 @@
 <template>
   <div>
     <PureTable :data="crisEntities" />
-    <PureDiff
-      v-if="entityType === 'project'"
-      class="mb-2"
-      :templateId="templateId"
-    />
+    <!-- <PureDiff
+         v-if="entityType === 'project'"
+         class="mb-2"
+         :templateId="templateId"
+         /> -->
     <!-- <TransformButton
          v-if="canCreateNew()"
          class="mt-2"
