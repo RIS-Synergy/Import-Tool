@@ -101,6 +101,7 @@ router.get('/project/:id', async (req: Request, res: Response) => {
 })
 
 async function updateCrisId(risId: string, resultData: any, settings: any, template: any) {
+  // TODO not project, but 'entity'
   log.info('Updating project', risId, 'with pureId', resultData.pureId)
 
   log.info('template', template)
@@ -149,9 +150,9 @@ async function createOrUpdateProject(uuid: string | undefined, pure: any, risId:
   const source = 'FWF'
   const prefix = uuid ? 'Updated' : 'Created';
   await ri.addNote({
+    entity,
     uuid: result.uuid,
     username: 'RIS-Synergy API',
-    // date as YYYY-MM-DD
     text: prefix + ` on ${new Date().toISOString().split('T')[0]}.
 
 Source: ${source}.`
@@ -175,7 +176,7 @@ router.post('/upload', async (req: Request, res: Response) => {
 
   try {
     const template = await prisma.template.findUnique({
-      where: { id: templateId.projectId }
+      where: { id: templateId[`${entity}Id`] }
     });
     if (!template) {
       return res.status(404).json({ error: 'Template not found' });
@@ -187,6 +188,7 @@ router.post('/upload', async (req: Request, res: Response) => {
     // return res.json({ pause: true }) // XXX just for debugging
 
     const result = await createOrUpdateProject(uuid, pure, ris.id, templateId, ris, settings, entity);
+
     return res.json(result);
   } catch (error) {
     log.error('Error processing upload', error);

@@ -7,6 +7,7 @@ type Category = 'Project' | 'Application' | 'Award'
 type risId = string
 
 type Note = {
+  entity: string
   uuid: string
   text: string
   username: string
@@ -97,7 +98,7 @@ export class ResearchInstitution {
   }
 
   async addNote(note: Note) {
-    const result = await callRIApi(`/projects/${note.uuid}/notes`, 'PUT', {
+    const result = await callRIApi(`/${note.entity}s/${note.uuid}/notes`, 'PUT', {
       text: note.text,
       date: new Date().toISOString(),
       username: note.username

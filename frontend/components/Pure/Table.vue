@@ -76,7 +76,7 @@
           </v-col>
         </v-row>
         <TransformButton
-          v-if="isTransformPage && entitySelected(item.systemName.toLowerCase())"
+          v-if="isTransformPage && entitySelected(item.systemName.toLowerCase()) && item.uuid === store.templateSelect[item.systemName.toLowerCase()]"
           class="mt-2"
           :entityType="item.systemName.toLowerCase()"
           :uuid="item.uuid"
