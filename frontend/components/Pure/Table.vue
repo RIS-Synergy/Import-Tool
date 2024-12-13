@@ -76,17 +76,17 @@
           <v-col cols="10">
             <v-icon
               v-if="
-                store.templateSelect[item.systemName.toLowerCase()] &&
-                store.templateSelect[item.systemName.toLowerCase()] ===
-                  item.uuid
-              "
+                    store.templateSelect[item.systemName.toLowerCase()] &&
+                    store.templateSelect[item.systemName.toLowerCase()] ===
+                    item.uuid
+                    "
               @click="store.selectTemplate(item.systemName.toLowerCase(), null)"
               icon="mdi-checkbox-marked-circle"
             />
             <v-icon
               v-else
               @click="
-                store.selectTemplate(item.systemName.toLowerCase(), item.uuid)
+              store.selectTemplate(item.systemName.toLowerCase(), item.uuid, item)
               "
               icon="mdi-checkbox-blank-circle-outline"
             />
@@ -94,13 +94,21 @@
         </v-row>
         <TransformButton
           v-if="
-            isTransformPage &&
-            entitySelected(item.systemName.toLowerCase()) &&
-            item.uuid === store.templateSelect[item.systemName.toLowerCase()]
-          "
+                isTransformPage &&
+                entitySelected(item.systemName.toLowerCase()) &&
+                item.uuid === store.templateSelect[item.systemName.toLowerCase()]
+                "
           class="mt-2"
           :entityType="item.systemName.toLowerCase()"
           :uuid="item.uuid"
+        />
+        <PureClusterButton
+          v-if="isTransformPage && item.systemName === 'Application'"
+          :item="item"
+        />
+        <PureClusterButton
+          v-if="isTransformPage && item.systemName === 'Aaward'"
+          :item="item"
         />
       </v-card-text>
     </v-card>

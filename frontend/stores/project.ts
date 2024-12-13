@@ -26,6 +26,7 @@ export const useProjectStore = defineStore('project', {
       application: null,
       award: null,
     },
+    projectSelected: null,
 
     risData: null,
     crisId: null,
@@ -76,8 +77,15 @@ export const useProjectStore = defineStore('project', {
     resetError () {
       this.error = null
     },
-    selectTemplate(type: string, uuid: any) {
+    selectTemplate(type: string, uuid: any, item: any = null) {
       this.templateSelect[type] = uuid;
+
+      if (item && item.systemName === 'Project') {
+        this.projectSelected = item;
+      }
+      if (!item && type === 'project') {
+        this.projectSelected = null;
+      }
     }
   },
   persist: true
