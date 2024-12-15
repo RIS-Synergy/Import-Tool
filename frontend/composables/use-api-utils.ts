@@ -227,6 +227,17 @@ export const useApiUtils = () => {
     return result;
   }
 
+  const assignCluster = async (project: string, item) => {
+    const result = await apiCall('ri/assignCluster', 'POST', {
+      body: JSON.stringify({
+        systemName: item.systemName,
+        uuid: item.uuid,
+        projectUUID: project,
+      }),
+    })
+    return result;
+  }
+
   return {
     getTemplates,
     getTemplateId,
@@ -248,6 +259,7 @@ export const useApiUtils = () => {
     searchAny,
     riEntityUUID,
     faApi,
-    diffRILikelihood
+    diffRILikelihood,
+    assignCluster
   };
 };

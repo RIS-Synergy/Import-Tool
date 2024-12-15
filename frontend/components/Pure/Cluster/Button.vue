@@ -1,5 +1,5 @@
 <template>
-  <div v-if="store.projectSelected && itemIsSameAsSelected()">
+  <div v-if="store.projectSelected && itemIsSameAsSelected() && !projectHasCluster()">
     <v-btn
       v-if="!itemIsNotAlligned()"
       class="text-none"
@@ -7,7 +7,7 @@
       rounded
       width="12em"
       color="primary"
-      @click="assignCluster"
+      @click="assignCluster(projectSelected(), item)"
     >
       Assign cluster
     </v-btn>
@@ -56,8 +56,10 @@ function itemIsNotAlligned() {
   }
 }
 
-function assignCluster() {
-  // TODO
-  console.log("assignCluster");
+function projectHasCluster () {
+  const entity = props.item.systemName.toLowerCase();
+  return store.projectSelected[entity + "Cluster"];
 }
+
+const { assignCluster } = useApiUtils()
 </script>

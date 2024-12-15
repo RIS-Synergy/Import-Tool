@@ -334,4 +334,28 @@ router.get('/:concepts/:uuid', async (req: Request, res: Response) => {
   res.json(result)
 })
 
+router.post('/assignCluster', async (req: Request, res: Response) => {
+  console.log('assignCluster', req.body)
+
+  const { projectUUID, uuid, systemName } = req.body
+  const entity = systemName.toLowerCase() + 's'
+  const entityData = await ri.callApi(`/${entity}/${uuid}`, 'GET')
+  const clusterUUID = entityData.cluster.uuid
+  console.log('clusterUUID', clusterUUID)
+
+  const project = await ri.getProjectData(req.body.projectUUID)
+  project[`${systemName.toLowerCase()}Clusters`] = [
+    {
+      uuid: clusterUUID,
+      systemName: systemName + 'Cluster',
+    }
+  ]
+
+  console.log('project', project)
+
+  const result = await ri.callApi(`/projects/${projectUUID}`, 'PUT', project)
+
+  res.json(result)
+})
+
 export default router

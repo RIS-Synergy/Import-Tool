@@ -13,6 +13,8 @@ type Note = {
   username: string
 }
 
+type Method = 'GET' | 'POST' | 'PUT' // | 'DELETE'
+
 class RISystem {
   systemId: RISystemID
   categoryRequestMap: Map<Category, string> = new Map()
@@ -104,5 +106,9 @@ export class ResearchInstitution {
       username: note.username
     })
     log.debug('Note added', result)
+  }
+
+  callApi (endpoint: string, method: Method = 'POST', body = null) {
+    return callRIApi(endpoint, method, body)
   }
 }

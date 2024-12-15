@@ -33,11 +33,11 @@
         <v-row dense v-if="item.applicationCluster || item.awardCluster">
           <v-col class="bold" cols="2">Cluster</v-col>
           <v-col cols="10">
-            <v-chip size="small" class="mr-1" color="blue-darken-4">
+            <v-chip v-if="item.applicationCluster" size="small" class="mr-1" color="blue-darken-4">
               Application
               <!-- {{ item.applicationCluster }} -->
             </v-chip>
-            <v-chip size="small" color="blue-darken-4">
+            <v-chip v-if="item.awardCluster" size="small" color="blue-darken-4">
               Award
               <!-- {{ item.awardCluster }} -->
             </v-chip>
@@ -107,7 +107,7 @@
           :item="item"
         />
         <PureClusterButton
-          v-if="isTransformPage && item.systemName === 'Aaward'"
+          v-if="isTransformPage && item.systemName === 'Award'"
           :item="item"
         />
       </v-card-text>
