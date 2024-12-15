@@ -2,6 +2,11 @@
   <div v-if="data.length">
     <v-card v-for="item in data" :key="item.uuid" class="mb-4">
       <v-card-text>
+        <div class="vertical-right">
+          <PureButton
+            :pureId="item.pureId"
+            :entityType="item.systemName.toLowerCase()" />
+        </div>
         <v-row v-if="!isTransformPage" dense>
           <v-col class="bold" cols="2">Entity</v-col>
           <v-col cols="7">{{ item.systemName }}</v-col>
@@ -185,5 +190,10 @@ function entitySelected(entity) {
   float: right;
   position: absolute;
   right: 0;
+}
+
+.vertical-right {
+  position: absolute;
+  right: 1em;
 }
 </style>

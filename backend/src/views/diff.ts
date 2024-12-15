@@ -50,7 +50,7 @@ function calculateSimilarityResults(texts: string[], searchResults: any[], maxDi
   for (const item of searchResults) {
     for (const text of texts) {
       for (const [lang, crisText] of Object.entries(item.title)) {
-        log.info(item)
+        // log.info(item)
 
         const diff = similarity(text, crisText);
         if (diff > maxDiffQuota) {
