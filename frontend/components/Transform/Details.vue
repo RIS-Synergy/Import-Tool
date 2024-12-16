@@ -1,6 +1,8 @@
 <template>
   <div>
-    <PureTable :data="crisEntities" />
+    <PureTable :data="crisEntities"
+        :entityType="entityType"
+    />
     <!-- <PureDiff
          v-if="entityType === 'project'"
          class="mb-2"

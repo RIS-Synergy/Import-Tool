@@ -5,21 +5,21 @@
         <div class="vertical-right">
           <PureButton
             :pureId="item.pureId"
-            :entityType="item.systemName.toLowerCase()" />
-
+            :entityType="item.systemName.toLowerCase()"
+          />
         </div>
         <div class="lower-right">
           <TransformButton
             v-if="
-                  isTransformPage &&
-                  entitySelected(item.systemName.toLowerCase()) &&
-                  item.uuid === store.templateSelect[item.systemName.toLowerCase()]
-                  "
+              isTransformPage &&
+              entitySelected(item.systemName.toLowerCase()) &&
+              item.uuid === store.templateSelect[item.systemName.toLowerCase()]
+            "
             class="mt-2"
             :entityType="item.systemName.toLowerCase()"
             :uuid="item.uuid"
           />
-          </div>
+        </div>
         <v-row v-if="!isTransformPage" dense>
           <v-col class="bold" cols="2">Entity</v-col>
           <v-col cols="7">{{ item.systemName }}</v-col>
@@ -28,7 +28,7 @@
               class="right mr-3"
               :pureId="item.pureId"
               :entityType="item.systemName.toLowerCase()"
-            /></v-col>
+          /></v-col>
         </v-row>
         <v-row dense>
           <v-col class="bold" cols="2">CRIS ID</v-col>
@@ -51,7 +51,12 @@
         <v-row dense v-if="item.applicationCluster || item.awardCluster">
           <v-col class="bold" cols="2">Cluster</v-col>
           <v-col cols="10">
-            <v-chip v-if="item.applicationCluster" size="small" class="mr-1" color="blue-darken-4">
+            <v-chip
+              v-if="item.applicationCluster"
+              size="small"
+              class="mr-1"
+              color="blue-darken-4"
+            >
               Application
               <!-- {{ item.applicationCluster }} -->
             </v-chip>
@@ -104,7 +109,11 @@
             <v-icon
               v-else
               @click="
-              store.selectTemplate(item.systemName.toLowerCase(), item.uuid, item)
+              store.selectTemplate(
+                item.systemName.toLowerCase(),
+                item.uuid,
+                item,
+              )
               "
               icon="mdi-checkbox-blank-circle-outline"
             />
@@ -123,6 +132,17 @@
       </v-card-text>
     </v-card>
   </div>
+  <!-- {{ entityType }} -->
+  <TransformButton
+    class="mt-3"
+    v-if="isTransformPage &&
+           entitySelected(entityType) &&
+
+           data.length === 0"
+    :entityType="entityType"
+    :uuid="null"
+  />
+
   <!-- <Yaml :json="data" /> -->
 </template>
 
@@ -131,6 +151,7 @@ import { formatDistance } from "date-fns";
 
 const props = defineProps({
   data: Array[Object],
+  entityType: String,
 });
 
 function modDate(date) {
@@ -200,7 +221,6 @@ function entitySelected(entity) {
 .vertical-right {
   position: absolute;
   right: 1em;
-
 }
 .lower-right {
   position: absolute;

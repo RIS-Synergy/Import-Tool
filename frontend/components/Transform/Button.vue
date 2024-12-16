@@ -6,7 +6,6 @@
         class="text-none"
         variant="flat"
         rounded
-        width="12em"
         color="primary"
         @click="saveTransformUpload"
       >

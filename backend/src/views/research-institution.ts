@@ -130,7 +130,7 @@ async function updateCrisId(risId: string, resultData: any, settings: any, templ
 }
 
 async function createOrUpdateProject(uuid: string | undefined, pure: any, risId: string, templateId: any, ris: any, settings: any, entity: string) {
-  const apiEndpoint = uuid ? `/${entity}s` : `/${entity}s/${uuid}`;
+  const apiEndpoint = !uuid ? `/${entity}s` : `/${entity}s/${uuid}`;
   const method = 'PUT';
   let result = await callRIApi(apiEndpoint, method, pure);
 
