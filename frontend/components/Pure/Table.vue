@@ -6,7 +6,20 @@
           <PureButton
             :pureId="item.pureId"
             :entityType="item.systemName.toLowerCase()" />
+
         </div>
+        <div class="lower-right">
+          <TransformButton
+            v-if="
+                  isTransformPage &&
+                  entitySelected(item.systemName.toLowerCase()) &&
+                  item.uuid === store.templateSelect[item.systemName.toLowerCase()]
+                  "
+            class="mt-2"
+            :entityType="item.systemName.toLowerCase()"
+            :uuid="item.uuid"
+          />
+          </div>
         <v-row v-if="!isTransformPage" dense>
           <v-col class="bold" cols="2">Entity</v-col>
           <v-col cols="7">{{ item.systemName }}</v-col>
@@ -97,21 +110,13 @@
             />
           </v-col>
         </v-row>
-        <TransformButton
-          v-if="
-                isTransformPage &&
-                entitySelected(item.systemName.toLowerCase()) &&
-                item.uuid === store.templateSelect[item.systemName.toLowerCase()]
-                "
-          class="mt-2"
-          :entityType="item.systemName.toLowerCase()"
-          :uuid="item.uuid"
-        />
         <PureClusterButton
+          class="mt-2"
           v-if="isTransformPage && item.systemName === 'Application'"
           :item="item"
         />
         <PureClusterButton
+          class="mt-2"
           v-if="isTransformPage && item.systemName === 'Award'"
           :item="item"
         />
@@ -195,5 +200,11 @@ function entitySelected(entity) {
 .vertical-right {
   position: absolute;
   right: 1em;
+
+}
+.lower-right {
+  position: absolute;
+  right: 1em;
+  bottom: 1em;
 }
 </style>
