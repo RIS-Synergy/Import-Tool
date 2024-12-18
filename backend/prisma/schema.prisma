@@ -64,3 +64,15 @@ model User {
   username  String     @unique
   password  String?
 }
+
+model CustomFunction {
+  id Int @id @default(autoincrement())
+
+  name        String @unique
+  description String @default("")
+  code        String @default("")
+  language    String @default("javascript")
+
+  createdDate  DateTime @default(now())
+  modifiedDate DateTime @updatedAt
+}
