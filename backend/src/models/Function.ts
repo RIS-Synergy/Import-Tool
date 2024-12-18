@@ -53,4 +53,12 @@ export class Function {
     })
   }
 
+  // get all, order by name
+  static async all() {
+    return await prisma.customFunction.findMany({
+      orderBy: {
+        name: 'asc'
+      }
+    })
+  }
 }

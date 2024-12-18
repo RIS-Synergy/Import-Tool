@@ -238,6 +238,11 @@ export const useApiUtils = () => {
     return result;
   }
 
+  const getAllFunctions = async () => {
+    const result = await apiCall('functions')
+    return result;
+  }
+
   return {
     getTemplates,
     getTemplateId,
@@ -260,6 +265,7 @@ export const useApiUtils = () => {
     riEntityUUID,
     faApi,
     diffRILikelihood,
-    assignCluster
+    assignCluster,
+    getAllFunctions
   };
 };

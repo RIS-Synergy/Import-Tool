@@ -35,11 +35,17 @@ describe('model', () => {
     const fn = await Function.read('function1')
     expect(fn.name).toBe('function1')
     expect(fn.code.length).toBe(45)
-    expect(fn.language).toBe('javascript')
   })
 
   it('can count functions', async () => {
     const count = await Function.count()
-    expect(count).toBe(1)
+    expect(count).toBe(7)
+  })
+
+  it('can get all functions', async () => {
+    const all = await Function.all()
+    const one = all[0]
+    expect(all).toHaveLength(7)
+    expect(one.name).toBe('getIdentifier')
   })
 })

@@ -26,6 +26,9 @@ app.use('/ri', auth, require('./views/research-institution').default)
 // transform: Transformations
 app.use('/transform', auth, require('./views/transform').default)
 
+// functions
+app.use('/functions', auth, require('./views/functions').default)
+
 // ÖFOS 2012
 app.use('/oefos', require('./views/oefos').default)
 
