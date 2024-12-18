@@ -51,7 +51,7 @@
 <script setup>
 useCron()
 
-const drawer = ref(false);
+const drawer = ref(true);
 
 const router = useRouter()
 const route = useRoute();

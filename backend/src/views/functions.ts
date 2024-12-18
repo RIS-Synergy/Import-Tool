@@ -12,4 +12,9 @@ router.get('/', async (req: Request, res: Response) => {
   res.json(await Function.all())
 })
 
+// get a function by name
+router.get('/:name', async (req: Request, res: Response) => {
+  res.json(await Function.read(req.params.name))
+})
+
 export default router

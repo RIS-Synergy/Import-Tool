@@ -238,8 +238,8 @@ export const useApiUtils = () => {
     return result;
   }
 
-  const getAllFunctions = async () => {
-    const result = await apiCall('functions')
+  const getFunction = async (id: string = '') => {
+    const result = await apiCall('functions/' + id)
     return result;
   }
 
@@ -266,6 +266,6 @@ export const useApiUtils = () => {
     faApi,
     diffRILikelihood,
     assignCluster,
-    getAllFunctions
+    getFunction
   };
 };
