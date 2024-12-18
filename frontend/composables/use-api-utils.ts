@@ -232,7 +232,7 @@ export const useApiUtils = () => {
       body: JSON.stringify({
         systemName: item.systemName,
         uuid: item.uuid,
-        projectUUID: project,
+        projectUUID: project
       }),
     })
     return result;
@@ -240,6 +240,15 @@ export const useApiUtils = () => {
 
   const getFunction = async (id: string = '') => {
     const result = await apiCall('functions/' + id)
+    return result;
+  }
+
+  const setFunction = async (name: string, code: string) => {
+    const result = await apiCall(`functions/${name}`, 'PUT', {
+      body: JSON.stringify({
+        code,
+      }),
+    })
     return result;
   }
 
@@ -266,6 +275,8 @@ export const useApiUtils = () => {
     faApi,
     diffRILikelihood,
     assignCluster,
-    getFunction
+
+    getFunction,
+    setFunction,
   };
 };

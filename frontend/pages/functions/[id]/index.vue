@@ -1,11 +1,9 @@
 <template>
   <v-container>
     <v-card>
-      <v-card-title>{{f.name}}</v-card-title>
+      <v-card-title v-if="false">{{f.name}}</v-card-title>
       <v-card-text>
-        <pre>
-          {{f.code}}
-        </pre>
+        <FuncitonCodeEditor :data="f.code" />
       </v-card-text>
     </v-card>
   </v-container>

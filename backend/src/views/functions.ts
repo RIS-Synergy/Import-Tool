@@ -17,4 +17,9 @@ router.get('/:name', async (req: Request, res: Response) => {
   res.json(await Function.read(req.params.name))
 })
 
+// update a function
+router.put('/:name', async (req: Request, res: Response) => {
+  res.json(await Function.createOrUpdate(req.params.name, req.body.code))
+})
+
 export default router

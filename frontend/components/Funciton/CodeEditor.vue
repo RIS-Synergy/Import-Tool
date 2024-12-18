@@ -4,7 +4,7 @@
   <v-ace-editor
     v-else
     v-model:value="textData"
-    lang="yaml"
+    :lang="props.lang"
     :options="options.value"
     theme="github_light_default"
     onChange="textData = $event"
@@ -45,7 +45,7 @@ import yaml from "js-yaml";
 import hljs from "highlight.js";
 import "highlight.js/styles/github.css";
 import { VAceEditor } from "vue3-ace-editor";
-import "ace-builds/src-noconflict/mode-yaml";
+import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-github_light_default";
 import "ace-builds/src-noconflict/theme-xcode";
 
@@ -55,6 +55,10 @@ const props = defineProps({
   data: {
     type: Object,
     required: true,
+  },
+  lang: {
+    type: String,
+    default: "javascript",
   },
 });
 
@@ -69,10 +73,10 @@ const options = {
 };
 
 const highlightedYaml = computed(() => {
-  return hljs.highlight(textData.value, { language: "yaml" }).value;
+  return hljs.highlight(textData.value, { language: props.lang }).value;
 });
 
-const { verifyTemplate, updateTemplate } = useApiUtils();
+const { setFunction } = useApiUtils();
 
 const error = ref(null);
 const okResult = ref(null);
@@ -83,10 +87,16 @@ function editOrView() {
   okResult.value = null;
 }
 
+const route = useRoute();
+console.log(route);
+
+const functionName = route.params.id
+
 async function save() {
   error.value = null;
   okResult.value = null;
-  const result = await verifyTemplate(textData.value);
+  // XXX const result = await verifyTemplate(textData.value);
+  const result = {}
   if (result.error) {
     error.value = result.error;
     return;
@@ -94,20 +104,20 @@ async function save() {
     okResult.value = result;
   }
 
-  const updated = await updateTemplate(store.templateId, textData.value);
+  const updated = await setFunction(functionName, textData.value);
   if (updated.error) {
     error.value = updated.error;
     return;
   } else {
     okResult.value = updated;
-    textData.value = updated.yamlTemplate;
+    textData.value = updated.code;
   }
 }
 </script>
 
 <style scoped>
 pre {
-  font-size: 0.7em;
+  font-size: 1em;
   line-height: 1.25em;
 }
 </style>
