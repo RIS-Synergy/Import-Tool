@@ -72,7 +72,7 @@ export const useProjectStore = defineStore('project', {
     },
     setError(error: any, area: string) {
       this.error = error;
-      this.error.area = area;
+      // this.error.area = area;
     },
     resetError () {
       this.error = null

@@ -44,7 +44,7 @@
       <slot v-if="store.risData" />
     </v-main>
 
-    <Error />
+    <Alert />
   </v-app>
 </template>
 

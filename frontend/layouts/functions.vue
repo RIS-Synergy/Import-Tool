@@ -21,6 +21,8 @@
     <v-main>
       <slot />
     </v-main>
+
+    <Alert />
   </v-app>
 </template>
 
@@ -30,15 +32,19 @@ const drawer = ref(true);
 const route = useRoute();
 const name = route.params.id;
 
+const store = useProjectStore();
+
 const breadcrumbs = ref([
   {title: "Functions",
-    to: "/functions",
+   to: "/functions",
   },
 ]);
 
 // seems odd to have do the same things twice here....
 // otherise there are still similar errors as in the other layouts, like 'project'
 // the error is that the top level backrougnd breadcrumbs are not presable
+
+store.resetError()
 
 onMounted(() => {
   if (name) {

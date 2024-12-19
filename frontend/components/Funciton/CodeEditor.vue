@@ -20,24 +20,6 @@
       Save
     </v-btn>
   </v-row>
-
-  <v-alert v-if="error" variant="outlined" :title="error.name" type="error">
-    {{ error.reason }}
-    <br />
-    <pre>
-      {{ error.mark }}
-    </pre>
-  </v-alert>
-  <v-alert
-    v-if="okResult"
-    title="Template saved"
-    variant="outlined"
-    type="success"
-  >
-    <pre v-if="false">
-      {{ okResult }}
-    </pre>
-  </v-alert>
 </template>
 
 <script setup>
@@ -78,6 +60,8 @@ const highlightedYaml = computed(() => {
 
 const { setFunction } = useApiUtils();
 
+const alert = useAlertStore()
+
 const error = ref(null);
 const okResult = ref(null);
 
@@ -92,25 +76,19 @@ console.log(route);
 
 const functionName = route.params.id
 
+// const { setError, resetError } = useProjectStore();
+
 async function save() {
   error.value = null;
   okResult.value = null;
-  // XXX const result = await verifyTemplate(textData.value);
-  const result = {}
-  if (result.error) {
-    error.value = result.error;
-    return;
-  } else {
-    okResult.value = result;
-  }
-
   const updated = await setFunction(functionName, textData.value);
   if (updated.error) {
-    error.value = updated.error;
-    return;
+    // setError(updated.error);
+    alert.setError(updated.error)
   } else {
-    okResult.value = updated;
+    okResult.value = updated; // XXX ??
     textData.value = updated.code;
+    alert.setInfo("Function updated", 'yay')
   }
 }
 </script>
