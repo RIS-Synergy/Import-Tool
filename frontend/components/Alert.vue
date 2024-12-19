@@ -6,7 +6,7 @@
       border="start"
       :border-color="store.color"
       closable
-      @click:clear="store.reset"
+      @click:close="store.reset"
     >
       {{ store.details }}
     </v-alert>
@@ -19,6 +19,6 @@ const store = useAlertStore();
 
 <style scoped>
 div {
-  margin-bottom: 2.2em;
+  margin-bottom: 0.4em;
 }
 </style>

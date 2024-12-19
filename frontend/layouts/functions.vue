@@ -32,7 +32,9 @@ const drawer = ref(true);
 const route = useRoute();
 const name = route.params.id;
 
-const store = useProjectStore();
+const store = useFunctionStore();
+const alert = useAlertStore();
+alert.reset();
 
 const breadcrumbs = ref([
   {title: "Functions",
@@ -44,7 +46,7 @@ const breadcrumbs = ref([
 // otherise there are still similar errors as in the other layouts, like 'project'
 // the error is that the top level backrougnd breadcrumbs are not presable
 
-store.resetError()
+store.reset()
 
 onMounted(() => {
   if (name) {

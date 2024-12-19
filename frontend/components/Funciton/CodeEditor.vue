@@ -35,7 +35,7 @@ const emit = defineEmits(["close", "save"]);
 
 const props = defineProps({
   data: {
-    type: Object,
+    type: String,
     required: true,
   },
   lang: {
@@ -44,7 +44,7 @@ const props = defineProps({
   },
 });
 
-const store = useTemplateStore();
+const store = useFunctionStore()
 
 const textData = ref(props.data);
 
@@ -72,11 +72,7 @@ function editOrView() {
 }
 
 const route = useRoute();
-console.log(route);
-
 const functionName = route.params.id
-
-// const { setError, resetError } = useProjectStore();
 
 async function save() {
   error.value = null;
@@ -86,7 +82,7 @@ async function save() {
     // setError(updated.error);
     alert.setError(updated.error)
   } else {
-    okResult.value = updated; // XXX ??
+    okResult.value = updated; // XXX do we need this??
     textData.value = updated.code;
     alert.setInfo("Function updated", 'yay')
   }
