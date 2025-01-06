@@ -54,10 +54,11 @@ return 'Hello, world!'
 describe('Executer', () => {
   it ('can execute the isolated VM', async () => {
     const code = `hello() {
-  return 'Hello, world!'
+return 'Hello, world!'
 }`
 
-    const executer = new Executer()
+    const yamlTemplate = `foo: "!<fn>hello:one:two"`
+    const executer = new Executer(yamlTemplate, {i: 'a'}, {s: 'b'} )
     executer.addFunction(code)
 
     const result = await executer.execute()
@@ -81,6 +82,11 @@ describe('Executer', () => {
     console.log("This loop will run forever!");
   }
 }`])
+    executer.addFunction(`function hello() {
+while (true) {
+console.log("This loop will run forever!");
+}
+}`)
     const result = await executer.execute()
     expect(result.error).toContain('Script execution timed out.')
   })
