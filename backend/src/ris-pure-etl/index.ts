@@ -1,10 +1,5 @@
-import * as yaml from 'yaml';
-import * as Bluebird from 'bluebird';
 import extraFunctions from '../functions';
 import {RISImport, PURE, LangText, RISIdentifer, Settings} from "../types";
-import { awaitAllPromises } from '../utils/promise'
-import { Logger } from 'tslog';
-const log = new Logger({ name: 'ETL' });
 
 function getLang (title: LangText[]): { [key: string]: string } {
   return {
@@ -61,12 +56,7 @@ export async function replaceTags(obj: any, input: any, settings: any) {
             const args = match[1].split(':').slice(1)
 
             const fun = await functions[fn]
-            // if it's an async function
-            // if (fun.isFunction) {
-              // obj[key] = await fun(input, ...args);
-            // } else {
             obj[key] = await fun(input, settings, ...args);
-            // }
           }
         }
       } else {
@@ -99,6 +89,9 @@ export async function projectETL2 (yamlContent: string, input: RISImport, settin
     input,
     settings
   });
+
+  console.log('processedYaml', processedYaml)
+
 
   // Process tags in the parsed YAML content
   processedYaml = await replaceTags(processedYaml, input, settings);
