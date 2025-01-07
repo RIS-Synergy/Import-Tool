@@ -4,7 +4,7 @@ import { replacePlaceholders } from '../utils/yaml';
 import { Logger } from "tslog";
 const log = new Logger({ name: "Executer" });
 
-export async function replaceTags(obj, input, settings, functions) {
+async function replaceTags(obj, input, settings, functions) {
   if (typeof obj === 'object' && obj !== null) {
     for (const key in obj) {
       if (typeof obj[key] === 'string') {
@@ -27,12 +27,15 @@ export async function replaceTags(obj, input, settings, functions) {
           if (match) {
             // the name of the function
             const [ fn ] = match[1].split(':').map(arg => arg.trim());
+            const name = fn
             // the arguments of the function
             const args = match[1].split(':').slice(1)
 
             // execute the function
-            const customFunction = functions[fn]
-            obj[key] = await customFunction(input, settings, ...args);
+            const customFunction = functions[name]
+            console.dir(customFunction)
+
+            obj[key] = customFunction(input, settings, ...args);
           }
         }
       } else {
@@ -72,7 +75,7 @@ export class Executer {
     this.functions[name] = body;
   }
 
-  async asyncCall(yamlTemplate, input, settings, functions): Promise<String> {
+  asyncCall(yamlTemplate, input, settings, functions) {
     var processedYaml = replacePlaceholders (yamlTemplate, {
       input: input,
       settings: settings
@@ -85,15 +88,26 @@ export class Executer {
     })
     functions = Object.fromEntries(new Map(functions))
 
-    processedYaml = await replaceTags(processedYaml, input, settings, functions);
-    processedYaml = await allPromisesNested(await processedYaml);
+    // processedYaml = await replaceTags(processedYaml, input, settings, functions);
+    // processedYaml = await allPromisesNested(await processedYaml);
 
-    const output = JSON.stringify(processedYaml)
+    return replaceTags(processedYaml, input, settings, functions)
+      .then(allPromisesNested)
+      .then((result) => {
+        console.log("Result", result)
+
+        processedYaml = result;
+        const output = JSON.stringify(processedYaml)
+        return output
+
+      });
+
+    // const output = JSON.stringify(processedYaml)
     // log.info("Output", JSON.parse(output))
     // log.info("Input", JSON.parse(input))
     // log.info("Settings", JSON.parse(settings))
 
-    return output
+    // return output
   }
 
   public async execute () {
@@ -107,26 +121,12 @@ export class Executer {
       await jail.set("input", JSON.stringify(this.input));
       await jail.set("settings", JSON.stringify(this.settings));
       await jail.set("functions", JSON.stringify(this.functions));
-
-      await jail.set('log', function(...args) {
-	      console.log(...args);
-      });
-
       await jail.set('asyncCall', new ivm.Reference(this.asyncCall));
-      const fn = await context.eval(`
-(async function () {
-let str = asyncCall.applySyncPromise(undefined, [yamlTemplate, input, settings, functions]);
-return str;
-}) `, { reference: true, result: { promise: true }})
 
-      const value: any = await fn.apply(
-        undefined,
-        [],
-        { timeout: 0, result: { promise: true, timeout: 0 } }
-      )
-
-      return JSON.parse(value)
-      // return value
+      return context.eval(`asyncCall.applySyncPromise(undefined, [yamlTemplate, input, settings, functions])`)
+        .then((result) => {
+          return JSON.parse(result)
+        })
     } catch (error) {
       log.error(error)
       return { error: error instanceof Error ? error.message : "Unknown error" };

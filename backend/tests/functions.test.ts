@@ -104,7 +104,7 @@ nested:
     expect(output).toBe('Hello Worls')
   })
 
-  // XXX no!
+  // XXX not safe (yet)!
   it.skip ('hostile memory use', async () => {
     const executer = new Executer('output: "!<fn>hello"')
     executer.addFunction('hello', hostile)
@@ -113,6 +113,7 @@ nested:
     expect(error).toBe('Invalid or unexpected token')
   })
 
+  // XXX not safe (yet)!
   it.skip ('can cause execution errors', async () => {
     const executer = new Executer()
     executer.addFunction('hello', "return 'Hello Wor")
@@ -121,11 +122,13 @@ nested:
     expect(error).toBe('Invalid or unexpected token')
   })
 
-  // Loop
-  it .skip ('infinite loop', async () => {
+  // XXX not safe (yet)!
+  it.skip ('infinite loop', async () => {
     const executer = new Executer('output: "!<fn>hello"', null, null, 100)
     executer.addFunction('hello', `
-while (true) {}
+while (true) {
+  console.log('loop')
+}
 `)
     const result = await executer.execute()
     expect(result.error).toContain('Script execution timed out.')
