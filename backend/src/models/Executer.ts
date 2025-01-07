@@ -4,33 +4,7 @@ import { replacePlaceholders } from '../utils/yaml';
 import { Logger } from "tslog";
 const log = new Logger({ name: "Executer" });
 
-const functions = {
-  getByLang: async function (input: any, settings: any, pass: string, lang: string): Promise<string> {
-    var title = input[pass].find(t => t.lang === lang);
-
-    if (!title || !title.text) {
-      return 'Title not found';
-    }
-
-    // replace title with \r\n with <br>
-    title = title.text.replace(/\r\n/g, '<br/>');
-
-    return title
-  },
-
-  hello: function (input: any, settings: any, world: string, and: string): string {
-    return `Hello ${world} and ${and}`;
-  },
-}
-
-function getLang (title) {
-  return {
-    en_GB: title.find(t => t.lang === 'en').text,
-    de_DE: title.find(t => t.lang === 'de').text
-  }
-}
-
-export async function replaceTags(obj, input, settings) {
+export async function replaceTags(obj, input, settings, functions) {
   if (typeof obj === 'object' && obj !== null) {
     for (const key in obj) {
       if (typeof obj[key] === 'string') {
@@ -56,12 +30,13 @@ export async function replaceTags(obj, input, settings) {
             // the arguments of the function
             const args = match[1].split(':').slice(1)
 
-            const fun = await functions[fn]
-            obj[key] = await fun(input, settings, ...args);
+            // execute the function
+            const customFunction = functions[fn]
+            obj[key] = await customFunction(input, settings, ...args);
           }
         }
       } else {
-        obj[key] = await replaceTags(obj[key], input, settings);
+        obj[key] = await replaceTags(obj[key], input, settings, functions);
       }
     }
   }
@@ -83,38 +58,42 @@ async function allPromisesNested(obj) {
 }
 
 export class Executer {
-  functions: string[] = []
+  private functions = {}
 
   constructor(
     private yamlTemplate: string = '',
     private input: any = {},
     private settings: any = {},
     // private functions: string[] = [],
+    private timeout = 1000
   ) {}
 
-  public addFunction (fn: string) {
-    this.functions.push(fn)
+  public addFunction (name: string, body: string) {
+    this.functions[name] = body;
   }
 
-  async myAsyncFunction(yamlTemplate, input, settings): Promise<String> {
+  async asyncCall(yamlTemplate, input, settings, functions): Promise<String> {
     var processedYaml = replacePlaceholders (yamlTemplate, {
       input: input,
       settings: settings
     });
 
-    processedYaml = await replaceTags(processedYaml, input, settings);
+    // create new functions from strings
+    functions = Object.entries(JSON.parse(functions)).map(([name, body]) => {
+      const fn = eval(`(function ${name}(input, settings, ...args) { ${body} })`);
+      return [ name, fn ]
+    })
+    functions = Object.fromEntries(new Map(functions))
+
+    processedYaml = await replaceTags(processedYaml, input, settings, functions);
     processedYaml = await allPromisesNested(await processedYaml);
 
-    // console.log( processedYaml)
-
     const output = JSON.stringify(processedYaml)
-    log.info("Output", JSON.parse(output))
-    log.info("Input", JSON.parse(input))
-    log.info("Settings", JSON.parse(settings))
+    // log.info("Output", JSON.parse(output))
+    // log.info("Input", JSON.parse(input))
+    // log.info("Settings", JSON.parse(settings))
 
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(output), 0);
-    });
+    return output
   }
 
   public async execute () {
@@ -127,23 +106,27 @@ export class Executer {
       await jail.set("yamlTemplate", this.yamlTemplate);
       await jail.set("input", JSON.stringify(this.input));
       await jail.set("settings", JSON.stringify(this.settings));
+      await jail.set("functions", JSON.stringify(this.functions));
 
       await jail.set('log', function(...args) {
 	      console.log(...args);
       });
 
-      await jail.set('myAsyncFunction', new ivm.Reference(this.myAsyncFunction));
+      await jail.set('asyncCall', new ivm.Reference(this.asyncCall));
       const fn = await context.eval(`
-(async function untrusted() {
-let str = await myAsyncFunction.applySyncPromise(undefined, [yamlTemplate, input, settings]);
+(async function () {
+let str = asyncCall.applySyncPromise(undefined, [yamlTemplate, input, settings, functions]);
 return str;
-}) `, { reference: true, result: { copy: true }})
+}) `, { reference: true, result: { promise: true }})
+
       const value: any = await fn.apply(
         undefined,
-        ['yamlTemplate', 'input', 'settings'],
-        { result: { promise: true } }
+        [],
+        { timeout: 0, result: { promise: true, timeout: 0 } }
       )
+
       return JSON.parse(value)
+      // return value
     } catch (error) {
       log.error(error)
       return { error: error instanceof Error ? error.message : "Unknown error" };

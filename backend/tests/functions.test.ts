@@ -51,42 +51,82 @@ return 'Hello, world!'
   })
 })
 
+const hostile = `
+const storage = [];
+const twoMegabytes = 1024 * 1024 * 2;
+while (true) {
+const array = new Uint8Array(twoMegabytes);
+for (let ii = 0; ii < twoMegabytes; ii += 4096) {
+array[ii] = 1; // we have to put something in the array to flush to real memory
+}
+storage.push(array);
+console.log('I\\'ve wasted '+ (storage.length * 2)+ 'MB');
+}
+`
+
 describe('Executer', () => {
   it ('can execute the isolated VM', async () => {
-    const code = `hello() {
-return 'Hello, world!'
-}`
+//     const code = `function hello() {
+// return 'Hello, world!'
+// }`
 
-    const yamlTemplate = `foo: "!<fn>hello:one:two"`
+    const yamlTemplate = `
+static: just a static string
+hello_function: "!<fn>hello"
+inputs_fn: "!<fn>fn_input"
+settings_fn: "!<fn>fn_settings"
+fn_custom_args: "!<fn>fn_with_args:one:two"
+nested:
+  value: "!<fn>hello"
+`
     const executer = new Executer(yamlTemplate, {i: 'a'}, {s: 'b'} )
-    executer.addFunction(code)
+    executer.addFunction('fn_with_args', "return `arguments ${args[0]} and ${args[1]}`")
+    executer.addFunction('hello', "return 'Hello, world!'")
+    executer.addFunction('fn_input', "return JSON.parse(input)")
+    executer.addFunction('fn_settings', "return JSON.parse(settings)")
 
     const result = await executer.execute()
-    expect(result).toBe('Hello, world!')
+
+    expect(result.static).toBe('just a static string')
+    expect(result.hello_function).toBe('Hello, world!')
+    expect(result.inputs_fn.i).toBe('a')
+    expect(result.settings_fn).toEqual({s: 'b'})
+    expect(result.fn_custom_args).toBe('arguments one and two')
+    expect(result.nested.value).toBe('Hello, world!')
   })
 
 
-  it.skip ('can cause execution errors', async () => {
-    const code = `functi hello() {
-}`
-    const executer = new Executer()
-    executer.addFunction(code)
+  it ('can cause execution errors', async () => {
+    const executer = new Executer('output: "!<fn>hello"')
+    executer.addFunction('hello', "return 'Hello Worls'")
+
+    const { output } = await executer.execute()
+    expect(output).toBe('Hello Worls')
+  })
+
+  // XXX no!
+  it.skip ('hostile memory use', async () => {
+    const executer = new Executer('output: "!<fn>hello"')
+    executer.addFunction('hello', hostile)
 
     const { error } = await executer.execute()
-    expect(error).toContain('Unexpected identifier')
+    expect(error).toBe('Invalid or unexpected token')
   })
 
   it.skip ('can cause execution errors', async () => {
-      const executer = new Executer([`function hello() {
-  while (true) {
-    console.log("This loop will run forever!");
-  }
-}`])
-    executer.addFunction(`function hello() {
-while (true) {
-console.log("This loop will run forever!");
-}
-}`)
+    const executer = new Executer()
+    executer.addFunction('hello', "return 'Hello Wor")
+
+    const { error } = await executer.execute()
+    expect(error).toBe('Invalid or unexpected token')
+  })
+
+  // Loop
+  it .skip ('infinite loop', async () => {
+    const executer = new Executer('output: "!<fn>hello"', null, null, 100)
+    executer.addFunction('hello', `
+while (true) {}
+`)
     const result = await executer.execute()
     expect(result.error).toContain('Script execution timed out.')
   })
