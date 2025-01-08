@@ -4,7 +4,31 @@ import { replacePlaceholders } from '../utils/yaml';
 import { Logger } from "tslog";
 const log = new Logger({ name: "Executer" });
 
-async function replaceTags(obj, input, settings, functions) {
+async function isolatedFunction(context, jail, timeout, name, functionBody, input, settings, args) {
+  await jail.set('body', functionBody);
+  await jail.set("input", JSON.stringify(input));
+  await jail.set("settings", JSON.stringify(settings));
+  await jail.set("args", JSON.stringify(args))
+  await jail.set('log', function(...args) {
+    log.info(`> (${name})`, ...args);
+  });
+  let value = null;
+  try {
+    value = context.evalSync(`
+args = JSON.parse(args);
+new Function(body)(input, settings, ...args)
+`, { timeout })
+  } catch (e) {
+    throw new Error(`Custom function error: ${e.message}`)
+  }
+  // valuse parse if possible
+  try {
+    value = JSON.parse(value)
+  } catch (error) {/* do nothing */ }
+  return value
+}
+
+async function replaceTags(obj, input, settings, functions, jail, context, timeout) {
   if (typeof obj === 'object' && obj !== null) {
     for (const key in obj) {
       if (typeof obj[key] === 'string') {
@@ -26,20 +50,23 @@ async function replaceTags(obj, input, settings, functions) {
           const match = obj[key].match(/!<fn>(.+)/);
           if (match) {
             // the name of the function
-            const [ fn ] = match[1].split(':').map(arg => arg.trim());
+            const [fn] = match[1].split(':').map(arg => arg.trim());
             const name = fn
             // the arguments of the function
             const args = match[1].split(':').slice(1)
-
-            // execute the function
-            const customFunction = functions[name]
-            console.dir(customFunction)
-
-            obj[key] = customFunction(input, settings, ...args);
+            const body = functions[name]
+            obj[key] = await isolatedFunction(context, jail, timeout, name, body, input, settings, args);
           }
         }
       } else {
-        obj[key] = await replaceTags(obj[key], input, settings, functions);
+        // let result = await replaceTags(obj[key], input, settings, functions, jail, context);
+        let result = null
+        try {
+          result = await replaceTags(obj[key], input, settings, functions, jail, context, timeout);
+        } catch (e) {
+          throw new Error(`Custom function error: ${e.message}`)
+        }
+        obj[key] = result;
       }
     }
   }
@@ -61,72 +88,50 @@ async function allPromisesNested(obj) {
 }
 
 export class Executer {
-  private functions = {}
+  private functions: Map<string, string> = new Map();
+  public timeout: number = 0;
 
   constructor(
     private yamlTemplate: string = '',
     private input: any = {},
     private settings: any = {},
-    // private functions: string[] = [],
-    private timeout = 1000
-  ) {}
+  ) { }
 
-  public addFunction (name: string, body: string) {
+  public addFunction(name: string, body: string) {
     this.functions[name] = body;
   }
 
-  asyncCall(yamlTemplate, input, settings, functions) {
-    var processedYaml = replacePlaceholders (yamlTemplate, {
-      input: input,
-      settings: settings
+  private asyncCall(jail, context) {
+    var processedYaml = replacePlaceholders(this.yamlTemplate, {
+      input: this.input,
+      settings: this.settings
     });
 
     // create new functions from strings
-    functions = Object.entries(JSON.parse(functions)).map(([name, body]) => {
-      const fn = eval(`(function ${name}(input, settings, ...args) { ${body} })`);
-      return [ name, fn ]
+    let functions = Object.entries(this.functions).map(([name, body]) => {
+      return [name, body]
     })
-    functions = Object.fromEntries(new Map(functions))
+    functions = Object.fromEntries(functions)
 
-    // processedYaml = await replaceTags(processedYaml, input, settings, functions);
-    // processedYaml = await allPromisesNested(await processedYaml);
-
-    return replaceTags(processedYaml, input, settings, functions)
+    return replaceTags(processedYaml, this.input, this.settings, functions, jail, context, this.timeout)
       .then(allPromisesNested)
       .then((result) => {
-        console.log("Result", result)
-
-        processedYaml = result;
-        const output = JSON.stringify(processedYaml)
-        return output
-
+        return result
+      })
+      .catch((error) => {
+        return { error: error instanceof Error ? error.message : "Unknown error" };
       });
-
-    // const output = JSON.stringify(processedYaml)
-    // log.info("Output", JSON.parse(output))
-    // log.info("Input", JSON.parse(input))
-    // log.info("Settings", JSON.parse(settings))
-
-    // return output
   }
 
-  public async execute () {
+  public async execute() {
     try {
       // Create a new isolated VM
       const isolate = new ivm.Isolate({ memoryLimit: 8 }); // Memory limit in MB
       const context = await isolate.createContext();
       const jail = context.global;
       await jail.set("global", jail.derefInto());
-      await jail.set("yamlTemplate", this.yamlTemplate);
-      await jail.set("input", JSON.stringify(this.input));
-      await jail.set("settings", JSON.stringify(this.settings));
-      await jail.set("functions", JSON.stringify(this.functions));
-      await jail.set('asyncCall', new ivm.Reference(this.asyncCall));
-
-      return context.eval(`asyncCall.applySyncPromise(undefined, [yamlTemplate, input, settings, functions])`)
-        .then((result) => {
-          return JSON.parse(result)
-        })
+      const result = this.asyncCall(jail, context)
+      return result;
     } catch (error) {
       log.error(error)
       return { error: error instanceof Error ? error.message : "Unknown error" };

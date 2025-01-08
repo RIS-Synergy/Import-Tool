@@ -51,18 +51,18 @@ return 'Hello, world!'
   })
 })
 
-const hostile = `
-const storage = [];
-const twoMegabytes = 1024 * 1024 * 2;
-while (true) {
-const array = new Uint8Array(twoMegabytes);
-for (let ii = 0; ii < twoMegabytes; ii += 4096) {
-array[ii] = 1; // we have to put something in the array to flush to real memory
-}
-storage.push(array);
-console.log('I\\'ve wasted '+ (storage.length * 2)+ 'MB');
-}
-`
+const hostile = (`
+	const storage = [];
+	const twoMegabytes = 1024 * 1024 * 2;
+	while (true) {
+		const array = new Uint8Array(twoMegabytes);
+		for (let ii = 0; ii < twoMegabytes; ii += 4096) {
+			array[ii] = 1; // we have to put something in the array to flush to real memory
+		}
+		storage.push(array);
+		log('I\\'ve wasted '+ (storage.length * 2)+ 'MB');
+	}
+`);
 
 describe('Executer', () => {
   it ('can execute the isolated VM', async () => {
@@ -82,8 +82,8 @@ nested:
     const executer = new Executer(yamlTemplate, {i: 'a'}, {s: 'b'} )
     executer.addFunction('fn_with_args', "return `arguments ${args[0]} and ${args[1]}`")
     executer.addFunction('hello', "return 'Hello, world!'")
-    executer.addFunction('fn_input', "return JSON.parse(input)")
-    executer.addFunction('fn_settings', "return JSON.parse(settings)")
+    executer.addFunction('fn_input', "log(input); return input")
+    executer.addFunction('fn_settings', "return settings")
 
     const result = await executer.execute()
 
@@ -96,7 +96,7 @@ nested:
   })
 
 
-  it ('can cause execution errors', async () => {
+  it ('can cause execution errors (?)', async () => {
     const executer = new Executer('output: "!<fn>hello"')
     executer.addFunction('hello', "return 'Hello Worls'")
 
@@ -104,33 +104,37 @@ nested:
     expect(output).toBe('Hello Worls')
   })
 
-  // XXX not safe (yet)!
-  it.skip ('hostile memory use', async () => {
+  it ('can cause execution errors', async () => {
+    const executer = new Executer('output: "!<fn>hello"')
+    executer.addFunction('hello', "not_defined")
+
+    const { output, error } = await executer.execute()
+    expect(output).toBe(undefined)
+    expect(error).toBe("Custom function error: not_defined is not defined")
+  })
+
+  it ('hostile memory use', async () => {
     const executer = new Executer('output: "!<fn>hello"')
     executer.addFunction('hello', hostile)
 
     const { error } = await executer.execute()
-    expect(error).toBe('Invalid or unexpected token')
+    expect(error).toBe('Custom function error: Array buffer allocation failed')
   })
 
-  // XXX not safe (yet)!
-  it.skip ('can cause execution errors', async () => {
-    const executer = new Executer()
+  it ('can cause execution errors', async () => {
+    const executer = new Executer('output: "!<fn>hello"')
     executer.addFunction('hello', "return 'Hello Wor")
 
     const { error } = await executer.execute()
-    expect(error).toBe('Invalid or unexpected token')
+    expect(error).toBe('Custom function error: Invalid or unexpected token')
   })
 
-  // XXX not safe (yet)!
-  it.skip ('infinite loop', async () => {
-    const executer = new Executer('output: "!<fn>hello"', null, null, 100)
-    executer.addFunction('hello', `
-while (true) {
-  console.log('loop')
-}
-`)
+  it ('infinite loop', async () => {
+    const executer = new Executer('output: "!<fn>hello"')
+    executer.timeout = 1
+
+    executer.addFunction('hello', `while (true) {}`)
     const result = await executer.execute()
-    expect(result.error).toContain('Script execution timed out.')
+    expect(result.error).toBe('Custom function error: Script execution timed out.')
   })
 })
