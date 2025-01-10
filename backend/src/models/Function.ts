@@ -4,6 +4,8 @@ const log = new Logger({ name: 'model:Function' });
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
+import { Executer } from './Executer'
+
 export class Function {
   name: string
   description: string
@@ -60,5 +62,15 @@ export class Function {
         name: 'asc'
       }
     })
+  }
+
+  static async verify(name: string, code: string) {
+    const executer = new Executer(`output: "!<fn>${name}"`)
+    executer.addFunction(name, code)
+    try {
+      return await executer.execute()
+    } catch (error) {
+      return { error: error instanceof Error ? error.message : "Unknown error" }
+    }
   }
 }

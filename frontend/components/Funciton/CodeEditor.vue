@@ -84,7 +84,7 @@ async function save() {
   } else {
     okResult.value = updated; // XXX do we need this??
     textData.value = updated.code;
-    alert.setInfo("Function updated", 'yay')
+    alert.setInfo("Function updated", `> ${updated.output}`);
   }
 }
 </script>
