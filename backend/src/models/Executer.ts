@@ -5,7 +5,11 @@ import { Logger } from "tslog";
 const log = new Logger({ name: "Executer" });
 
 async function isolatedFunction(context, jail, timeout, name, functionBody, input, settings, args) {
-  await jail.set('body', functionBody);
+  const preParse = `
+try { input = JSON.parse(input) } catch (e) {};
+try { settings = JSON.parse(settings) } catch (e) {};
+`
+  await jail.set('body', preParse + functionBody);
   await jail.set("input", JSON.stringify(input));
   await jail.set("settings", JSON.stringify(settings));
   await jail.set("args", JSON.stringify(args))
@@ -16,10 +20,7 @@ async function isolatedFunction(context, jail, timeout, name, functionBody, inpu
   try {
     value = context.evalSync(`
 args = JSON.parse(args);
-// input = JSON.parse(input);
-// settings = JSON.parse(settings);
-log(args)
-new Function(body)(input, settings, ...args)
+JSON.stringify(new Function(args, body)(...args));
 `, { timeout })
   } catch (e) {
     throw new Error(`Custom function error: ${e.message}`)
@@ -27,7 +28,7 @@ new Function(body)(input, settings, ...args)
   // valuse parse if possible
   try {
     value = JSON.parse(value)
-  } catch (error) {/* do nothing */ }
+  } catch (error) {/* do nothing */ return value }
   return value
 }
 
