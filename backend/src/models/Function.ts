@@ -64,8 +64,10 @@ export class Function {
     })
   }
 
-  static async verify(name: string, code: string) {
-    const executer = new Executer(`output: "!<fn>${name}"`)
+  static async verify(name: string, code: string, input: object, settings: object) {
+    // log.info('verify', name, code, input, settings)
+
+    const executer = new Executer(`output: "!<fn>${name}"`, input, settings)
     executer.addFunction(name, code)
     try {
       return await executer.execute()

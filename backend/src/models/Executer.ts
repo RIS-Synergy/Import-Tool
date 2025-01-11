@@ -10,12 +10,15 @@ async function isolatedFunction(context, jail, timeout, name, functionBody, inpu
   await jail.set("settings", JSON.stringify(settings));
   await jail.set("args", JSON.stringify(args))
   await jail.set('log', function(...args) {
-    log.info(`> (${name})`, ...args);
+    log.info(`\n> (${name})`, ...args);
   });
   let value = null;
   try {
     value = context.evalSync(`
 args = JSON.parse(args);
+// input = JSON.parse(input);
+// settings = JSON.parse(settings);
+log(args)
 new Function(body)(input, settings, ...args)
 `, { timeout })
   } catch (e) {
@@ -95,6 +98,7 @@ export class Executer {
     private yamlTemplate: string = '',
     private input: any = {},
     private settings: any = {},
+    private args: any = [],
   ) { }
 
   public addFunction(name: string, body: string) {

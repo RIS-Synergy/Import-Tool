@@ -45,6 +45,7 @@ const props = defineProps({
 });
 
 const store = useFunctionStore()
+const projectStore = useProjectStore()
 
 const textData = ref(props.data);
 
@@ -77,7 +78,10 @@ const functionName = route.params.id
 async function save() {
   error.value = null;
   okResult.value = null;
-  const updated = await setFunction(functionName, textData.value);
+  const updated = await setFunction(
+    functionName, textData.value,
+    projectStore.lastTemplate.input,
+    projectStore.lastTemplate.settings)
   if (updated.error) {
     // setError(updated.error);
     alert.setError(updated.error)

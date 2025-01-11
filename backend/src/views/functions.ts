@@ -23,9 +23,9 @@ router.get('/:name', async (req: Request, res: Response) => {
 // update a function (incl. execution validation)
 router.put('/:name', async (req: Request, res: Response) => {
   const { name } = req.params
-  const { code } = req.body
+  const { code, input, settings } = req.body
   // TODO include the input and settings from a specific entity (project or award or application)
-  const { output, error } = await Function.verify(name, code)
+  const { output, error } = await Function.verify(name, code, input, settings)
   const fn = await Function.createOrUpdate(name, code)
   log.info(`Updated function '${fn.name}'`, '\n>', output)
   res.json({ ...fn, error, output })

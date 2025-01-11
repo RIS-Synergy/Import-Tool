@@ -87,8 +87,11 @@ nested:
 
     const result = await executer.execute()
 
+    console.log(result)
+
     expect(result.static).toBe('just a static string')
     expect(result.hello_function).toBe('Hello, world!')
+    // expect(result.inputs_fn).toBe('a')
     expect(result.inputs_fn.i).toBe('a')
     expect(result.settings_fn).toEqual({s: 'b'})
     expect(result.fn_custom_args).toBe('arguments one and two')

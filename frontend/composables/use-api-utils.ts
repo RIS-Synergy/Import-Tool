@@ -91,7 +91,7 @@ export const useApiUtils = () => {
     return result;
   };
 
-  const loadTransformation = async (store, templateId) => {
+  const loadTransformation = async (store, templateId, templateType: string) => {
     if (!templateId) {
       return;
     }
@@ -110,6 +110,10 @@ export const useApiUtils = () => {
     });
 
     store.template.data = x;
+
+    // this is used for verifying custom Functions
+    // for the last viewed template
+    store.viewLastTemplate(store.risData, store.settings, templateType)
   };
 
   const getDiffs = async (risId: string) => {
@@ -243,10 +247,12 @@ export const useApiUtils = () => {
     return result;
   }
 
-  const setFunction = async (name: string, code: string) => {
+  const setFunction = async (name: string, code: string, input: object, settings: object) => {
     const result = await apiCall(`functions/${name}`, 'PUT', {
       body: JSON.stringify({
         code,
+        input,
+        settings
       }),
     })
     return result;
