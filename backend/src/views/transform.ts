@@ -1,6 +1,7 @@
 import express, { Router, Request, Response } from "express"
 
 import { projectETL2 } from '../ris-pure-etl/index'
+import { Transform } from '../models/Transform'
 
 import { Logger } from "tslog";
 const log = new Logger({ name: 'view:transform'});
@@ -19,7 +20,11 @@ router.post('/upload', async (req: Request, res: Response) => {
 
   log.debug('Template', template.id, template.name)
 
-  const result = await projectETL2(template.yamlTemplate, req.body.ris, req.body.settings)
+  const transform = new Transform()
+  // transform.functions = []
+  const result = await transform.run(template.yamlTemplate, req.body.ris, req.body.settings)
+  // log.info('Result', result)
+
   res.json({
     yamlTemplate: template.yamlTemplate,
     transformationResult: result

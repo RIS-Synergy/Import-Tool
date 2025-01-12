@@ -142,4 +142,13 @@ oefos_fn: "!<fn>fn_oefos"
     const result = await executer.execute()
     expect(result.error).toBe('Custom function error: Script execution timed out.')
   })
+
+  it ('not an "output"', async () => {
+    const executer = new Executer('foo: "!<fn>hello"')
+    executer.addFunction('hello', "return 'Hello Worls'")
+
+    const { foo } = await executer.execute()
+    expect(foo).toBe('Hello Worls')
+  })
+
 })

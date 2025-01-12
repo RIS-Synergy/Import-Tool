@@ -96,12 +96,7 @@ export const useApiUtils = () => {
       return;
     }
 
-    console.log("loadTransformation", templateId);
-
-    // const ris = store.risData.value
-    // const settings = store.settings.value
-
-    const x = await apiCall("transform/upload", "POST", {
+    const result = await apiCall("transform/upload", "POST", {
         body: JSON.stringify({
           ris: store.risData,
           settings: store.settings,
@@ -109,7 +104,7 @@ export const useApiUtils = () => {
         }),
     });
 
-    store.template.data = x;
+    store.template.data = result;
 
     // this is used for verifying custom Functions
     // for the last viewed template
@@ -258,6 +253,17 @@ export const useApiUtils = () => {
     return result;
   }
 
+
+  const createFunction = async (name: string) => {
+    // same as setFunction, but with POST
+    const result = await apiCall(`functions/`, 'PUT', {
+      body: JSON.stringify({
+        name,
+      }),
+    })
+    return result;
+  }
+
   return {
     getTemplates,
     getTemplateId,
@@ -284,5 +290,6 @@ export const useApiUtils = () => {
 
     getFunction,
     setFunction,
+    createFunction
   };
 };

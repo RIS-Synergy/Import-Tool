@@ -84,6 +84,7 @@ return result = Object.entries(data).map(([lang, texts]) => ({
 ## oefos2012
 
 The list of OEFOS text values are not yet defined (TODO).
+The `oefosValue` is a hardcoded function
 
 ```
 const { subjects } = input
@@ -101,3 +102,31 @@ const result = subjects.map((subject) => {
 
 return result
 ```
+
+## getByLang
+
+```
+const pass = args[0]
+const lang = args[1]
+
+var title = input[pass].find(t => t.lang === lang);
+
+if (!title || !title.text) {
+  return 'Title not found';
+}
+
+// replace title with \r\n with <br>
+title = title.text.replace(/\r\n/g, '<br/>');
+
+return title
+```
+
+# Templates
+
+An example of a template that just sends the input  itself as it is (of the RIS Data).
+
+```
+output: "!<fn>literallyInput"
+```
+
+and a trivial function for it: `return input`.

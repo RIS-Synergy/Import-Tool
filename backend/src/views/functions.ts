@@ -13,9 +13,15 @@ router.get('/', async (req: Request, res: Response) => {
   res.json(all)
 })
 
+router.put('/', async (req: Request, res: Response) => {
+  const { name } = req.body
+  const fn = await Function.createOrUpdate(name, '')
+  res.json({ ...fn })
+})
+
 // get a function by name
 router.get('/:name', async (req: Request, res: Response) => {
-  const  {name} = req.params
+  const { name } = req.params
   const fn = await Function.read(name)
   res.json(fn)
 })
