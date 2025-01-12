@@ -1,5 +1,6 @@
 import ivm from "isolated-vm";
 import { replacePlaceholders } from '../utils/yaml';
+import { getValue as oefosValue } from '../views/oefos';
 
 import { Logger } from "tslog";
 const log = new Logger({ name: "Executer" });
@@ -16,6 +17,9 @@ try { settings = JSON.parse(settings) } catch (e) {};
   await jail.set('log', function(...args) {
     log.info(`\n> (${name})`, ...args);
   });
+  // at the moment, we don't use these functions (in 'keywords' for PURE)
+  await jail.set("oefosValue", oefosValue)
+
   let value = null;
   try {
     value = context.evalSync(`

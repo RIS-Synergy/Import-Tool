@@ -78,12 +78,14 @@ settings_fn: "!<fn>fn_settings"
 fn_custom_args: "!<fn>fn_with_args:one:two"
 nested:
   value: "!<fn>hello"
+oefos_fn: "!<fn>fn_oefos"
 `
     const executer = new Executer(yamlTemplate, {i: 'a'}, {s: 'b'} )
     executer.addFunction('fn_with_args', "return `arguments ${args[0]} and ${args[1]}`")
     executer.addFunction('hello', "return 'Hello, world!'")
     executer.addFunction('fn_input', "log(input); return input")
     executer.addFunction('fn_settings', "return settings")
+    executer.addFunction('fn_oefos', "return oefosValue('501030', 'DE')")
 
     const result = await executer.execute()
 

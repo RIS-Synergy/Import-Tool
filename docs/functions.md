@@ -86,15 +86,13 @@ return result = Object.entries(data).map(([lang, texts]) => ({
 The list of OEFOS text values are not yet defined (TODO).
 
 ```
-import { getValue } from '../views/oefos'
-
 const { subjects } = input
 
 const result = subjects.map((subject) => {
   const { value } = subject
 
-  const de = getValue(value, 'DE')
-  const en = getValue(value, 'EN')
+  const de = oefosValue(value, 'DE')
+  const en = oefosValue(value, 'EN')
 
   return {
     uri: `/dk/atira/pure/core/oefos2012/${value[0]}/${value}`,
