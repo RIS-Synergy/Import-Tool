@@ -8,7 +8,9 @@
       closable
       @click:close="store.reset"
     >
-      {{ store.details }}
+<pre>
+{{ store.details }}
+</pre>
     </v-alert>
   </div>
 </template>
