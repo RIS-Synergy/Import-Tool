@@ -83,8 +83,7 @@ return result = Object.entries(data).map(([lang, texts]) => ({
 
 ## oefos2012
 
-The list of OEFOS text values are not yet defined (TODO).
-The `oefosValue` is a hardcoded function
+The `oefosValue` is a hardcoded function.
 
 ```
 const { subjects } = input

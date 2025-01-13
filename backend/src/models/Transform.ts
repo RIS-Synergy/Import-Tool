@@ -13,13 +13,9 @@ export class Transform {
     if (!this.functions) {
       this.functions = await Function.all();
     }
-    console.log('functions', this.functions)
-
     const executer = new Executer(yamlTemplate, input, settings)
 
     this.functions.forEach((fn: Function) => {
-      console.log('fn', fn.name, fn.code)
-
       executer.addFunction(fn.name, fn.code)
     })
 

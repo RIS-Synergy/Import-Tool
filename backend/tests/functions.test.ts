@@ -40,13 +40,13 @@ return 'Hello, world!'
 
   it('can count functions', async () => {
     const count = await Function.count()
-    expect(count).toBe(6)
+    expect(count).toBe(7)
   })
 
   it('can get all functions', async () => {
     const all = await Function.all()
     const one = all[0]
-    expect(all).toHaveLength(6)
+    expect(all).toHaveLength(7)
     expect(one.name).toBe('function1')
   })
 })
@@ -66,10 +66,6 @@ const hostile = (`
 
 describe('Executer', () => {
   it ('can execute the isolated VM', async () => {
-//     const code = `function hello() {
-// return 'Hello, world!'
-// }`
-
     const yamlTemplate = `
 static: just a static string
 hello_function: "!<fn>hello"
@@ -88,12 +84,8 @@ oefos_fn: "!<fn>fn_oefos"
     executer.addFunction('fn_oefos', "return oefosValue('501030', 'DE')")
 
     const result = await executer.execute()
-
-    console.log(result)
-
     expect(result.static).toBe('just a static string')
     expect(result.hello_function).toBe('Hello, world!')
-    // expect(result.inputs_fn).toBe('a')
     expect(result.inputs_fn.i).toBe('a')
     expect(result.settings_fn).toEqual({s: 'b'})
     expect(result.fn_custom_args).toBe('arguments one and two')
