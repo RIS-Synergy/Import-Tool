@@ -85,7 +85,7 @@ return result = Object.entries(data).map(([lang, texts]) => ({
 
 The `oefosValue` is a hardcoded function.
 
-```
+```js
 const { subjects } = input
 
 const result = subjects.map((subject) => {
@@ -104,7 +104,7 @@ return result
 
 ## getByLang
 
-```
+```js
 const pass = args[0]
 const lang = args[1]
 
@@ -122,9 +122,11 @@ return title
 
 # Templates
 
-An example of a template that just sends the input  itself as it is (of the RIS Data).
+## literallyInput
 
-```
+An example of a template that just sends the `input` itself as it is (of the RIS Data).
+
+```yaml
 output: "!<fn>literallyInput"
 ```
 

@@ -87,6 +87,14 @@ docker --context rissynergy-test-univie compose \
   up -d --force-recreate
 ```
 
+(Optional) Migrate the database (if the prisma schema has been updated):
+
+```
+docker --context rissynergy-test-univie compose \
+  -f compose.yaml -f compose.production.yaml \
+  exec -it backend yarn prisma migrate deploy
+```
+
 (Optional) Follow the logs:
 
 ```

@@ -5,6 +5,7 @@
 * Link to production: [docs/production](./docs/production.md)
 * Link to database: [docs/database](./docs/database.md)
 * Link to tools: [docs/tools](./docs/tools.md)
+* Link to functions: [docs/functions](./docs/functions.md)
 
 ## Getting Started
 
@@ -25,15 +26,6 @@ manage research projects.
 The CRIS is the Current Research Information System that is used by the research institution
 to manage research projects.
 
-**Backend**:
-The backend is the Node.js server that serves the frontend and the API.
-
-**Frontend**:
-The frontend is the Nuxt.js application that is served by the backend.
-
-**Database**:
-The database is a PostgreSQL database that is used by the backend to store data.
-
 **Funding Agency**:
 The funding agency is the organization that provides the funding for the project.
 
@@ -45,3 +37,13 @@ The project is the research project that is being conducted by the research inst
 
 **ETL**: *Extract*, *Transform*, *Load* is the process of extracting data from one system,
 transforming it, and loading it into another system.
+
+**Backend**:
+The backend is the Node.js server that serves the frontend and the API.
+
+**Frontend**:
+The frontend is the Nuxt.js application that is served by the backend.
+
+**Database**:
+The database is a PostgreSQL database that is used by the backend to store data.
+

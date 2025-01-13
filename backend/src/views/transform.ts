@@ -21,9 +21,8 @@ router.post('/upload', async (req: Request, res: Response) => {
   log.debug('Template', template.id, template.name)
 
   const transform = new Transform()
-  // transform.functions = []
   const result = await transform.run(template.yamlTemplate, req.body.ris, req.body.settings)
-  // log.info('Result', result)
+  log.info('Result', result)
 
   res.json({
     yamlTemplate: template.yamlTemplate,
