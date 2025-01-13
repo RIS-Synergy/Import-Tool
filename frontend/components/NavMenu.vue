@@ -51,7 +51,12 @@
     <v-divider></v-divider>
     <v-list-item :to="`/searchCRIS`" link title="CRIS Search" />
     <v-divider></v-divider>
-    <v-list-item :to="`/functions`" link title="Functions" />
+    <v-list-item :to="`/functions`" link title="Functions" >
+      <template v-slot:append>
+          <v-icon>mdi-file-code-outline</v-icon>
+    </template>
+    </v-list-item>
+
     <v-divider></v-divider>
     <v-list-item :to="`/fundings`" link title="Fundings" />
     <v-list-item :to="`/info`" link title="Info" />

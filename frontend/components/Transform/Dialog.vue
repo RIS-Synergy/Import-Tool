@@ -44,6 +44,6 @@ const store = useProjectStore();
 const { loadTransformation } = useApiUtils();
 
 function onClickView () {
-  loadTransformation(store, id.value)
+  loadTransformation(store, id.value, props.templateType)
 }
 </script>

@@ -13,3 +13,134 @@ describe('custom transform functions', () => {
     ])
   })
 })
+
+import { Function } from '../src/models/Function'
+import { Executer } from '../src/models/Executer'
+
+describe('model', () => {
+  it('can create a function model', () => {
+    const fn = new Function()
+    expect(fn).toBeInstanceOf(Function)
+  })
+
+  it('can create a function', async () => {
+    const code = `function hello() {
+return 'Hello, world!'
+}`
+    const fn = await Function.createOrUpdate('function1', code)
+    expect(fn.name).toBe('function1')
+    expect(fn.code).toBe(code)
+  })
+
+  it('can load a function', async () => {
+    const fn = await Function.read('function1')
+    expect(fn.name).toBe('function1')
+    expect(fn.code.length).toBe(43)
+  })
+
+  it('can count functions', async () => {
+    const count = await Function.count()
+    expect(count).toBe(7)
+  })
+
+  it('can get all functions', async () => {
+    const all = await Function.all()
+    const one = all[0]
+    expect(all).toHaveLength(7)
+    expect(one.name).toBe('function1')
+  })
+})
+
+const hostile = (`
+	const storage = [];
+	const twoMegabytes = 1024 * 1024 * 2;
+	while (true) {
+		const array = new Uint8Array(twoMegabytes);
+		for (let ii = 0; ii < twoMegabytes; ii += 4096) {
+			array[ii] = 1; // we have to put something in the array to flush to real memory
+		}
+		storage.push(array);
+		log('I\\'ve wasted '+ (storage.length * 2)+ 'MB');
+	}
+`);
+
+describe('Executer', () => {
+  it ('can execute the isolated VM', async () => {
+    const yamlTemplate = `
+static: just a static string
+hello_function: "!<fn>hello"
+inputs_fn: "!<fn>fn_input"
+settings_fn: "!<fn>fn_settings"
+fn_custom_args: "!<fn>fn_with_args:one:two"
+nested:
+  value: "!<fn>hello"
+oefos_fn: "!<fn>fn_oefos"
+`
+    const executer = new Executer(yamlTemplate, {i: 'a'}, {s: 'b'} )
+    executer.addFunction('fn_with_args', "return `arguments ${args[0]} and ${args[1]}`")
+    executer.addFunction('hello', "return 'Hello, world!'")
+    executer.addFunction('fn_input', "log(input); return input")
+    executer.addFunction('fn_settings', "return settings")
+    executer.addFunction('fn_oefos', "return oefosValue('501030', 'DE')")
+
+    const result = await executer.execute()
+    expect(result.static).toBe('just a static string')
+    expect(result.hello_function).toBe('Hello, world!')
+    expect(result.inputs_fn.i).toBe('a')
+    expect(result.settings_fn).toEqual({s: 'b'})
+    expect(result.fn_custom_args).toBe('arguments one and two')
+    expect(result.nested.value).toBe('Hello, world!')
+  })
+
+
+  it ('can cause execution errors (?)', async () => {
+    const executer = new Executer('output: "!<fn>hello"')
+    executer.addFunction('hello', "return 'Hello Worls'")
+
+    const { output } = await executer.execute()
+    expect(output).toBe('Hello Worls')
+  })
+
+  it ('can cause execution errors', async () => {
+    const executer = new Executer('output: "!<fn>hello"')
+    executer.addFunction('hello', "not_defined")
+
+    const { output, error } = await executer.execute()
+    expect(output).toBe(undefined)
+    expect(error).toBe("Custom function error: not_defined is not defined")
+  })
+
+  it ('hostile memory use', async () => {
+    const executer = new Executer('output: "!<fn>hello"')
+    executer.addFunction('hello', hostile)
+
+    const { error } = await executer.execute()
+    expect(error).toBe('Custom function error: Array buffer allocation failed')
+  })
+
+  it ('can cause execution errors', async () => {
+    const executer = new Executer('output: "!<fn>hello"')
+    executer.addFunction('hello', "return 'Hello Wor")
+
+    const { error } = await executer.execute()
+    expect(error).toBe('Custom function error: Invalid or unexpected token')
+  })
+
+  it ('infinite loop', async () => {
+    const executer = new Executer('output: "!<fn>hello"')
+    executer.timeout = 1
+
+    executer.addFunction('hello', `while (true) {}`)
+    const result = await executer.execute()
+    expect(result.error).toBe('Custom function error: Script execution timed out.')
+  })
+
+  it ('not an "output"', async () => {
+    const executer = new Executer('foo: "!<fn>hello"')
+    executer.addFunction('hello', "return 'Hello Worls'")
+
+    const { foo } = await executer.execute()
+    expect(foo).toBe('Hello Worls')
+  })
+
+})

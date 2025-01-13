@@ -91,17 +91,12 @@ export const useApiUtils = () => {
     return result;
   };
 
-  const loadTransformation = async (store, templateId) => {
+  const loadTransformation = async (store, templateId, templateType: string) => {
     if (!templateId) {
       return;
     }
 
-    console.log("loadTransformation", templateId);
-
-    // const ris = store.risData.value
-    // const settings = store.settings.value
-
-    const x = await apiCall("transform/upload", "POST", {
+    const result = await apiCall("transform/upload", "POST", {
         body: JSON.stringify({
           ris: store.risData,
           settings: store.settings,
@@ -109,7 +104,11 @@ export const useApiUtils = () => {
         }),
     });
 
-    store.template.data = x;
+    store.template.data = result;
+
+    // this is used for verifying custom Functions
+    // for the last viewed template
+    store.viewLastTemplate(store.risData, store.settings, templateType)
   };
 
   const getDiffs = async (risId: string) => {
@@ -232,7 +231,34 @@ export const useApiUtils = () => {
       body: JSON.stringify({
         systemName: item.systemName,
         uuid: item.uuid,
-        projectUUID: project,
+        projectUUID: project
+      }),
+    })
+    return result;
+  }
+
+  const getFunction = async (id: string = '') => {
+    const result = await apiCall('functions/' + id)
+    return result;
+  }
+
+  const setFunction = async (name: string, code: string, input: object, settings: object) => {
+    const result = await apiCall(`functions/${name}`, 'PUT', {
+      body: JSON.stringify({
+        code,
+        input,
+        settings
+      }),
+    })
+    return result;
+  }
+
+
+  const createFunction = async (name: string) => {
+    // same as setFunction, but with POST
+    const result = await apiCall(`functions/`, 'PUT', {
+      body: JSON.stringify({
+        name,
       }),
     })
     return result;
@@ -260,6 +286,10 @@ export const useApiUtils = () => {
     riEntityUUID,
     faApi,
     diffRILikelihood,
-    assignCluster
+    assignCluster,
+
+    getFunction,
+    setFunction,
+    createFunction
   };
 };

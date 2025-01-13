@@ -50,6 +50,14 @@ docker --context rissynergy-test-univie compose \
   exec -it backend yarn db-user
 ```
 
+Create the functions under `backend/resources/funcitons/*`:
+
+```
+docker --context rissynergy-test-univie compose \
+  -f compose.yaml -f compose.production.yaml \
+  exec -it backend yarn create-functions
+```
+
 ## Projects (samples)
 
 Create projects data:

@@ -13,6 +13,7 @@
     "create-application": "ts-node ./scripts/create-application.ts",
     "create-award": "ts-node ./scripts/create-award.ts",
     "create-system-user": "ts-node ./scripts/create-system-user.ts",
+    "create-functions": "ts-node ./scripts/create-functions.ts",
     "copy": "ts-node ./scripts/copy-projects-from-fa.ts"
   },
   "keywords": [],
@@ -39,6 +40,7 @@
     "express": ">=5.0.0-beta.1",
     "flat": "^6.0.1",
     "glob": "^11.0.0",
+    "isolated-vm": "^5.0.3",
     "joi": "^17.13.3",
     "js-yaml": "^4.1.0",
     "jsonwebtoken": "^9.0.2",

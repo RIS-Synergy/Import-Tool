@@ -34,6 +34,12 @@ export const useProjectStore = defineStore('project', {
     crisData: null,
 
     error: null,
+
+    lastTemplate: {
+      settings: {},
+      input: {},
+      templateType: null
+    }
   }),
   getters: {
     noEmptySetings: (state) => {
@@ -72,7 +78,7 @@ export const useProjectStore = defineStore('project', {
     },
     setError(error: any, area: string) {
       this.error = error;
-      this.error.area = area;
+      // this.error.area = area;
     },
     resetError () {
       this.error = null
@@ -86,6 +92,11 @@ export const useProjectStore = defineStore('project', {
       if (!item && type === 'project') {
         this.projectSelected = null;
       }
+    },
+    viewLastTemplate (input, settings, templateType) {
+      this.lastTemplate.settings = settings;
+      this.lastTemplate.input = input;
+      this.lastTemplate.templateType = templateType;
     }
   },
   persist: true
