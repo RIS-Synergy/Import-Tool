@@ -9,6 +9,7 @@
     <ProjectEdit label="Type" v-model="model.type" />
     <ProjectEdit label="Acronym" v-model="model.acronym" />
     <ProjectEdit label="Title" v-model="model.title" component="LangTrans" />
+    <ProjectEdit label="Team" v-model="model.team" component="Teams" />
     <ProjectEdit label="Start Date" v-model="model.startDate" />
     <ProjectEdit label="End Date" v-model="model.endDate" />
     <ProjectEdit label="Subjects" v-model="model.subjects"
@@ -26,7 +27,6 @@
     />
     <ProjectEdit label="Status" v-model="model.status" />
     <ProjectEdit label="URL" v-model="model.url" />
-    <ProjectEdit label="Team" v-model="model.team" component="Teams" />
     <ProjectEdit label="Funded" v-model="model.funded" component="Fundeds" />
   </v-container>
   <!-- <hr />
