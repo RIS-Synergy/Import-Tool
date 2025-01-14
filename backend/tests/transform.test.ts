@@ -21,6 +21,6 @@ describe('Transform', () => {
     expect(transform.functions.length).toBe(1)
 
     const result = await transform.run('output: "!<fn>hello_fn"', input, settings)
-    expect(result).toBe('Hello, world!')
+    expect(result.output).toBe('Hello, world!')
   })
 })

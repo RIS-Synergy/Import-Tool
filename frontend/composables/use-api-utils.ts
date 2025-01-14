@@ -106,6 +106,12 @@ export const useApiUtils = () => {
 
     store.template.data = result;
 
+    if (result.error) {
+      const { error } = useSnackbar();
+      error(result.error)
+      return
+    }
+
     // this is used for verifying custom Functions
     // for the last viewed template
     store.viewLastTemplate(store.risData, store.settings, templateType)

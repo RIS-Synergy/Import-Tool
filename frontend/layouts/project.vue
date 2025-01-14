@@ -39,13 +39,11 @@
 
       </template>
     </v-app-bar>
-
     <v-main>
       <slot v-if="store.risData" />
     </v-main>
-
-    <Alert />
   </v-app>
+  <Alert />
 </template>
 
 <script setup>

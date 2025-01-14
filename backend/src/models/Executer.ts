@@ -27,7 +27,7 @@ args = JSON.parse(args);
 JSON.stringify(new Function(args, body)(...args));
 `, { timeout })
   } catch (e) {
-    throw new Error(`Custom function error: ${e.message}`)
+    throw new Error(`Custom function "${name}" error: ${e.message}`)
   }
   // valuse parse if possible
   try {
@@ -72,7 +72,7 @@ async function replaceTags(obj, input, settings, functions, jail, context, timeo
         try {
           result = await replaceTags(obj[key], input, settings, functions, jail, context, timeout);
         } catch (e) {
-          throw new Error(`Custom function error: ${e.message}`)
+          throw new Error(`${e.message}`)
         }
         obj[key] = result;
       }

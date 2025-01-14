@@ -22,11 +22,12 @@ router.post('/upload', async (req: Request, res: Response) => {
 
   const transform = new Transform()
   const result = await transform.run(template.yamlTemplate, req.body.ris, req.body.settings)
-  log.info('Result', result)
+  // log.info('Result', result)
 
   res.json({
     yamlTemplate: template.yamlTemplate,
-    transformationResult: result
+    transformationResult: result.output,
+    error: result.error
   })
 })
 
