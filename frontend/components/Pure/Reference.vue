@@ -1,8 +1,31 @@
 <template>
   <v-dialog max-width="1200">
     <template v-slot:activator="{ props: activatorProps }">
+      <v-chip
+        v-if="result && data.systemName === 'Organization'"
+        class="mr-1 mt-1"
+        :class="orgClass"
+      >
+        <v-btn
+          v-if="!orgIsAssigned"
+          variant="flat"
+          rounded
+          size="x-small"
+          class="mr-1"
+          @click="assignGroup"
+        >
+          +
+        </v-btn>
+        <span
+          v-bind="activatorProps"
+          :style="{ cursor: 'pointer' }"
+        >
+          {{ orgShorten() }}
+        </span>
+      </v-chip>
+
       <v-btn
-        v-if="result"
+        v-if="result && data.systemName === 'User'"
         variant="flat"
         rounded
         size="small"
@@ -10,9 +33,6 @@
         :class="orgClass"
         v-bind="activatorProps"
       >
-        <span v-if="data.systemName === 'Organization'">
-          {{ orgShorten() }}
-        </span>
         <span v-if="data.systemName === 'User'">
           {{ result.username }}
         </span>
@@ -62,7 +82,7 @@ const props = defineProps({
   },
   parentUuid: {
     type: String,
-    required: false
+    required: false,
   },
 });
 
@@ -73,7 +93,7 @@ const result = ref(null);
 const orgClass = computed(() => {
   if (!props.period) return;
   const { startDate, endDate } = props.period;
-  if (!endDate) return { current: true }
+  if (!endDate) return { current: true };
   const current = endDate.startsWith("9999-") || !endDate;
   return {
     current,
@@ -92,13 +112,13 @@ function orgShorten() {
     return acc.replace(cur, "");
   }, text);
 
-  const numberOfText = 12;
+  const numberOfText = 50;
   return rest.length > numberOfText
     ? rest.slice(0, numberOfText) + "..."
     : rest;
 }
 
-const { setPerson } = useProjectStore();
+const store = useProjectStore();
 
 const sameEmail = computed(() => {
   if (!props.email) return false;
@@ -106,10 +126,20 @@ const sameEmail = computed(() => {
   // compare both lowercase
   const same = props.email.toLowerCase() === result.value.email.toLowerCase();
   if (same) {
-    setPerson(props.parentUuid);
+    store.setPerson(props.parentUuid);
   }
   return same;
 });
+
+const orgIsAssigned = computed(() => {
+  return store.settings.organization === props.data.uuid;
+});
+
+function assignGroup() {
+  // console.log(props)
+  // console.log(store)
+  return (store.settings.organization = props.data.uuid);
+}
 
 onMounted(async () => {
   const { riReference } = useApiUtils();
