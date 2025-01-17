@@ -11,6 +11,7 @@ const log = new Logger({ name: 'model:FundingAgency' });
 export class FundingAgency {
   id = 'FWF';
   pageSize = 1000;
+  running = false;
 
   constructor() {}
 
@@ -82,6 +83,13 @@ export class FundingAgency {
     let projects = []
     let response = []
 
+    if(this.running) {
+      log.info('Already running')
+      throw new Error('Already running')
+    }
+    
+    this.running = true
+
     do {
       // TODO FWF bug: page[page] should not need the `page * this.pageSize` multiplier.
       const url = `${process.env.RIS_URL_PROJECTS}?page[page]=${page * this.pageSize}&page[size]=${this.pageSize}`
@@ -97,6 +105,49 @@ export class FundingAgency {
     log.info(`====================`)
     log.info(`Received total: ${projects.length} Projects`)
 
+
+    this.running = false
+
     return projects;
+  }
+
+  parseTimeoutString (timeoutString: string) {
+    const match = timeoutString.match(/(\d+)([smh])/)
+    if (!match) {
+      throw new Error('Invalid timeout string')
+    }
+
+    const value = parseInt(match[1])
+    const unit = match[2]
+
+    switch (unit) {
+      case 's':
+        return value
+      case 'm':
+        return value * 60
+      case 'h':
+        return value * 60 * 60
+      default:
+        throw new Error('Invalid timeout unit')
+    }
+  }
+
+  start (timeoutString: string = process.env.FA_SYNC_TIME) {
+    if (!timeoutString) {
+      throw new Error('No timeout string "FA_SYNC_TIME" provided')
+    }
+
+    const timeout = this.parseTimeoutString(timeoutString)
+    log.info(`Starting the FA -> DB sync process for ${timeoutString} (${timeout} seconds)`)
+
+    setTimeout(() => {
+      try {
+        log.info('Timeout reached')
+        this.copyProjectToDatabase()
+        this.start(timeoutString)
+      } catch (error) {
+        log.error('Error in timeout', error)
+      }
+    }, timeout * 1000)
   }
 }
