@@ -22,7 +22,7 @@ export async function getAuthEndpoint (url: string) {
       })
     });
 
-    log.info('Received the Auth Token')
+    // log.info('Received the Auth Token')
 
     /* Now that we have the token, we can GET the `url` */
     const info = await ofetch(url, {
@@ -32,7 +32,7 @@ export async function getAuthEndpoint (url: string) {
       }
     })
 
-    log.info(`Received url: ${url}`)
+    // log.info(`Received url: ${url}`)
 
     return info
   } catch (error) {

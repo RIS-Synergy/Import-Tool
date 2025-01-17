@@ -1,10 +1,14 @@
 import prompts from 'prompts';
 import { FundingAgency } from '../src/models/FundingAgency';
 
-// import { importSecretsToProcess } from "../src/utils/secrets";
-// importSecretsToProcess()
-
 async function main () {
+  // console.log(process.env.AUTH_SERVER, process.env.AUTH_CLIENT_ID)
+
+  const agency = new FundingAgency()
+  // const projects = await agency.fetchAllPages()
+  await agency.copyProjectToDatabase()
+
+  /* tedious to call this every time
   const { value } = await prompts({
     message: 'Import Project from Funding Agency (FWF)?',
     type: 'confirm',
@@ -15,8 +19,8 @@ async function main () {
     console.log('Aborted')
     process.exit(0);
   }
+  */
 
-  await FundingAgency.copyProjectToDatabase()
 }
 
 main()

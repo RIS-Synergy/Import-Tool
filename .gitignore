@@ -11,3 +11,6 @@ compose/*.env
 
 # don't use functions here yet
 functions_js
+
+# just for dev, sometimes
+backend/projects/

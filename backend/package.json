@@ -14,7 +14,8 @@
     "create-award": "ts-node ./scripts/create-award.ts",
     "create-system-user": "ts-node ./scripts/create-system-user.ts",
     "create-functions": "ts-node ./scripts/create-functions.ts",
-    "copy": "ts-node ./scripts/copy-projects-from-fa.ts"
+    "copy": "ts-node ./scripts/copy-projects-from-fa.ts",
+    "fa-api": "ts-node ./scripts/fa-api.ts"
   },
   "keywords": [],
   "author": "Kirill Stytsenko <kirill@styts.com>",

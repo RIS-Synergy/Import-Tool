@@ -18,9 +18,9 @@ export class Project {
         }
       })
     } catch (error) {
-      log.error('Error checking if project exists', error)
+      log.error('Error checking if project exists', error.message)
     }
-    return null
+    return false
   }
 
   static getById = async (risId: string) => {
