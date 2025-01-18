@@ -58,9 +58,9 @@
     </v-list-item>
 
     <v-divider></v-divider>
-    <v-list-item :to="`/fundings`" link title="Fundings" />
+    <!-- <v-list-item :to="`/fundings`" link title="Fundings" /> -->
     <v-list-item :to="`/info`" link title="Info" />
-    <v-list-item :to="`/pure`" link title="Pure" />
+    <!-- <v-list-item :to="`/pure`" link title="Pure" /> -->
   </v-list>
 </template>
 

@@ -1,4 +1,4 @@
-import fs from 'fs'
+// import fs from 'fs'
 import { PrismaClient } from '@prisma/client'
 import { Logger } from "tslog";
 
@@ -9,31 +9,14 @@ const prisma = new PrismaClient()
 const log = new Logger({ name: 'model:FundingAgency' });
 
 export class FundingAgency {
-  id = 'FWF';
   pageSize = 1000;
   running = false;
-
-  constructor() {}
 
   async copyProjectToDatabase() {
     let projects = []
 
     const start = new Date().getTime()
     projects = await this.fetchAllPages()
-    /*
-    // Download all the projects from the RIS
-    try {
-      // measure time
-      log.info('Starting to download all Projects')
-      const start = new Date().getTime()
-      projects = await getAuthEndpoint(process.env.RIS_URL_PROJECTS);
-      const end = new Date().getTime() - start
-      log.info(`Received ${projects.length} Projects in ${end / 1000} seconds`)
-    } catch (error) {
-      log.error('Error downloading Projects', error)
-      return
-    }
-    */
     const end = new Date().getTime() - start
     log.info(`Received ${projects.length} Projects in ${end / 1000} seconds`)
 
@@ -92,7 +75,8 @@ export class FundingAgency {
 
     do {
       // TODO FWF bug: page[page] should not need the `page * this.pageSize` multiplier.
-      const url = `${process.env.RIS_URL_PROJECTS}?page[page]=${page * this.pageSize}&page[size]=${this.pageSize}`
+      // const url = `${process.env.RIS_URL_PROJECTS}?page[page]=${page * this.pageSize}&page[size]=${this.pageSize}`
+      const url = `${Project.getUrl('PROJECTS')}?page[page]=${page * this.pageSize}&page[size]=${this.pageSize}`
       log.info(`Fetching page ${page} from ${url}`)
       response = await getAuthEndpoint(url)
       // fs.writeFileSync(`projects/project_${page}.json`, JSON.stringify(response, null, 2))

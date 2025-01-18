@@ -16,7 +16,7 @@ export async function getAuthEndpoint (url: string) {
       },
       body: new URLSearchParams({
         grant_type: 'client_credentials',
-        client_id: process.env.AUTH_CLIENT_ID,
+        client_id: process.env.RIS_FA_CLIENT_ID,
         // client_secret: process.env.AUTH_CLIENT_SECRET
         client_secret: process.env.RIS_FA_API_KEY
       })
