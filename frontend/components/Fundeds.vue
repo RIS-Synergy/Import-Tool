@@ -15,8 +15,7 @@
       <LangTrans v-model="x.as.name" />
       <div class="mb-1">
         <h4>Amount</h4>
-        {{ x.as.amount.amount }}
-        {{ x.as.amount.currency }}
+        <Price :amount="x.as.amount.amount" :currency="x.as.amount.currency" />
       </div>
       <div v-for="({ orgUnit }, idx) in x.as.recipients" :key="idx">
         <h4>OrgUnit</h4>
