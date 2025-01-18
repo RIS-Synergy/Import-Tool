@@ -26,7 +26,7 @@
       component="LangTrans"
     />
     <ProjectEdit label="Status" v-model="model.status" />
-    <ProjectEdit label="URL" v-model="model.url" />
+    <ProjectEdit label="URL" v-model="model.url" component="Url" />
     <ProjectEdit label="Funded" v-model="model.funded" component="Fundeds" />
   </v-container>
   <!-- <hr />
