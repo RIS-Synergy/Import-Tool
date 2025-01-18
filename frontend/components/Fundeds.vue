@@ -19,7 +19,7 @@
       </div>
       <div v-for="({ orgUnit }, idx) in x.as.recipients" :key="idx">
         <h4>OrgUnit</h4>
-        <pre> {{ orgUnit }}</pre>
+        <OrgUnit :id="orgUnit.id" :names="orgUnit.name" :identifiers="orgUnit.identifiers" />
       </div>
     </div>
   </div>
