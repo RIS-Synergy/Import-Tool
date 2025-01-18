@@ -16,13 +16,13 @@ export async function getAuthEndpoint (url: string) {
       },
       body: new URLSearchParams({
         grant_type: 'client_credentials',
-        client_id: process.env.AUTH_CLIENT_ID,
+        client_id: process.env.RIS_FA_CLIENT_ID,
         // client_secret: process.env.AUTH_CLIENT_SECRET
         client_secret: process.env.RIS_FA_API_KEY
       })
     });
 
-    log.info('Received the Auth Token')
+    // log.info('Received the Auth Token')
 
     /* Now that we have the token, we can GET the `url` */
     const info = await ofetch(url, {
@@ -32,7 +32,7 @@ export async function getAuthEndpoint (url: string) {
       }
     })
 
-    log.info(`Received url: ${url}`)
+    // log.info(`Received url: ${url}`)
 
     return info
   } catch (error) {

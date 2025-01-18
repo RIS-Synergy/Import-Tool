@@ -1,3 +1,7 @@
+// TODO this file and the directory
+// might be deleted eventually. but this needs to be
+// refactored at some later time.
+
 // find the `*.ts` files under this directory
 // and get them from an object
 
@@ -18,7 +22,7 @@ files.forEach(file => {
   // ignore flycheck_ files (sometimes they happen when developing)
   if(name.startsWith('flycheck_')) name.replace('flycheck_', '');
 
-  console.log('Loading function:', name, file)
+  // console.log('Loading function:', name, file)
 
   functions[name] = import(file).then(m => m.default);
 });

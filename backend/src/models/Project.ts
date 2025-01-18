@@ -5,9 +5,10 @@ const prisma = new PrismaClient()
 const log = new Logger({ name: 'model:Project' });
 
 import { ResearchInstitution } from './ResearchInstitution'
+import { Registry } from './Registry'
 
 export class Project {
-  constructor (public risId: string) {}
+  constructor(public risId: string) { }
 
   // @deprecated, delete it later. us getById, and even new Project(risId), not static
   static async ifExists(risId: string) {
@@ -18,9 +19,9 @@ export class Project {
         }
       })
     } catch (error) {
-      log.error('Error checking if project exists', error)
+      log.error('Error checking if project exists', error.message)
     }
-    return null
+    return false
   }
 
   static getById = async (risId: string) => {
@@ -73,5 +74,9 @@ export class Project {
     const ri = new ResearchInstitution()
     const crisData = await ri.getProjectData(await this.crisUUID)
     return crisData
+  }
+
+  static getUrl(url: 'PROJECTS' | 'PROJECT') {
+    return Registry.getURL('project', url)
   }
 }

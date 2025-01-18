@@ -12,20 +12,32 @@ import auth from '../middleware/auth'
 import { Logger } from "tslog";
 import { Sql } from "@prisma/client/runtime/library";
 const log = new Logger({ name: "view:funding-agency" });
+import { Registry } from "../models/Registry";
 
 const router: Router = express.Router();
 
 router.get("/info", async (req: Request, res: Response) => {
-  const result = await getAuthEndpoint(process.env.RIS_URL_INFO);
-  res.json(result.endpoints);
+  const result = Registry.endpoints
+
+  // Map to json
+  const jsonResult = {}
+  result.forEach((value, key) => {
+    jsonResult[key] = value
+  })
+
+  res.json(jsonResult);
 });
 
+
+// fundings are not used anymore (for now)
+/*
 router.get("/fundings/:id", async (req: Request, res: Response) => {
   const result = await getAuthEndpoint(
     process.env.RIS_URL_FUNDINGS + req.params.id,
   );
   res.json(result[0]);
 });
+*/
 
 router.get("/fundings", async (req: Request, res: Response) => {
   const result = await getAuthEndpoint(process.env.RIS_URL_FUNDINGS);
@@ -119,9 +131,12 @@ WHERE p."risData" #>> '{team,0,person,electronicAddress}' LIKE '%@${filters.piDo
   }
 });
 
+/*
+// also not used anymore
 router.get("/orgunits", async (req: Request, res: Response) => {
   const result = await getAuthEndpoint(process.env.RIS_URL_ORGUNITS);
   res.json(result);
 });
+*/
 
 export default router;

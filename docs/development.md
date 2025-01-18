@@ -48,6 +48,8 @@ docker exec -it backend npm run copy
 ```
 ---
 
+## VPN
+
 Open the UniVie VPN, which is required for their test CRIS system, using a
 Time-based one-time password (TOTP), a 6-digit code):
 
@@ -103,4 +105,49 @@ The IP adress is lightly different, find the right one:
 
 ```
 docker inspect backend | grep IPAddress
+```
+
+## Debugging FA API endpoints
+
+FWF also has an unauthenticated environment with non-sensitive data:
+```
+curl https://risapi.dev.fwf.ac.at/info/v1/info/ | jq
+```
+
+E.g. if you want to call a Funding Agency request https://risapi.prod.fwf.ac.at/info/v1/info/ with authentication credentials, you can run this:
+
+(test):
+```
+AUTH_CLIENT_ID=risapi.test.univie \
+AUTH_SERVER="https://tsso.fwf.ac.at/auth/realms/sso/protocol/openid-connect/token" \
+RIS_FA_API_KEY=$(pass ris/fwf-test) \
+yarn --silent fa-api https://risapi.fwf.ac.at/info/v1/info/ | jq
+```
+
+(production):
+```
+AUTH_CLIENT_ID=risapi.prod.univie \
+AUTH_SERVER="https://sso.fwf.ac.at/auth/realms/sso/protocol/openid-connect/token" \
+RIS_FA_API_KEY=$(pass ris/fwf-prod) \
+yarn --silent fa-api https://risapi.prod.fwf.ac.at/info/v1/info/ | jq
+```
+
+## Sync FA -> DB
+
+Temporarily. Later we will need fewer arguments.
+
+(test)
+```
+docker compose exec -it backend env RIS_FA_API_KEY=$(pass ris/fwf-test) bash -c "AUTH_CLIENT_ID='risapi.test.univie' \
+  AUTH_SERVER='https://tsso.fwf.ac.at/auth/realms/sso/protocol/openid-connect/token' \
+  RIS_URL_PROJECTS="https://risapi.fwf.ac.at/project/v1/projects/" \
+  yarn copy"
+```
+
+(production)
+```
+docker compose exec -it backend env RIS_FA_API_KEY=$(pass ris/fwf-prod) bash -c "AUTH_CLIENT_ID='risapi.prod.univie' \
+  AUTH_SERVER='https://sso.fwf.ac.at/auth/realms/sso/protocol/openid-connect/token' \
+  RIS_URL_PROJECTS="https://risapi.prod.fwf.ac.at/project/v1/projects/" \
+  yarn copy"
 ```
