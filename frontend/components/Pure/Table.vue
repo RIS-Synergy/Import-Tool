@@ -7,6 +7,8 @@
             :pureId="item.pureId"
             :entityType="item.systemName.toLowerCase()"
           />
+          <v-spacer />
+          <DiffButton class="bottom" :pureId="item.pureId" />
         </div>
         <div class="lower-right">
           <TransformButton
@@ -226,5 +228,12 @@ function entitySelected(entity) {
   position: absolute;
   right: 1em;
   bottom: 1em;
+}
+
+.bottom {
+  background-color: #fee;
+  height: 5em;
+  /* position: absolute;
+     bottom: 1em; */
 }
 </style>

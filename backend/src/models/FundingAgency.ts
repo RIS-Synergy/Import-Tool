@@ -70,7 +70,7 @@ export class FundingAgency {
       log.info('Already running')
       throw new Error('Already running')
     }
-    
+
     this.running = true
 
     do {
@@ -78,11 +78,15 @@ export class FundingAgency {
       // const url = `${process.env.RIS_URL_PROJECTS}?page[page]=${page * this.pageSize}&page[size]=${this.pageSize}`
       const url = `${Project.getUrl('PROJECTS')}?page[page]=${page * this.pageSize}&page[size]=${this.pageSize}`
       log.info(`Fetching page ${page} from ${url}`)
+      try {
       response = await getAuthEndpoint(url)
       // fs.writeFileSync(`projects/project_${page}.json`, JSON.stringify(response, null, 2))
 
       projects = projects.concat(response)
       log.info(`Received ${response.length} (total: ${projects.length}) Projects`)
+      } catch (error) {
+        log.error('Error fetching page', url, error)
+      }
       page++
     } while (response.length >= 0)
 
