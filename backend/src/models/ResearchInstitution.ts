@@ -52,12 +52,25 @@ export class ResearchInstitution {
     return result
   }
 
+  // move or move to 'getEntityData' below
   getProjectData = async (uuid: string) => {
     let result: any
     try {
       result = await callRIApi(`/projects/${uuid}`, 'GET')
     } catch (error) {
       log.error('Error getting project data', error)
+      return null
+    }
+    return result
+  }
+
+  // we can replace this by project...
+  getEntityData = async (entityFolder: string, uuid: string) => {
+    let result: any
+    try {
+      result = await callRIApi(`/${entityFolder}/${uuid}`, 'GET')
+    } catch (error) {
+      log.error(`Error getting entity (${entityFolder}) data`, error)
       return null
     }
     return result

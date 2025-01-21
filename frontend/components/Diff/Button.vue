@@ -8,7 +8,6 @@
         <v-btn
           v-bind="activatorProps"
           text="View"
-          @click="onClickView"
           variant="tonal"
         ></v-btn>
         <br />
@@ -56,12 +55,12 @@ const props = defineProps({
 
 const { getDiffs } = useApiUtils();
 
-const isActive = ref(true);
+const isActive = ref(false);
 const diffList = ref([]);
 
 onMounted(async () => {
-  console.log("mounted diff button", props.risId, props.systemName);
-  diffList.value = await getDiffs(props.risId, props.systemName, props.uuid);
+  // console.log("mounted diff button", props.risId, props.systemName, templateSelected.value);
+  diffList.value = await getDiffs(props.risId, props.systemName, props.uuid, templateSelected.value);
 });
 
 const templateSelected = computed(() => {
@@ -70,7 +69,7 @@ const templateSelected = computed(() => {
 
 function btnText() {
   const { value } = diffList;
-  console.log('value', value);
+  // console.log('value', value);
 
   // if values is not a list, return
   if (!Array.isArray(value)) {
@@ -98,10 +97,11 @@ function btnText() {
 
     let text = "";
     if (countCRIS.length > 0) {
-      text += `CRIS: ${countCRIS.join(", ")}`;
+      // text += `CRIS: ${countCRIS.join(", ")}`;
+      text += `CRIS: ${countCRIS.length}, `;
     }
     if (countRIS.length > 0) {
-      text += `RIS: ${countRIS.join(", ")}`;
+      text += `RIS: ${countRIS.length}`;
     }
     return text;
   }

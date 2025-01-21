@@ -1,6 +1,6 @@
 <template>
     <v-card-title>
-      <v-tabs v-model="tab">
+      <v-tabs v-model="tab" height="2em">
         <v-tab :value="1">YAML</v-tab>
         <v-tab :value="2">JSON</v-tab>
       </v-tabs>
@@ -60,8 +60,11 @@ const highlightedJson = computed(() => {
 
 <style scoped>
 pre {
-  padding: 1em;
+  /* padding: 1em; */
   border-radius: 8px;
   font-size: 0.8em;
+}
+
+.v-card-title {
 }
 </style>

@@ -113,8 +113,9 @@ const omitList = new Set([
 ])
 
 export async function runPipeline(risId: string,
-  // dbProject: any = {id: 0},
-  crisData: any) {
+                                  crisData: any,
+                                  latestTemplateId: number
+                                 ) {
   // 1) Get Project ID data from the Database
   const dbProject = await Project.getById(risId);
   if (!dbProject) {

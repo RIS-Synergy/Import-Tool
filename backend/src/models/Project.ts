@@ -70,9 +70,9 @@ export class Project {
     })
   }
 
-  async fetchCrisData() {
+  async fetchCrisData(crisUUID: string) {
     const ri = new ResearchInstitution()
-    const crisData = await ri.getProjectData(await this.crisUUID)
+    const crisData = await ri.getProjectData(crisUUID)
     return crisData
   }
 

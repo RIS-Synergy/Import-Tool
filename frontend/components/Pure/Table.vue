@@ -8,7 +8,7 @@
             :entityType="item.systemName.toLowerCase()"
           />
           <v-spacer />
-          <DiffButton class="bottom"
+          <DiffButton v-if="true"  class="bottom"
                       :risId="risId"
                       :systemName="item.systemName"
                       :uuid="item.uuid"

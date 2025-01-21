@@ -3,6 +3,7 @@ import express, { Router, Request, Response } from "express"
 import { Logger } from "tslog";
 const log = new Logger({ name: 'view:transform' });
 import { Project } from '../models/Project';
+import  { Diff } from '../models/Diff';
 import similarity from '../utils/similarity'
 
 const router: Router = express.Router()
@@ -14,16 +15,27 @@ const ri = new ResearchInstitution()
 
 router.post('/:id', async (req: Request, res: Response) => {
   log.info(`req: ${req.path}`, 'DiffList', req.body)
+  const  {id } = req.params
+  const { uuid, templateSelected, systemName } = req.body
+  // const project = new Project(req.params.id)
+  // const { risData } = await Project.getById(req.params.id)
 
-  const project = new Project(req.params.id)
-  const crisData = await project.fetchCrisData()
+  // log.silly('Project', risData)
+  // const crisData = await project.fetchCrisData(uuid)
   // log.info('CrisData', crisData)
-  if (!crisData) {
-    res.json({})
-    return
-  }
-  const result = await runPipeline(req.params.id, crisData)
-  log.info(`req: ${req.path}`, 'DiffList', result.diffList)
+  // if (!crisData) {
+  //   res.json({})
+  //   return
+  // }
+  const diff = new Diff(id, systemName)
+  await diff.setProjectData()
+  // await diff.setCrisId(uuid)
+  await diff.fetchCrisData(uuid)
+  const result = await diff.runPipeline(templateSelected)
+
+  // log.info(result)
+  // const result = await runPipeline(req.params.id, crisData, latestTemplateId)
+  // log.info(`req: ${req.path}`, 'DiffList', result.diffList)
   res.json(result.diffList.map((x: any) => {
     return {
       cris: x.a,

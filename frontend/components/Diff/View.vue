@@ -10,15 +10,17 @@
       <tbody>
         <tr v-for="diff in props.diffList" :key="diff.key">
           <td class="path mt-2">{{ diff.path }}</td>
-          <td>
-<pre>
-{{ diff.ris }}
-</pre>
+          <td class="data">
+            <Yaml v-if="diff.ris" :json="diff.ris" />
+            <!-- <pre>
+                 {{ diff.ris }}
+                 </pre> -->
           </td>
-            <td>
-<pre>
-{{ diff.cris }}
-</pre>
+          <td class="data">
+            <Yaml v-if="diff.cris" :json="diff.cris" />
+            <!-- <pre>
+                 {{ diff.cris }}
+                 </pre> -->
             </td>
         </tr>
       </tbody>
@@ -52,7 +54,11 @@ const hasAtLeastOne = computed(() => {
 }
 
 .path {
-  /* vertical-align: baseline; */
+  max-width: 10em;
+}
+
+.data {
+  max-width: 20em;
 }
 </style>
 
