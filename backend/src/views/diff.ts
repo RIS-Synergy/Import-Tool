@@ -12,7 +12,9 @@ import { runPipeline } from '../utils/diff'
 import { ResearchInstitution } from '../models/ResearchInstitution'
 const ri = new ResearchInstitution()
 
-router.get('/:id', async (req: Request, res: Response) => {
+router.post('/:id', async (req: Request, res: Response) => {
+  log.info(`req: ${req.path}`, 'DiffList', req.body)
+
   const project = new Project(req.params.id)
   const crisData = await project.fetchCrisData()
   // log.info('CrisData', crisData)

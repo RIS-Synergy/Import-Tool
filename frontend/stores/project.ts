@@ -97,7 +97,11 @@ export const useProjectStore = defineStore('project', {
       this.lastTemplate.settings = settings;
       this.lastTemplate.input = input;
       this.lastTemplate.templateType = templateType;
-    }
+    },
+    getTemplateByEntity(entity: string) {
+      const key = entity.toLocaleLowerCase() + 'Id'
+      return this.template[key]
+    },
   },
   persist: true
 })

@@ -1,6 +1,7 @@
 <template>
   <div>
     <PureTable :data="crisEntities"
+        :risId="id"
         :entityType="entityType"
     />
     <!-- <PureDiff
@@ -45,4 +46,8 @@ function canCreateNew () {
   return true
 }
 
+
+// not ideal...
+const route = useRoute();
+const id = route.params.id;
 </script>

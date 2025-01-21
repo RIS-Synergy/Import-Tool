@@ -8,7 +8,11 @@
             :entityType="item.systemName.toLowerCase()"
           />
           <v-spacer />
-          <DiffButton class="bottom" :pureId="item.pureId" />
+          <DiffButton class="bottom"
+                      :risId="risId"
+                      :systemName="item.systemName"
+                      :uuid="item.uuid"
+                      :pureId="item.pureId" />
         </div>
         <div class="lower-right">
           <TransformButton
@@ -154,6 +158,7 @@ import { formatDistance } from "date-fns";
 const props = defineProps({
   data: Array[Object],
   entityType: String,
+  risId: String,
 });
 
 function modDate(date) {

@@ -1,7 +1,7 @@
 <template>
   <StatusActive v-if="data.uuid" :data="data" />
   <span v-if="!data.uuid">
-    <StatusLikely :data="likelihood" v-if="!loading && likely" />
+    <StatusLikely :risId="props.id" :data="likelihood" v-if="!loading && likely" />
     <v-chip v-else class="text-none" color="#ffaa60"> unknown </v-chip>
   </span>
 </template>

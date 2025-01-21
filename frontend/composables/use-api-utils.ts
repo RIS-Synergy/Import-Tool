@@ -117,8 +117,13 @@ export const useApiUtils = () => {
     store.viewLastTemplate(store.risData, store.settings, templateType)
   };
 
-  const getDiffs = async (risId: string) => {
-    const result = await apiCall(`diff/${risId}`)
+  const getDiffs = async (risId: string, systemName: string, uuid: string) => {
+    const result = await apiCall(`diff/${risId}`, "POST", {
+      body: JSON.stringify({
+        systemName,
+        uuid
+      }),
+    });
     return result;
   }
 

@@ -9,7 +9,7 @@
     <template v-slot:default="{ isActive }">
       <v-card>
         <v-card-text>
-          <PureTable :data="data" />
+          <PureTable :risId="risId" :data="data" />
         </v-card-text>
       </v-card>
     </template>
@@ -19,6 +19,7 @@
 <script setup>
 const props = defineProps({
   data: Array[Object],
+  risId: String,
 });
 </script>
 

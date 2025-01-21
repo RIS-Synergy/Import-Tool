@@ -12,7 +12,9 @@
         <tr v-for="diff in diffList" :key="diff.key">
           <td>{{ diff.path }}</td>
           <td>{{ diff.ris }}</td>
-          <td>{{ diff.cris }}</td>
+          <td><pre>
+{{ diff.cris }}
+</pre></td>
         </tr>
       </tbody>
     </v-table>

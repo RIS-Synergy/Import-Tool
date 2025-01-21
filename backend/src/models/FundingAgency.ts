@@ -86,9 +86,10 @@ export class FundingAgency {
       log.info(`Received ${response.length} (total: ${projects.length}) Projects`)
       } catch (error) {
         log.error('Error fetching page', url, error)
+        // exit loop
       }
       page++
-    } while (response.length >= 0)
+    } while (response && response.length >= 0)
 
     log.info(`====================`)
     log.info(`Received total: ${projects.length} Projects`)
