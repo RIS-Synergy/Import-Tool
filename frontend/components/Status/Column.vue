@@ -1,9 +1,11 @@
 <template>
-  <StatusActive v-if="data.uuid" :data="data" />
-  <span v-if="!data.uuid">
-    <StatusLikely :risId="props.id" :data="likelihood" v-if="!loading && likely" />
-    <v-chip v-else class="text-none" color="#ffaa60"> unknown </v-chip>
-  </span>
+  <StatusLikely
+    v-if="!loading && likely"
+    :risId="props.id"
+    :data="likelihood"
+    :uuid="props.data.uuid"
+  />
+  <v-chip v-else class="text-none" color="orange">Unknown</v-chip>
 </template>
 
 <script setup>
@@ -19,7 +21,7 @@ const { diffRILikelihood } = useApiUtils();
 const likelihood = ref(null);
 const likely = ref(false);
 
-if (!props.data.uuid) {
+//if (!props.data.uuid) {
   likelihood.value = await diffRILikelihood(props.id).then((result) => {
     // result is a object with keys
     if (result.length) {
@@ -28,7 +30,7 @@ if (!props.data.uuid) {
     loading.value = false;
     return result;
   });
-}
+//}
 </script>
 
 <style scoped>

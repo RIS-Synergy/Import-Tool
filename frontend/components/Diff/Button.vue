@@ -11,7 +11,8 @@
           variant="tonal"
         ></v-btn>
         <br />
-        {{ btnText() }}
+        <DiffText :data="diffList" />
+        <!-- {{ btnText() }} -->
       </div>
     </template>
 

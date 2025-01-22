@@ -1,8 +1,8 @@
 <template>
   <v-dialog max-width="800">
     <template v-slot:activator="{ props: activatorProps }">
-      <v-chip class="text-none" v-bind="activatorProps" color="#ff60aa">
-        likely <span class="ml-1 number">{{data.length}}</span>
+      <v-chip class="text-none" v-bind="activatorProps" :color="color">
+        {{ text }} <span class="ml-1 number">{{data.length}}</span>
       </v-chip>
     </template>
 
@@ -20,7 +20,21 @@
 const props = defineProps({
   data: Array[Object],
   risId: String,
+  uuid: String,
 });
+
+const text = ref('Unknown');
+const color = ref('orange');
+
+if (props.data.length) {
+  text.value = 'Likely';
+  color.value = 'pink';
+}
+if (props.uuid) {
+  text.value = 'RIS';
+  // purple
+  color.value = 'purple';
+}
 </script>
 
 <style scoped>
