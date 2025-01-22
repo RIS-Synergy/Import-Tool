@@ -12,7 +12,7 @@ WORKDIR /app
 
 # Install dependencies, including nodemon
 # Add nodemon as a global package or use it in devDependencies
-RUN npm install -g nodemon
+RUN npm install -g nodemon ts-node
 
 # Copy package manager files first for dependency caching
 COPY package.json yarn.lock ./
