@@ -10,6 +10,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Set the working directory
 WORKDIR /app
 
+# Install dependencies, including nodemon
+# Add nodemon as a global package or use it in devDependencies
+RUN npm install -g nodemon
+
 # Copy package manager files first for dependency caching
 COPY package.json yarn.lock ./
 
