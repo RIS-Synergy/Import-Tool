@@ -28,24 +28,32 @@ router.post('/searchAny', async (req: any, res: any) => {
   const { searchString } = req.body
   var results = []
 
-  const promises = entityTypes.map(entityType =>
-    callRIApi(`/${entityType}/search`, 'POST', {
-      size: 10,
-      offset: 0,
-      searchString
-    }).then((result: any) => {
-      result.items.map((item: any) => {
-        results.push({
-          pureId: item.pureId,
-          uuid: item.uuid,
-          name: item.name,
-          title: item.title,
-          entity: entityType,
-          modifiedDate: item.modifiedDate,
-        });
-      })
-    })
-  );
+  const promises = entityTypes.map(entityType => {
+    var result
+    try {
+      result = callRIApi(`/${entityType}/search`, 'POST', {
+          size: 10,
+          offset: 0,
+          searchString
+        }).then((result: any) => {
+          result.items.map((item: any) => {
+            results.push({
+              pureId: item.pureId,
+              uuid: item.uuid,
+              name: item.name,
+              title: item.title,
+              entity: entityType,
+              modifiedDate: item.modifiedDate,
+            });
+          })
+        })
+    } catch {
+      log.error('Error searching', entityType)
+      return
+    }
+    return result
+  })
+
 
   await Promise.all(promises);
 
