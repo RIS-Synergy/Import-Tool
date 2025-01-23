@@ -10,8 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Set the working directory
 WORKDIR /app
 
-# Install dependencies, including nodemon
-# Add nodemon as a global package or use it in devDependencies
+# Install global dependencies
 RUN npm install -g nodemon ts-node
 
 # Copy package manager files first for dependency caching

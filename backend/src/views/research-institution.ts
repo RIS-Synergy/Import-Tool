@@ -16,7 +16,7 @@ const router: Router = express.Router()
 
 const ri = new ResearchInstitution()
 
-router.post('/searchAny', async (req: Request, res: Response) => {
+router.post('/searchAny', async (req: any, res: any) => {
   // TODO there is a class for this already in ResearchInstitution.searchCategories
   const entityTypes = [
     'projects',
@@ -43,7 +43,7 @@ router.post('/searchAny', async (req: Request, res: Response) => {
           entity: entityType,
           modifiedDate: item.modifiedDate,
         });
-      });
+      })
     })
   );
 
@@ -57,7 +57,7 @@ router.post('/searchAny', async (req: Request, res: Response) => {
   return res.json(sortedResults);
 })
 
-router.post('/searchCluster', async (req: Request, res: Response) => {
+router.post('/searchCluster', async (req: any, res: any) => {
   const { searchString, uuid } = req.body
   const entityType = req.body.entityType
 
@@ -165,7 +165,8 @@ Source: ${source}.`
   return result;
 }
 
-router.post('/upload', async (req: Request, res: Response) => {
+// @ts-none
+router.post('/upload', async (req: any, res: any) => {
   const { ris, settings, uuid, template: templateId, entity } = req.body;
 
   log.info('Upload request', uuid, templateId, entity);
