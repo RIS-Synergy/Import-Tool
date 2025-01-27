@@ -1,0 +1,76 @@
+# Templates
+
+## literallyInput
+
+An example of a template that just sends the `input` itself as it is (of the RIS Data).
+
+```yaml
+output: "!<fn>literallyInput"
+```
+
+and a trivial function for it: `return input`.
+
+## Example
+
+As per PURE for UniVie (as per `2025-01-27`).
+
+```yaml
+output:
+  typeDiscriminator: "AwardManagementProject"
+  systemName: "Project"
+  visibility:
+    key: "FREE"
+    description:
+      en_GB: "Public - No restriction"
+      de_DE: "Öffentlich - Keine Einschränkungen"
+  title:
+    en_GB: "!<fn>getByLang:title:en"
+    de_DE: "!<fn>getByLang:title:de"
+  descriptions:
+    - value:
+        en_GB: "!<fn>getByLang:abstractPR:en"
+        de_DE: "!<fn>getByLang:abstractPR:de"
+      type:
+        uri: "/dk/atira/pure/upmproject/descriptions/projectdescription"
+  period:
+    startDate: ${input.startDate}
+    endDate: ${input.endDate}
+  participants:
+    - typeDiscriminator: "InternalParticipantAssociation"
+      person:
+        systemName: "Person"
+        uuid: "${settings.person}"
+      role:
+        uri: "/dk/atira/pure/upmproject/roles/upmproject/pi"
+      organizations:
+        - systemName: "Organization"
+          uuid: "${settings.organization}"
+  type:
+    uri: "/dk/atira/pure/upmproject/upmprojecttypes/upmproject/research_funding"
+  managingOrganization:
+    systemName: "Organization"
+    uuid: "${settings.organization}"
+  organizations:
+    - systemName: "Organization"
+      uuid: "${settings.organization}"
+  identifiers:
+    - typeDiscriminator: ClassifiedId
+      id: "!<fn>getIdentifier:CROSSREF_GRANTID"
+      type:
+        uri: /dk/atira/pure/upm/classifiedsource/crossref_grant_id
+    - typeDiscriminator: ClassifiedId
+      id: "!<fn>getIdentifier:PROJECT_NUMBER"
+      type:
+        uri: /dk/atira/pure/upm/classifiedsource/internalprojectid
+    - id: ris:FWF:project:${input.id}
+      type:
+        uri: /dk/atira/pure/upm/classifiedsource/ris_id
+      typeDiscriminator: ClassifiedId
+  keywordGroups:
+  - typeDiscriminator: ClassificationsKeywordGroup
+    logicalName: oefos2012
+    classifications: "!<fn>oefos2012"
+  - typeDiscriminator: FreeKeywordsKeywordGroup
+    logicalName: keywordContainers
+    keywords: "!<fn>keywords"
+```

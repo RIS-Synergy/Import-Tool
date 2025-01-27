@@ -11,13 +11,15 @@
 - Follow the logs: `docker compose logs -f`
 - Create user credentials: `docker exec -it backend yarn db-user`
 - Open the browser: http://localhost:3032/
+- Create the [templates](./docs/templates.md) and [custom functions](./docs/functions.md) as needed.
 
 ## Documentation
 
-* Link to functions: [docs/functions](./docs/functions.md)
-* Link to development: [docs/development](./docs/development.md)
-* Link to docker: [docs/docker](./docs/docker.md)
-* Link to production: [docs/production](./docs/production.md)
-* Link to database: [docs/database](./docs/database.md)
-* Link to tools: [docs/tools](./docs/tools.md)
-* Link to definitions: [docs/definitions](./docs/definitions.md)
+* [Development](./docs/development.md)
+* [Docker](./docs/docker.md)
+* [Production](./docs/production.md)
+* [Database](./docs/database.md)
+* [Tools](./docs/tools.md)
+* [Functions](./docs/functions.md)
+* [Templates](./docs/templates.md)
+* [Definitions](./docs/definitions.md)

@@ -34,10 +34,6 @@ Result:
   ]
 ```
 
-## getPersonUUID
-
-(Not needed, as it has been replaced by `settings.person`.)
-
 ## grantAmount
 
 ```js
@@ -124,14 +120,6 @@ title = title.text.replace(/\r\n/g, '<br/>');
 return title
 ```
 
-# Templates
+## getPersonUUID
 
-## literallyInput
-
-An example of a template that just sends the `input` itself as it is (of the RIS Data).
-
-```yaml
-output: "!<fn>literallyInput"
-```
-
-and a trivial function for it: `return input`.
+(Not needed, as it has been replaced by `settings.person`.)
