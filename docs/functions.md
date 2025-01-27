@@ -1,5 +1,7 @@
 # Custom Functions
 
+These functions can created manually in the UI.
+
 ## Hello World
 
 Trivial example function.
@@ -9,6 +11,15 @@ return 'Hello, world!';
 ```
 
 ## getIdentifier
+
+```js
+const type = args[0] || 'PROJECT_NUMBER';
+return input.identifiers
+  .find(i => i.type === type)
+  .value
+```
+
+Result:
 
 ```json
 "identifiers": [
@@ -23,16 +34,9 @@ return 'Hello, world!';
   ]
 ```
 
-```js
-const type = args[0] || 'PROJECT_NUMBER';
-return input.identifiers
-  .find(i => i.type === type)
-  .value
-```
-
 ## getPersonUUID
 
-(Has been replaced by `settings.person`.)
+(Not needed, as it has been replaced by `settings.person`.)
 
 ## grantAmount
 
