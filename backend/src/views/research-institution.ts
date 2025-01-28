@@ -352,7 +352,8 @@ router.post('/assignCluster', async (req: Request, res: Response) => {
   const clusterUUID = entityData.cluster.uuid
   console.log('clusterUUID', clusterUUID)
 
-  const project = await ri.getProjectData(req.body.projectUUID)
+  // const project = await ri.getProjectData(req.body.projectUUID)
+  const project = await ri.getEntityData('Project', req.body.projectUUID)
   project[`${systemName.toLowerCase()}Clusters`] = [
     {
       uuid: clusterUUID,

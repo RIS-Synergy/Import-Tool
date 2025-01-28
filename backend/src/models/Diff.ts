@@ -33,10 +33,10 @@ export class Diff {
   //   this.crisId = crisId
   // }
 
-  async fetchCrisData(uuid: string) {
+  async fetchCrisData(uuid: string, systemName: string) {
     const ri = new ResearchInstitution()
     // XXX this.systemName
-    this.crisData = await ri.getEntityData('projects', uuid)
+    this.crisData = await ri.getEntityData(systemName, uuid)
   }
 
   async runPipeline (templateId: number) {
@@ -142,6 +142,7 @@ export class Differ {
 }
 
 const omitList = new Set([
+  /*
   'applicationClusters',
   'awardClusters',
   'createdBy',
@@ -179,6 +180,7 @@ const omitList = new Set([
   'type.term',
   'uuid',
   'version',
+  */
 ])
 
 class Omits {

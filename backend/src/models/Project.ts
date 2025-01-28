@@ -72,7 +72,7 @@ export class Project {
 
   async fetchCrisData(crisUUID: string) {
     const ri = new ResearchInstitution()
-    const crisData = await ri.getProjectData(crisUUID)
+    const crisData = await ri.getEntityData('Project', crisUUID)
     return crisData
   }
 

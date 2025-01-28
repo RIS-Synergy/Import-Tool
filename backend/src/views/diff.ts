@@ -17,25 +17,11 @@ router.post('/:id', async (req: Request, res: Response) => {
   log.info(`req: ${req.path}`, 'DiffList', req.body)
   const  {id } = req.params
   const { uuid, templateSelected, systemName } = req.body
-  // const project = new Project(req.params.id)
-  // const { risData } = await Project.getById(req.params.id)
-
-  // log.silly('Project', risData)
-  // const crisData = await project.fetchCrisData(uuid)
-  // log.info('CrisData', crisData)
-  // if (!crisData) {
-  //   res.json({})
-  //   return
-  // }
   const diff = new Diff(id, systemName)
   await diff.setProjectData()
-  // await diff.setCrisId(uuid)
-  await diff.fetchCrisData(uuid)
+  await diff.fetchCrisData(uuid, systemName)
   const result = await diff.runPipeline(templateSelected)
 
-  // log.info(result)
-  // const result = await runPipeline(req.params.id, crisData, latestTemplateId)
-  // log.info(`req: ${req.path}`, 'DiffList', result.diffList)
   res.json(result.diffList.map((x: any) => {
     return {
       cris: x.a,
