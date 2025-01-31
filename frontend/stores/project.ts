@@ -39,6 +39,10 @@ export const useProjectStore = defineStore('project', {
       settings: {},
       input: {},
       templateType: null
+    },
+
+    diff: {
+      onlyRIS: true
     }
   }),
   getters: {
@@ -102,6 +106,9 @@ export const useProjectStore = defineStore('project', {
       const key = entity.toLocaleLowerCase() + 'Id'
       return this.template[key]
     },
+    toggleDiff () {
+      this.diff.onlyRIS = !this.diff.onlyRIS
+    }
   },
   persist: true
 })
