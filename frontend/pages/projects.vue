@@ -1,73 +1,48 @@
 <template>
-  <v-data-table-server
-    :headers="headers"
-    :items="serverItems"
-    :items-length="totalItems"
-    :items-per-page="store.itemsPerPage"
-    :loading="loading"
-    :sort-by.sync="store.sortBy"
-    :items-per-page-options="items_per_page_options"
-    @update:options="loadItems"
-    @update:itemsPerPage="updateItemsPerPage"
-  >
-    <template v-slot:item.id="x">
-      <NuxtLink :to="`/project/${x.item.id}`">{{ x.item.id }}</NuxtLink>
-    </template>
-    <!-- <template v-slot:item.PI_email="x">
-         <span v-html="email(x.item.PI_email)" />
-         </template> -->
-    <template v-slot:item.startDate="x">
-      <div class="date">
-        {{ x.item.startDate }}
-      </div>
-    </template>
-    <template v-slot:item.endDate="x">
-      <div class="date">
-        {{ x.item.endDate }}
-      </div>
-    </template>
-    <template v-if="false" #item="{ item }">
-      <v-col cols="12">
-        <v-card>
-          <ProjectCard :data="item" />
+  <v-container>
+    <v-row>
+      <v-col
+        v-for="(item, index) in serverItems"
+        :key="item.id"
+        cols="12"
+        md="6"
+      >
+        <v-card class="">
+          <v-card-title
+            >{{ getLang(item.title, "de") }} <br />
+            {{ getLang(item.title, "en") }}
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col>
+                ID:
+                <NuxtLink :to="`/project/${item.id}`">{{ item.id }}</NuxtLink>
+                <br />
+                PI: <span class="bold">{{ piName(item) }}</span
+                ><br />
+                Date: {{ item.startDate }} - {{ item.endDate }}<br />
+                Status: {{ item.status }}<br />
+              </v-col>
+              <v-col> ... </v-col>
+            </v-row>
+          </v-card-text>
         </v-card>
       </v-col>
-    </template>
-    <template v-if="false" #body="{ items, columns, toggleSelect }">
-      <v-col cols="6" v-for="item in items">
-        <v-card>
-          <ProjectCard :data="item" />
-        </v-card>
-      </v-col>
-    </template>
-    <template v-slot:item.crisStatus="x">
-      <StatusColumn :data="x.internalItem.raw.crisStatus" :id="x.item.id || null" />
-    </template>
-  </v-data-table-server>
+      <v-pagination
+        v-if="totalItems > 0"
+        v-model="page"
+        :length="pagesLength"
+        class="my-4"
+      ></v-pagination>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup>
-const headers = [
-  {
-    title: "ID",
-    align: "start",
-    sortable: false,
-    key: "id",
-  },
-  { title: "Title", key: "title", align: "start", sortable: false },
-  { title: "PI Name", key: "PI_name", align: "start", sortable: false },
-  // { title: "PI Email", key: "PI_email", align: "start", sortable: false },
-  { title: "Start Date", key: "startDate", align: "start", sortable: true },
-  { title: "End Date", key: "endDate", align: "start", sortable: true },
-  { title: "Status", key: "status", align: "start", sortable: true },
-  // { title: "Action", key: "action", align: "start", sortable: false},
-  // { title: "Pure ID", key: "pureId", align: "start", sortable: false },
-  { title: "CRIS", key: "crisStatus", align: "start", sortable: false },
-];
-
 const loading = ref(false);
 const serverItems = ref([]);
 const totalItems = ref(0);
+const page = ref(1);
 
 const { getProjectsList } = useApiUtils();
 async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
@@ -75,7 +50,6 @@ async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
   loading.value = true;
 
   const filters = storeFilter || store.projectFilters;
-  // console.log('loadItems', page, itemsPerPage, sortBy, filters)
 
   const { total, items } = await getProjectsList({
     page,
@@ -84,55 +58,41 @@ async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
     filters,
   });
 
-  serverItems.value = getItems(items);
+  serverItems.value = items.map((x) => x.risData);
   totalItems.value = total;
   loading.value = false;
 }
 
 function getLang(item, lang) {
-  return item.find((x) => x.lang === lang).text;
+  try {
+    return item.find((x) => x.lang === lang).text;
+  } catch (error) {
+    console.log(item);
+    return "";
+  }
 }
 
-function getItems(itms) {
-  const result = itms.map((data) => {
-    const x = data.risData;
-    return {
-      id: x.id,
-      title: getLang(x.title, "en"),
-      // PI_email: x.team[0].person.electronicAddress,
-      PI_name:
-        x.team[0].person.personName.firstName +
-        " " +
-        x.team[0].person.personName.familyName,
-      startDate: x.startDate,
-      endDate: x.endDate,
-      status: x.status,
-      // pureId: data.crisUUID,
-      crisStatus: {
-        uuid: data.crisUUID,
-        crisId: data.crisId, // the crisId might not be so interesting, when we already have the uuid
-      },
-    };
-  });
-  // console.log('getItems', result)
-  return result;
+function piName(x) {
+  try {
+    return (
+      x.team[0].person.personName.firstName +
+      " " +
+      x.team[0].person.personName.familyName
+    );
+  } catch (error) {
+    console.error(error);
+    return "";
+  }
 }
-
-function email(str) {
-  // highlisht with bold, given the domain matches "univie.ac.at"
-  if (!str) return str;
-
-  const [name, domain] = str.split("@");
-  // return domain === "univie.ac.at" ? `<b>${name}</b>@${domain}` : str;
-  return str;
-}
-
-const page = ref(1);
 
 const store = useUserSettingsStore();
 function updateItemsPerPage(idx) {
   store.itemsPerPage = idx;
 }
+
+const pagesLength = computed(() => {
+  return Math.ceil(totalItems.value / store.itemsPerPage);
+});
 
 watch(
   store.projectFilters,
@@ -145,12 +105,30 @@ watch(
   { deep: true },
 );
 
-const items_per_page_options = [
-  {value: 10, title: '10'},
-  {value: 15, title: '15'},
-  {value: 20, title: '20'},
-  {value: 25, title: '25'},
-]
+onMounted(() => {
+  loadItems(
+    { page: 1, itemsPerPage: store.itemsPerPage, sortBy: store.sortBy },
+    store.projectFilters,
+  );
+});
+
+watch(page, () => {
+  loadItems(
+    {
+      page: page.value,
+      itemsPerPage: store.itemsPerPage,
+      sortBy: store.sortBy,
+    },
+    store.projectFilters,
+  );
+});
+
+// const items_per_page_options = [
+//   { value: 10, title: "10" },
+//   { value: 15, title: "15" },
+//   { value: 20, title: "20" },
+//   { value: 25, title: "25" },
+// ];
 </script>
 
 <style scoped>
@@ -166,5 +144,9 @@ a {
 /* make the dates a bit wider */
 .date {
   min-width: 6em;
+}
+
+.bold {
+  font-weight: bold;
 }
 </style>
