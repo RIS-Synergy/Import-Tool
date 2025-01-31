@@ -54,7 +54,7 @@ const tableList = computed(() => {
 function validate (diff) {
   console.log(diff)
   if (store.diff.onlyRIS) {
-    console.log(diff)
+    // console.log(diff)
     return diff && !!diff.ris
   }
   return true

@@ -1,25 +1,26 @@
 <template>
-  <v-dialog>
+  <v-dialog v-model="dialog">
     <template v-slot:activator="{ props: activatorProps }">
       <div class="mt-1 text-warning" v-if="!templateSelected">
         Template not selected
       </div>
-      <div v-else class="diff mt-1">
+      <div v-else class="diff">
         <v-btn
+          v-if="false"
           v-bind="activatorProps"
           text="View"
+          @click="isActive = true"
           variant="tonal"
         ></v-btn>
-        <br />
-        <DiffText :data="diffList" />
-        <!-- {{ btnText() }} -->
+        <DiffText v-if="diffList" :data="diffList" @click="dialog = true" />
       </div>
     </template>
 
     <template v-slot:default="{ isActive }">
       <v-card>
         <v-card-text>
-          <DiffView :diff-list="diffList" />
+          <DiffView :diff-list="diffList"
+          />
         </v-card-text>
 
         <v-card-actions>
@@ -35,6 +36,8 @@
 <script setup>
 // const route = useRoute();
 // const id = route.params.id;
+
+const dialog = ref(false);
 
 const store = useProjectStore();
 
@@ -57,7 +60,8 @@ const props = defineProps({
 const { getDiffs } = useApiUtils();
 
 const isActive = ref(false);
-const diffList = ref([]);
+// const diffList = ref([]);
+const diffList = ref(null);
 
 onMounted(async () => {
   // console.log("mounted diff button", props.risId, props.systemName, templateSelected.value);
@@ -112,6 +116,9 @@ function btnText() {
 <style scoped>
 .diff {
   /* background-color: lightgrey; */
-  padding: 10px;
+  /* padding: 10px; */
+
+  right: 0;
+  position: absolute;
 }
 </style>

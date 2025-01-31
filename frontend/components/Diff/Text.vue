@@ -1,62 +1,44 @@
 <template>
-  <span v-if="!Array.isArray(data)">
-    Not an Array
-  </span>
-  <!-- === 0 -->
-  <span v-if="data.length === 0">
-    No diffs
-  </span>
-  <span v-else>
-    {{btnText()}}
-  </span>
+  <div class="mt-3">
+    <span v-if="!Array.isArray(data)"> Not an Array </span>
+    <v-btn v-if="countRIS.length === 0" rounded variant="outlined" color="green" @click="click"
+    ><v-icon>mdi-set-right</v-icon>No diff</v-btn
+                                          >
+    <v-btn v-else rounded variant="outlined" color="orange" @click="click"
+      ><v-icon>mdi-set-right</v-icon>{{ countRIS.length }} diffs</v-btn
+    >
+  </div>
 </template>
 
 <script setup>
+const emit = defineEmits(["click"]);
 const props = defineProps({
   data: Object,
+  // activatorProps: Object,
 });
 
-function btnText() {
-  const value = props.data
-  // console.log('value', value);
+const value = props.data;
 
-  // if values is not a list, return
-  // if (!Array.isArray(value)) {
-  //   return "No diffs";
-  // }
-  // 
-  // if (value.length === 0) {
-  //   return "No diffs";
-  // } else {
-    const countCRIS = value
-      .map((v) => {
-        if (v.cris) {
-          return v.path;
-        }
-      })
-      .filter((v) => v);
-    const countRIS = value
-      .map((v) => {
-        if (v.ris) {
-          return v.path;
-        }
-      })
-      .filter((v) => v);
-    console.log(countCRIS, countRIS);
-
-    let text = "";
-    if (countCRIS.length > 0) {
-      // text += `CRIS: ${countCRIS.join(", ")}`;
-      text += `CRIS: ${countCRIS.length}, `;
+const countCRIS = value
+  .map((v) => {
+    if (v.cris) {
+      return v.path;
     }
-    if (countRIS.length > 0) {
-      text += `RIS: ${countRIS.length}`;
-    }
-    return text;
-  // }
-}
+  })
+  .filter((v) => v);
 
-function newFn() {
-  // TODO
+const countRIS = value
+  .map((v) => {
+    if (v.ris) {
+      return v.path;
+    }
+  })
+  .filter((v) => v);
+
+console.log(countCRIS, countRIS);
+
+function click() {
+  console.log("clicked");
+  emit("click");
 }
 </script>
