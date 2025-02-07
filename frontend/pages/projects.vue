@@ -41,7 +41,8 @@
         v-if="totalItems > 0"
         v-model="page"
         :length="pagesLength"
-        class="my-4"
+        :total-visible="25"
+        class="my-4 mx-auto"
       ></v-pagination>
     </v-row>
     Projects: <b>{{ totalItems }}</b>
