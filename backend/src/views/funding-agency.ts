@@ -62,26 +62,30 @@ type SortBy = {
 type Filter = {
   status: Array<string>;
   piDomain: string;
+  orderBy: string;
 }
 
 router.get("/projects", async (req: Request, res: Response) => {
   try {
     const { page = 1, itemsPerPage = 10 } = req.query;
 
-    var sortBy: SortBy;
-    if (req.query.sortBy) {
-      sortBy = JSON.parse(req.query.sortBy as string);
-    } else {
-      sortBy = { key: "startDate", order: "asc" };
-    }
+    var sortBy: SortBy = { key: "startDate", order: "desc" };
+    /* these are no longer a table in the frontend
+    // if (req.query.sortBy) {
+    //   sortBy = JSON.parse(req.query.sortBy as string);
+    // } else {
+    //   sortBy = { key: "startDate", order: "asc" };
+    // } */
+
     var filters: Filter;
     if (req.query.filters) {
       filters = JSON.parse(req.query.filters as string);
     } else {
-      filters = { status: [], piDomain: "" };
+      filters = { status: [], piDomain: "", orderBy: "startDate:desc"};
     }
 
-    console.log(filters)
+    sortBy.key = filters.orderBy.split(":")[0];
+    sortBy.order = filters.orderBy.split(":")[1];
 
     var whereFilters: string
     if (filters.status.length === 0) {
@@ -92,9 +96,9 @@ router.get("/projects", async (req: Request, res: Response) => {
       }).join(" OR ");
     }
 
-    const orderBy: any = {
-      [sortBy.key]: sortBy.order === "asc" ? "asc" : "desc",
-    };
+    // const orderBy: any = {
+    //   [sortBy.key]: sortBy.order === "asc" ? "asc" : "desc",
+    // };
 
     const pageNumber = parseInt(page as string, 10);
     const items = parseInt(itemsPerPage as string, 10);
@@ -111,7 +115,6 @@ OFFSET ${skip} LIMIT ${take}`);
       log.debug(projects[0].risData[sortBy.key]);
     }
 
-    // const totalProjects = await prisma.project.count();
     const totalProjects = await prisma.$queryRawUnsafe(`
 SELECT COUNT(*) FROM "Project" p
 WHERE p."risData" #>> '{team,0,person,electronicAddress}' LIKE '%@${filters.piDomain}' AND (${whereFilters})

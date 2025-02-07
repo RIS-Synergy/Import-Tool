@@ -119,7 +119,7 @@ export function getValues(sourceA, sourceB, path) {
   if (a === b) {
     return null
   }
-  log.debug('[DIFF]', `${path}: "${a}" -> "${b}"`)
+  // log.debug('[DIFF]', `${path}: "${a}" -> "${b}"`)
   return {
     a,
     b,

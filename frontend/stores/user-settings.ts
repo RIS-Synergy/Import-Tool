@@ -7,7 +7,8 @@ export const useUserSettingsStore = defineStore('user-settings', {
     sortBy: [{ key: 'startDate', order: 'desc' }],
     projectFilters: {
       status: [],
-      piDomain: ['univie.ac.at']
+      piDomain: ['univie.ac.at'],
+      orderBy: 'startDate:desc',
     },
     token: null,
     user: null
