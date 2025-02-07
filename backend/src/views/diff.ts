@@ -3,7 +3,7 @@ import express, { Router, Request, Response } from "express"
 import { Logger } from "tslog";
 const log = new Logger({ name: 'view:transform' });
 import { Project } from '../models/Project';
-import  { Diff } from '../models/Diff';
+import { Diff } from '../models/Diff';
 import similarity from '../utils/similarity'
 
 const router: Router = express.Router()
@@ -15,20 +15,33 @@ const ri = new ResearchInstitution()
 
 router.post('/:id', async (req: Request, res: Response) => {
   log.info(`req: ${req.path}`, 'DiffList', req.body)
-  const  {id } = req.params
+  const { id } = req.params
   const { uuid, templateSelected, systemName } = req.body
   const diff = new Diff(id, systemName)
   await diff.setProjectData()
   await diff.fetchCrisData(uuid, systemName)
   const result = await diff.runPipeline(templateSelected)
 
-  res.json(result.diffList.map((x: any) => {
-    return {
-      cris: x.a,
-      ris: x.b,
-      path: x.path
-    }
-  }))
+  const output =
+    result.diffList.map((x: any) => {
+      return {
+        cris: x.a,
+        ris: x.b,
+        path: x.path
+      }
+    })
+  const countRIS = output
+    .map((v) => {
+      if (v.ris) {
+        return v.path;
+      }
+    })
+    .filter((v) => v);
+
+  res.json({
+    output,
+    countRIS: countRIS.length,
+  })
 })
 
 router.get('/likelihood/:id', async (req: Request, res: Response) => {

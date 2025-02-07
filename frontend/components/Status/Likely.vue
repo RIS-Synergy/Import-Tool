@@ -21,6 +21,10 @@ const props = defineProps({
   data: Array[Object],
   risId: String,
   uuid: String,
+  same: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 const text = ref('Unknown');
@@ -32,9 +36,15 @@ if (props.data.length) {
 }
 if (props.uuid) {
   text.value = 'RIS';
-  // purple
   color.value = 'purple';
 }
+
+watch(() => props.same, (val) => {
+  if (val) {
+    text.value = 'Identical';
+    color.value = 'green';
+  }
+});
 </script>
 
 <style scoped>

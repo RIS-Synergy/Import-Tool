@@ -54,7 +54,7 @@ const props = defineProps({
   uuid: {
     type: String,
     required: true,
-  },
+  }
 });
 
 const { getDiffs } = useApiUtils();
@@ -64,8 +64,8 @@ const isActive = ref(false);
 const diffList = ref(null);
 
 onMounted(async () => {
-  // console.log("mounted diff button", props.risId, props.systemName, templateSelected.value);
-  diffList.value = await getDiffs(props.risId, props.systemName, props.uuid, templateSelected.value);
+  const result = await getDiffs(props.risId, props.systemName, props.uuid, templateSelected.value);
+  diffList.value = result.output;
 });
 
 const templateSelected = computed(() => {
