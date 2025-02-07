@@ -23,7 +23,9 @@
                 Date: {{ item.startDate }} - {{ item.endDate }}<br />
                 Status: {{ item.status }}<br />
               </v-col>
-              <v-col> ... </v-col>
+              <v-col>
+                <StatusColumn :id="item.id" :data="columnData" />
+              </v-col>
             </v-row>
           </v-card-text>
         </v-card>
@@ -92,6 +94,12 @@ function piName(x) {
     return "";
   }
 }
+
+const columnData = computed(() => {
+  return {
+    uuid: null
+  }
+});
 
 const store = useUserSettingsStore();
 
