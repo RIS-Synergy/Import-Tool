@@ -7,14 +7,14 @@
         cols="12"
         md="6"
       >
-        <v-card class="">
+        <v-card v-if="!loading" class="">
           <v-card-title
             >{{ getLang(item.title, "de") }} <br />
             {{ getLang(item.title, "en") }}
           </v-card-title>
           <v-card-text>
             <v-row>
-              <v-col>
+              <v-col cols="8">
                 ID:
                 <NuxtLink :to="`/project/${item.id}`">{{ item.id }}</NuxtLink>
                 <br />
@@ -27,6 +27,13 @@
             </v-row>
           </v-card-text>
         </v-card>
+        <v-skeleton-loader
+          v-else
+          class="mx-auto"
+          max-heigth
+          elevation="1"
+          type="text, text, subtitle, list-item-three-line"
+        ></v-skeleton-loader>
       </v-col>
       <v-pagination
         v-if="totalItems > 0"
@@ -35,6 +42,7 @@
         class="my-4"
       ></v-pagination>
     </v-row>
+    Projects: <b>{{ totalItems }}</b>
   </v-container>
 </template>
 
@@ -86,6 +94,7 @@ function piName(x) {
 }
 
 const store = useUserSettingsStore();
+
 function updateItemsPerPage(idx) {
   store.itemsPerPage = idx;
 }
