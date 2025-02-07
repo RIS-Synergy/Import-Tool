@@ -16,7 +16,8 @@
             <v-row>
               <v-col cols="8">
                 ID:
-                <NuxtLink :to="`/project/${item.id}`">{{ item.id }}</NuxtLink>
+                <!-- <NuxtLink :to="`/project/${item.id}`">{{ item.id }}</NuxtLink> -->
+                {{ item.id }}
                 <br />
                 PI: <span class="bold">{{ piName(item) }}</span
                 ><br />
@@ -24,7 +25,19 @@
                 Status: {{ item.status }}<br />
               </v-col>
               <v-col>
-                <StatusColumn :id="item.id" :data="columnData" />
+                <!-- btn link -->
+                <NuxtLink :to="`/project/${item.id}`">
+                  <v-btn
+                    variant="outlined"
+                    size="small"
+                    class="right"
+                    color="primary">
+                    <!-- <v-icon>mdi-eye-outline</v-icon> -->
+                    view
+                  </v-btn>
+                </NuxtLink>
+
+                <StatusColumn class="bottom-right" :id="item.id" :data="columnData" />
               </v-col>
             </v-row>
           </v-card-text>
@@ -166,5 +179,15 @@ a {
 
 .bold {
   font-weight: bold;
+}
+
+:deep(.v-chip) {
+  position: absolute;
+  right: 1em;
+  bottom: 1em;
+}
+
+.right {
+  float: right;
 }
 </style>
