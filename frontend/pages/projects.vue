@@ -54,7 +54,7 @@
         v-if="totalItems > 0"
         v-model="page"
         :length="pagesLength"
-        :total-visible="25"
+        :total-visible="15"
         class="my-4 mx-auto"
       ></v-pagination>
     </v-row>
@@ -122,7 +122,7 @@ function updateItemsPerPage(idx) {
 }
 
 const pagesLength = computed(() => {
-  return Math.ceil(totalItems.value / store.itemsPerPage);
+  return Math.ceil(totalItems.value / store.projectFilters.itemsPerPage);
 });
 
 watch(

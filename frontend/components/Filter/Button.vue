@@ -34,6 +34,14 @@
             outlined
             clearable
           ></v-select>
+          <v-select
+            v-model="store.projectFilters.itemsPerPage"
+            :items="itemsPerPage"
+            label="Items per page"
+            chips
+            outlined
+            clearable
+          ></v-select>
         </v-card-text>
 
         <v-card-actions v-if="false">
@@ -91,6 +99,16 @@ const orderBy = [
     value: "endDate:desc",
     title: "End Date, descending",
   },
+];
+
+const itemsPerPage = [
+  { value: 5, title: "5" },
+  { value: 10, title: "10" },
+  { value: 20, title: "20" },
+  { value: 30, title: "30" },
+  { value: 40, title: "40" },
+  { value: 50, title: "50" },
+  { value: 100, title: "100" },
 ];
 
 function clearFilters() {

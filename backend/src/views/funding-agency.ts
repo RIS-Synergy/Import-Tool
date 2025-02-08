@@ -63,11 +63,12 @@ type Filter = {
   status: Array<string>;
   piDomain: string;
   orderBy: string;
+  itemsPerPage: string;
 }
 
 router.get("/projects", async (req: Request, res: Response) => {
   try {
-    const { page = 1, itemsPerPage = 10 } = req.query;
+    const { page = 1 } = req.query;
 
     var sortBy: SortBy = { key: "startDate", order: "desc" };
     /* these are no longer a table in the frontend
@@ -81,11 +82,12 @@ router.get("/projects", async (req: Request, res: Response) => {
     if (req.query.filters) {
       filters = JSON.parse(req.query.filters as string);
     } else {
-      filters = { status: [], piDomain: "", orderBy: "startDate:desc"};
+      filters = { status: [], piDomain: "", orderBy: "startDate:desc", itemsPerPage: '10'};
     }
 
     sortBy.key = filters.orderBy.split(":")[0];
     sortBy.order = filters.orderBy.split(":")[1];
+    var itemsPerPage = filters.itemsPerPage;
 
     var whereFilters: string
     if (filters.status.length === 0) {
