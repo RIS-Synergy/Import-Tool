@@ -74,11 +74,23 @@ const projectStatus = [
 const projectStatusDomain = [
   {
     value: "univie.ac.at",
-    title: "University of Vienna",
+    title: "Universität Wien",
   },
   {
     value: "plus.ac.at",
     title: "Universität Salzburg",
+  },
+  {
+    value: "tuwien.ac.at",
+    title: "Technische Universität Wien",
+  },
+  {
+    value: "uni-graz.at",
+    title: "Universität Graz",
+  },
+  {
+    value: "aau.at",
+    title: "Alpen-Adria-Universität Klagenfurt",
   },
 ];
 
@@ -102,7 +114,7 @@ const orderBy = [
 ];
 
 const itemsPerPage = [
-  { value: 5, title: "5" },
+  { value: 8, title: "8" },
   { value: 10, title: "10" },
   { value: 20, title: "20" },
   { value: 30, title: "30" },
