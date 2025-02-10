@@ -30,11 +30,7 @@
           </v-tabs>
           <v-spacer />
           <v-tabs right v-model="tabRight">
-            <v-tab
-              :disabled="!store.crisId"
-              :to="`/project/` + id + `/view`"> CRIS </v-tab>
-            <v-tab
-              :to="`/project/` + id + `/diff`"> Diff </v-tab>
+            <!-- has been removed. Diffs are now under 'Transform' -->
           </v-tabs>
 
       </template>
@@ -89,6 +85,7 @@ const breadcrumbs = computed(() => {
     {
       title: "Projects",
       to: "/projects",
+      disabled: false,
     },
   ];
   if (!store.risData) return result;

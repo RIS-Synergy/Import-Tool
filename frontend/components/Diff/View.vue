@@ -19,10 +19,22 @@
       <tr v-for="(diff, idx) in tableList" :key="idx">
         <td class="path mt-2">{{ diff.path }}</td>
         <td class="data">
-          <Yaml v-if="diff.ris" :json="diff.ris" />
+          <!-- if RIS is a string -->
+          <span class="string" v-if="typeof diff.ris === 'string'">{{ diff.ris }}</span>
+          <!-- if it's a number -->
+          <span class="number" v-else-if="typeof diff.ris === 'number'">{{ diff.ris }}</span>
+          <!-- if it's undefined -->
+          <span v-else-if="diff.ris === undefined"></span>
+          <Yaml v-else="diff.ris" :json="diff.ris" />
         </td>
         <td class="data">
-          <Yaml v-if="diff.cris" :json="diff.cris" />
+          <!-- if CRIS is a string -->
+          <span class="string" v-if="typeof diff.cris === 'string'">{{ diff.cris }}</span>
+          <!-- if it's a number -->
+          <span class="number" v-else-if="typeof diff.cris === 'number'">{{ diff.cris }}</span>
+          <!-- if it's undefined -->
+          <span v-else-if="diff.cris === undefined"></span>
+          <Yaml v-else="diff.cris" :json="diff.cris" />
         </td>
       </tr>
     </tbody>
@@ -52,9 +64,7 @@ const tableList = computed(() => {
 });
 
 function validate (diff) {
-  console.log(diff)
   if (store.diff.onlyRIS) {
-    // console.log(diff)
     return diff && !!diff.ris
   }
   return true
@@ -78,5 +88,18 @@ function validate (diff) {
 .toggleBtn {
   position: absolute;
   right: 0;
+}
+
+.number {
+  /* font-style: italic; */
+  opacity: 0.8;
+  /* bluer */
+  color: #26c;
+  font-size: 1.1em;
+}
+
+.string {
+  /* slightly larger */
+  font-size: 1.1em;
 }
 </style>

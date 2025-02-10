@@ -1,8 +1,9 @@
 <template>
   <NuxtLayout>
-    <ClientOnly>
+    <!-- This should be fine. (changed at 2025-02-09) -->
+    <!-- <ClientOnly> -->
       <NuxtPage />
-    </ClientOnly>
+      <!-- </ClientOnly> -->
     <Snackbar />
   </NuxtLayout>
 </template>

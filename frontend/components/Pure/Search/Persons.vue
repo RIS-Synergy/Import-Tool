@@ -110,7 +110,7 @@ function setOfOrganization(items) {
   if (!items) return [];
 
   // the organization UUID is already set in the environmnent settings (like in Development), ignore.
-  if (config.valueOrganization) {
+  if (config.public.valueOrganization) {
     return;
   }
 

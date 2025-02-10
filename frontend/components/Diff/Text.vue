@@ -35,10 +35,7 @@ const countRIS = value
   })
   .filter((v) => v);
 
-console.log(countCRIS, countRIS);
-
 function click() {
-  console.log("clicked");
   emit("click");
 }
 </script>

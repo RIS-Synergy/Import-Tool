@@ -32,6 +32,8 @@ const route = useRoute();
 const { id } = route.params;
 
 const store = useProjectStore();
+const alert = useAlertStore()
+const snackbar = useSnackbar();
 
 const { uploadToPure } = useApiUtils();
 
@@ -48,11 +50,17 @@ async function saveTransformUpload(crud) {
   );
   if (result.error) {
     store.setError(result.error, "uploadToPure");
+    alert.setError("Error saving update", result.error);
     return;
   } else {
     store.setPure(result);
-    // redirect to project view
-    router.push({ name: "project-id-view", params: { id: route.params.id } });
+    alert.setInfo("Update saved");
+
+    // delay 1 second:
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // refresh the page
+    store.templateSelect[props.entityType] = null
+    router.go(0);
   }
 }
 
