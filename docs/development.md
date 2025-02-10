@@ -3,7 +3,7 @@
 Run this command in development mode:
 
 ```
-docker compose -f ./compose/core.yml -f ./compose/development.yml up -d
+docker compose up -d
 ```
 
 You might want to initialize the samples from an earlier database projects' file from the FWF.
@@ -73,7 +73,7 @@ f5fpc --stop
 Run the logs (and follow the log output):
 
 ```
-docker compose -f ./compose/core.yml -f ./compose/development.yml logs -f
+docker compose logs -n 10 -f
 ```
 
 ## Testing
