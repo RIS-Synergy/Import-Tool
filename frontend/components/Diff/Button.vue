@@ -118,7 +118,7 @@ function btnText() {
   /* background-color: lightgrey; */
   /* padding: 10px; */
 
-  right: 0;
-  position: absolute;
+  /* right: 0; */
+  /* position: absolute; */
 }
 </style>

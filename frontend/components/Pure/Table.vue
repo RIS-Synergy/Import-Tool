@@ -3,13 +3,31 @@
     <v-card v-for="item in data" :key="item.uuid" class="mb-4">
       <v-card-text>
         <div class="vertical-right">
+          <v-dialog max-width="1400">
+            <template v-slot:activator="{ props: activatorProps }">
+              <v-btn
+                class="mb-3"
+                color="primary"
+                style=""
+                v-bind="activatorProps"
+                text="View"
+                variant="outlined"
+              ></v-btn>
+            </template>
+
+            <template v-slot:default="{ isActive }">
+              <PureUUID :uuid="item.uuid" :entity="item.entity" />
+            </template>
+          </v-dialog>
+
+          <v-spacer />
           <PureButton
             :pureId="item.pureId"
             :entityType="item.systemName.toLowerCase()"
           />
-          <v-spacer />
-          <DiffButton v-if="true"  class="bottom"
-                      :risId="risId"
+
+          <!-- <v-spacer /> -->
+          <DiffButton :risId="risId"
                       :systemName="item.systemName"
                       :uuid="item.uuid"
                       :pureId="item.pureId" />
@@ -31,6 +49,7 @@
           <v-col cols="7">{{ item.systemName }}</v-col>
           <v-col cols="3">
             <PureButton
+              v-if="false"
               class="right mr-3"
               :pureId="item.pureId"
               :entityType="item.systemName.toLowerCase()"
@@ -226,19 +245,15 @@ function entitySelected(entity) {
 }
 
 .vertical-right {
+  /* right */
   position: absolute;
-  right: 1em;
-}
-.lower-right {
-  position: absolute;
-  right: 1em;
-  bottom: 1em;
-}
+  right: 0;
 
-.bottom {
-  background-color: #fee;
-  height: 5em;
-  /* position: absolute;
-     bottom: 1em; */
+  /* clients are to the right */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  right: 1em;
 }
 </style>
