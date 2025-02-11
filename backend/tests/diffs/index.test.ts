@@ -1,8 +1,12 @@
+import yaml from "js-yaml";
 import { describe, it, expect } from 'vitest'
 import _ from 'lodash'
-import { Differ, findDeepDiff, runPipeline, getValues } from '../../src/utils/diff'
+import { runPipeline } from '../../src/utils/diff'
+import { Diff, Differ, findDeepDiff, getValues } from '../../src/models/Diff'
 import { Project } from '../../src/models/Project'
 import { templateData } from './crisTestData'
+import { risTestData } from './risTestData'
+import yamlTemplateTestData from './yamlTemplateTestData'
 
 const A = {
   foo: 'a',
@@ -62,8 +66,8 @@ describe('Differ class', () => {
 
     expect(getValues(A, B, 'foo')).toEqual({ a: 'a', b: 'b', path: 'foo' })
     expect(getValues(newA, newB, 'eq')).toEqual(null)
-    expect(getValues(newA, newB, 'bar.baz')).toEqual({ a: 'c', b: 'd', path: 'bar.baz'})
-    expect(getValues(newA, newB, 'bar')).toEqual({ a: { baz: 'c'}, b: { baz: 'd'}, path: 'bar'})
+    expect(getValues(newA, newB, 'bar.baz')).toEqual({ a: 'c', b: 'd', path: 'bar.baz' })
+    expect(getValues(newA, newB, 'bar')).toEqual({ a: { baz: 'c' }, b: { baz: 'd' }, path: 'bar' })
     expect(getValues(newA, newB, 'none')).toEqual(null)
   })
 
@@ -101,7 +105,83 @@ describe('Differ class', () => {
 })
 
 
-describe('runPipeline', () => {
+describe('not runPipeline, but Diff', () => {
+  const settings = {
+    person: "Person1-uuid-1234-abc",
+    organization: 'Org1-uuid-6789-xyz'
+  }
+
+  it('pipeline: identical', async () => {
+    const crisData = {
+      ...templateData,
+    }
+
+    const diff = new Diff('id_is_irrelevant_for_tests', 'systemName_is_irrelevant_for_tests')
+    diff.setProjectData(risTestData)
+    diff.crisData = crisData
+    diff.settings = settings
+    diff.yamlTemplate = yaml.dump({ output: yamlTemplateTestData }, { indent: 2 })
+
+    const { diffSet, diffList } = await diff.runPipeline()
+
+    expect(diffList).toEqual([])
+    expect(diffSet).toEqual(new Set([]))
+  })
+
+  it('pipeline: cris with undefined', async () => {
+    const crisData = {
+      ...templateData,
+      crisHasThisButRisDataNot: 'hello'
+    }
+
+    const diff = new Diff('id_is_irrelevant_for_tests', 'systemName_is_irrelevant_for_tests')
+    diff.setProjectData(risTestData)
+    diff.crisData = crisData
+    diff.settings = settings
+    diff.yamlTemplate = yaml.dump({ output: yamlTemplateTestData }, { indent: 2 })
+
+    const { diffSet, diffList } = await diff.runPipeline()
+
+    expect(diffList).toEqual([
+      {
+        "a": "hello",
+        "b": undefined,
+        "path": "crisHasThisButRisDataNot",
+      }
+    ])
+    expect(diffSet).toEqual(new Set(["crisHasThisButRisDataNot"]))
+  })
+
+  it('CRIS data date has changed', async () => {
+    const crisData = {
+      ...templateData,
+      period: {
+        endDate: '2023-12-12'
+      }
+    }
+
+    const diff = new Diff('id_is_irrelevant_for_tests', 'systemName_is_irrelevant_for_tests')
+    diff.setProjectData(risTestData)
+    diff.crisData = crisData
+    diff.settings = settings
+    diff.yamlTemplate = yaml.dump({ output: yamlTemplateTestData }, { indent: 2 })
+
+    const { diffSet, diffList } = await diff.runPipeline()
+
+    expect(diffList).toEqual([
+      {
+        "a": "2023-12-12",
+        "b": "2026-12-06",
+        "path": "period.endDate",
+      }
+    ])
+    expect(diffSet).toEqual(new Set(["period.endDate"]))
+  })
+})
+
+// This is now replaced by the Diff runPipeline
+/*
+describe.skip('runPipeline', () => {
   it('pipeline', async () => {
     const crisData = {
       ...templateData,
@@ -127,10 +207,4 @@ describe('runPipeline', () => {
     expect(diffSet).toEqual(new Set([]))
   })
 })
-
-
-// describe('Diff omits' () => {
-  // TODO
-  // it('omits', () => {
-  // })
-// })
+*/
