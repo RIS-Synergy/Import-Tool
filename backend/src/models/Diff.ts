@@ -11,7 +11,7 @@ import { ResearchInstitution } from './ResearchInstitution';
 export class Diff {
   risData = null
   crisData = null
-  settings = null
+  settings = {}
   yamlTemplate = null
 
   constructor(
