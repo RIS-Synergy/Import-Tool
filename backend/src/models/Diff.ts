@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import { Logger } from "tslog";
-const log = new Logger({ name: 'Diff'});
+const log = new Logger({ name: 'Diff' });
 
 import { Project } from './Project';
 import { Template } from './Template';
@@ -17,7 +17,7 @@ export class Diff {
   constructor(
     private risId: string,
     private systemName = 'projects'
-  ) {}
+  ) { }
 
   setProjectData = async (risData?: any) => {
     if (risData) {
@@ -33,7 +33,7 @@ export class Diff {
     this.crisData = await ri.getEntityData(systemName, uuid)
   }
 
-  async runPipeline (templateId?: number) {
+  async runPipeline(templateId?: number) {
     if (templateId) {
       const template = await Template.getById(templateId)
       this.yamlTemplate = template.yamlTemplate
@@ -57,11 +57,15 @@ export class Diff {
     var diffList = []
     diffSet.forEach((item: string) => {
       const { a, b, path } = getValues(this.crisData, appliedTemplate.output, item)
-      diffList.push({
-        a,
-        b,
-        path
-      })
+      if (!areIdenticalNumbers(a, b)) {
+        diffList.push({
+          a,
+          b,
+          path
+        })
+      } else {
+        diffSet.delete(item)
+      }
     })
 
     return {
@@ -69,6 +73,12 @@ export class Diff {
       diffList
     }
   }
+}
+
+// identical numbers '100.5' and string "100.5"
+export function areIdenticalNumbers(a: number | string, b: number | string): boolean {
+  if (a === "" || b === "") return false;
+  return Number(a) === Number(b);
 }
 
 export function findDeepDiff(obj1, obj2) {

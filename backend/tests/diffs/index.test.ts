@@ -2,11 +2,13 @@ import yaml from "js-yaml";
 import { describe, it, expect } from 'vitest'
 import _ from 'lodash'
 import { runPipeline } from '../../src/utils/diff'
-import { Diff, Differ, findDeepDiff, getValues } from '../../src/models/Diff'
+import { Diff, Differ, findDeepDiff, getValues, areIdenticalNumbers } from '../../src/models/Diff'
 import { Project } from '../../src/models/Project'
 import { templateData } from './crisTestData'
 import { risTestData } from './risTestData'
 import yamlTemplateTestData from './yamlTemplateTestData'
+import yamlTemplateApplication from './template/application1'
+import crisDataApplication1 from './crisData/application1'
 
 const A = {
   foo: 'a',
@@ -179,32 +181,52 @@ describe('not runPipeline, but Diff', () => {
   })
 })
 
-// This is now replaced by the Diff runPipeline
-/*
-describe.skip('runPipeline', () => {
-  it('pipeline', async () => {
+describe('temaplate: application', () => {
+  const settings = {
+    person: "Person1-uuid-1234-abc",
+    organization: 'Org1-uuid-6789-xyz'
+  }
+
+  it('pipeline: identical', async () => {
     const crisData = {
-      ...templateData,
-      crisHasThisButRisDataNot: 'hello'
+      ...crisDataApplication1
     }
 
-    const { diffSet } = await runPipeline('PUD33', crisData)
-    expect(diffSet).toEqual(new Set(["crisHasThisButRisDataNot"]))
-  })
+    const diff = new Diff('id_is_irrelevant_for_tests', 'systemName_is_irrelevant_for_tests')
+    diff.setProjectData(risTestData)
+    diff.crisData = crisData
+    diff.settings = settings
+    diff.yamlTemplate = yaml.dump({ output: yamlTemplateApplication }, { indent: 2 })
 
-  it('CRIS data date has changed', async () => {
-    const { diffSet } = await runPipeline('PUD33', {
-      ...templateData,
-      period: {
-        endDate: '2023-12-12'
-      }
-    })
-    expect(diffSet).toEqual(new Set(["period.endDate"]))
-  })
+    const { diffSet, diffList } = await diff.runPipeline()
 
-  it('CRIS and DB are the same', async () => {
-    const { diffSet } = await runPipeline('PUD33', templateData)
+    expect(diffList).toEqual([])
     expect(diffSet).toEqual(new Set([]))
   })
 })
-*/
+
+describe('function: areIdenticalNumbers', () => {
+  it('should return true for 100.5 (number) and "100.5" (string)', () => {
+    expect(areIdenticalNumbers(100.5, "100.5")).toBe(true);
+  });
+
+  it('should return true for integer values as numbers and strings', () => {
+    expect(areIdenticalNumbers(42, "42")).toBe(true);
+  });
+
+  it('should return false for non-numeric strings', () => {
+    expect(areIdenticalNumbers("abc", "100.5")).toBe(false);
+  });
+
+  it('should return false for different numeric values', () => {
+    expect(areIdenticalNumbers(100.5, 200.5)).toBe(false);
+  });
+
+  it('should return true for zero in different forms', () => {
+    expect(areIdenticalNumbers(0, "0")).toBe(true);
+  });
+
+  it('should return false for an empty string and zero', () => {
+    expect(areIdenticalNumbers("", 0)).toBe(false);
+  });
+});
