@@ -1,6 +1,6 @@
 <template>
   <!-- <v-footer v-if="store.sameNum" class="my-3" app> -->
-    <v-row justify="center" no-gutters>
+    <v-row class="mb-3 mr-3" justify="center" no-gutters>
       <v-spacer></v-spacer>
       <v-btn
         class="text-none"
@@ -68,3 +68,11 @@ const entityTitle = computed(() => {
   return props.entityType.charAt(0).toUpperCase() + props.entityType.slice(1);
 });
 </script>
+
+<style scoped>
+.v-row {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+</style>

@@ -159,10 +159,9 @@
   </div>
   <!-- {{ entityType }} -->
   <TransformButton
-    class="mt-3"
+    class=""
     v-if="isTransformPage &&
            entitySelected(entityType) &&
-
            data.length === 0"
     :entityType="entityType"
     :uuid="null"

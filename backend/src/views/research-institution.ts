@@ -147,9 +147,6 @@ async function createOrUpdateProject(uuid: string | undefined, pure: any, risId:
   }
 
   log.info(!uuid ? `Created new ${entity}` : `Updated ${entity}`, result);
-  // const project = new Project(risId);
-  // project.createOrUpdateCrisLink(result);
-  // const proj = await uploadProjectApplicationClusters(result, templateId, ris, settings);
 
   // save into the database
   await updateCrisId(risId, result, settings, templateId);
