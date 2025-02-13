@@ -128,7 +128,17 @@ export class ResearchInstitution {
     return results
   }
 
-  async addNote(note: Note) {
+  async addNote(entity: string, uuid: string, source: string = 'FWF') {
+    const prefix = uuid ? 'Updated' : 'Created';
+    var note: Note = {
+      entity,
+      uuid,
+      username: 'RIS-Synergy API',
+      text: prefix + ` on ${new Date().toISOString().split('T')[0]}.
+
+Source: ${source}.`
+    }
+
     const result = await callRIApi(`/${note.entity}s/${note.uuid}/notes`, 'PUT', {
       text: note.text,
       date: new Date().toISOString(),
@@ -137,7 +147,31 @@ export class ResearchInstitution {
     log.debug('Note added', result)
   }
 
-  callApi (endpoint: string, method: Method = 'POST', body = null) {
-    return callRIApi(endpoint, method, body)
+  async callApi (endpoint: string, method: Method = 'POST', body = null) {
+    log.debug(`>>> RI ${method} ${endpoint}`)
+    return await callRIApi(endpoint, method, body)
+  }
+
+  createEntity (entity: Category, data: any) {
+    return this.callApi(`/${entity}s/`, 'POST', data)
+  }
+
+  async uploadEntity (entity: Category, data: any, uuid: string, override: boolean = true) {
+    if (override) {
+      log.debug('Entity updated >>>', data)
+      const result = await this.callApi(`/${entity}s/${uuid}`, 'PUT', data)
+      log.debug('Entity updated <<<', result)
+      return result
+    }
+
+    // This part of the code will be added later
+    // -----------------------------------------
+
+    // get existing CRIS data
+    // const existingData = this.callApi(`/${entity}s/${uuid}`, 'GET')
+
+    // // update the data
+    // const result = this.callApi(`/${entity}s/${uuid}`, 'PUT', data)
+    // return result
   }
 }

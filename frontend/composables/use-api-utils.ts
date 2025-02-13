@@ -1,7 +1,7 @@
 export async function apiCall(url = '', method = 'GET', data: any = {}) {
+  const snackbar = useSnackbar();
   const router = useRouter();
   const store = useUserSettingsStore();
-  const snackbar = useSnackbar();
   var result: any;
   try {
     result = await $fetch(
@@ -186,6 +186,8 @@ export const useApiUtils = () => {
   }
 
   const uploadToPure = async (ris, settings, uuid, templateData, entity) => {
+    const snackbar = useSnackbar();
+
     var template = {
       ...templateData,
     }
@@ -200,6 +202,10 @@ export const useApiUtils = () => {
         entity
       }),
     })
+
+    if (!result.error) {
+      snackbar.info('Upload successful')
+    }
     return result
   }
 
@@ -299,7 +305,6 @@ export const useApiUtils = () => {
     faApi,
     diffRILikelihood,
     assignCluster,
-
     getFunction,
     setFunction,
     createFunction

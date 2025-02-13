@@ -48,19 +48,26 @@ async function saveTransformUpload(crud) {
     store.template,
     props.entityType
   );
-  if (result.error) {
-    store.setError(result.error, "uploadToPure");
-    alert.setError("Error saving update", result.error);
-    return;
-  } else {
-    store.setPure(result);
-    alert.setInfo("Update saved");
+  if (!result.error) {
+    // store.setError(result.error, "uploadToPure");
+    // alert.setError("Error saving update", result.error);
+    // return;
+    //   } else {
+
+    // might delete this
+    // store.setPure(result);
+
+    // alert.setInfo("Update saved");
 
     // delay 1 second:
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
+
     // refresh the page
     store.templateSelect[props.entityType] = null
-    router.go(0);
+
+    // Toggle and comment this out to desabled for convenice
+    // for development (so many logs otherwise)
+    // router.go(0);
   }
 }
 

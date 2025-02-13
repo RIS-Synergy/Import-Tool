@@ -10,7 +10,15 @@ export const useSnackbar = () => {
     })
   }
 
+  const info = async (details: string, area: string = 'default') => {
+    nuxt.$event ("snackbar:info", {
+      details,
+      area
+    })
+  }
+
   return {
-    error
+    error,
+    info
   };
 };

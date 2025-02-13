@@ -4,15 +4,9 @@
     multi-line
     :timeout="10000"
     variant="tonal"
-    color="error"
+    :color="error ? 'error' : 'primary'"
   >
-    <div v-if="error.status === 422">
-      <!-- "message": "Referenced content with systemName: Organization and UUID: 14ac95fe-8982-4b1f-858a-4adb320c4e9c not found!",
-           "errors": [],
-           "method": "PUT",
-           "endpoint": "/applications",
-           "apiStatus": 400,
-           "status": 422 -->
+    <div v-if="error && error.status === 422">
       <div>
         <b>Research Institution API Error</b>
       </div>
@@ -20,24 +14,33 @@
         {{ error.method }} <i>{{ error.endpoint }}</i
         >, {{ error.apiStatus }}
       </div>
-      <!-- <div>
-           <i>Method</i>: {{ error.method }}
-           </div>
-           <div>
-           <i>Status</i>: {{ error.status }}
-           </div> -->
       <hr class="my-2" />
       <div>
         {{ error.message }}
       </div>
     </div>
-    <pre v-else>
-      {{ error }}
-    </pre>
+
+    <div v-if="info">
+      <div>
+        <b>Info</b>
+      </div>
+      <div>
+        {{ info }}
+      </div>
+    </div>
 
     <template v-slot:actions>
       <v-btn
+        v-if="error"
         color="red"
+        variant="text"
+        icon="mdi-close"
+        @click="snackbar = false"
+      >
+      </v-btn>
+      <v-btn
+        v-if="info"
+        color="blue"
         variant="text"
         icon="mdi-close"
         @click="snackbar = false"
@@ -50,10 +53,20 @@
 <script setup>
 const snackbar = ref(false);
 const error = ref(null);
+const info = ref(null);
 
 const nuxt = useNuxtApp();
 nuxt.$listen("snackbar:error", (e, area) => {
   snackbar.value = true;
   error.value = e.details;
+  info.value = null
+});
+
+// TODO ui not yet implemented
+nuxt.$listen("snackbar:info", (i, area) => {
+  console.warn("snackbar:info not implemented", i, area);
+  snackbar.value = true;
+  info.value = i.details;
+  error.value = null;
 });
 </script>

@@ -30,8 +30,7 @@ export async function callRIApi(endpoint: string, method = 'POST', body = null):
 
   const contentType: string = response.headers.get("content-type")
   log.debug(`<<< ${response.status} ${endpoint}`)
-// ${response.status}, with content-type: ${contentType}`)
-  // console.log(response)
+  // log.debug(response)
 
   if (response.status === 500) {
     log.warn('Body status 500 >>>>>>>>>>', body)

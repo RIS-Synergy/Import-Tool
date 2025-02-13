@@ -11,6 +11,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 import { Project } from '../models/Project'
 import { ResearchInstitution } from "../models/ResearchInstitution"
+import { Transform } from '../models/Transform'
 
 const router: Router = express.Router()
 
@@ -150,23 +151,10 @@ async function createOrUpdateProject(uuid: string | undefined, pure: any, risId:
 
   // save into the database
   await updateCrisId(risId, result, settings, templateId);
+  // XXX i'm not sure if we will need this or not...
 
   // add note
-  const source = 'FWF'
-  const prefix = uuid ? 'Updated' : 'Created';
-  await ri.addNote({
-    entity,
-    uuid: result.uuid,
-    username: 'RIS-Synergy API',
-    text: prefix + ` on ${new Date().toISOString().split('T')[0]}.
-
-Source: ${source}.`
-  })
-
-  // log.info('XXXXXXXXXXXXXX', proj, result)
-  log.info('XXXXXXXXXXXXXX', result)
-
-  // result = await callRIApi(apiEndpoint, method, pure);
+  await ri.addNote(entity, result.uuid)
   return result;
 }
 
@@ -180,7 +168,7 @@ router.post('/upload', async (req: any, res: any) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  try {
+  // try {
     const template = await prisma.template.findUnique({
       where: { id: templateId[`${entity}Id`] }
     });
@@ -189,17 +177,26 @@ router.post('/upload', async (req: any, res: any) => {
     }
 
     log.debug('Template', template.id, template.name);
-    const pure = await projectETL2(template.yamlTemplate, ris, settings);
-    log.debug('Pure data', pure);
-    // return res.json({ pause: true }) // XXX just for debugging
+    const transform = new Transform()
+    const templateResult = await transform.run(template.yamlTemplate, ris, settings)
 
-    const result = await createOrUpdateProject(uuid, pure, ris.id, templateId, ris, settings, entity);
+    log.debug('Template Result', templateResult);
+    var result = null
+    if (uuid) {
+      result = await ri.uploadEntity(entity, templateResult.output, uuid);
+      ri.addNote(entity, uuid);
+    } else {
+      result = await ri.createEntity(entity, templateResult.output);
+      ri.addNote(entity, result.uuid);
+    }
 
     return res.json(result);
-  } catch (error) {
-    log.error('Error processing upload', error);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
+  // } catch (error) {
+  //   log.error('Error processing upload', error);
+  //   return res.status(error.status).json({
+  //     error
+  //   });
+  // }
 });
 
 router.get('/organizations/:id', async (req: Request, res: Response) => {
@@ -324,21 +321,22 @@ router.get('/:concepts/:uuid', async (req: Request, res: Response) => {
     // if it's a uuid
     console.log('uuid', uuid)
 
-    const result = await callRIApi(`/${concepts}/${uuid}`, 'GET')
+    const result = await ri.callApi(`/${concepts}/${uuid}`, 'GET')
     res.json(result)
   }
 })
 
 // PUT for any concept with uuid
-router.put('/:concepts/:uuid', async (req: Request, res: Response) => {
-  const result = await callRIApi(`/${req.params.concepts}/${req.params.uuid}`, 'PUT', req.body)
-  res.json(result)
-})
+// router.put('/:concepts/:uuid', async (req: Request, res: Response) => {
+//   const result = await callRIApi(`/${req.params.concepts}/${req.params.uuid}`, 'PUT', req.body)
+//   res.json(result)
+// })
 
-router.get('/:concepts/:uuid', async (req: Request, res: Response) => {
-  const result = await callRIApi(`/${req.params.concepts}/${req.params.uuid}`, 'GET')
-  res.json(result)
-})
+// router.get('/:concepts/:uuid', async (req: Request, res: Response) => {
+//   //await callRIApi(`/${req.params.concepts}/${req.params.uuid}`, 'GET')
+//   const result = ri.callApi(req.params.concepts, "GET")
+//   res.json(result)
+// })
 
 router.post('/assignCluster', async (req: Request, res: Response) => {
   console.log('assignCluster', req.body)
