@@ -20,10 +20,6 @@ const data = ref({});
 
 const { riEntityUUID } = useApiUtils();
 data.value = await riEntityUUID(props.entity, props.uuid);
-
-onMounted(() => {
-  console.log(data);
-});
 </script>
 
 <style></style>

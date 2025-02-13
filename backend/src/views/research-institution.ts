@@ -33,21 +33,21 @@ router.post('/searchAny', async (req: any, res: any) => {
     var result
     try {
       result = callRIApi(`/${entityType}/search`, 'POST', {
-          size: 10,
-          offset: 0,
-          searchString
-        }).then((result: any) => {
-          result.items.map((item: any) => {
-            results.push({
-              pureId: item.pureId,
-              uuid: item.uuid,
-              name: item.name,
-              title: item.title,
-              entity: entityType,
-              modifiedDate: item.modifiedDate,
-            });
-          })
+        size: 10,
+        offset: 0,
+        searchString
+      }).then((result: any) => {
+        result.items.map((item: any) => {
+          results.push({
+            pureId: item.pureId,
+            uuid: item.uuid,
+            name: item.name,
+            title: item.title,
+            entity: entityType,
+            modifiedDate: item.modifiedDate,
+          });
         })
+      })
     } catch {
       log.error('Error searching', entityType)
       return
@@ -109,55 +109,6 @@ router.get('/project/:id', async (req: Request, res: Response) => {
   })
 })
 
-async function updateCrisId(risId: string, resultData: any, settings: any, template: any) {
-  // TODO not project, but 'entity'
-  log.info('Updating project', risId, 'with pureId', resultData.pureId)
-
-  log.info('template', template)
-  log.info('settings', settings)
-
-  let saveData = resultData
-
-  const result = await prisma.project.update({
-    where: {
-      risId,
-    },
-    data: {
-      crisId: String(resultData.pureId),
-      crisUUID: resultData.uuid,
-
-      savedTemplate: {
-        create: {
-          template,
-          settings,
-          saveData
-        }
-      }
-    }
-  })
-  log.debug('Updated Project database', result.id)
-}
-
-async function createOrUpdateProject(uuid: string | undefined, pure: any, risId: string, templateId: any, ris: any, settings: any, entity: string) {
-  const apiEndpoint = !uuid ? `/${entity}s` : `/${entity}s/${uuid}`;
-  const method = 'PUT';
-  let result = await callRIApi(apiEndpoint, method, pure);
-
-  if (result.error) {
-    return result;
-  }
-
-  log.info(!uuid ? `Created new ${entity}` : `Updated ${entity}`, result);
-
-  // save into the database
-  await updateCrisId(risId, result, settings, templateId);
-  // XXX i'm not sure if we will need this or not...
-
-  // add note
-  await ri.addNote(entity, result.uuid)
-  return result;
-}
-
 // @ts-none
 router.post('/upload', async (req: any, res: any) => {
   const { ris, settings, uuid, template: templateId, entity } = req.body;
@@ -168,35 +119,28 @@ router.post('/upload', async (req: any, res: any) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  // try {
-    const template = await prisma.template.findUnique({
-      where: { id: templateId[`${entity}Id`] }
-    });
-    if (!template) {
-      return res.status(404).json({ error: 'Template not found' });
-    }
+  const template = await prisma.template.findUnique({
+    where: { id: templateId[`${entity}Id`] }
+  });
+  if (!template) {
+    return res.status(404).json({ error: 'Template not found' });
+  }
 
-    log.debug('Template', template.id, template.name);
-    const transform = new Transform()
-    const templateResult = await transform.run(template.yamlTemplate, ris, settings)
+  log.info('Template', template.id, template.name);
+  const transform = new Transform()
+  const templateResult = await transform.run(template.yamlTemplate, ris, settings)
 
-    log.debug('Template Result', templateResult);
-    var result = null
-    if (uuid) {
-      result = await ri.uploadEntity(entity, templateResult.output, uuid);
-      ri.addNote(entity, uuid);
-    } else {
-      result = await ri.createEntity(entity, templateResult.output);
-      ri.addNote(entity, result.uuid);
-    }
+  log.debug('Template Result', templateResult.output);
+  var result = null
+  if (uuid) {
+    result = await ri.uploadEntity(entity, templateResult.output, uuid);
+    ri.addNote(entity, uuid);
+  } else {
+    result = await ri.createEntity(entity, templateResult.output);
+    ri.addNote(entity, result.uuid);
+  }
 
-    return res.json(result);
-  // } catch (error) {
-  //   log.error('Error processing upload', error);
-  //   return res.status(error.status).json({
-  //     error
-  //   });
-  // }
+  return res.json(result);
 });
 
 router.get('/organizations/:id', async (req: Request, res: Response) => {

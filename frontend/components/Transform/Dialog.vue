@@ -3,9 +3,9 @@
     <template v-slot:activator="{ props: activatorProps }">
       <v-btn
         v-bind="activatorProps"
-        text="View"
+        text="Template"
         @click="onClickView"
-        variant="tonal"
+        variant="outlined"
       ></v-btn>
     </template>
 

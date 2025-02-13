@@ -21,11 +21,11 @@
             icon="mdi-checkbox-blank-circle-outline"
           />
         </v-col>
-        <v-col cols="9">
+        <v-col cols="8">
           <h4>{{ template.name }}</h4>
           <i class="light-grey"> {{ template.description }}</i>
         </v-col>
-        <v-col class="2">
+        <v-col class="right" cols="3">
           <TransformDialog :templateType="props.templateType" />
         </v-col>
       </v-row>
@@ -128,5 +128,9 @@ sameTemplateAsSelected();
 
 .hidden {
   display: none;
+}
+
+.right {
+  text-align: right;
 }
 </style>

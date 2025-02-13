@@ -203,7 +203,7 @@ export const useApiUtils = () => {
       }),
     })
 
-    if (!result.error) {
+    if (result && !result.error) {
       snackbar.info('Upload successful')
     }
     return result
