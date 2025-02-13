@@ -1,12 +1,12 @@
 <template>
   <v-snackbar
+    v-if="error"
     v-model="snackbar"
     multi-line
     :timeout="10000"
-    variant="tonal"
-    :color="error ? 'error' : 'primary'"
+    color="error"
   >
-    <div v-if="error && error.status === 422">
+    <div v-if="error.status === 422">
       <div>
         <b>Research Institution API Error</b>
       </div>
@@ -19,8 +19,32 @@
         {{ error.message }}
       </div>
     </div>
+    <div v-else>
+      <div>
+        <b>Error</b>
+      </div>
+      <div>
+        {{ error }}
+      </div>
+    </div>
+    <template v-slot:actions>
+      <v-btn
+        color="red"
+        variant="text"
+        icon="mdi-close"
+        @click="snackbar = false"
+      />
+    </template>
+  </v-snackbar>
 
-    <div v-if="info">
+  <v-snackbar
+    v-if="info"
+    v-model="snackbar"
+    multi-line
+    :timeout="10000"
+    color="primary"
+  >
+    <div>
       <div>
         <b>Info</b>
       </div>
@@ -31,21 +55,12 @@
 
     <template v-slot:actions>
       <v-btn
-        v-if="error"
-        color="red"
-        variant="text"
-        icon="mdi-close"
-        @click="snackbar = false"
-      >
-      </v-btn>
-      <v-btn
         v-if="info"
         color="blue"
         variant="text"
         icon="mdi-close"
         @click="snackbar = false"
-      >
-      </v-btn>
+      />
     </template>
   </v-snackbar>
 </template>
@@ -59,12 +74,10 @@ const nuxt = useNuxtApp();
 nuxt.$listen("snackbar:error", (e, area) => {
   snackbar.value = true;
   error.value = e.details;
-  info.value = null
+  info.value = null;
 });
 
-// TODO ui not yet implemented
 nuxt.$listen("snackbar:info", (i, area) => {
-  console.warn("snackbar:info not implemented", i, area);
   snackbar.value = true;
   info.value = i.details;
   error.value = null;
