@@ -4,8 +4,9 @@ import * as yaml from 'yaml';
 
 const projectsFile = `./samples/projects/${process.env.RIS_TEST_DATA}`
 const projects = JSON.parse(fs.readFileSync(projectsFile, 'utf8'))
-import { projectETL2, replaceTags } from '../src/ris-pure-etl/index'
+import { replaceTags } from '../src/ris-pure-etl/index'
 import { awaitAllPromises } from '../src/utils/promise'
+import { Transform } from '../src/models/Transform'
 
 const p = projects.find(p => p.id === 'PUB3333')
 
@@ -14,7 +15,6 @@ const yamlContent = fs.readFileSync('./resources/transformers/project1.yaml', 'u
 const settings = {
   person: '0000-0002-0131-2191',
   organization: 'b2a38757-9395-4089-a2ba-ef39502950c3',
-  defaultPersonUUID: 'default'
 }
 
 describe('YAML', () => {
@@ -30,8 +30,8 @@ describe('YAML', () => {
   })
 
   it('transform ETL project from FWF to PURE', async () => {
-    const pure = await projectETL2(yamlContent, p, settings)
-
+    const transform = new Transform()
+    const { output: pure } = await transform.run(yamlContent, p, settings)
     expect(pure.typeDiscriminator).toEqual('AwardManagementProject')
 
     expect(pure).toEqual({
