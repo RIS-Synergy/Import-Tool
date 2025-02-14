@@ -4,7 +4,6 @@ import * as yaml from 'yaml';
 
 const projectsFile = `./samples/projects/${process.env.RIS_TEST_DATA}`
 const projects = JSON.parse(fs.readFileSync(projectsFile, 'utf8'))
-import { replaceTags } from '../src/ris-pure-etl/index'
 import { awaitAllPromises } from '../src/utils/promise'
 import { Transform } from '../src/models/Transform'
 
@@ -18,17 +17,6 @@ const settings = {
 }
 
 describe('YAML', () => {
-  it('handle the custom functions', async () => {
-    const input = {}
-    const parsedYaml = yaml.parse(`output:
-  another: "!<fn>hello:World:prosper"
-`);
-    const processedYaml = await replaceTags(parsedYaml, input, settings);
-    const { output } = await processedYaml;
-    const { another } = await output;
-    expect(another).toEqual('Hello World and prosper')
-  })
-
   it('transform ETL project from FWF to PURE', async () => {
     const transform = new Transform()
     const { output: pure } = await transform.run(yamlContent, p, settings)

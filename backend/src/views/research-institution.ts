@@ -1,7 +1,6 @@
 import express, { Router, Request, Response } from "express"
 
 import { callRIApi } from '../utils/ri-api'
-import { projectETL2 } from '../ris-pure-etl/index'
 import { uploadProjectApplicationClusters } from '../ris-pure-etl/clusters'
 
 import { Logger } from "tslog";

@@ -1,6 +1,5 @@
 import express, { Router, Request, Response } from "express"
 
-import { projectETL2 } from '../ris-pure-etl/index'
 import { Transform } from '../models/Transform'
 
 import { Logger } from "tslog";

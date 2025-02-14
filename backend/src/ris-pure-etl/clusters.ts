@@ -1,7 +1,8 @@
 import { Logger } from "tslog";
 const log = new Logger({ name: 'clusters' });
 
-import { projectETL2cluster } from '../ris-pure-etl/index'
+import { Transform } from '../models/Transform'
+// import { projectETL2cluster } from '../ris-pure-etl/index'
 import { callRIApi } from '../utils/ri-api'
 
 import { Template } from '../models/Template'
@@ -40,7 +41,12 @@ export async function uploadProjectApplicationClusters(project, template, ris, s
 
 async function handleCluster(cluster, templateId, systemName, apiPath, project, ris, settings) {
   const { yamlTemplate } = await Template.getById(templateId);
-  const data = await projectETL2cluster(yamlTemplate, ris, settings);
+
+  // TODO this needs to be looked into again
+  const transform = new Transform()
+  const { output: data } = await transform.run(yamlTemplate, ris, settings);
+
+  // const data = await projectETL2cluster(yamlTemplate, ris, settings);
 
   if (!cluster) {
     log.info(`No ${systemName.toLowerCase()}. Creating a new one.`);

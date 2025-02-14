@@ -8,8 +8,6 @@ import similarity from '../utils/similarity'
 
 const router: Router = express.Router()
 
-import { runPipeline } from '../utils/diff'
-
 import { ResearchInstitution } from '../models/ResearchInstitution'
 const ri = new ResearchInstitution()
 

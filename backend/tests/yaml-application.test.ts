@@ -1,11 +1,8 @@
 import { describe, expect, it } from "vitest";
 import * as fs from "fs";
-import * as yaml from "yaml";
 
 const projectsFile = `./samples/projects/${process.env.RIS_TEST_DATA}`
 const projects = JSON.parse(fs.readFileSync(projectsFile, 'utf8'))
-import { projectETL2, replaceTags } from "../src/ris-pure-etl/index";
-import { awaitAllPromises } from "../src/utils/promise";
 import { Transform } from '../src/models/Transform'
 
 const p = projects.find((p) => p.id === "P34707");
@@ -21,7 +18,6 @@ describe("Application", () => {
   it("transform ETL application from FA to RI", async () => {
     const transform = new Transform()
     const { output: pure } = await transform.run(yamlContent, p, settings)
-    // const pure = await projectETL2(yamlContent, p, settings);
 
     expect(pure.typeDiscriminator).toEqual("AwardManagementApplication");
 

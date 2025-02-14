@@ -36,12 +36,13 @@ JSON.stringify(new Function(args, body)(...args));
   return value
 }
 
-async function replaceTags(obj, input, settings, functions, jail, context, timeout) {
+export async function replaceTags(obj, input, settings, functions, jail, context, timeout) {
   if (typeof obj === 'object' && obj !== null) {
     for (const key in obj) {
       if (typeof obj[key] === 'string') {
         // Handle input placeholders
         if (obj[key].startsWith('${input.')) {
+          console.log(obj[key])
           const inputPath = obj[key].match(/\${input\.(.+)}/)?.[1];
           if (inputPath) {
             obj[key] = input[inputPath];
@@ -67,7 +68,6 @@ async function replaceTags(obj, input, settings, functions, jail, context, timeo
           }
         }
       } else {
-        // let result = await replaceTags(obj[key], input, settings, functions, jail, context);
         let result = null
         try {
           result = await replaceTags(obj[key], input, settings, functions, jail, context, timeout);
