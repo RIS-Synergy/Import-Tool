@@ -152,8 +152,10 @@ Source: ${source}.`
     return await callRIApi(endpoint, method, body)
   }
 
-  createEntity (entity: Category, data: any) {
-    return this.callApi(`/${entity}s/`, 'POST', data)
+  async createEntity (entity: Category, data: any) {
+    const result = await this.callApi(`/${entity}s/`, 'PUT', data)
+    log.info(`${entity} created`, result.uuid)
+    return result
   }
 
   async uploadEntity (entity: Category, data: any, uuid: string, override: boolean = true) {

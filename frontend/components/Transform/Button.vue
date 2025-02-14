@@ -1,15 +1,23 @@
 <template>
-  <v-row class="mb-3 mr-3" justify="center" no-gutters>
+  <v-row v-if="!uuid" class="ma-3" justify="end" no-gutters>
     <!-- <v-spacer></v-spacer> -->
     <v-btn
       class="text-none"
       variant="flat"
       rounded
       color="primary"
-      @click="saveTransformUpload"
-    >
-      <span v-if="uuid">Update {{ entityTitle }}</span>
-      <span v-else>Create new {{ entityTitle }}</span>
+      @click="saveTransformUpload" >
+      <span>Create new {{ entityTitle }}</span>
+    </v-btn>
+  </v-row>
+  <v-row v-else class="lower-right mb-3 mr-3" justify="end" no-gutters>
+    <v-btn
+      class="text-none"
+      variant="flat"
+      rounded
+      color="primary"
+      @click="saveTransformUpload" >
+      <span>Update {{ entityTitle }}</span>
     </v-btn>
   </v-row>
 </template>
@@ -58,6 +66,12 @@ const entityTitle = computed(() => {
 
 <style scoped>
 .v-row {
+  /* position: absolute;
+     bottom: 0;
+     right: 0; */
+}
+
+.lower-right {
   position: absolute;
   bottom: 0;
   right: 0;
