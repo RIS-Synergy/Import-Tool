@@ -1,3 +1,26 @@
+<template>
+  <v-dialog v-if="cluster" max-width="800">
+    <template v-slot:activator="{ props: activatorProps }">
+      <v-btn
+        class="mr-2"
+        v-bind="activatorProps"
+        color="grey"
+        rounded
+        target="_blank"
+      >
+        {{ text }}
+      </v-btn>
+    </template>
+
+    <template v-slot:default="{ isActive }">
+      <!-- <v-card :title="data.systemName"> -->
+      <v-card>
+        <Yaml :json="data" />
+      </v-card>
+    </template>
+  </v-dialog>
+</template>
+
 <script setup>
 const { clusterType, entityTypes } = defineProps({
   clusterType : {
@@ -36,30 +59,3 @@ if (clusterUUID.value) {
   });
 }
 </script>
-
-
-<template>
-  <v-dialog v-if="cluster" max-width="800">
-    <template v-slot:activator="{ props: activatorProps }">
-      <v-btn
-        class="mr-2"
-        v-bind="activatorProps"
-        color="grey"
-        rounded
-        target="_blank"
-      >
-        {{ text }}
-      </v-btn>
-    </template>
-
-    <template v-slot:default="{ isActive }">
-      <!-- <v-card :title="data.systemName"> -->
-      <v-card>
-         <Yaml :json="data" />
-      </v-card>
-    </template>
-  </v-dialog>
-</template>
-
-<style>
-</style>

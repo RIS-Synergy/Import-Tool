@@ -245,6 +245,7 @@ export const useApiUtils = () => {
   }
 
   const assignCluster = async (project: string, item) => {
+    const snackbar = useSnackbar();
     const result = await apiCall('ri/assignCluster', 'POST', {
       body: JSON.stringify({
         systemName: item.systemName,
@@ -252,6 +253,11 @@ export const useApiUtils = () => {
         projectUUID: project
       }),
     })
+    if (result && !result.error) {
+      snackbar.info('Upload successful')
+    } else {
+      snackbar.error(result.error)
+    }
     return result;
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="store.projectSelected && itemIsSameAsSelected() && !projectHasCluster()">
+  <div v-if="canAssignCluster()">
     <v-btn
       v-if="!itemIsNotAlligned()"
       class="text-none"
@@ -51,14 +51,31 @@ function itemIsNotAlligned() {
     console.log("entityCluster", entityCluster);
     return true;
   } else {
-    console.log("no entityCluster");
+    // console.log("no entityCluster");
     return false;
   }
 }
 
 function projectHasCluster () {
   const entity = props.item.systemName.toLowerCase();
-  return store.projectSelected[entity + "Cluster"];
+  return store.projectSelected && store.projectSelected[entity + "Cluster"];
+}
+
+function canAssignCluster () {
+  // Project should not have a cluster assigned
+  const validClusterEntity = ['Application', 'Award'] // props.item.systemName 
+  if (!validClusterEntity.includes(props.item.systemName)) {
+    return false;
+  }
+
+  // Project should be selected
+  const a = store.projectSelected;
+  // Cluster should not be assigned to project
+  const b = itemIsSameAsSelected();
+  // Project should not have a cluster assigned
+  const c = !projectHasCluster();
+  const result = a && b && c;
+  return result;
 }
 
 const { assignCluster } = useApiUtils()
