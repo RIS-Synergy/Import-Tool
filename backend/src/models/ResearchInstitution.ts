@@ -1,6 +1,7 @@
 import { callRIApi } from '../utils/ri-api'
 import { Logger } from "tslog";
 const log = new Logger({ name: 'model:Project' });
+import _ from 'lodash/fp';
 
 type RISystemID = 'Pure' | 'Custom'
 type Category = 'Project' | 'Application' | 'Award'
@@ -164,27 +165,20 @@ Source: ${source}.`
     return result
   }
 
-  async uploadEntity (entity: Category, data: any, uuid: string, override: boolean = true) {
+  async uploadEntity (entity: Category, data: any, uuid: string) {
     // GET existing data
     const current = await this.getEntity(entity, uuid)
-
     log.debug('Current entity data', current)
 
-    if (override) {
-      log.debug('Entity updated >>>', data)
-      const result = await this.callApi(`/${entity}s/${uuid}`, 'PUT', data)
-      log.debug('Entity updated <<<', result)
-      return result
-    }
+    // Merge new data with existing data
+    const merged = _.merge(current, data)
+    log.debug('Merged entity data', merged)
 
-    // This part of the code will be added later
-    // -----------------------------------------
+    // PUT merged data
+    log.debug('Entity updated >>>', merged)
+    const result = await this.callApi(`/${entity}s/${uuid}`, 'PUT', merged) // XXX not merge
+    log.debug('Entity updated <<<', result)
 
-    // get existing CRIS data
-    // const existingData = this.callApi(`/${entity}s/${uuid}`, 'GET')
-
-    // // update the data
-    // const result = this.callApi(`/${entity}s/${uuid}`, 'PUT', data)
-    // return result
+    return result
   }
 }

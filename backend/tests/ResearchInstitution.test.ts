@@ -48,6 +48,9 @@ describe('RI', () => {
 
     const uuid = 'abcd'
     const result = await ri.uploadEntity("Project", uploadData, uuid)
-    expect(result).toEqual(crisData)
+    expect(result).toEqual({
+      ...crisData,
+      ...uploadData
+    })
   })
 })
