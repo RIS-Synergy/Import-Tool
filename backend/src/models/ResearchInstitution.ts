@@ -158,7 +158,18 @@ Source: ${source}.`
     return result
   }
 
+  async getEntity (entity: Category, uuid: string) {
+    const result = await this.callApi(`/${entity}s/${uuid}`, 'GET')
+    log.debug('Entity data', result)
+    return result
+  }
+
   async uploadEntity (entity: Category, data: any, uuid: string, override: boolean = true) {
+    // GET existing data
+    const current = await this.getEntity(entity, uuid)
+
+    log.debug('Current entity data', current)
+
     if (override) {
       log.debug('Entity updated >>>', data)
       const result = await this.callApi(`/${entity}s/${uuid}`, 'PUT', data)

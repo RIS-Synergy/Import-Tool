@@ -1,23 +1,26 @@
 import { describe, it, expect, vi } from 'vitest'
 import { ResearchInstitution } from '../src/models/ResearchInstitution'
 
-// Mock all the CRIS api calls
+import { callRIApi } from "../src/utils/ri-api";
 
 const crisData = {
   hello: 'old world',
   pureId: 123
 }
 
+const uploadData = {
+  hello: 'new world'
+}
+
+vi.mock("../src/utils/ri-api", () => ({
+  callRIApi: vi.fn()
+}));
+
+(callRIApi as ReturnType<typeof vi.fn>)
+  .mockResolvedValue(crisData)
+
 describe('RI', () => {
   const ri = new ResearchInstitution()
-
-  const uploadData = {
-    hello: 'new world'
-  }
-
-  vi.mock("../src/utils/ri-api", () => ({
-    callRIApi: vi.fn(() => Promise.resolve(crisData))
-  }))
 
   it('call mocking api endpoint', async () => {
     const result = await ri.callApi('Projects')
@@ -30,6 +33,19 @@ describe('RI', () => {
   })
 
   it('upload: use an existing project', async () => {
+    const uuid = 'abcd'
+    const result = await ri.uploadEntity("Project", uploadData, uuid)
+    expect(result).toEqual(crisData)
+  })
+
+  it('upload: use an existing project and _.merge', async () => {
+    (callRIApi as ReturnType<typeof vi.fn>)
+      .mockImplementationOnce(() => Promise.resolve(crisData))
+      .mockImplementationOnce(() => Promise.resolve({
+        ...crisData,
+        ...uploadData
+      }))
+
     const uuid = 'abcd'
     const result = await ri.uploadEntity("Project", uploadData, uuid)
     expect(result).toEqual(crisData)
