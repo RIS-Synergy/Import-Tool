@@ -53,7 +53,7 @@ async function saveTransformUpload(crud) {
     store.template,
     props.entityType,
   );
-  if (!result.error) {
+  if (result && !result.error) {
     // turn off the left 'O' "Select" button
     store.templateSelect[props.entityType] = null;
   }

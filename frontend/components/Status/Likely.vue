@@ -1,5 +1,5 @@
 <template>
-  <v-dialog max-width="800">
+  <v-dialog max-width="1200">
     <template v-slot:activator="{ props: activatorProps }">
       <v-chip class="text-none" v-bind="activatorProps" :color="color">
         {{ text }} <span class="ml-1 number">{{data.length}}</span>
