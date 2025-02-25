@@ -5,6 +5,7 @@ import { TransformStreamDefaultController } from "stream/web";
 import { Logger } from "tslog"
 import { envLogs } from "./utils/env-logs";
 import { FundingAgency } from "./models/FundingAgency";
+import { DiffSync } from "./models/DiffSync";
 import { Registry } from "./models/Registry";
 
 const log = new Logger({ name: "server" });
@@ -24,3 +25,6 @@ app.listen(port, () => {
 
 const fundingAgency = new FundingAgency()
 fundingAgency.start()
+
+const diffSync = new DiffSync()
+diffSync.start()

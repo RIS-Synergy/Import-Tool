@@ -7,6 +7,7 @@ import { getAuthEndpoint } from "../utils/oauth2";
 
 const prisma = new PrismaClient()
 const log = new Logger({ name: 'model:FundingAgency' });
+import { parseTimeoutString } from "../utils/sync";
 
 export class FundingAgency {
   pageSize = 1000;
@@ -99,33 +100,12 @@ export class FundingAgency {
     return projects;
   }
 
-  parseTimeoutString (timeoutString: string) {
-    const match = timeoutString.match(/(\d+)([smh])/)
-    if (!match) {
-      throw new Error('Invalid timeout string')
-    }
-
-    const value = parseInt(match[1])
-    const unit = match[2]
-
-    switch (unit) {
-      case 's':
-        return value
-      case 'm':
-        return value * 60
-      case 'h':
-        return value * 60 * 60
-      default:
-        throw new Error('Invalid timeout unit')
-    }
-  }
-
   start (timeoutString: string = process.env.FA_SYNC_TIME) {
     if (!timeoutString) {
       throw new Error('No timeout string "FA_SYNC_TIME" provided')
     }
 
-    const timeout = this.parseTimeoutString(timeoutString)
+    const timeout = parseTimeoutString(timeoutString)
     log.info(`Starting the FA -> DB sync process for ${timeoutString} (${timeout} seconds)`)
 
     setTimeout(() => {
