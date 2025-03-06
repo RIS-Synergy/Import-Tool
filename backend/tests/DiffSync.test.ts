@@ -1,9 +1,21 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { DiffSync } from '../src/models/DiffSync'
 import { parseTimeoutString } from '../src/utils/sync'
+import { callRIApi } from "../src/utils/ri-api";
 
-describe('utils: parseTimeoutString', () => {
-  it ('...', async () => {
+const crisData = [
+  {}
+]
+
+vi.mock("../src/utils/ri-api", () => ({
+  callRIApi: vi.fn()
+}));
+
+(callRIApi as ReturnType<typeof vi.fn>)
+  .mockResolvedValue(crisData)
+
+describe('utils', () => {
+  it ('parseTimeoutString', async () => {
     var result = parseTimeoutString('1m')
     expect(result).toEqual(60)
 
@@ -20,10 +32,18 @@ describe('utils: parseTimeoutString', () => {
 })
 
 describe('DiffSync', () => {
-  const ds = new DiffSync()
+  process.env.CRIS_SYNC_TIME = '5s'
 
-  it ('...', async () => {
+  const ds = new DiffSync()
+  delete ds.start
+
+  it ('empty so far', async () => {
     const result = ds
     expect(result).toEqual({})
+  })
+
+  it ('get all RIS data', async () => {
+    // const result = await ds.process()
+    // expect(result).toEqual(crisData)
   })
 })

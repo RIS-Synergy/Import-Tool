@@ -181,4 +181,17 @@ Source: ${source}.`
 
     return result
   }
+
+  entityToRISId (data: any) {
+    try {
+      return data.identifiers.map((obj: any) => {
+        // ris:FWF:project:F68 -> F68
+        return obj.id.split(':')[3]
+      })
+      .filter((id: string) => id)[0] || null
+    } catch (error) {
+      log.error('Error getting RIS ID', error)
+      return null
+    }
+  }
 }

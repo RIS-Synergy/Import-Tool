@@ -27,4 +27,4 @@ const fundingAgency = new FundingAgency()
 fundingAgency.start()
 
 const diffSync = new DiffSync()
-diffSync.start()
+diffSync.start(process.env.CRIS_SYNC_TIME)

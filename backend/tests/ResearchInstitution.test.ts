@@ -54,3 +54,23 @@ describe('RI', () => {
     })
   })
 })
+
+describe('RI - entity to RIS ID', () => {
+  const crisData = {
+    "identifiers": [
+      {
+        "id": "ris:FWF:project:F68",
+      }
+    ],
+  }
+  it('entity to RIS ID', async () => {
+    const ri = new ResearchInstitution()
+    const result = ri.entityToRISId(crisData)
+    expect(result).toEqual('F68')
+  })
+  it('entity to RIS ID, no `identifiers`', async () => {
+    const ri = new ResearchInstitution()
+    const result = ri.entityToRISId({ ...crisData, identifiers: [] })
+    expect(result).toEqual(null)
+  })
+})
