@@ -161,23 +161,23 @@ Source: ${source}.`
 
   async getEntity (entity: Category, uuid: string) {
     const result = await this.callApi(`/${entity}s/${uuid}`, 'GET')
-    log.debug('Entity data', result)
+    // log.debug('Entity data', result)
     return result
   }
 
   async uploadEntity (entity: Category, data: any, uuid: string) {
     // GET existing data
     const current = await this.getEntity(entity, uuid)
-    log.debug('Current entity data', current)
+    // log.debug('Current entity data', current)
 
     // Merge new data with existing data
     const merged = _.merge(current, data)
-    log.debug('Merged entity data', merged)
+    // log.debug('Merged entity data', merged)
 
     // PUT merged data
-    log.debug('Entity updated >>>', merged)
+    // log.debug('Entity updated >>>', merged)
     const result = await this.callApi(`/${entity}s/${uuid}`, 'PUT', merged) // XXX not merge
-    log.debug('Entity updated <<<', result)
+    // log.debug('Entity updated <<<', result)
 
     return result
   }

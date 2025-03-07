@@ -11,7 +11,7 @@ export class DiffSync {
   constructor() {
   }
 
-  async process () {
+  async process() {
     console.log('Processing DiffSync')
     // search for many entities with a "RIS ID"
     const search = {
@@ -22,18 +22,20 @@ export class DiffSync {
     const result = await ri.callApi('/projects/search', 'POST', search)
     log.info('Count', result.count, result.items.length)
     // next: loop the result.items
-    result.items.map (async (item: any) => {
+    result.items.map(async (item: any) => {
       const { systemName } = item
-      const diff = new Diff(item.uuid, systemName)
       const risId = ri.entityToRISId(item)
+      const diff = new Diff(risId, systemName)
+      await diff.setProjectData()
+      diff.crisData = item
       // log.info(systemName, Object.keys(item))
-      log.info('RIS ID', risId)
+      const templateSelected = 68 // Projects
+      const result = await diff.runPipeline(templateSelected)
+      log.info(risId, diff.improveOutput(result.diffList))
     })
-    // return result.items
-
   }
 
-  start (timeoutString: string) {
+  start(timeoutString: string) {
     if (!timeoutString) {
       throw new Error('No timeout string "CRIS_SYNC_TIME" provided')
     }
