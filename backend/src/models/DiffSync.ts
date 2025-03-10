@@ -2,6 +2,8 @@ import { Logger } from "tslog"
 import { ResearchInstitution } from "./ResearchInstitution"
 import { Diff } from "./Diff";
 const log = new Logger({ name: "DiffSync" });
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 
 import { parseTimeoutString } from "../utils/sync";
 
@@ -32,6 +34,7 @@ export class DiffSync {
       const templateSelected = 68 // Projects
       const result = await diff.runPipeline(templateSelected)
       log.info(risId, diff.improveOutput(result.diffList))
+      this.save(risId, diff.improveOutput(result.diffList))
     })
   }
 
@@ -52,5 +55,27 @@ export class DiffSync {
         log.error('Error in timeout', error)
       }
     }, timeout * 1000)
+  }
+
+  // save to DB
+  save = async (risId: string, data: any) => {
+    // create or update
+    await prisma.diff.upsert({
+      where: { id: risId },
+      update: {
+        list: data,
+        length: data.length
+      },
+      create: {
+        list: data,
+        template: {
+          connect: { id: 68 }
+        },
+        length: data.length,
+        project: {
+          connect: { risId: risId }
+        }
+      }
+    })
   }
 }

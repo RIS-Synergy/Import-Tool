@@ -92,6 +92,10 @@ const projectStatusDomain = [
     value: "aau.at",
     title: "Alpen-Adria-Universität Klagenfurt",
   },
+  {
+    value: "akbild.ac.at",
+    title: "Akademie der bildenden Künste",
+  },
 ];
 
 const orderBy = [
