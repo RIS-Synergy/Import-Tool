@@ -117,4 +117,20 @@ export class Project {
     search(funded);
     return { ror, name };
   }
+
+  static hasROR(funded: FundedItem[], ror: string): boolean {
+    function search(item: any): boolean {
+      if (Array.isArray(item)) {
+        return item.some(subItem => search(subItem));
+      } else if (typeof item === "object" && item !== null) {
+        if (item.type === "ROR" && item.value === ror) {
+          return true;
+        }
+        return Object.values(item).some(value => search(value));
+      }
+      return false;
+    }
+
+    return search(funded);
+  }
 }

@@ -9,47 +9,110 @@ describe('Project', () => {
   })
 
   describe('findRORInfo', () => {
-    it('should return the correct ROR and name from nested structure', () => {
-      const fundedItems = [
+    const fundedItems =
+      [
         {
-          type: 'Funding',
-          items: [
-            {
-              type: 'ROR',
-              value: '1234-5678-9101',
-              name: [
-                { lang: 'en', text: 'English Name' },
-                { lang: 'de', text: 'German Name' }
-              ]
+          "by": {
+            "id": "FWF",
+            "name": {
+              "lang": "de",
+              "trans": "O",
+              "text": "Österreichischer Wissenschaftsfonds FWF"
             }
-          ]
+          }
+        },
+        {
+          "as": {
+            "id": "10.55776/CSP6797524",
+            "type": "GRANT",
+            "name": {
+              "lang": "de",
+              "trans": "H",
+              "text": "Top Citizen Science"
+            },
+            "amount": {
+              "currency": "EUR",
+              "amount": 96001.5
+            },
+            "recipients": [
+              {
+                "orgUnit": {
+                  "id": "13",
+                  "name": [
+                    {
+                      "lang": "de",
+                      "trans": "O",
+                      "text": "Akademie der bildenden Künste Wien"
+                    }
+                  ],
+                  "identifiers": [
+                    {
+                      "type": "ROR",
+                      "value": "https://ror.org/029djt864"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
         }
       ];
-
+    it('should return the correct ROR and name from nested structure', () => {
       const result = Project.findRORInfo(fundedItems);
-      expect(result.ror).toBe('1234-5678-9101');
-      expect(result.name).toBe('German Name');
+      expect(result.ror).toBe("https://ror.org/029djt864")
+      expect(result.name).toBe("Akademie der bildenden Künste Wien")
     });
 
     it('should return null for ROR and name if not found', () => {
-      const fundedItems = [
-        {
-          type: 'Funding',
-          items: [
-            {
-              type: 'Other',
-              value: '0000-0000-0000',
-              name: [
-                { lang: 'en', text: 'English Name' }
-              ]
-            }
-          ]
-        }
-      ];
-
+      const recipients = []
+      fundedItems[1].as.recipients = recipients
       const result = Project.findRORInfo(fundedItems);
       expect(result.ror).toBeNull();
       expect(result.name).toBeNull();
     });
+
+    it('should use the second orgUnit', () => {
+      const recipients = [
+        {
+          orgUnit: {
+            id: "14",
+            name: [
+              {
+                lang: "de",
+                trans: "O",
+                text: "Universität Wien"
+              }
+            ],
+            identifiers: [
+              {
+                type: "ROR",
+                value: "https://ror.org/03yrm5c26"
+              }
+            ]
+          }
+        },
+        {
+          orgUnit: {
+            id: "13",
+            name: [
+              {
+                lang: "de",
+                trans: "O",
+                text: "Akademie der bildenden Künste Wien"
+              }
+            ],
+            identifiers: [
+              {
+                type: "ROR",
+                value: "https://ror.org/029djt864"
+              }
+            ]
+          }
+        }
+      ];
+      fundedItems[1].as.recipients = recipients;
+      expect(Project.hasROR(fundedItems, "https://ror.org/029djt864")).toBe(true)
+      expect(Project.hasROR(fundedItems, "https://ror.org/12345")).toBe(false)
+    })
   })
 })
