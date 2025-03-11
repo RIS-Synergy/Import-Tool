@@ -39,7 +39,7 @@ describe('DiffSync', () => {
 
   it ('empty so far', async () => {
     const result = ds
-    expect(result).toEqual({})
+    expect(Object.keys(result)).toEqual(['save'])
   })
 
   it ('get all RIS data', async () => {
