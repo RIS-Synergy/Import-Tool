@@ -57,6 +57,8 @@ describe('Project', () => {
           }
         }
       ];
+    expect(fundedItems[1].as.recipients.length).toBe(1)
+
     it('should return the correct ROR and name from nested structure', () => {
       const result = Project.findRORInfo(fundedItems);
       expect(result.ror).toBe("https://ror.org/029djt864")
@@ -71,7 +73,8 @@ describe('Project', () => {
       expect(result.name).toBeNull();
     });
 
-    it('should use the second orgUnit', () => {
+    it('similar function `hasROR`', () => {
+      // using 2 orgUnits
       const recipients = [
         {
           orgUnit: {
@@ -110,7 +113,9 @@ describe('Project', () => {
           }
         }
       ];
+      expect(fundedItems[1].as.recipients.length).toBe(0)
       fundedItems[1].as.recipients = recipients;
+      expect(fundedItems[1].as.recipients.length).toBe(2)
       expect(Project.hasROR(fundedItems, "https://ror.org/029djt864")).toBe(true)
       expect(Project.hasROR(fundedItems, "https://ror.org/12345")).toBe(false)
     })
