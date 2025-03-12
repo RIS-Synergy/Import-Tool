@@ -36,10 +36,12 @@
                     view
                   </v-btn>
                 </NuxtLink>
-
                 <StatusColumn class="bottom-right" :id="item.id" :data="columnData" />
               </v-col>
             </v-row>
+            <DiffSimple
+              class="ml-1 mr-1"
+              :diffList="item.diffList" />
           </v-card-text>
         </v-card>
         <v-skeleton-loader
@@ -82,7 +84,13 @@ async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
     filters,
   });
 
-  serverItems.value = items.map((x) => x.risData);
+  serverItems.value = items.map((x) => {
+    return {
+      ...x.risData,
+      diffList: x.diffList,
+      diffLength: x.diffLength
+    }
+  });
   totalItems.value = total;
   loading.value = false;
 }

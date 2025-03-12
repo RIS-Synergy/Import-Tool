@@ -1,9 +1,14 @@
 <template>
   <div class="mt-3">
     <span v-if="!Array.isArray(data)"> Not an Array </span>
-    <v-btn v-if="countRIS.length === 0" rounded variant="outlined" color="green" @click="click"
-    ><v-icon>mdi-set-right</v-icon>No diff</v-btn
-                                          >
+    <v-btn
+      v-if="countRIS.length === 0"
+      rounded
+      variant="outlined"
+      color="green"
+      @click="click"
+      ><v-icon>mdi-set-right</v-icon>No diff</v-btn
+    >
     <v-btn v-else rounded variant="outlined" color="orange" @click="click"
       ><v-icon>mdi-set-right</v-icon>{{ countRIS.length }} diffs</v-btn
     >
