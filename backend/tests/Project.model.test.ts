@@ -75,7 +75,11 @@ describe('Project', () => {
 
     it('similar function `hasROR`', () => {
       // using 2 orgUnits
-      const recipients = [
+      expect(fundedItems[1].as.recipients.length).toBe(0)
+      expect(Project.hasROR(fundedItems, "https://ror.org/029djt864")).toBe(false)
+      expect(Project.hasROR(fundedItems, "https://ror.org/03yrm5c26")).toBe(false)
+      expect(Project.hasROR(fundedItems, "https://ror.org/12345")).toBe(false)
+      fundedItems[1].as.recipients.push(
         {
           orgUnit: {
             id: "14",
@@ -93,7 +97,12 @@ describe('Project', () => {
               }
             ]
           }
-        },
+        })
+      expect(fundedItems[1].as.recipients.length).toBe(1)
+      expect(Project.hasROR(fundedItems, "https://ror.org/029djt864")).toBe(false)
+      expect(Project.hasROR(fundedItems, "https://ror.org/03yrm5c26")).toBe(true)
+      expect(Project.hasROR(fundedItems, "https://ror.org/12345")).toBe(false)
+      fundedItems[1].as.recipients.push(
         {
           orgUnit: {
             id: "13",
@@ -112,11 +121,11 @@ describe('Project', () => {
             ]
           }
         }
-      ];
-      expect(fundedItems[1].as.recipients.length).toBe(0)
-      fundedItems[1].as.recipients = recipients;
+      )
+      // fundedItems[1].as.recipients = recipients;
       expect(fundedItems[1].as.recipients.length).toBe(2)
       expect(Project.hasROR(fundedItems, "https://ror.org/029djt864")).toBe(true)
+      expect(Project.hasROR(fundedItems, "https://ror.org/03yrm5c26")).toBe(true)
       expect(Project.hasROR(fundedItems, "https://ror.org/12345")).toBe(false)
     })
   })
