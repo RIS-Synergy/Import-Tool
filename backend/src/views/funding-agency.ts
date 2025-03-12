@@ -109,7 +109,8 @@ router.get("/projects", async (req: Request, res: Response) => {
     const take = items;
 
     const projects: Array<any> = await prisma.$queryRawUnsafe(`
-SELECT * FROM "Project" p
+SELECT p.*, d.length AS "diffLength", d.list AS "diffList" FROM "Project" p
+LEFT JOIN "Diff" d ON p."risId" = d.id
 WHERE p."risData" #>> '{team,0,person,electronicAddress}' LIKE '%@${filters.piDomain}' AND (${whereFilters})
 ORDER BY p."risData"->>'${sortBy.key}' ${sortBy.order}
 OFFSET ${skip} LIMIT ${take}`);
