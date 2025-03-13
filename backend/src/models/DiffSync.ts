@@ -27,14 +27,18 @@ export class DiffSync {
       log.info('Count', result.count, result.items.length)
       // next: loop the result.items
       result.items.map(async (item: any) => {
-        const { systemName } = item
-        const risId = ri.entityToRISId(item)
-        const diff = new Diff(risId, systemName)
-        await diff.setProjectData()
-        diff.crisData = item
-        const templateSelected = await Template.first("PROJECT")
-        const result = await diff.runPipeline(templateSelected.id)
-        this.save(risId, diff.improveOutput(result.diffList))
+        try {
+          const { systemName } = item
+          const risId = ri.entityToRISId(item)
+          const diff = new Diff(risId, systemName)
+          await diff.setProjectData()
+          diff.crisData = item
+          const templateSelected = await Template.first("PROJECT")
+          const result = await diff.runPipeline(templateSelected.id)
+          this.save(risId, diff.improveOutput(result.diffList))
+        } catch (error) {
+          log.error('Error processing item', error, item)
+        }
       })
     } catch (error) {
       log.error('Error processing DiffSync', error)
