@@ -14,28 +14,32 @@ export class DiffSync {
   }
 
   async process() {
-    console.log('Processing DiffSync')
-    // search for many entities with a "RIS ID"
-    const search = {
-      size: 10000, // might be too high
-      offset: 0,
-      searchString: 'ris:FWF:project:*'
+    try {
+      log.debug('Processing DiffSync')
+      // search for many entities with a "RIS ID"
+      const search = {
+        size: 10000, // might be too high
+        offset: 0,
+        searchString: 'ris:FWF:project:*'
+      }
+      const result = await ri.callApi('/projects/search', 'POST', search)
+      log.info('Count', result.count, result.items.length)
+      // next: loop the result.items
+      result.items.map(async (item: any) => {
+        const { systemName } = item
+        const risId = ri.entityToRISId(item)
+        const diff = new Diff(risId, systemName)
+        await diff.setProjectData()
+        diff.crisData = item
+        // log.info(systemName, Object.keys(item))
+        const templateSelected = 68 // XXX Projects hardcoded!
+        const result = await diff.runPipeline(templateSelected)
+        // log.info(risId, diff.improveOutput(result.diffList))
+        this.save(risId, diff.improveOutput(result.diffList))
+      })
+    } catch (error) {
+      log.error('Error processing DiffSync', error)
     }
-    const result = await ri.callApi('/projects/search', 'POST', search)
-    log.info('Count', result.count, result.items.length)
-    // next: loop the result.items
-    result.items.map(async (item: any) => {
-      const { systemName } = item
-      const risId = ri.entityToRISId(item)
-      const diff = new Diff(risId, systemName)
-      await diff.setProjectData()
-      diff.crisData = item
-      // log.info(systemName, Object.keys(item))
-      const templateSelected = 68 // Projects
-      const result = await diff.runPipeline(templateSelected)
-      log.info(risId, diff.improveOutput(result.diffList))
-      this.save(risId, diff.improveOutput(result.diffList))
-    })
   }
 
   start(timeoutString: string) {

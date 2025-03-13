@@ -18,7 +18,7 @@ export class Transform {
     this.functions.forEach((fn: Function) => {
       executer.addFunction(fn.name, fn.code)
     })
-    log.debug(`Functions (${this.functions.length})`, this.functions.map((fn: Function) => fn.name).join(', '))
+    // log.debug(`Functions (${this.functions.length})`, this.functions.map((fn: Function) => fn.name).join(', '))
 
     const result = await executer.execute()
     return result
