@@ -59,11 +59,27 @@ type SortBy = {
   order: string;
 };
 
+type DiffFilter = null | "NULL" | "IDENTICAL" | "DIFFERENT";
+
 type Filter = {
   status: Array<string>;
   piDomain: string;
+  diffs: DiffFilter;
   orderBy: string;
   itemsPerPage: string;
+}
+
+function diffsSQL(diffs: DiffFilter) {
+  switch (diffs) {
+    case "NULL":
+      return "d.length is NULL";
+    case "IDENTICAL":
+      return "d.length = 0";
+    case "DIFFERENT":
+      return "d.length >= 1"
+    default:
+      return "1=1"
+  }
 }
 
 router.get("/projects", async (req: Request, res: Response) => {
@@ -82,8 +98,15 @@ router.get("/projects", async (req: Request, res: Response) => {
     if (req.query.filters) {
       filters = JSON.parse(req.query.filters as string);
     } else {
-      filters = { status: [], piDomain: "", orderBy: "startDate:desc", itemsPerPage: '10'};
+      filters = {
+        status: [],
+        piDomain: "",
+        diffs: null,
+        orderBy: "startDate:desc", itemsPerPage: '10'
+      };
     }
+
+    log.debug("Filter", filters);
 
     sortBy.key = filters.orderBy.split(":")[0];
     sortBy.order = filters.orderBy.split(":")[1];
@@ -108,9 +131,13 @@ router.get("/projects", async (req: Request, res: Response) => {
     const skip = (pageNumber - 1) * items;
     const take = items;
 
+    const diffSQL = diffsSQL(filters.diffs);
     const projects: Array<any> = await prisma.$queryRawUnsafe(`
-SELECT * FROM "Project" p
-WHERE p."risData" #>> '{team,0,person,electronicAddress}' LIKE '%@${filters.piDomain}' AND (${whereFilters})
+SELECT p.*, d.length AS "diffLength", d.list AS "diffList" FROM "Project" p
+LEFT JOIN "Diff" d ON p."risId" = d.id
+WHERE p."risData" #>> '{team,0,person,electronicAddress}' LIKE '%@${filters.piDomain}'
+AND (${whereFilters})
+AND (${diffSQL})
 ORDER BY p."risData"->>'${sortBy.key}' ${sortBy.order}
 OFFSET ${skip} LIMIT ${take}`);
     if (projects && projects.length > 0) {
@@ -119,7 +146,10 @@ OFFSET ${skip} LIMIT ${take}`);
 
     const totalProjects = await prisma.$queryRawUnsafe(`
 SELECT COUNT(*) FROM "Project" p
-WHERE p."risData" #>> '{team,0,person,electronicAddress}' LIKE '%@${filters.piDomain}' AND (${whereFilters})
+LEFT JOIN "Diff" d ON p."risId" = d.id
+WHERE p."risData" #>> '{team,0,person,electronicAddress}' LIKE '%@${filters.piDomain}'
+AND (${whereFilters})
+AND (${diffSQL})
 `);
 
     res.json({

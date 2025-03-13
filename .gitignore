@@ -14,3 +14,6 @@ functions_js
 
 # just for dev, sometimes
 backend/projects/
+
+# Research Institutions database
+backend/resources/whitelistProjects.json

@@ -68,10 +68,34 @@ export class Diff {
       }
     })
 
+    // log.info('DiffList', diffList)
+
     return {
       diffSet,
       diffList
     }
+
+  }
+
+  improveOutput (diffList: any) {
+    var output =
+      diffList.map((x: any) => {
+        return {
+          cris: x.a,
+          ris: x.b,
+          path: x.path
+        }
+      })
+
+    output = output.map((x: any) => {
+      if (x.ris) {
+        return x
+      }
+    })
+      .filter((v) => v)
+
+    // log.info('output', output)
+    return output
   }
 }
 

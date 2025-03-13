@@ -230,3 +230,31 @@ describe('function: areIdenticalNumbers', () => {
     expect(areIdenticalNumbers("", 0)).toBe(false);
   });
 });
+
+describe('improveOutput', () => {
+  it('hide if `b: undefined`', () => {
+    const list1 = [
+      {
+        a: 'a',
+        b: undefined,
+        path: 'path1'
+      }
+    ]
+    const diff = new Diff('', '')
+
+    const list2 = [
+      {
+        a: 'a',
+        b: 'b',
+        path: 'path1'
+      }
+    ]
+    expect(diff.improveOutput(list2)).toEqual([
+      {
+        "cris": "a",
+        "path": "path1",
+        "ris": "b",
+      }
+    ])
+  });
+})

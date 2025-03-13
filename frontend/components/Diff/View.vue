@@ -1,5 +1,6 @@
 <template>
   <v-btn
+    v-if="showButton"
     class="float-right mr-5 toggleBtn"
 
     variant="outlined"
@@ -52,6 +53,10 @@ const props = defineProps({
   diffList: {
     type: Array,
     required: true,
+  },
+  showButton: {
+    type: Boolean,
+    default: true,
   },
 });
 

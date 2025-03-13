@@ -25,6 +25,7 @@ model Project {
 
   createdDate  DateTime @default(now())
   modifiedDate DateTime @updatedAt
+  Diff         Diff[]
 }
 
 enum TemplateType {
@@ -43,6 +44,7 @@ model Template {
 
   createdDate  DateTime @default(now())
   modifiedDate DateTime @updatedAt
+  Diff         Diff[]
 }
 
 model SavedTemplate {
@@ -59,10 +61,10 @@ model SavedTemplate {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  email     String?    @unique
-  username  String     @unique
-  password  String?
+  id       Int     @id @default(autoincrement())
+  email    String? @unique
+  username String  @unique
+  password String?
 }
 
 model CustomFunction {
@@ -72,6 +74,20 @@ model CustomFunction {
   description String @default("")
   code        String @default("")
   language    String @default("javascript")
+
+  createdDate  DateTime @default(now())
+  modifiedDate DateTime @updatedAt
+}
+
+model Diff {
+  id      String  @id
+  project Project @relation(fields: [id], references: [risId])
+
+  templateId Int
+  template   Template @relation(fields: [templateId], references: [id])
+
+  length Int
+  list   Json @default("[]")
 
   createdDate  DateTime @default(now())
   modifiedDate DateTime @updatedAt

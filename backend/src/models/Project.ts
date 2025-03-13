@@ -7,6 +7,8 @@ const log = new Logger({ name: 'model:Project' });
 import { ResearchInstitution } from './ResearchInstitution'
 import { Registry } from './Registry'
 
+type FundedItem = Record<string, any>; // Generic type for unknown nested structures
+
 export class Project {
   constructor(public risId: string) { }
 
@@ -78,5 +80,57 @@ export class Project {
 
   static getUrl(url: 'PROJECTS' | 'PROJECT') {
     return Registry.getURL('project', url)
+  }
+
+  /**
+   * Recursively searches for the first ROR identifier and the associated organization name.
+   * @param funded - The array containing nested funding data.
+   * @returns An object containing the ROR identifier and organization name, or null if not found.
+   */
+  static findRORInfo(funded: FundedItem[]): { ror: string | null; name: string | null } {
+    let ror: string | null = null;
+    let name: string | null = null;
+
+    function search(item: any) {
+      if (Array.isArray(item)) {
+        for (const subItem of item) {
+          search(subItem);
+          if (ror && name) return; // Stop if both values are found
+        }
+      } else if (typeof item === "object" && item !== null) {
+        if (item.type === "ROR" && item.value) {
+          ror = item.value;
+        }
+        if (Array.isArray(item.name)) {
+          const nameObj = item.name.find((n: any) => n.lang === "de" && n.text);
+          if (nameObj) {
+            name = nameObj.text;
+          }
+        }
+        for (const key in item) {
+          search(item[key]);
+          if (ror && name) return; // Stop if both values are found
+        }
+      }
+    }
+
+    search(funded);
+    return { ror, name };
+  }
+
+  static hasROR(funded: FundedItem[], ror: string): boolean {
+    function search(item: any): boolean {
+      if (Array.isArray(item)) {
+        return item.some(subItem => search(subItem));
+      } else if (typeof item === "object" && item !== null) {
+        if (item.type === "ROR" && item.value === ror) {
+          return true;
+        }
+        return Object.values(item).some(value => search(value));
+      }
+      return false;
+    }
+
+    return search(funded);
   }
 }

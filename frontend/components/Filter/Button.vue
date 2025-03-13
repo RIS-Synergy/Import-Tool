@@ -27,6 +27,14 @@
             clearable
           ></v-select>
           <v-select
+            v-model="store.projectFilters.diffs"
+            :items="diffs"
+            label="Diffs"
+            chips
+            outlined
+            clearable
+          ></v-select>
+          <v-select
             v-model="store.projectFilters.orderBy"
             :items="orderBy"
             label="Order by"
@@ -92,6 +100,29 @@ const projectStatusDomain = [
     value: "aau.at",
     title: "Alpen-Adria-Universität Klagenfurt",
   },
+  {
+    value: "akbild.ac.at",
+    title: "Akademie der bildenden Künste",
+  },
+];
+
+const diffs = [
+  {
+    value: null,
+    title: "All",
+  },
+  {
+    value: "NULL",
+    title: "Project not linked to CRIS",
+  },
+  {
+    value: "IDENTICAL",
+    title: "Project in CRIS and has no differences (Identical)",
+  },
+  {
+    value: "DIFFERENT",
+    title: "Project in CRIS, but has differences (Diff)",
+  },
 ];
 
 const orderBy = [
@@ -123,6 +154,9 @@ const itemsPerPage = [
   { value: 100, title: "100" },
 ];
 
+const store = useUserSettingsStore();
+const projectStore = useProjectStore();
+
 function clearFilters() {
   store.projectFilters.status = [];
   store.projectFilters.piDomain = [];
@@ -139,9 +173,6 @@ const filterIcon = computed(() => {
     return "mdi-filter-outline";
   }
 });
-
-const store = useUserSettingsStore();
-const projectStore = useProjectStore();
 
 watch(
   () => store.projectFilters,

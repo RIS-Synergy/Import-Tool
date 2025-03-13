@@ -9,6 +9,7 @@ export const useUserSettingsStore = defineStore('user-settings', {
       piDomain: ['univie.ac.at'],
       orderBy: 'startDate:desc',
       itemsPerPage: 10,
+      diffs: null
     },
     token: null,
     user: null

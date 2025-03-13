@@ -4,6 +4,8 @@ import { Logger } from "tslog";
 const prisma = new PrismaClient()
 const log = new Logger({ name: 'model:Template' });
 
+import { TemplateType } from '@prisma/client';
+
 export class Template {
   constructor () {}
 
@@ -58,4 +60,17 @@ export class Template {
   //   const crisData = await ri.getProjectData(await this.crisUUID)
   //   return crisData
   // }
+
+  static async first (templateType: TemplateType) {
+    const latestProjectTemplate = await prisma.template.findFirst({
+      where: {
+        templateType
+      },
+      orderBy: {
+        modifiedDate: 'desc',
+      },
+    });
+    // log.info('Latest Project Template', latestProjectTemplate.id);
+    return latestProjectTemplate;
+  }
 }
