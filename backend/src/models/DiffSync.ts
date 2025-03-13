@@ -1,6 +1,7 @@
 import { Logger } from "tslog"
 import { ResearchInstitution } from "./ResearchInstitution"
 import { Diff } from "./Diff";
+import { Template } from "./Template";
 const log = new Logger({ name: "DiffSync" });
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
@@ -31,10 +32,8 @@ export class DiffSync {
         const diff = new Diff(risId, systemName)
         await diff.setProjectData()
         diff.crisData = item
-        // log.info(systemName, Object.keys(item))
-        const templateSelected = 68 // XXX Projects hardcoded!
-        const result = await diff.runPipeline(templateSelected)
-        // log.info(risId, diff.improveOutput(result.diffList))
+        const templateSelected = await Template.first("PROJECT")
+        const result = await diff.runPipeline(templateSelected.id)
         this.save(risId, diff.improveOutput(result.diffList))
       })
     } catch (error) {
