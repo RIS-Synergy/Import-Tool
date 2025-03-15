@@ -15,7 +15,8 @@
     "create-system-user": "ts-node ./scripts/create-system-user.ts",
     "create-functions": "ts-node ./scripts/create-functions.ts",
     "copy": "ts-node ./scripts/copy-projects-from-fa.ts",
-    "fa-api": "ts-node ./scripts/fa-api.ts"
+    "fa-api": "ts-node ./scripts/fa-api.ts",
+    "json-to-excel": "ts-node ./scripts/json-to-excel.ts"
   },
   "keywords": [],
   "author": "Kirill Stytsenko <kirill@styts.com>",
@@ -50,6 +51,7 @@
     "node-fetch": "^3.3.2",
     "ofetch": "^1.3.4",
     "tslog": "^4.9.2",
+    "xlsx": "^0.18.5",
     "yaml": "^2.4.3"
   }
 }
