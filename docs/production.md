@@ -6,22 +6,16 @@ Be mindful of the `.env` file. Secrets are there! 🔑
 
 ## Testing
 
-Create a `docker context`:
-
-```
-docker context create rissynergy-test-univie --docker "host=ssh://<username>@<your_hostname>"
-```
-
 Build the images:
 
 ```
-docker --context rissynergy-test-univie compose
+docker compose
 ```
 
 Run in production:
 
 ```
-docker --context rissynergy-test-univie compose \
+docker compose \
   -f compose.yaml -f compose.production.yaml \
   up
 ```
@@ -29,7 +23,7 @@ docker --context rissynergy-test-univie compose \
 Migrate the Database:
 
 ```
-docker --context rissynergy-test-univie compose \
+docker compose \
   -f compose.yaml -f compose.production.yaml \
   exec -it backend yarn prisma migrate deploy
 ```
@@ -37,7 +31,7 @@ docker --context rissynergy-test-univie compose \
 Create a user:
 
 ```
-docker --context rissynergy-test-univie compose \
+docker compose \
   -f compose.yaml -f compose.production.yaml \
   exec -it backend yarn db-user
 ```
@@ -45,7 +39,7 @@ docker --context rissynergy-test-univie compose \
 Create the functions under `backend/resources/funcitons/*`:
 
 ```
-docker --context rissynergy-test-univie compose \
+docker compose \
   -f compose.yaml -f compose.production.yaml \
   exec -it backend yarn create-functions
 ```
@@ -55,7 +49,7 @@ docker --context rissynergy-test-univie compose \
 Create projects data:
 
 ```
-docker --context rissynergy-test-univie compose \
+docker compose \
   -f compose.yaml -f compose.production.yaml \
   exec -it backend yarn copy
 ```
@@ -66,38 +60,32 @@ docker --context rissynergy-test-univie compose \
 Build:
 
 ```
-docker --context rissynergy-test-univie compose \
-  -f compose.yaml -f compose.production.yaml \
-  build
+docker compose -f compose.yaml -f compose.production.yaml build
 ```
 
 Then `up`:
 
 ```
-docker --context rissynergy-test-univie compose \
-  -f compose.yaml -f compose.production.yaml \
+docker compose -f compose.yaml -f compose.production.yaml \
   up -d --force-recreate
 ```
 
 (Optional) Migrate the database (if the prisma schema has been updated):
 
 ```
-docker --context rissynergy-test-univie compose \
-  -f compose.yaml -f compose.production.yaml \
+docker compose -f compose.yaml -f compose.production.yaml \
   exec -it backend yarn prisma migrate deploy
 ```
 
 (Optional) Follow the logs:
 
 ```
-docker --context rissynergy-test-univie compose \
-  -f compose.yaml -f compose.production.yaml \
+docker compose -f compose.yaml -f compose.production.yaml \
   logs -n 0 -f
 ```
 
 (Optional) Remove old Docker data:
 
 ```
-docker --context rissynergy-test-univie \
-  system prune -f
+docker system prune -f
 ```

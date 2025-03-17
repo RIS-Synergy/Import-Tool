@@ -28,9 +28,9 @@ export class DiffSync {
       // next: loop the result.items
       result.items.map(async (item: any) => {
         try {
-          const { systemName } = item
+          // const { systemName } = item
           const risId = ri.entityToRISId(item)
-          const diff = new Diff(risId, systemName)
+          const diff = new Diff(risId)
           await diff.setProjectData()
           diff.crisData = item
           const templateSelected = await Template.first("PROJECT")

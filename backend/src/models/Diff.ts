@@ -16,14 +16,24 @@ export class Diff {
 
   constructor(
     private risId: string,
-    private systemName = 'projects'
+    // private systemName = 'projects'
   ) { }
 
   setProjectData = async (risData?: any) => {
     if (risData) {
       this.risData = risData
     } else {
-      this.risData = (await Project.getById(this.risId)).risData
+      try {
+        const data = await Project.getById(this.risId)
+        if (data) {
+          log.debug(`Project ${this.risId} Data`, data)
+          this.risData = data.risData
+        } else {
+          log.warn('No data found for project', this.risId)
+        }
+      } catch (error) {
+        log.error('Error getting project by ID', error)
+      }
     }
   }
 
@@ -77,7 +87,7 @@ export class Diff {
 
   }
 
-  improveOutput (diffList: any) {
+  improveOutput(diffList: any) {
     var output =
       diffList.map((x: any) => {
         return {

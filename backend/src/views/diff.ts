@@ -15,7 +15,7 @@ router.post('/:id', async (req: Request, res: Response) => {
   log.info(`req: ${req.path}`, 'DiffList', req.body)
   const { id } = req.params
   const { uuid, templateSelected, systemName } = req.body
-  const diff = new Diff(id, systemName)
+  const diff = new Diff(id)
   await diff.setProjectData()
   await diff.fetchCrisData(uuid, systemName)
   const result = await diff.runPipeline(templateSelected)
