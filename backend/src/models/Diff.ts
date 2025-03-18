@@ -26,7 +26,7 @@ export class Diff {
       try {
         const data = await Project.getById(this.risId)
         if (data) {
-          log.debug(`Project ${this.risId} Data`, data)
+          // log.debug(`Project ${this.risId} Data`, data)
           this.risData = data.risData
         } else {
           log.warn('No data found for project', this.risId)
