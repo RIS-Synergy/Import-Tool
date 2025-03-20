@@ -68,4 +68,19 @@ router.post('/upload', upload.array ('files'), async (req, res) => {
   return res.json(results)
 })
 
+router.post('/download', async (req, res) => {
+  const projects = await prisma.project.findMany({
+    take: 5000, // XXX no limit
+  })
+  const projectsData = projects.map((project) => project.risData)
+
+  var json = JSON.stringify(projectsData);
+
+  var filename = 'projects.json';
+  var mimetype = 'application/json';
+  res.setHeader('Content-Type', mimetype);
+  res.setHeader('Content-disposition','attachment; filename='+filename);
+  res.send(json);
+})
+
 export default router

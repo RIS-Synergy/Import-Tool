@@ -28,6 +28,7 @@
     <v-divider></v-divider>
     <v-list-item to="/projects" title="Projects" />
     <v-list-item class="smaller" :to="`/project/upload`" link title="Upload" />
+    <v-list-item class="smaller" :to="`/project/download`" link title="Download" />
     <v-divider></v-divider>
     <v-list-item type="subheader" class="subheader"> Templates </v-list-item>
     <v-list-item

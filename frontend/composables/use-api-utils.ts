@@ -289,6 +289,7 @@ export const useApiUtils = () => {
   }
 
   return {
+    apiCall,
     getTemplates,
     getTemplateId,
     verifyTemplate,

@@ -23,7 +23,7 @@
       <slot />
     </v-main>
 
-    <TransformButton />
+    <!-- <TransformButton :entityType="Project" /> -->
   </v-app>
 </template>
 
