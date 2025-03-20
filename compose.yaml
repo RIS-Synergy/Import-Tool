@@ -22,12 +22,18 @@ services:
     restart: unless-stopped
     build:
       context: ./backend
+      target: ${BUILD_TARGET:-production}
+    volumes:
+      - /app/node_modules
     container_name: backend
     depends_on:
       - db
     env_file: .env
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
     ports:
       - "3031:3001"
+    command: ${START_CMD:-"node dist/index.js"}
 
   frontend:
     restart: unless-stopped
@@ -36,8 +42,10 @@ services:
     container_name: frontend
     depends_on:
       - backend
-    # env_file: .env
     tmpfs: /tmp
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - BACKEND_API_PROXY=http://backend:3000/**
     ports:
       - "3032:3000"
 

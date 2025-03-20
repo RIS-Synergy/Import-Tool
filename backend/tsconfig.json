@@ -1,11 +1,13 @@
 {
     "compilerOptions": {
+        "target": "ESNext",
+        "moduleResolution": "node",
         "sourceMap": true,
         "outDir": "dist",
         "esModuleInterop": true,
         "resolveJsonModule": true,
         "types": [
-            "node", "@types/express", "@types/node"
+            "node"
         ],
         "typeRoots": [
             "src/types",

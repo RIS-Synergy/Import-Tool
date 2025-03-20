@@ -24,6 +24,7 @@ files.forEach(file => {
 
   // console.log('Loading function:', name, file)
 
+  // @ts-ignore
   functions[name] = import(file).then(m => m.default);
 });
 

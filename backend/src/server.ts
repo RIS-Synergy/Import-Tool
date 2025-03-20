@@ -24,5 +24,9 @@ app.listen(port, () => {
 const fundingAgency = new FundingAgency()
 fundingAgency.start()
 
-const diffSync = new DiffSync()
-diffSync.start(process.env.CRIS_SYNC_TIME)
+if (process.env.CRIS_SYNC_TIME && process.env.PURE_API_URL) {
+  const diffSync = new DiffSync()
+  diffSync.start(process.env.CRIS_SYNC_TIME)
+} else {
+  log.warn('No CRIS_SYNC_TIME or PURE_API_URL provided. DiffSync will not start.')
+}

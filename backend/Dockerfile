@@ -1,5 +1,5 @@
 # Use a lightweight Node.js base image
-FROM node:lts-slim
+FROM node:lts-slim AS base
 
 # Install required system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -27,5 +27,11 @@ RUN npx prisma generate
 
 EXPOSE 3000
 
-# Currenttly runs 'ts-node ./src/server.ts', will need to `build` later. TODO
-CMD ["yarn", "docker"]
+# Development stage
+FROM base AS development
+CMD ["yarn", "dev"]
+
+# Production stage
+FROM base AS production
+RUN yarn build
+CMD ["node", "dist/index.js"]

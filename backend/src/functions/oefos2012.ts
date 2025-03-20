@@ -7,6 +7,7 @@ type Classification = {
 }
 
 export default function (ris: RISImport, settings: Settings): Classification[] {
+  // @ts-ignore
   const { subjects } = ris
 
   const result: Classification[] = subjects.map((subject) => {
