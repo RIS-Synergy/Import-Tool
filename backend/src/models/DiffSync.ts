@@ -35,7 +35,7 @@ export class DiffSync {
           diff.crisData = item
           const templateSelected = await Template.first("PROJECT")
           const result = await diff.runPipeline(templateSelected.id)
-          this.save(risId, diff.improveOutput(result.diffList))
+          this.save(risId, diff.improveOutput(result.diffList), templateSelected.id)
         } catch (error) {
           log.error('Error processing item', error, item)
         }
@@ -65,7 +65,7 @@ export class DiffSync {
   }
 
   // save to DB
-  save = async (risId: string, data: any) => {
+  save = async (risId: string, data: any, templateId: number) => {
     // create or update
     await prisma.diff.upsert({
       where: { id: risId },
@@ -76,7 +76,7 @@ export class DiffSync {
       create: {
         list: data,
         template: {
-          connect: { id: 68 }
+          connect: { id: templateId }
         },
         length: data.length,
         project: {

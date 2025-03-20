@@ -70,8 +70,10 @@ router.post('/upload', upload.array ('files'), async (req, res) => {
 
 router.post('/download', async (req, res) => {
   const projects = await prisma.project.findMany({
-    take: 5000, // XXX no limit
+    take: 1000, // XXX no limit later
   })
+  // TODO: limit by institution
+
   const projectsData = projects.map((project) => project.risData)
 
   var json = JSON.stringify(projectsData);
