@@ -25,13 +25,22 @@ COPY . .
 # Generate Prisma client
 RUN npx prisma generate
 
-EXPOSE 3000
+EXPOSE 3001
 
 # Development stage
 FROM base AS development
+ENV NODE_ENV=development
 CMD ["yarn", "dev"]
 
 # Production stage
 FROM base AS production
+ENV NODE_ENV=production
 RUN yarn build
-CMD ["node", "dist/index.js"]
+
+# Ensure the build output exists
+# RUN ls -la dist/
+
+# Use a non-root user for security
+USER node
+
+CMD ["node", "dist/server.js"]

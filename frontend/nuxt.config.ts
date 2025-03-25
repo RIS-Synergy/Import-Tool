@@ -19,6 +19,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
+      // This is just a way to preview these value for development
+      // backendApiProxy: process.env.BACKEND_API_PROXY, // remove later
       valueOrganization: process.env.RIS_DEV_VALUE_ORGANIZATION || null,
       valuePerson: process.env.RIS_DEV_VALUE_PERSON || null
     }
@@ -58,5 +60,5 @@ export default defineNuxtConfig({
         transformAssetUrls
       }
     }
-  }
+  },
 })

@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
         "target": "ESNext",
-        "moduleResolution": "node",
+        "module": "CommonJS",
         "sourceMap": true,
-        "outDir": "dist",
+        "outDir": "./dist",
         "esModuleInterop": true,
         "resolveJsonModule": true,
         "types": [
@@ -13,7 +13,7 @@
             "src/types",
             "node_modules/@types"
         ],
-        "rootDir": "src"
+        "rootDir": "./src"
     },
     "include": [
         "src/**/*.ts",

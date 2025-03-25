@@ -1,8 +1,0 @@
-services:
-  backend:
-    environment:
-      - NODE_ENV=production
-  frontend:
-    environment:
-      - NODE_ENV=production
-      - BACKEND_API_PROXY=http://backend:3000/**

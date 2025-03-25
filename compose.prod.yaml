@@ -1,0 +1,14 @@
+services:
+  backend:
+    restart: always
+    build:
+      target: production
+    environment:
+      - NODE_ENV=production
+      - JWT_SECRET=${JWT_SECRET}
+
+  frontend:
+    build:
+      target: production
+    environment:
+      - NODE_ENV=production

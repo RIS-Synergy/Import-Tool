@@ -1,18 +1,23 @@
 # This is for development!
 #
+# Run it like this:
+#
+# docker compose up --build -d
+#
 # Production would compose the main file, followed by another yaml file:
 #
-# docker --context ... compose \
-#  -f compose.yaml -f compose.production.yaml \
+# docker compose -f compose.yaml -f compose.prod.yaml up --build -d
 
 services:
   backend:
+    build:
+      target: development
     volumes:
       - ./backend/:/app
+      - /app/node_modules
     environment:
       - NODE_ENV=development
-      - PORT=3001
-      - RIS_TEST_DATA=2024-09-04_testdata_projects_updated.json
+      - JWT_SECRET=nosecret
     ports:
       - "3031:3001"
       - "51204:51204" # vitest, incl. UI
@@ -22,7 +27,8 @@ services:
   frontend:
     environment:
       - NODE_ENV=development
-      - BACKEND_API_PROXY=http://backend:3001/**
+    build:
+      target: development
     ports:
       - "3032:3000"
       - "24678:24678"

@@ -1,4 +1,4 @@
-FROM node:lts-slim
+FROM node:lts-slim AS base
 
 # Set working directory
 WORKDIR /app
@@ -13,5 +13,13 @@ COPY . .
 # Expose the development server port
 EXPOSE 3000
 
-# Run the development server
+# Development stage
+FROM base AS development
 CMD ["yarn", "dev"]
+
+# Production stage
+FROM base AS production
+ARG BACKEND_API_PROXY
+ENV BACKEND_API_PROXY=$BACKEND_API_PROXY
+RUN BACKEND_API_PROXY=${BACKEND_API_PROXY} yarn build
+CMD ["node", ".output/server/index.mjs"]

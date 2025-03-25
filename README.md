@@ -7,8 +7,8 @@
 - Go to directory: `cd Import-Tool`,
 - Fetch the latest code: `git pull`
 - The first time: `cp sample.env .env`, define your configuration environments.
-- Run in development `BUILD_TARGET=development NODE_ENV=development docker compose up --build -d`
-- (Alternatively, run in production `docker compose up -d --build`)
+- Run in development `docker compose up --build -d`
+- (Alternatively, run in production `docker compose -f compose.yaml -f compose.prod.yaml up --build -d`)
 - Follow the logs: `docker compose logs -f`
 - Create user credentials: `docker exec -it backend yarn db-user`
 - Open the browser: http://localhost:3032/
