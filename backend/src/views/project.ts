@@ -1,6 +1,7 @@
 import express, { Router, Request, Response } from "express"
+import * as XLSX from "xlsx";
 import { Logger } from "tslog";
-const log = new Logger({ name: 'view:project'});
+const log = new Logger({ name: 'view:project' });
 // const fs = require('fs')
 const router: any = express.Router()
 
@@ -10,7 +11,7 @@ const prisma = new PrismaClient()
 import multer from 'multer'
 const upload = multer();
 
-async function useProject (project): Promise<any> {
+async function useProject(project): Promise<any> {
   log.debug('Project', project.id)
 
   const { id } = project
@@ -37,7 +38,7 @@ async function useProject (project): Promise<any> {
 }
 
 // Upload multiple projects as FormData and save to prisma
-router.post('/upload', upload.array ('files'), async (req, res) => {
+router.post('/upload', upload.array('files'), async (req, res) => {
   var results: Array<any> = []
   const files: any = req.files
   const bla = files.forEach(async (file) => {
@@ -64,25 +65,36 @@ router.post('/upload', upload.array ('files'), async (req, res) => {
   console.log('Results', results)
   console.log('Results bla', bla)
 
-
   return res.json(results)
 })
 
 router.post('/download', async (req, res) => {
   const projects = await prisma.project.findMany({
-    take: 1000, // XXX no limit later
+    // take: 10000, // XXX smaller is useful for debugging
   })
-  // TODO: limit by institution
-
   const projectsData = projects.map((project) => project.risData)
+  const format: string = req.body.format
 
-  var json = JSON.stringify(projectsData);
+  if (format === 'Excel') {
+    // Convert JSON to Excel
+    const ws = XLSX.utils.json_to_sheet(projectsData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
 
-  var filename = 'projects.json';
-  var mimetype = 'application/json';
-  res.setHeader('Content-Type', mimetype);
-  res.setHeader('Content-disposition','attachment; filename='+filename);
-  res.send(json);
+    // Convert workbook to buffer
+    const wbout = XLSX.write(wb, { bookType: "xlsx", type: "buffer" });
+
+    // Set headers for file download
+    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.setHeader("Content-Disposition", 'attachment; filename="projects.xlsx"');
+    res.send(Buffer.from(wbout));
+  } else {
+    var filename = 'projects.json';
+    var mimetype = 'application/json';
+    res.setHeader('Content-Type', mimetype);
+    res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+    res.send(projectsData);
+  }
 })
 
 export default router

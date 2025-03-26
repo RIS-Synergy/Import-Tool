@@ -1,34 +1,52 @@
 <template>
   <v-container>
-    <v-btn color="primary" @click="downloadProject">
-      Download All Projects</v-btn
-    >
+    Download all Projects in <b>JSON</b> format:
+    <div class="mb-5">
+      <v-btn color="primary" @click="download('JSON')"> Download</v-btn>
+    </div>
+    Download all Projects in <b>Excel</b> format:
+
+    <div>
+      <v-btn color="primary" @click="download('Excel')"> Download</v-btn>
+    </div>
   </v-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
 definePageMeta({
   layout: "project-upload",
 });
 
 const files = ref([]);
-
 const { apiCall } = useApiUtils();
 
-async function downloadProject() {
-  const data = await apiCall('project/download', "POST");
-
-  const jsonData = JSON.stringify(data, null, 2);
-  const blob = new Blob([ jsonData ], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-
-  const now = new Date();
-  const date = now.toISOString().slice(0, 10);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `Projects_${date}.json`;
-  document.body.appendChild(a);
-  a.click();
-  URL.revokeObjectURL(url);
+function fileName(format) {
+  if (format === "JSON") {
+    return `Projects_${new Date().toISOString().slice(0, 10)}.json`;
+  } else {
+    return `Projects_${new Date().toISOString().slice(0, 10)}.xlsx`;
+  }
 }
+
+const download = async (format) => {
+  var blob = await apiCall("project/download", "POST", {
+    body: {
+      format,
+    },
+  });
+
+  // not a Excel, but a JSON
+  if (Array.isArray(blob)) {
+    const data = JSON.stringify(blob);
+    blob = new Blob([data], { type: "application/json" });
+  }
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = fileName(format);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 </script>
