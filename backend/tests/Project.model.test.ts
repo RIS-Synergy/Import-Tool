@@ -8,6 +8,32 @@ describe('Project', () => {
     expect(Project.ifExists).toBeInstanceOf(Function)
   })
 
+  it('matchDomain', () => {
+    const teamData = [
+      {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "person": {
+          "personId": "111111",
+          "electronicAddress": "personone@univie.ac.at",
+          "personName": {
+            "familyName": "Nachnameeins",
+            "firstName": "Bernhard"
+          },
+          "identifiers": [
+            {
+              "type": "ORCID",
+              "value": "0000-0000-1111-1111"
+            }
+          ]
+        }
+      }
+    ]
+    expect(Project.matchDomain(teamData, "univie.ac.at")).toBe(true)
+    expect(Project.matchDomain(teamData, "other")).toBe(false)
+    expect(Project.matchDomain(teamData, "")).toBe(false)
+    expect(Project.matchDomain([], "univie.ac.at")).toBe(false)
+  })
+
   describe('findRORInfo', () => {
     const fundedItems =
       [

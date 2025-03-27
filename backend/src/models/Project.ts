@@ -133,4 +133,28 @@ export class Project {
 
     return search(funded);
   }
+
+  /**
+   * Checks if any email addresses in the project data match the specified domain.
+   * @param project - The project data containing team information.
+   * @param domain - The domain to match against email addresses.
+   * @returns True if a matching email address is found, otherwise false.
+   */
+  static matchDomain(project: any, domain: string): boolean {
+    if (!domain) return false;
+
+    function search(item: any): boolean {
+      if (Array.isArray(item)) {
+        return item.some(subItem => search(subItem));
+      } else if (typeof item === "object" && item !== null) {
+        if (item.electronicAddress && item.electronicAddress.endsWith(`@${domain}`)) {
+          return true;
+        }
+        return Object.values(item).some(value => search(value));
+      }
+      return false;
+    }
+
+    return search(project);
+  }
 }
