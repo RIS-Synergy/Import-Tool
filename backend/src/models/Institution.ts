@@ -1,0 +1,25 @@
+import domains from '../../resources/ri-domains.json'
+
+type InstitutionDomain = {
+  name: string
+  domain: string
+  ror: string
+}
+
+export class Institution {
+  constructor(public name: string,
+    public ror: string,
+    public domain: string,
+  ) {}
+
+  static getByROR(rorId: string) {
+    console.log(domains.length)
+
+    const inst = domains.find((domain: InstitutionDomain) => {
+      return domain.ror === rorId
+    })
+    if (inst) {
+      return new Institution(inst.name, inst.ror, inst.domain)
+    }
+  }
+}
