@@ -2,13 +2,9 @@
   <v-container>
     <!-- RI filter -->
     <v-col cols="6">
-      <v-card
-        title="Filter by Research Institution">
+      <v-card title="Filter by Research Institution">
         <v-card-text>
-          <v-select
-            v-model="ror"
-            :items="rorItems"
-          ></v-select>
+          <v-select v-model="ror" :items="rorItems"></v-select>
         </v-card-text>
       </v-card>
     </v-col>
@@ -16,12 +12,16 @@
     <v-container>
       Download all Projects in <b>JSON</b> format:
       <div class="mb-5">
-        <v-btn color="primary" @click="download('JSON')"> Download</v-btn>
+        <v-btn :disabled="!ror" color="primary" @click="download('JSON')">
+          Download</v-btn
+        >
       </div>
       Download all Projects in <b>Excel</b> format:
 
       <div>
-        <v-btn color="primary" @click="download('Excel')"> Download</v-btn>
+        <v-btn :disabled="!ror" color="primary" @click="download('Excel')">
+          Download</v-btn
+        >
       </div>
     </v-container>
   </v-container>

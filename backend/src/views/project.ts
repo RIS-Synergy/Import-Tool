@@ -9,6 +9,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 import { Project } from '../models/Project'
 import { Institution } from '../models/Institution'
+import { Excel } from '../models/Excel'
 
 import multer from 'multer'
 const upload = multer();
@@ -90,12 +91,10 @@ router.post('/download', async (req, res) => {
 
   if (format === 'Excel') {
     // Convert JSON to Excel
-    const ws = XLSX.utils.json_to_sheet(projectsData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    const workbook = Excel.write(projectsData)
 
     // Convert workbook to buffer
-    const wbout = XLSX.write(wb, { bookType: "xlsx", type: "buffer" });
+    const wbout = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
 
     // Set headers for file download
     res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

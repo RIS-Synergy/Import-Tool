@@ -1,12 +1,25 @@
 import * as XLSX from "xlsx";
-import * as fs from "fs";
+import _ from 'lodash';
+
+const PRIORITIZED_KEYS = [
+  "id",
+  "acronym",
+  "identifiers",
+  "url",
+  "type",
+  "status",
+  "startDate",
+  "endDate",
+  "title",
+  "team",
+  "funded",
+  "abstractPR",
+  "subjects",
+  "keyword"
+];
 
 /**
- * Flattens a nested JSON object, dynamically expanding arrays of objects.
- * @param obj - The object to flatten.
- * @param prefix - The key prefix (used internally for recursion).
- * @param result - The accumulator for flattened key-value pairs.
- * @returns A flattened object.
+ * Flattens a nested JSON object, preserving array indexes in a structured way.
  */
 export function flattenObject(obj: any, prefix = "", result: any = {}): any {
   for (const key of Object.keys(obj)) {
@@ -14,17 +27,14 @@ export function flattenObject(obj: any, prefix = "", result: any = {}): any {
     const value = obj[key];
 
     if (Array.isArray(value)) {
-      if (value.every((v) => typeof v === "object" && v !== null)) {
-        // If the array contains objects, expand them into separate numbered columns
-        value.forEach((item, index) => {
+      value.forEach((item, index) => {
+        if (typeof item === "object" && item !== null) {
           flattenObject(item, `${fullKey}[${index}]`, result);
-        });
-      } else {
-        // Convert simple arrays into a comma-separated string
-        result[fullKey] = value;
-      }
+        } else {
+          result[`${fullKey}[${index}]`] = item;
+        }
+      });
     } else if (typeof value === "object" && value !== null) {
-      // Recursively flatten objects
       flattenObject(value, fullKey, result);
     } else {
       result[fullKey] = value;
@@ -34,30 +44,118 @@ export function flattenObject(obj: any, prefix = "", result: any = {}): any {
 }
 
 /**
- * Converts an array of JSON objects to an Excel file.
- * @param data - Array of JSON objects.
- * @param fileName - Name of the output Excel file.
+ * Analyzes the data to determine the maximum array length for each key prefix.
+ */
+function getMaxArrayLengths(data: any[]): Record<string, number> {
+  const maxLengths: Record<string, number> = {};
+
+  for (const item of data) {
+    const flatItem = flattenObject(item);
+    for (const key of Object.keys(flatItem)) {
+      const match = key.match(/^(.*)\[(\d+)\]/);
+      if (match) {
+        const baseKey = match[1];
+        const index = parseInt(match[2], 10);
+        maxLengths[baseKey] = Math.max(maxLengths[baseKey] || 0, index);
+      }
+    }
+  }
+  return maxLengths;
+}
+
+/**
+ * Expands each row to ensure all array-based keys have consistent column headers.
+ */
+function normalizeFlattenedData(flattenedData: any[], maxArrayLengths: Record<string, number>) {
+  const allKeys = new Set<string>();
+
+  // Generate all required keys in advance
+  for (const obj of flattenedData) {
+    for (const key of Object.keys(obj)) {
+      allKeys.add(key);
+    }
+  }
+
+  // Ensure array-based keys have consistent structure
+  for (const baseKey of Object.keys(maxArrayLengths)) {
+    for (let i = 0; i <= maxArrayLengths[baseKey]; i++) {
+      for (const key of Object.keys(flattenedData[0] || {})) {
+        if (key.startsWith(`${baseKey}[0]`)) {
+          const suffix = key.slice(`${baseKey}[0]`.length);
+          allKeys.add(`${baseKey}[${i}]${suffix}`);
+        }
+      }
+    }
+  }
+
+  // Convert Set to Array and sort naturally
+  const sortedKeys = Array.from(allKeys).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+
+  // Normalize data
+  return flattenedData.map((obj) =>
+    sortedKeys.reduce((acc, key) => {
+      acc[key] = obj[key] ?? "";
+      return acc;
+    }, {} as Record<string, any>)
+  );
+}
+
+/**
+ * Reorders columns to ensure prioritized keys (and their subkeys) appear first.
+ */
+function reorderColumns(data: any[], prioritizedKeys: string[]): any[] {
+  if (data.length === 0) return data;
+
+  const allKeys = Object.keys(data[0]);
+
+  // Group columns based on whether they match a prioritized key
+  const priorityGroups: Record<string, string[]> = {};
+  const otherColumns: string[] = [];
+
+  for (const key of allKeys) {
+    const matchedPriority = prioritizedKeys.find((pKey) => key.startsWith(pKey));
+    if (matchedPriority) {
+      if (!priorityGroups[matchedPriority]) {
+        priorityGroups[matchedPriority] = [];
+      }
+      priorityGroups[matchedPriority].push(key);
+    } else {
+      otherColumns.push(key);
+    }
+  }
+
+  // Sort each group alphabetically (to preserve structure)
+  for (const key in priorityGroups) {
+    priorityGroups[key].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  }
+
+  // Build final ordered key list
+  const orderedKeys = [
+    ...prioritizedKeys.flatMap((key) => priorityGroups[key] || []), // Prioritized groups first
+    ...otherColumns.sort((a, b) => a.localeCompare(b, undefined, { numeric: true })), // Then everything else
+  ];
+
+  // Rebuild data with the new key order
+  return data.map((obj) =>
+    orderedKeys.reduce((acc, key) => {
+      acc[key] = obj[key] ?? "";
+      return acc;
+    }, {} as Record<string, any>)
+  );
+}
+
+/**
+ * Converts an array of JSON objects to an Excel file with consistent column structure.
  */
 export function jsonToExcel(data: any[]) {
-  // Flatten each JSON object in the array
   const flattenedData = data.map((item) => flattenObject(item));
+  const maxArrayLengths = getMaxArrayLengths(data);
+  const normalizedData = normalizeFlattenedData(flattenedData, maxArrayLengths);
+  const reorderedData = reorderColumns(normalizedData, PRIORITIZED_KEYS);
 
-  // Get all unique keys to ensure correct column mapping
-  const allKeys = Array.from(
-    new Set(flattenedData.flatMap((obj) => Object.keys(obj)))
-  );
-
-  // Rebuild objects with all keys to ensure proper Excel formatting
-  const normalizedData = flattenedData.map((obj) =>
-    allKeys.reduce((acc, key) => ({ ...acc, [key]: obj[key] ?? "" }), {})
-  );
-
-  // Create a worksheet from JSON
-  const worksheet = XLSX.utils.json_to_sheet(normalizedData);
-
-  // Create a workbook and append the worksheet
+  const worksheet = XLSX.utils.json_to_sheet(reorderedData);
   const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Complete List");
 
   return workbook;
 }
@@ -66,10 +164,13 @@ export class Excel {
   constructor() {
   }
 
-  static async write(data: any[], fileName: string) {
-    const workbook = jsonToExcel(data);
-
-    // Write the workbook to a file
+  // used in the 'json-to-excel' script
+  static writeFile = (workbook: XLSX.WorkBook, fileName: string) => {
     XLSX.writeFile(workbook, fileName);
+  }
+
+  static write(data: any[]) {
+    const workbook = jsonToExcel(data);
+    return workbook;
   }
 }

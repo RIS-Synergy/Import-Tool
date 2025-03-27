@@ -13,8 +13,6 @@ export class Institution {
   ) {}
 
   static getByROR(rorId: string) {
-    console.log(domains.length)
-
     const inst = domains.find((domain: InstitutionDomain) => {
       return domain.ror === rorId
     })

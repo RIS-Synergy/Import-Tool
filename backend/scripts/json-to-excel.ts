@@ -32,8 +32,13 @@ async function main() {
 
   // remove the extension .json at the end
   name = name.replace('.json', '')
-  await Excel.write(data as any, `${name}.xlsx`)
-  console.log('Saved file:', `${name}.xlsx`)
+
+  // Write the workbook to a file
+  const fileName = `${name}.xlsx`
+  const workbook = Excel.write(data as any)
+  Excel.writeFile(workbook, fileName)
+
+  console.log('Saved file:', fileName)
 }
 
 main()
