@@ -28,6 +28,6 @@ const route = useRoute();
 const likelyhood = await diffRILikelihood(route.params.id);
 
 function getCrisEntities(entity) {
-  return likelyhood.filter((item) => item.entity === entity);
+  return likelyhood && likelyhood.filter((item) => item.entity === entity);
 }
 </script>

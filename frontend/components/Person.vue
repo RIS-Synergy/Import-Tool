@@ -14,11 +14,13 @@
     </v-col>
   </v-row>
     <TypeValues v-if="model.identifiers" v-model="model.identifiers" />
-    <PureSearchPersons v-model="model.personName" :email="model.electronicAddress" />
+    <PureSearchPersons v-if="hasCRIS()" v-model="model.personName" :email="model.electronicAddress" />
 </template>
 
 <script setup>
 const model = defineModel();
+
+const { hasCRIS } = useApiUtils();
 </script>
 
 <style scoped></style>

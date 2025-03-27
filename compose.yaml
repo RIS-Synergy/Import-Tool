@@ -34,6 +34,8 @@ services:
     depends_on:
       - backend
     tmpfs: /tmp
+    environment:
+      PURE_API_URL: ${PURE_API_URL}
     ports:
       - "3032:3000"
 

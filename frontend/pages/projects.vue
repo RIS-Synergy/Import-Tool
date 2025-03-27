@@ -36,7 +36,7 @@
                     view
                   </v-btn>
                 </NuxtLink>
-                <StatusColumn class="bottom-right" :id="item.id" :data="columnData" />
+                <StatusColumn v-if="hasCRIS()" class="bottom-right" :id="item.id" :data="columnData" />
               </v-col>
             </v-row>
             <DiffSimple
@@ -70,7 +70,7 @@ const serverItems = ref([]);
 const totalItems = ref(0);
 const page = ref(1);
 
-const { getProjectsList } = useApiUtils();
+const { getProjectsList, hasCRIS } = useApiUtils();
 async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
   store.sortBy = sortBy;
   loading.value = true;

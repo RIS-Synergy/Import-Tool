@@ -19,10 +19,11 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      // This is just a way to preview these value for development
-      // backendApiProxy: process.env.BACKEND_API_PROXY, // remove later
       valueOrganization: process.env.RIS_DEV_VALUE_ORGANIZATION || null,
-      valuePerson: process.env.RIS_DEV_VALUE_PERSON || null
+      valuePerson: process.env.RIS_DEV_VALUE_PERSON || null,
+
+      // Some instances do not have a CRIS. Some UI Components will otherwise show errors
+      hasCRIS: !!process.env.PURE_API_URL || false,
     }
   },
 

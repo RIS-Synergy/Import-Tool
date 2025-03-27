@@ -32,6 +32,11 @@ export async function apiCall(url = '', method = 'GET', data: any = {}) {
   return result;
 }
 
+export function hasCRIS () {
+  const config = useRuntimeConfig()
+  return config.public.hasCRIS
+}
+
 export const useApiUtils = () => {
   const getTemplates = async (type: string) => {
     const result = await apiCall(`templates/${type}`)
@@ -118,6 +123,7 @@ export const useApiUtils = () => {
   };
 
   const getDiffs = async (risId: string, systemName: string, uuid: string, templateSelected: number) => {
+    if (!hasCRIS()) return
     const result = await apiCall(`diff/${risId}`, "POST", {
       body: JSON.stringify({
         systemName,
@@ -188,6 +194,11 @@ export const useApiUtils = () => {
   const uploadToPure = async (ris, settings, uuid, templateData, entity) => {
     const snackbar = useSnackbar();
 
+    if (!hasCRIS()) {
+      snackbar.error("CRIS API is not available.")
+      return
+    }
+
     var template = {
       ...templateData,
     }
@@ -240,6 +251,7 @@ export const useApiUtils = () => {
   }
 
   const diffRILikelihood = async (risId: string) => {
+    if (!hasCRIS()) return
     const result = await apiCall(`diff/likelihood/${risId}`)
     return result;
   }
@@ -314,6 +326,7 @@ export const useApiUtils = () => {
     assignCluster,
     getFunction,
     setFunction,
-    createFunction
+    createFunction,
+    hasCRIS
   };
 };
