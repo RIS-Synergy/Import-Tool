@@ -18,6 +18,7 @@ services:
     environment:
       - NODE_ENV=development
       - JWT_SECRET=nosecret
+      - RIS_TEST_DATA=2024-09-04_testdata_projects_updated.json
     ports:
       - "3031:3001"
       - "51204:51204" # vitest, incl. UI
