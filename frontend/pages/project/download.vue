@@ -1,14 +1,29 @@
 <template>
   <v-container>
-    Download all Projects in <b>JSON</b> format:
-    <div class="mb-5">
-      <v-btn color="primary" @click="download('JSON')"> Download</v-btn>
-    </div>
-    Download all Projects in <b>Excel</b> format:
+    <!-- RI filter -->
+    <v-col cols="6">
+      <v-card
+        title="Filter by Research Institution">
+        <v-card-text>
+          <v-select
+            v-model="ror"
+            :items="rorItems"
+          ></v-select>
+        </v-card-text>
+      </v-card>
+    </v-col>
 
-    <div>
-      <v-btn color="primary" @click="download('Excel')"> Download</v-btn>
-    </div>
+    <v-container>
+      Download all Projects in <b>JSON</b> format:
+      <div class="mb-5">
+        <v-btn color="primary" @click="download('JSON')"> Download</v-btn>
+      </div>
+      Download all Projects in <b>Excel</b> format:
+
+      <div>
+        <v-btn color="primary" @click="download('Excel')"> Download</v-btn>
+      </div>
+    </v-container>
   </v-container>
 </template>
 
@@ -16,6 +31,24 @@
 definePageMeta({
   layout: "project-upload",
 });
+
+// duplicated in FilterButton component
+const rorItems = [
+  {
+    value: "https://ror.org/03prydq77",
+    title: "Universität Wien",
+  },
+  {
+    value: "https://ror.org/05gs8cd61",
+    title: "Universität Salzburg",
+  },
+  {
+    value: "https://ror.org/029djt864",
+    title: "Akademie der bildenden Künste",
+  },
+];
+
+const ror = ref(null);
 
 const files = ref([]);
 const { apiCall } = useApiUtils();
@@ -32,6 +65,7 @@ const download = async (format) => {
   var blob = await apiCall("project/download", "POST", {
     body: {
       format,
+      ror: ror.value,
     },
   });
 

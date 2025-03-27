@@ -1,5 +1,24 @@
-import { describe, it, expect } from 'vitest'
+import { readFileSync } from 'fs'
+import { describe, it, expect, vi } from 'vitest'
 import { flattenObject, jsonToExcel } from '../src/models/Excel'
+
+const projectsFile = `./samples/projects/${process.env.RIS_TEST_DATA}`
+const projects = JSON.parse(readFileSync(projectsFile, 'utf8'))
+
+vi.mock('../../src/models/Project', () => ({
+  Project: {
+    getById: vi.fn(async (id: string) => {
+      const p = projects.find((p: any) => {
+        return p.id === id
+      })
+
+      return {
+        risData: p
+      }
+    })
+  }
+}))
+
 
 describe('Excel class', () => {
   const nestedObject = {

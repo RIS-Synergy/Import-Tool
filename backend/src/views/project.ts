@@ -7,6 +7,7 @@ const router: any = express.Router()
 
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
+import { Project } from '../models/Project'
 
 import multer from 'multer'
 const upload = multer();
@@ -70,9 +71,12 @@ router.post('/upload', upload.array('files'), async (req, res) => {
 
 router.post('/download', async (req, res) => {
   const projects = await prisma.project.findMany({
-    // take: 10000, // XXX smaller is useful for debugging
+    // take: 100, // XXX smaller is useful for debugging
   })
-  const projectsData = projects.map((project) => project.risData)
+  const { ror } = req.body
+  const projectsData = projects
+    .map((project) => project.risData)
+    .filter((project: any) => Project.hasROR(project.funded, ror))
   const format: string = req.body.format
 
   if (format === 'Excel') {
