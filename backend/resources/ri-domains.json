@@ -1,0 +1,417 @@
+[
+  {
+    "name": "Österreichische Akademie der Wissenschaften",
+    "domain": "oeaw.ac.at",
+    "ror": "https://ror.org/03anc3s24"
+  },
+  {
+    "name": "Universität Graz",
+    "domain": "uni-graz.at",
+    "ror": "https://ror.org/01faaaf77"
+  },
+  {
+    "name": "Universität Wien",
+    "domain": "univie.ac.at",
+    "ror": "https://ror.org/03prydq77"
+  },
+  {
+    "name": "Universität für angewandte Kunst Wien",
+    "domain": "uni-ak.ac.at",
+    "ror": "https://ror.org/05yjy4360"
+  },
+  {
+    "name": "Freie Universität Berlin",
+    "domain": "fu-berlin.de",
+    "ror": "https://ror.org/046ak2485"
+  },
+  {
+    "name": "Universität Duisburg-Essen",
+    "domain": "uni-due.de",
+    "ror": "https://ror.org/04mz5ra38"
+  },
+  {
+    "name": "Universität Innsbruck",
+    "domain": "uibk.ac.at",
+    "ror": "https://ror.org/054pv6659"
+  },
+  {
+    "name": "Sonstige Forschungs- oder Entwicklungseinrichtungen",
+    "domain": "",
+    "ror": "null"
+  },
+  {
+    "name": "Universität Klagenfurt",
+    "domain": "aau.at",
+    "ror": "https://ror.org/05q9m0937"
+  },
+  {
+    "name": "Universität Salzburg",
+    "domain": "plus.ac.at",
+    "ror": "https://ror.org/05gs8cd61"
+  },
+  {
+    "name": "Medizinische Universität Wien",
+    "domain": "meduniwien.ac.at",
+    "ror": "https://ror.org/05n3x4p02"
+  },
+  {
+    "name": "Technische Universität Wien",
+    "domain": "tuwien.ac.at",
+    "ror": "https://ror.org/04d836q62"
+  },
+  {
+    "name": "Institut für Molekulare Pathologie - IMP",
+    "domain": "imp.ac.at",
+    "ror": "https://ror.org/02c5jsm26"
+  },
+  {
+    "name": "FH Oberösterreich",
+    "domain": "fh-ooe.at",
+    "ror": "https://ror.org/03jqp6d56"
+  },
+  {
+    "name": "Medizinische Universität Innsbruck",
+    "domain": "i-med.ac.at",
+    "ror": "https://ror.org/03pt86f80"
+  },
+  {
+    "name": "Institute of Science and Technology Austria - ISTA",
+    "domain": "ist.ac.at",
+    "ror": "https://ror.org/03gnh5541"
+  },
+  {
+    "name": "Universität für Bodenkultur Wien",
+    "domain": "boku.ac.at",
+    "ror": "https://ror.org/057ff4y42"
+  },
+  {
+    "name": "Wirtschaftsuniversität Wien",
+    "domain": "wu.ac.at",
+    "ror": "https://ror.org/03yn8s215"
+  },
+  {
+    "name": "International Institute for Applied System Analysis (IIASA)",
+    "domain": "iiasa.ac.at",
+    "ror": "https://ror.org/02wfhk785"
+  },
+  {
+    "name": "Medizinische Universität Graz",
+    "domain": "medunigraz.at",
+    "ror": "https://ror.org/02n0bts35"
+  },
+  {
+    "name": "University of Toronto",
+    "domain": "utoronto.ca",
+    "ror": "https://ror.org/03dbr7087"
+  },
+  {
+    "name": "Central European University Private University",
+    "domain": "ceu.edu",
+    "ror": "https://ror.org/02zx40v98"
+  },
+  {
+    "name": "Technische Universität Graz",
+    "domain": "tugraz.at",
+    "ror": "https://ror.org/00d7xrm67"
+  },
+  {
+    "name": "Ludwig Boltzmann Gesellschaft",
+    "domain": "lbg.ac.at",
+    "ror": "https://ror.org/01v1jam04"
+  },
+  {
+    "name": "Universität für Musik und darstellende Kunst Graz",
+    "domain": "kug.ac.at",
+    "ror": "https://ror.org/0541v4g57"
+  },
+  {
+    "name": "Veterinärmedizinische Universität Wien",
+    "domain": "vetmeduni.ac.at",
+    "ror": "https://ror.org/01w6qp003"
+  },
+  {
+    "name": "CeMM – Forschungszentrum für Molekulare Medizin GmbH",
+    "domain": "cemm.at",
+    "ror": "https://ror.org/02z2dfb58"
+  },
+  {
+    "name": "Materials Center Leoben (MCL)",
+    "domain": "mcl.at",
+    "ror": "https://ror.org/04s620254"
+  },
+  {
+    "name": "Universität Linz",
+    "domain": "jku.at",
+    "ror": "https://ror.org/052r2xn60"
+  },
+  {
+    "name": "FH Salzburg",
+    "domain": "fh-salzburg.ac.at",
+    "ror": "https://ror.org/0072dxg89"
+  },
+  {
+    "name": "Naturhistorisches Museum Wien",
+    "domain": "nhm-wien.ac.at",
+    "ror": "https://ror.org/01tv5y993"
+  },
+  {
+    "name": "IMBA – Institut für Molekulare Biotechnologie GmbH",
+    "domain": "imba.oeaw.ac.at",
+    "ror": "https://ror.org/01zqrxf85"
+  },
+  {
+    "name": "Charles University Prague",
+    "domain": "cuni.cz",
+    "ror": "https://ror.org/024d6js02"
+  },
+  {
+    "name": "Austrian Institute of Technology - AIT",
+    "domain": "ait.ac.at",
+    "ror": "https://ror.org/04knbh022"
+  },
+  {
+    "name": "Geologische Bundesanstalt",
+    "domain": "geologie.ac.at",
+    "ror": "https://ror.org/03em27e03"
+  },
+  {
+    "name": "FH Vorarlberg",
+    "domain": "fhv.at",
+    "ror": "https://ror.org/031wyx077"
+  },
+  {
+    "name": "Montanuniversität Leoben",
+    "domain": "unileoben.ac.at",
+    "ror": "https://ror.org/02fhfw393"
+  },
+  {
+    "name": "St. Anna Kinderkrebsforschung GmbH",
+    "domain": "ccri.at",
+    "ror": "https://ror.org/05bd7c383"
+  },
+  {
+    "name": "Gregor Mendel Institute of Molecular Plant Biology",
+    "domain": "gmi.oeaw.ac.at",
+    "ror": "https://ror.org/05twjp994"
+  },
+  {
+    "name": "Universität Mozarteum Salzburg",
+    "domain": "moz.ac.at",
+    "ror": "https://ror.org/00tfmqe91"
+  },
+  {
+    "name": "Research Center for Non Destructive Testing GmbH",
+    "domain": "recendt.at",
+    "ror": "https://ror.org/05cndr128"
+  },
+  {
+    "name": "Akademie der bildenden Künste Wien",
+    "domain": "akbild.ac.at",
+    "ror": "https://ror.org/029djt864"
+  },
+  {
+    "name": "Uppsala University",
+    "domain": "uu.se",
+    "ror": "https://ror.org/048a87296"
+  },
+  {
+    "name": "Universität für Musik und darstellende Kunst Wien",
+    "domain": "mdw.ac.at",
+    "ror": "https://ror.org/000ymgt65"
+  },
+  {
+    "name": "MC Innsbruck",
+    "domain": "mci.edu",
+    "ror": "https://ror.org/021kg9v06"
+  },
+  {
+    "name": "Wolfgang Pauli Institut",
+    "domain": "wpi.ac.at",
+    "ror": "https://ror.org/048qkq105"
+  },
+  {
+    "name": "Donau-Universität Krems",
+    "domain": "donau-uni.ac.at",
+    "ror": "https://ror.org/03ef4a036"
+  },
+  {
+    "name": "Österreichische Forschungsstiftung für internationale Entwicklung (ÖFSE)",
+    "domain": "oefse.at",
+    "ror": "https://ror.org/054z0bn29"
+  },
+  {
+    "name": "FH Campus Wien",
+    "domain": "fh-campuswien.ac.at",
+    "ror": "https://ror.org/003f4pg83"
+  },
+  {
+    "name": "Universität Kassel",
+    "domain": "uni-kassel.de",
+    "ror": "https://ror.org/04zc7p361"
+  },
+  {
+    "name": "Musik u. Kunst Priv.-Univ. d. Stadt Wien",
+    "domain": "muk.ac.at",
+    "ror": "https://ror.org/03y1x4f32"
+  },
+  {
+    "name": "Diplomatische Akademie Wien - Vienna School of International Studies",
+    "domain": "da-vienna.ac.at",
+    "ror": "https://ror.org/01s3pkg06"
+  },
+  {
+    "name": "Universität für künstlerische und industrielle Gestaltung Linz",
+    "domain": "ufg.ac.at",
+    "ror": "https://ror.org/02as55378"
+  },
+  {
+    "name": "FH St. Pölten",
+    "domain": "fhstp.ac.at",
+    "ror": "https://ror.org/039a2re55"
+  },
+  {
+    "name": "University of Zurich",
+    "domain": "uzh.ch",
+    "ror": "https://ror.org/02crff812"
+  },
+  {
+    "name": "Karl Landsteiner Priv.-Univ.",
+    "domain": "kl.ac.at",
+    "ror": "https://ror.org/04t79ze18"
+  },
+  {
+    "name": "CBmed - Center of Biomarker Research in Medicine",
+    "domain": "cbmed.org",
+    "ror": "https://ror.org/031gwf224"
+  },
+  {
+    "name": "Complexity Science Hub Vienna CSH",
+    "domain": "csh.ac.at",
+    "ror": "https://ror.org/023dz9m50"
+  },
+  {
+    "name": "Paracelsus Med.-Priv.-Univ. Salzburg / SALK",
+    "domain": "pmu.ac.at",
+    "ror": "https://ror.org/03z3mg085"
+  },
+  {
+    "name": "University of Barcelona",
+    "domain": "ub.edu",
+    "ror": "https://ror.org/021018s57"
+  },
+  {
+    "name": "Kompetenzzentrum - Das virtuelle Fahrzeug",
+    "domain": "v2c2.at",
+    "ror": "https://ror.org/029rc9g37"
+  },
+  {
+    "name": "Ludwig-Maximilians-Universität München",
+    "domain": "lmu.de",
+    "ror": "https://ror.org/05591te55"
+  },
+  {
+    "name": "Modul Univ. Vienna",
+    "domain": "modul.ac.at",
+    "ror": "https://ror.org/04v2brz27"
+  },
+  {
+    "name": "FH Kärnten",
+    "domain": "fh-kaernten.at",
+    "ror": "https://ror.org/036w00e23"
+  },
+  {
+    "name": "New York University",
+    "domain": "nyu.edu",
+    "ror": "https://ror.org/0190ak572"
+  },
+  {
+    "name": "DCS Computing GmbH",
+    "domain": "dcs-computing.com",
+    "ror": "https://ror.org/05pggr453"
+  },
+  {
+    "name": "Sigmund Freud Priv. Univ.",
+    "domain": "sfu.ac.at",
+    "ror": "https://ror.org/04hwbg047"
+  },
+  {
+    "name": "Hochschule für Musik und Tanz Köln",
+    "domain": "hfmt-koeln.de",
+    "ror": "https://ror.org/05256tw11"
+  },
+  {
+    "name": "Kompetenzzentrum Holz",
+    "domain": "wood-kplus.at",
+    "ror": "https://ror.org/01gpw0445"
+  },
+  {
+    "name": "FH Joanneum",
+    "domain": "fh-joanneum.at",
+    "ror": "https://ror.org/03kkbqm48"
+  },
+  {
+    "name": "École polytechnique fédérale de Lausanne",
+    "domain": "epfl.ch",
+    "ror": "https://ror.org/02s376052"
+  },
+  {
+    "name": "Joanneum Research Forschungsgesellschaft mbH",
+    "domain": "joanneum.at",
+    "ror": "https://ror.org/049bdss47"
+  },
+  {
+    "name": "University of Oxford",
+    "domain": "ox.ac.uk",
+    "ror": "https://ror.org/052gg0110"
+  },
+  {
+    "name": "University of Copenhagen",
+    "domain": "ku.dk",
+    "ror": "https://ror.org/035b05819"
+  },
+  {
+    "name": "Fachhochschule Wiener Neustadt GmbH",
+    "domain": "fhwn.ac.at",
+    "ror": "https://ror.org/03k7r0z51"
+  },
+  {
+    "name": "AGES - Österreichische Agentur für Gesundheit und Ernährungssicherheit",
+    "domain": "ages.at",
+    "ror": "https://ror.org/055xb4311"
+  },
+  {
+    "name": "Österreichisches Forschungsinstitut für Artificial Intelligence",
+    "domain": "ofai.at",
+    "ror": "https://ror.org/04j47vk14"
+  },
+  {
+    "name": "WasserCluster Lunz",
+    "domain": "wcl.ac.at",
+    "ror": "https://ror.org/01q437m46"
+  },
+  {
+    "name": "University of California Berkeley",
+    "domain": "berkeley.edu",
+    "ror": "https://ror.org/01an7q238"
+  },
+  {
+    "name": "Eidgenössische Technische Hochschule Zürich",
+    "domain": "ethz.ch",
+    "ror": "https://ror.org/05a28rw58"
+  },
+  {
+    "name": "Universalmuseum Joanneum",
+    "domain": "museum-joanneum.at",
+    "ror": "https://ror.org/00nxtmb68"
+  },
+  {
+    "name": "TU Bergakademie Freiberg",
+    "domain": "tu-freiberg.de",
+    "ror": "https://ror.org/031vc2293"
+  },
+  {
+    "name": "University of St. Andrews",
+    "domain": "st-andrews.ac.uk",
+    "ror": "https://ror.org/02wn5qz54"
+  }
+]
