@@ -144,18 +144,50 @@ function reorderColumns(data: any[], prioritizedKeys: string[]): any[] {
   );
 }
 
+// not regex
+const onlyEssentialKeys = [
+    "id",
+    "identifiers[0].value",
+    "identifiers[1].value",
+    "type",
+    "title[0].text",
+    "title[1].text",
+    "status",
+    "team[0].person.electronicAddress",
+    "team[0].person.personName.familyName",
+    "team[0].person.personName.firstName",
+    "team[0].person.identifiers[0].value",
+    "funded[0].by.id",
+    "funded[0].by.name.text",
+    "funded[1].as.name.text",
+    "funded[1].as.amount.currency",
+    "funded[1].as.amount.amount",
+    "funded[1].as.recipients[0].orgUnit.name[0].text",
+    "startDate",
+    "endDate",
+    "funded[1].as.recipients[1].orgUnit.name[0].text",
+    "funded[1].as.recipients[2].orgUnit.name[0].text"
+  ];
+
+export function onlyEssential(data: any[], keys: string[]) {
+  return data.map((item) => {
+    return _.pick(item, keys)
+  });
+}
+
 /**
  * Converts an array of JSON objects to an Excel file with consistent column structure.
  */
-export function jsonToExcel(data: any[]) {
-  const flattenedData = data.map((item) => flattenObject(item));
-  const maxArrayLengths = getMaxArrayLengths(data);
-  const normalizedData = normalizeFlattenedData(flattenedData, maxArrayLengths);
-  const reorderedData = reorderColumns(normalizedData, PRIORITIZED_KEYS);
+export function jsonToExcel(data: any[], essentialKeys: string[]) {
 
-  const worksheet = XLSX.utils.json_to_sheet(reorderedData);
   const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Complete List");
+
+  // Create 'Essential List'
+  const essentialList = onlyEssential(data, essentialKeys);
+  XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(essentialList), "Essential List");
+
+  // Create 'Complete List'
+  XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(data), "Complete List");
 
   return workbook;
 }
@@ -164,13 +196,22 @@ export class Excel {
   constructor() {
   }
 
+  static process(data: any[]) {
+    const flattenedData = data.map((item) => flattenObject(item));
+    const maxArrayLengths = getMaxArrayLengths(data);
+    const normalizedData = normalizeFlattenedData(flattenedData, maxArrayLengths);
+    const reorderedData = reorderColumns(normalizedData, PRIORITIZED_KEYS);
+    return reorderedData;
+  }
+
   // used in the 'json-to-excel' script
   static writeFile = (workbook: XLSX.WorkBook, fileName: string) => {
     XLSX.writeFile(workbook, fileName);
   }
 
   static write(data: any[]) {
-    const workbook = jsonToExcel(data);
+    const processedData = Excel.process(data);
+    const workbook = jsonToExcel(processedData, onlyEssentialKeys);
     return workbook;
   }
 }

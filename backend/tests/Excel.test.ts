@@ -20,6 +20,15 @@ vi.mock('../../src/models/Project', () => ({
   }
 }))
 
+const onlyEssentialKeys = [
+  'name',
+  'details.age',
+  'details.address.city',
+  'details.address.zip',
+  'keywords[0].name',
+  'keywords[1].more[0].name',
+  'keywords[1].name'
+]
 
 describe('Excel helper functions', () => {
   const nestedObject = {
@@ -41,57 +50,75 @@ describe('Excel helper functions', () => {
     ]
   };
 
-  it('flattenObject function', () => {
-    const expectedFlattened = {
-      "name": "Test",
-      "details.age": 30,
-      "details.address.city": "New York",
-      "details.address.zip": "10001",
-      "keywords[0].name": "tag1",
-      "keywords[1].more[0].name": "tag3",
-      "keywords[1].name": "tag2",
-    };
+  const expectedFlattened = {
+    "name": "Test",
+    "details.age": 30,
+    "details.address.city": "New York",
+    "details.address.zip": "10001",
+    "keywords[0].name": "tag1",
+    "keywords[1].name": "tag2",
+    "keywords[1].more[0].name": "tag3",
+  };
 
+  it('flattenObject keys', () => {
+    const result = excel.flattenObject(nestedObject)
+    expect(Object.keys(result)).toEqual(Object.keys(expectedFlattened))
+  })
+
+  it('flattenObject function', () => {
     const result = excel.flattenObject(nestedObject)
     expect(result).toEqual(expectedFlattened);
   })
 
   it('jsonToExcel function', () => {
-    const result = excel.jsonToExcel([nestedObject])
-    expect(result.Sheets).toEqual({
-      'Complete List': {
-        '!ref': 'A1:G2',
-        A1: { t: 's', v: 'keywords[0].name' },
-        B1: { t: 's', v: 'keywords[1].more[0].name' },
-        C1: { t: 's', v: 'keywords[1].name' },
-        D1: { t: 's', v: 'details.address.city' },
-        E1: { t: 's', v: 'details.address.zip' },
-        F1: { t: 's', v: 'details.age' },
-        G1: { t: 's', v: 'name' },
+    const result = excel.jsonToExcel([nestedObject], onlyEssentialKeys)
+    expect(result.Sheets['Complete List']).toEqual({
+      "!ref": "A1:C2",
+      A1: { t: "s", v: "name" },
+      A2: { t: "s", v: "Test" },
+      B1: { t: "s", v: "details" },
+      B2: { address: { city: "New York", zip: "10001" }, age: 30 },
+      C1: { t: "s", v: "keywords" },
+      C2: [
+        { name: "tag1" },
+        { name: "tag2", more: [ { name: "tag3" } ] }
+      ]
+    });
+  })
 
-        A2: { t: 's', v: 'tag1' },
-        B2: { t: 's', v: 'tag3' },
-        C2: { t: 's', v: 'tag2' },
-        D2: { t: 's', v: 'New York' },
-        E2: { t: 's', v: '10001' },
-        F2: { t: 'n', v: 30 },
-        G2: { t: 's', v: 'Test' },
-      }
+  it('Essential List', () => {
+    const result = excel.jsonToExcel([nestedObject], onlyEssentialKeys)
+    expect(result.Sheets['Essential List']).toEqual({
+      "!ref": "A1:C2",
+      A1: { t: "s", v: "name" },
+      A2: { t: "s", v: "Test" },
+      B1: { t: "s", v: "details" },
+      B2: { address: { city: "New York", zip: "10001" }, age: 30 },
+      C1: { t: "s", v: "keywords" },
+      C2: [
+        { name: "tag1" },
+        { name: "tag2", more: [ { name: "tag3" } ] }
+      ]
     });
   })
 })
 
-
 describe('Excel class', () => {
+  it('Excel.process', () => {
+    expect(Excel.process(projects)).toBeDefined()
+    expect(Excel.process(projects)).toBeInstanceOf(Array)
+    // expect(Excel.process(projects)).toBe({})
+  })
 
   it('Excel.write', () => {
     const workbook = Excel.write(projects)
     // Excel.writeFile(workbook, 'test.xlsx')
-    expect (workbook).toBeDefined()
-    expect(workbook.SheetNames).toEqual(['Complete List'])
+    expect(workbook).toBeDefined()
+    expect(workbook.SheetNames).toEqual(['Essential List', "Complete List"])
 
     // how many rows
     const rows = workbook.Sheets['Complete List']['!ref'].split(':')[1].replace(/[A-Z]/g, '')
+    expect(Number(rows)).toBe(21)
     expect(Number(rows)).toBe(projects.length + 1)
   })
 })
