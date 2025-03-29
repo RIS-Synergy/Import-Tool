@@ -71,7 +71,7 @@ const download = async (format) => {
 
   // not a Excel, but a JSON
   if (Array.isArray(blob)) {
-    const data = JSON.stringify(blob);
+    const data = JSON.stringify(blob, null, 2);
     blob = new Blob([data], { type: "application/json" });
   }
 

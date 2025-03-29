@@ -101,11 +101,7 @@ router.post('/download', async (req, res) => {
     res.setHeader("Content-Disposition", 'attachment; filename="projects.xlsx"');
     res.send(Buffer.from(wbout));
   } else {
-    var filename = 'projects.json';
-    var mimetype = 'application/json';
-    res.setHeader('Content-Type', mimetype);
-    res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-    res.send(projectsData);
+    res.json(projectsData);
   }
 })
 

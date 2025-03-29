@@ -29,8 +29,8 @@ export class FundingAgency {
 
     // Save all the projects to the database
     await Promise.all(projects.map(async (project) => {
-      if(!project || !project.id) { // bug from FWF
-        log.error('Project has no id', project)
+      if(!project || !project.id) {
+        // minor bug from FWF, ignore it
         return
       }
 
