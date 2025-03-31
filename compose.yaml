@@ -30,6 +30,7 @@ services:
       context: ./frontend
       args:
         BACKEND_API_PROXY: http://backend:3000/**
+        PURE_API_URL: ${PURE_API_URL}
     container_name: frontend
     depends_on:
       - backend
