@@ -1,14 +1,12 @@
 import express, { Router, Request, Response } from "express"
 
 import { callRIApi } from '../utils/ri-api'
-import { uploadProjectApplicationClusters } from '../ris-pure-etl/clusters'
 
 import { Logger } from "tslog";
 const log = new Logger({ name: 'view:ri' });
 
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
-import { Project } from '../models/Project'
 import { ResearchInstitution } from "../models/ResearchInstitution"
 import { Transform } from '../models/Transform'
 
