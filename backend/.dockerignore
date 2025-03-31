@@ -20,6 +20,11 @@ Dockerfile
 # AI Tools
 .aider*
 
+# Tests
+tests/**
+vitest.config.ts
+samples
+
 # **/.classpath
 # **/.dockerignore
 # **/.env
