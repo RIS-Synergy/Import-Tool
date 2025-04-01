@@ -6,17 +6,28 @@ const log = new Logger({ name: "DiffSync" });
 
 import { parseTimeoutString } from "../utils/sync";
 
+type FoundDiff = {
+  risId: string;
+  templateId: number;
+  diffs: any[];
+};
+
 const ri = new ResearchInstitution()
 
 export class DiffSync {
+  foundDiffs: FoundDiff[] = []
+
   async process() {
+    this.foundDiffs = []
     try {
       log.debug('Processing DiffSync');
       const result = await ri.getAllProjects("Project");
-      log.info('CRIS found', result.items.length, "Projects");
       await this.processItems(result.items);
     } catch (error) {
       log.error('Error processing DiffSync', error);
+    }
+    if (this.foundDiffs.length > 0) {
+      log.info('Found', this.foundDiffs.length, "Project", 'diffs')
     }
   }
 
@@ -37,9 +48,18 @@ export class DiffSync {
     diff.crisData = item;
     const templateSelected = await Template.first("PROJECT");
     const result = await diff.runPipeline(templateSelected.id);
-    await diff.save(risId, diff.improveOutput(result.diffList), templateSelected.id);
+    const improved = diff.improveOutput(result.diffList)
+    if (improved.length > 0) {
+      this.foundDiffs.push({
+        risId,
+        templateId: templateSelected.id,
+        diffs: improved
+      })
+    }
+    await diff.save(risId, improved, templateSelected.id);
   }
 
+  /* istanbul ignore next */
   start(timeoutString: string) {
     if (!timeoutString) {
       throw new Error('No timeout string "CRIS_SYNC_TIME" provided')

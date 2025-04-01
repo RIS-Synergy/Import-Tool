@@ -1,18 +1,28 @@
 import { describe, it, expect, vi } from 'vitest'
 import { DiffSync } from '../src/models/DiffSync'
 import { parseTimeoutString } from '../src/utils/sync'
-import { callRIApi } from "../src/utils/ri-api";
 
-const crisData = [
-  {}
-]
-
-vi.mock("../src/utils/ri-api", () => ({
-  callRIApi: vi.fn()
+vi.mock('../src/models/Diff', () => ({
+  Diff: vi.fn().mockImplementation(() => ({
+    save: vi.fn(() => {}),
+    setProjectData: vi.fn(() => {}),
+    runPipeline: vi.fn(() => ({ diffList: [
+      { cris: "foo", ris: "bar", path: '' }
+    ] })),
+    improveOutput: vi.fn(() => [
+      { cris: "foo", ris: "bar", path: 'xyz' }
+    ])
+  }))
 }));
 
-(callRIApi as ReturnType<typeof vi.fn>)
-  .mockResolvedValue(crisData)
+vi.mock('../src/models/ResearchInstitution', () => ({
+  ResearchInstitution: vi.fn().mockImplementation(() => ({
+    getAllProjects: vi.fn().mockResolvedValue({ items: [{
+      foo: 'bar'
+    }] }),
+    entityToRISId: vi.fn().mockReturnValue('test-ris-id')
+  }))
+}));
 
 describe('utils', () => {
   it ('parseTimeoutString', async () => {
@@ -39,11 +49,22 @@ describe('DiffSync', () => {
 
   it ('empty so far', async () => {
     const result = ds
-    expect(Object.keys(result)).toEqual([])
+    expect(Object.keys(result)).toEqual(['foundDiffs'])
   })
 
-  it ('get all RIS data', async () => {
-    // const result = await ds.process()
-    // expect(result).toEqual(crisData)
-  })
+  it('process function', async () => {
+    expect(ds.foundDiffs).toEqual([]);
+    await ds.process();
+    expect(ds.foundDiffs).toEqual([ {
+      diffs: [
+        {
+          cris: "foo",
+          path: "xyz",
+          ris: "bar",
+        },
+      ],
+      risId: "test-ris-id",
+      templateId: expect.any(Number)
+    },]);
+  });
 })

@@ -1,6 +1,6 @@
 import { callRIApi } from '../utils/ri-api'
 import { Logger } from "tslog";
-const log = new Logger({ name: 'model:Project' });
+const log = new Logger({ name: 'model:RI' });
 import _ from 'lodash/fp';
 
 type RISystemID = 'Pure' | 'Custom'
