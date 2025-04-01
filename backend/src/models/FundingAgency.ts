@@ -14,28 +14,26 @@ export class FundingAgency {
   running = false;
 
   async copyProjectToDatabase() {
-    let projects = []
+    const start = new Date().getTime();
+    const projects = await this.fetchAllPages();
+    const end = new Date().getTime() - start;
+    log.info(`Received ${projects.length} Projects in ${end / 1000} seconds`);
 
-    const start = new Date().getTime()
-    projects = await this.fetchAllPages()
-    const end = new Date().getTime() - start
-    log.info(`Received ${projects.length} Projects in ${end / 1000} seconds`)
+    const countStats = await this.saveProjectsToDatabase(projects);
 
-    let countStats = {
-      new: 0,
-      existing: 0
-    }
-    // log.info(`Database has ${await prisma.project.count()} projects`)
+    log.info('Projects saved to database', countStats);
+    log.info(`Database has ${await prisma.project.count()} projects`);
 
-    // Save all the projects to the database
+    return countStats
+  }
+
+  private async saveProjectsToDatabase(projects: any[]) {
+    let countStats = { new: 0, existing: 0 };
+
     await Promise.all(projects.map(async (project) => {
-      if(!project || !project.id) {
-        // minor bug from FWF, ignore it
-        return
-      }
+      if (!project || !project.id) return;
 
-      // if not exists
-      const projectExists = await Project.ifExists(project.id)
+      const projectExists = await Project.ifExists(project.id);
 
       if (!projectExists) {
         try {
@@ -44,62 +42,63 @@ export class FundingAgency {
               risId: project.id,
               risData: project
             }
-          })
-          log.debug(`Project ${newProject.risId} created`)
-          countStats.new++
+          });
+          log.debug(`Project ${newProject.risId} created`);
+          countStats.new++;
         } catch (error) {
-          log.error('Error creating project', error)
+          log.error('Error creating project', error);
         }
       } else {
-        // log.debug(`Project ${project.id} already exists`)
-        countStats.existing++
+        countStats.existing++;
       }
-    }))
+    }));
 
-    log.info('Projects saved to database', countStats)
-    log.info(`Database has ${await prisma.project.count()} projects`)
+    return countStats;
   }
 
-  // fetch all pages of the API where the parameters include page[page] and page[size]
   async fetchAllPages() {
-    let page = 0
-    let projects = []
-    let response = []
+    let page = 0;
+    let projects = [];
+    let response = [];
 
-    if(this.running) {
-      log.info('Already running')
-      throw new Error('Already running')
+    if (this.running) {
+      log.info('Already running');
+      throw new Error('Already running');
     }
 
-    this.running = true
+    this.running = true;
 
     do {
-      // TODO FWF bug: page[page] should not need the `page * this.pageSize` multiplier.
-      // const url = `${process.env.RIS_URL_PROJECTS}?page[page]=${page * this.pageSize}&page[size]=${this.pageSize}`
-      const url = `${Project.getUrl('PROJECTS')}?page[page]=${page * this.pageSize}&page[size]=${this.pageSize}`
-      log.info(`Fetching page ${page} from ${url}`)
-      try {
-      response = await getAuthEndpoint(url)
-      // fs.writeFileSync(`projects/project_${page}.json`, JSON.stringify(response, null, 2))
+      console.log(response)
 
-      projects = projects.concat(response)
-      log.info(`Received ${response.length} (total: ${projects.length}) Projects`)
-      } catch (error) {
-        log.error('Error fetching page', url, error)
-        // exit loop
-      }
-      page++
-    } while (response && response.length >= 0)
+      response = await this.fetchPage(page);
+      projects = projects.concat(response);
+      page++;
+    } while (response && response.length > 0);
 
-    log.info(`====================`)
-    log.info(`Received total: ${projects.length} Projects`)
+    log.info(`====================`);
+    log.info(`Received total: ${projects.length} Projects`);
 
-
-    this.running = false
+    this.running = false;
 
     return projects;
   }
 
+  private async fetchPage(page: number) {
+    const url = `${Project.getUrl('PROJECTS')}?page[page]=${page * this.pageSize}&page[size]=${this.pageSize}`;
+    log.info(`Fetching page ${page} from ${url}`);
+    try {
+      console.log('Response fetchPage', url)
+      const response = await getAuthEndpoint(url);
+      log.info(`Received ${response.length} Projects`);
+      return response;
+    } catch (error) {
+      log.error('Error fetching page', url, error);
+      return [];
+    }
+  }
+
+  /* istanbul ignore next */
   start (timeoutString: string = process.env.FA_SYNC_TIME) {
     if (!timeoutString) {
       throw new Error('No timeout string "FA_SYNC_TIME" provided')
