@@ -1,5 +1,8 @@
 import _ from 'lodash';
 
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
+
 import { Logger } from "tslog";
 const log = new Logger({ name: 'Diff' });
 
@@ -106,6 +109,29 @@ export class Diff {
 
     // log.info('output', output)
     return output
+  }
+
+
+  // save to DB
+  async save (risId: string, data: any, templateId: number) {
+    // create or update
+    await prisma.diff.upsert({
+      where: { id: risId },
+      update: {
+        list: data,
+        length: data.length
+      },
+      create: {
+        list: data,
+        template: {
+          connect: { id: templateId }
+        },
+        length: data.length,
+        project: {
+          connect: { risId: risId }
+        }
+      }
+    })
   }
 }
 

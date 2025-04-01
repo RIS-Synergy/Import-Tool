@@ -43,8 +43,9 @@ class CustomSystem extends RISystem {
 
 export class ResearchInstitution {
   system: RISystem
+  searchSizeMax = 100000
 
-  constructor () {
+  constructor() {
     this.system = new Pure()
   }
 
@@ -53,7 +54,7 @@ export class ResearchInstitution {
     return result
   }
 
-  getEndpointFromEntity (entityTitle: string) {
+  getEndpointFromEntity(entityTitle: string) {
     if (entityTitle === 'Project') {
       return 'projects'
     }
@@ -124,7 +125,7 @@ export class ResearchInstitution {
           });
         });
       })
-                                    );
+    );
     await Promise.all(promises);
     return results
   }
@@ -148,24 +149,24 @@ Source: ${source}.`
     log.debug('Note added', result)
   }
 
-  async callApi (endpoint: string, method: Method = 'POST', body = null) {
+  async callApi(endpoint: string, method: Method = 'POST', body = null) {
     log.debug(`>>> RI ${method} ${endpoint}`)
     return await callRIApi(endpoint, method, body)
   }
 
-  async createEntity (entity: Category, data: any) {
+  async createEntity(entity: Category, data: any) {
     const result = await this.callApi(`/${entity}s/`, 'PUT', data)
     log.info(`${entity} created`, result.uuid)
     return result
   }
 
-  async getEntity (entity: Category, uuid: string) {
+  async getEntity(entity: Category, uuid: string) {
     const result = await this.callApi(`/${entity}s/${uuid}`, 'GET')
     // log.debug('Entity data', result)
     return result
   }
 
-  async uploadEntity (entity: Category, data: any, uuid: string) {
+  async uploadEntity(entity: Category, data: any, uuid: string) {
     // GET existing data
     const current = await this.getEntity(entity, uuid)
     // log.debug('Current entity data', current)
@@ -182,16 +183,32 @@ Source: ${source}.`
     return result
   }
 
-  entityToRISId (data: any) {
+  entityToRISId(data: any) {
     try {
       return data.identifiers.map((obj: any) => {
         // ris:FWF:project:F68 -> F68
         return obj.id.split(':')[3]
       })
-      .filter((id: string) => id)[0] || null
+        .filter((id: string) => id)[0] || null
     } catch (error) {
       log.error('Error getting RIS ID', error)
       return null
     }
+  }
+
+  async getAllProjects(category: Category) {
+    const search = {
+      size: this.searchSizeMax,
+      offset: 0,
+      searchString: `ris:FWF:${category.toLowerCase()}:*`
+    };
+    const startTime = Date.now();
+    const result = await this.callApi('/projects/search', 'POST', search);
+    const responseSizeBytes = JSON.stringify(result).length;
+    const responseSizeKB = Number((responseSizeBytes / 1024).toFixed(2));
+    const endTime = Date.now();
+    const responseTime = (endTime - startTime) / 1000; // in seconds
+    log.info('CRIS found', result.items.length, `${category}s. Response time:`, responseTime, 'seconds. Size:', responseSizeKB, 'KB')
+    return result;
   }
 }
