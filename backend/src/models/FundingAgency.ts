@@ -1,8 +1,9 @@
-// import fs from 'fs'
 import { PrismaClient } from '@prisma/client'
+
 import { Logger } from "tslog";
 
 import { Project } from './Project'
+import { Differ } from './Diff'
 import { getAuthEndpoint } from "../utils/oauth2";
 
 const prisma = new PrismaClient()
@@ -27,15 +28,22 @@ export class FundingAgency {
     return countStats
   }
 
-  private async saveProjectsToDatabase(projects: any[]) {
-    let countStats = { new: 0, existing: 0 };
+  private async saveProjectsToDatabase(faProjects: any[]) {
+    let countStats = { new: 0, existing: 0, updated: 0 };
 
-    await Promise.all(projects.map(async (project) => {
+    // Fetch all existing projects
+    const projectIds = faProjects.map(p => p.id).filter(id => id);
+    const existingProjects = await prisma.project.findMany({
+      where: { risId: { in: projectIds } },
+      select: { risId: true }
+    });
+
+    const existingProjectIds = new Set(existingProjects.map(p => p.risId));
+
+    await Promise.all(faProjects.map(async (project) => {
       if (!project || !project.id) return;
 
-      const projectExists = await Project.ifExists(project.id);
-
-      if (!projectExists) {
+      if (!existingProjectIds.has(project.id)) {
         try {
           const newProject = await prisma.project.create({
             data: {
@@ -49,11 +57,40 @@ export class FundingAgency {
           log.error('Error creating project', error);
         }
       } else {
-        countStats.existing++;
+        const existingProject = await prisma.project.findUnique({
+          where: { risId: project.id },
+          select: { risData: true }
+        });
+        const updated = await this.upsertProject(project, existingProject.risData);
+        if (updated) {
+          countStats.updated++;
+        } else {
+          countStats.existing++;
+        }
       }
     }));
 
     return countStats;
+  }
+
+  async upsertProject(newProject: any, oldProject: any): Promise<boolean> {
+    const diffSet = new Differ(oldProject, newProject).diff()
+    if (diffSet.size === 0) {
+      return false
+    }
+
+    log.debug('Diff set', newProject.id, diffSet)
+
+    try {
+      const dbResult = await prisma.project.update({
+        where: { risId: newProject.id },
+        data: { risData: newProject }
+      });
+      log.debug('Project', dbResult.id, "updated");
+      return true
+    } catch (error) {
+      log.error('Error updating project', error);
+    }
   }
 
   async fetchAllPages() {
@@ -63,21 +100,18 @@ export class FundingAgency {
 
     if (this.running) {
       log.info('Already running');
-      throw new Error('Already running');
+      return []
     }
 
     this.running = true;
 
     do {
-      console.log(response)
-
       response = await this.fetchPage(page);
       projects = projects.concat(response);
       page++;
     } while (response && response.length > 0);
 
-    log.info(`====================`);
-    log.info(`Received total: ${projects.length} Projects`);
+    log.info(`===> FA Received total: ${projects.length} Projects`);
 
     this.running = false;
 
@@ -99,7 +133,7 @@ export class FundingAgency {
   }
 
   /* istanbul ignore next */
-  start (timeoutString: string = process.env.FA_SYNC_TIME) {
+  start(timeoutString: string = process.env.FA_SYNC_TIME) {
     if (!timeoutString) {
       throw new Error('No timeout string "FA_SYNC_TIME" provided')
     }

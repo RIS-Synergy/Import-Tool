@@ -22,6 +22,7 @@ services:
     ports:
       - "3031:3001"
       - "51204:51204" # vitest, incl. UI
+      - "3029:9229"   # debugger
     command: >
       sh -c "yarn dev"
 
