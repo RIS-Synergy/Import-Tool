@@ -34,13 +34,6 @@ class Pure extends RISystem {
   }
 }
 
-class CustomSystem extends RISystem {
-  systemId: RISystemID = 'Custom'
-  constructor() {
-    super()
-  }
-}
-
 export class ResearchInstitution {
   system: RISystem
   searchSizeMax = 100000
@@ -67,19 +60,6 @@ export class ResearchInstitution {
     log.error(`Entity ${entityTitle} not found. Useing 'projects' as default.`)
     return 'projects'
   }
-
-  // move or move to 'getEntityData' below
-  // getProjectData = async (uuid: string, entityTitle = 'Project') => {
-  //   const endpoint = this.getEndpointFromEntity(entityTitle)
-  //   let result: any
-  //   try {
-  //     result = await callRIApi(`/${endpoint}/${uuid}`, 'GET')
-  //   } catch (error) {
-  //     log.error('Error getting project data', error)
-  //     return null
-  //   }
-  //   return result
-  // }
 
   // we can replace this by project...
   getEntityData = async (entityFolder: string, uuid: string) => {

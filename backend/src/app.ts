@@ -9,7 +9,6 @@ const app = express()
 // middlewares
 app.use(express.json())
 
-
 // root url
 app.get('/', (_req: Request, res: Response) => {
   res.json({
@@ -37,10 +36,6 @@ app.use('/project', auth, require('./views/project').default)
 
 // Templates
 app.use('/templates', auth, require('./views/templates').default)
-
-// if (process.env.NODE_ENV === 'development') {
-app.use('/dev-cris-api', require('./views/dev-cris-api').default)
-// }
 
 // Differences
 app.use('/diff', auth, require('./views/diff').default)

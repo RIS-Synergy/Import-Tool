@@ -86,7 +86,7 @@ export class FundingAgency {
         where: { risId: newProject.id },
         data: { risData: newProject }
       });
-      log.debug('Project', dbResult.id, "updated");
+      log.debug('Project', dbResult.risId, "updated");
       return true
     } catch (error) {
       log.error('Error updating project', error);
