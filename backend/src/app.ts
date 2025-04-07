@@ -1,6 +1,5 @@
-import express, { Express, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import { unexpectedErrorHandler } from './middleware/errorHandler'
-// import { getAuthEndpoint } from './utils/oauth2'
 
 import auth from './middleware/auth'
 
@@ -8,7 +7,6 @@ const app = express()
 
 // middlewares
 app.use(express.json())
-
 
 // root url
 app.get('/', (_req: Request, res: Response) => {
@@ -37,10 +35,6 @@ app.use('/project', auth, require('./views/project').default)
 
 // Templates
 app.use('/templates', auth, require('./views/templates').default)
-
-// if (process.env.NODE_ENV === 'development') {
-app.use('/dev-cris-api', require('./views/dev-cris-api').default)
-// }
 
 // Differences
 app.use('/diff', auth, require('./views/diff').default)

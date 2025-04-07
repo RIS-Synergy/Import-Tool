@@ -267,18 +267,6 @@ router.get('/:concepts/:uuid', async (req: Request, res: Response) => {
   }
 })
 
-// PUT for any concept with uuid
-// router.put('/:concepts/:uuid', async (req: Request, res: Response) => {
-//   const result = await callRIApi(`/${req.params.concepts}/${req.params.uuid}`, 'PUT', req.body)
-//   res.json(result)
-// })
-
-// router.get('/:concepts/:uuid', async (req: Request, res: Response) => {
-//   //await callRIApi(`/${req.params.concepts}/${req.params.uuid}`, 'GET')
-//   const result = ri.callApi(req.params.concepts, "GET")
-//   res.json(result)
-// })
-
 router.post('/assignCluster', async (req: Request, res: Response) => {
   console.log('assignCluster', req.body)
 

@@ -65,16 +65,13 @@ router.post('/upload', upload.array('files'), async (req, res) => {
     }
   })
 
-  console.log('Results', results)
-  console.log('Results bla', bla)
+  log.info('Uplpad', bla)
 
   return res.json(results)
 })
 
 router.post('/download', async (req, res) => {
   const projects = await prisma.project.findMany({
-    // take: Infinity
-    // take: 100, // XXX smaller is useful for debugging
   })
   const { ror } = req.body
   const institution = Institution.getByROR(ror)

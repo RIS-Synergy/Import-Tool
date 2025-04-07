@@ -1,16 +1,10 @@
 import express, { Router, Request, Response } from "express";
 
 import { PrismaClient } from "@prisma/client";
-// const prisma = new PrismaClient({ log: ['query', 'info', 'warn', 'error'], });
 const prisma = new PrismaClient();
 
-import { unexpectedErrorHandler } from "../middleware/errorHandler";
 import { getAuthEndpoint } from "../utils/oauth2";
-import { promises as fs } from "fs";
-import auth from '../middleware/auth'
-
 import { Logger } from "tslog";
-import { Sql } from "@prisma/client/runtime/library";
 const log = new Logger({ name: "view:funding-agency" });
 import { Registry } from "../models/Registry";
 
@@ -27,17 +21,6 @@ router.get("/info", async (req: Request, res: Response) => {
 
   res.json(jsonResult);
 });
-
-
-// fundings are not used anymore (for now)
-/*
-router.get("/fundings/:id", async (req: Request, res: Response) => {
-  const result = await getAuthEndpoint(
-    process.env.RIS_URL_FUNDINGS + req.params.id,
-  );
-  res.json(result[0]);
-});
-*/
 
 router.get("/fundings", async (req: Request, res: Response) => {
   const result = await getAuthEndpoint(process.env.RIS_URL_FUNDINGS);
@@ -87,12 +70,6 @@ router.get("/projects", async (req: Request, res: Response) => {
     const { page = 1 } = req.query;
 
     var sortBy: SortBy = { key: "startDate", order: "desc" };
-    /* these are no longer a table in the frontend
-    // if (req.query.sortBy) {
-    //   sortBy = JSON.parse(req.query.sortBy as string);
-    // } else {
-    //   sortBy = { key: "startDate", order: "asc" };
-    // } */
 
     var filters: Filter;
     if (req.query.filters) {
@@ -121,10 +98,6 @@ router.get("/projects", async (req: Request, res: Response) => {
       }).join(" OR ");
     }
 
-    // const orderBy: any = {
-    //   [sortBy.key]: sortBy.order === "asc" ? "asc" : "desc",
-    // };
-
     const pageNumber = parseInt(page as string, 10);
     const items = parseInt(itemsPerPage as string, 10);
 
@@ -132,14 +105,17 @@ router.get("/projects", async (req: Request, res: Response) => {
     const take = items;
 
     const diffSQL = diffsSQL(filters.diffs);
-    const projects: Array<any> = await prisma.$queryRawUnsafe(`
+    const rawSQL = `
 SELECT p.*, d.length AS "diffLength", d.list AS "diffList" FROM "Project" p
 LEFT JOIN "Diff" d ON p."risId" = d.id
 WHERE p."risData" #>> '{team,0,person,electronicAddress}' LIKE '%@${filters.piDomain}'
 AND (${whereFilters})
 AND (${diffSQL})
 ORDER BY p."risData"->>'${sortBy.key}' ${sortBy.order}
-OFFSET ${skip} LIMIT ${take}`);
+OFFSET ${skip} LIMIT ${take}
+`
+    log.debug("SQL", rawSQL);
+    const projects: Array<any> = await prisma.$queryRawUnsafe(rawSQL);
     if (projects && projects.length > 0) {
       log.debug(projects[0].risData[sortBy.key]);
     }
@@ -165,13 +141,5 @@ AND (${diffSQL})
       .json({ error: "An error occurred while fetching projects" });
   }
 });
-
-/*
-// also not used anymore
-router.get("/orgunits", async (req: Request, res: Response) => {
-  const result = await getAuthEndpoint(process.env.RIS_URL_ORGUNITS);
-  res.json(result);
-});
-*/
 
 export default router;
