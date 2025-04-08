@@ -11,7 +11,10 @@ export const login = makeSchema({
 
 export const filter = makeSchema({
   page: Joi.number().integer(),
-  sortBy: Joi.array().items(Joi.object({})),
+  sortBy: Joi.array().items(Joi.object({
+    key: Joi.string(),
+    order: Joi.string().valid("asc", "desc")
+  })),
   filters: Joi.object({
     status: Joi.array().items(Joi.string()),
     piDomain: Joi.object({

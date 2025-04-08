@@ -78,7 +78,6 @@ router.post("/projects", validator(filterValidator), async (req: Request, res: R
 
     var filters: Filter;
     if (req.body.filters) {
-      // filters = JSON.parse(req.body.filters as string);
       filters = req.body.filters;
     } else {
       filters = {
