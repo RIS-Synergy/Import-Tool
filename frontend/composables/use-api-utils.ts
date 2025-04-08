@@ -90,7 +90,7 @@ export const useApiUtils = () => {
   };
 
   const getProjectsList = async ({ page, itemsPerPage, sortBy, filters }) => {
-    const result = await apiCall('fa/projects', 'GET', { query: {
+    const result = await apiCall('fa/projects', 'POST', { body: {
       page, itemsPerPage, sortBy, filters
     } })
     return result;

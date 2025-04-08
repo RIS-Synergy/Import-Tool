@@ -7,6 +7,8 @@ import { getAuthEndpoint } from "../utils/oauth2";
 import { Logger } from "tslog";
 const log = new Logger({ name: "view:funding-agency" });
 import { Registry } from "../models/Registry";
+import { filter as filterValidator } from './validators'
+import validator from '../middleware/validator'
 
 const router: Router = express.Router();
 
@@ -42,11 +44,13 @@ type SortBy = {
   order: string;
 };
 
-type DiffFilter = null | "NULL" | "IDENTICAL" | "DIFFERENT";
+type Status = "IN_PREPERATION" | "ACTIVE" | "COMPLETED" | "CANCELLED" | "REJECTED";
+
+type DiffFilter = "All" | "NULL" | "IDENTICAL" | "DIFFERENT";
 
 type Filter = {
-  status: Array<string>;
-  piDomain: string;
+  status: Array<Status>;
+  piDomain: { domain: string; ror: string };
   diffs: DiffFilter;
   orderBy: string;
   itemsPerPage: string;
@@ -65,20 +69,22 @@ function diffsSQL(diffs: DiffFilter) {
   }
 }
 
-router.get("/projects", async (req: Request, res: Response) => {
+router.post("/projects", validator(filterValidator), async (req: Request, res: Response) => {
+  log.debug("valid", req.body);
   try {
-    const { page = 1 } = req.query;
+    const { page = 1 } = req.body;
 
     var sortBy: SortBy = { key: "startDate", order: "desc" };
 
     var filters: Filter;
-    if (req.query.filters) {
-      filters = JSON.parse(req.query.filters as string);
+    if (req.body.filters) {
+      // filters = JSON.parse(req.body.filters as string);
+      filters = req.body.filters;
     } else {
       filters = {
         status: [],
-        piDomain: "",
-        diffs: null,
+        piDomain: { domain: "", ror: "" },
+        diffs: "All",
         orderBy: "startDate:desc", itemsPerPage: '10'
       };
     }
@@ -98,6 +104,19 @@ router.get("/projects", async (req: Request, res: Response) => {
       }).join(" OR ");
     }
 
+    // SQL for OrgUnit
+    const orgUnitQuery = `
+EXISTS (
+  SELECT 1
+  FROM jsonb_path_query(
+  p."risData"::jsonb,
+  '$.funded[*].as.recipients[*].orgUnit.identifiers[*] ? (@.value == "${filters.piDomain.ror}")'
+  ) AS match
+)
+`
+    // SQL for domains
+    const domainQuery = `p."risData" #>> '{team,0,person,electronicAddress}' LIKE '%@${filters.piDomain.domain}'`
+
     const pageNumber = parseInt(page as string, 10);
     const items = parseInt(itemsPerPage as string, 10);
 
@@ -108,25 +127,30 @@ router.get("/projects", async (req: Request, res: Response) => {
     const rawSQL = `
 SELECT p.*, d.length AS "diffLength", d.list AS "diffList" FROM "Project" p
 LEFT JOIN "Diff" d ON p."risId" = d.id
-WHERE p."risData" #>> '{team,0,person,electronicAddress}' LIKE '%@${filters.piDomain}'
+WHERE (
+  ${domainQuery} OR ${orgUnitQuery}
+)
 AND (${whereFilters})
 AND (${diffSQL})
 ORDER BY p."risData"->>'${sortBy.key}' ${sortBy.order}
 OFFSET ${skip} LIMIT ${take}
 `
+    var timeBefore = new Date();
     log.debug("SQL", rawSQL);
     const projects: Array<any> = await prisma.$queryRawUnsafe(rawSQL);
     if (projects && projects.length > 0) {
       log.debug(projects[0].risData[sortBy.key]);
     }
+    log.debug("SQL Time", new Date().getTime() - timeBefore.getTime());
 
     const totalProjects = await prisma.$queryRawUnsafe(`
 SELECT COUNT(*) FROM "Project" p
 LEFT JOIN "Diff" d ON p."risId" = d.id
-WHERE p."risData" #>> '{team,0,person,electronicAddress}' LIKE '%@${filters.piDomain}'
+WHERE (${domainQuery} OR ${orgUnitQuery})
 AND (${whereFilters})
 AND (${diffSQL})
 `);
+    log.debug("Time incl. Count(*)", new Date().getTime() - timeBefore.getTime());
 
     res.json({
       items: projects,

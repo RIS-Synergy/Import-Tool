@@ -14,7 +14,7 @@ export function unexpectedErrorHandler(err: Error, _req: Request, res: Response,
   res.status(status)
 
   if (err instanceof BadRequestError) {
-    log.info('BadRequestError', _req.path, status)
+    log.info('BadRequestError', _req.path, status, _req.body, err)
   } else if (err instanceof ResearchInstitutionError) {
     log.warn('ResearchInstitutionError', _req.path, status)
     return res.json(err)

@@ -1,16 +1,21 @@
 import { defineStore } from 'pinia'
 
+const projectFilters = {
+  status: [],
+  piDomain: {
+    domain: 'univie.ac.at',
+    ror: 'https://ror.org/03prydq77'
+  },
+  orderBy: 'startDate:desc',
+  itemsPerPage: 10,
+  diffs: "All",
+}
+
 export const useUserSettingsStore = defineStore('user-settings', {
   state: () => ({
     dark: true,
     sortBy: [{ key: 'startDate', order: 'desc' }],
-    projectFilters: {
-      status: [],
-      piDomain: ['univie.ac.at'],
-      orderBy: 'startDate:desc',
-      itemsPerPage: 10,
-      diffs: null
-    },
+    projectFilters,
     token: null,
     user: null
   }),
@@ -20,6 +25,9 @@ export const useUserSettingsStore = defineStore('user-settings', {
     },
     setUser(user: any) {
       this.user = user
+    },
+    clearFilters() {
+      this.projectFilters = projectFilters
     }
   },
   persist: true

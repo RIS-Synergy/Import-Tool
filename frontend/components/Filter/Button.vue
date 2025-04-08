@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="500">
+  <v-dialog v-model="dialog" min-width="500" max-width="800">
     <template v-slot:activator="{ props: activatorProps }">
       <v-btn v-bind="activatorProps" :icon="filterIcon" variant="flat">
         <v-icon :icon="filterIcon"></v-icon>
@@ -18,21 +18,22 @@
             outlined
             clearable
           ></v-select>
-          <v-select
+          <v-autocomplete
             v-model="store.projectFilters.piDomain"
             :items="projectStatusDomain"
             label="PI Domain"
             chips
+            :clearable="false"
+            :multiple="false"
+            :rules="[v => !!v || 'PI Domain is required']"
             outlined
-            clearable
-          ></v-select>
+          ></v-autocomplete>
           <v-select
             v-model="store.projectFilters.diffs"
             :items="diffs"
             label="Diffs"
             chips
             outlined
-            clearable
           ></v-select>
           <v-select
             v-model="store.projectFilters.orderBy"
@@ -40,7 +41,6 @@
             label="Order by"
             chips
             outlined
-            clearable
           ></v-select>
           <v-select
             v-model="store.projectFilters.itemsPerPage"
@@ -48,7 +48,6 @@
             label="Items per page"
             chips
             outlined
-            clearable
           ></v-select>
         </v-card-text>
 
@@ -69,8 +68,6 @@
 <script setup>
 const dialog = ref(false);
 
-// const status = ref(null);
-
 const projectStatus = [
   "IN_PREPERATION",
   "ACTIVE",
@@ -79,36 +76,23 @@ const projectStatus = [
   "REJECTED",
 ];
 
-const projectStatusDomain = [
-  {
-    value: "univie.ac.at",
-    title: "Universität Wien",
-  },
-  {
-    value: "plus.ac.at",
-    title: "Universität Salzburg",
-  },
-  {
-    value: "tuwien.ac.at",
-    title: "Technische Universität Wien",
-  },
-  {
-    value: "uni-graz.at",
-    title: "Universität Graz",
-  },
-  {
-    value: "aau.at",
-    title: "Alpen-Adria-Universität Klagenfurt",
-  },
-  {
-    value: "akbild.ac.at",
-    title: "Akademie der bildenden Künste",
-  },
-];
+const projectStatusDomain = ref([]);
+
+const { apiCall } = useApiUtils();
+
+onMounted(async () => {
+  projectStatusDomain.value = (await apiCall("institution/list"))
+    .map((domain) => {
+      return {
+        value: { domain: domain.domain, ror: domain.ror },
+        title: domain.name,
+      };
+    });
+})
 
 const diffs = [
   {
-    value: null,
+    value: "All",
     title: "All",
   },
   {
@@ -145,6 +129,7 @@ const orderBy = [
 ];
 
 const itemsPerPage = [
+  { value: 6, title: "6" },
   { value: 8, title: "8" },
   { value: 10, title: "10" },
   { value: 20, title: "20" },
@@ -158,15 +143,11 @@ const store = useUserSettingsStore();
 const projectStore = useProjectStore();
 
 function clearFilters() {
-  store.projectFilters.status = [];
-  store.projectFilters.piDomain = [];
-
+  store.projectFilters.clearFilters();
   dialog.value = false;
 }
 
 const filterIcon = computed(() => {
-  // console.log(store.projectFilters.status.length)
-
   if (store.projectFilters.status.length > 0) {
     return "mdi-filter";
   } else {

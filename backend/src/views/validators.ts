@@ -8,3 +8,19 @@ export const login = makeSchema({
   username: Joi.string().required(),
   password: Joi.string().required()
 })
+
+export const filter = makeSchema({
+  page: Joi.number().integer(),
+  sortBy: Joi.array().items(Joi.object({})),
+  filters: Joi.object({
+    status: Joi.array().items(Joi.string()),
+    piDomain: Joi.object({
+      domain: Joi.string(),
+      ror: Joi.string()
+    }),
+    diffs: Joi.string()
+      .valid("All", "NULL", "IDENTICAL", "DIFFERENT"),
+    orderBy: Joi.string(),
+    itemsPerPage: Joi.number().integer()
+  })
+})

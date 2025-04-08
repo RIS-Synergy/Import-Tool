@@ -4,7 +4,10 @@
     <v-col cols="6">
       <v-card title="Filter by Research Institution">
         <v-card-text>
-          <v-select v-model="ror" :items="rorItems"></v-select>
+          <v-select
+            v-model="ror"
+            :items="projectStatusDomain">
+          </v-select>
         </v-card-text>
       </v-card>
     </v-col>
@@ -32,26 +35,21 @@ definePageMeta({
   layout: "project-upload",
 });
 
-// duplicated in FilterButton component
-const rorItems = [
-  {
-    value: "https://ror.org/03prydq77",
-    title: "Universität Wien",
-  },
-  {
-    value: "https://ror.org/05gs8cd61",
-    title: "Universität Salzburg",
-  },
-  {
-    value: "https://ror.org/029djt864",
-    title: "Akademie der bildenden Künste",
-  },
-];
+const { apiCall } = useApiUtils();
 
 const ror = ref(null);
-
 const files = ref([]);
-const { apiCall } = useApiUtils();
+const projectStatusDomain = ref([])
+
+onMounted(async () => {
+  projectStatusDomain.value = (await apiCall("institution/list"))
+  .map((domain) => {
+    return {
+      value: domain.ror,
+      title: domain.name,
+    };
+  });
+})
 
 function fileName(format) {
   if (format === "JSON") {
