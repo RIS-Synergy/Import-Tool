@@ -42,6 +42,9 @@ app.use('/diff', auth, require('./views/diff').default)
 // Authentication
 app.use('/auth', require('./views/auth').default)
 
+// Institution
+app.use('/institution', auth, require('./views/institution').default)
+
 // error handler last
 app.use(unexpectedErrorHandler)
 
