@@ -1,0 +1,28 @@
+name: Backend Tests
+
+defaults:
+  run:
+    working-directory: ./backend
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+
+jobs:
+  test:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        cache: 'yarn'
+        node-version: lts/*
+        cache-dependency-path: ./backend/yarn.lock
+
+    - name: Run backend tests
+      run: yarn test
