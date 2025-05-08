@@ -8,6 +8,7 @@
     "docker": "ts-node ./src/server.ts",
     "debug": "nodemon --exec node --inspect-brk=0.0.0.0 -r ts-node/register ./src/server.ts",
     "test": "docker exec -it backend yarn vitest --ui --open=false --api.host=0.0.0.0 --coverage.enabled=true",
+    "test:ci": "vitest --coverage.enabled=true",
     "test:coverage": "docker exec -it backend yarn vitest --ui --open=false --api.host=0.0.0.0 --coverage.enabled=true --coverage.reporter=text",
     "db-init": "ts-node ./scripts/db-initiate.ts",
     "db-user": "ts-node ./scripts/db-user.ts",

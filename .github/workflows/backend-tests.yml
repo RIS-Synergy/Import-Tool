@@ -25,4 +25,4 @@ jobs:
         cache-dependency-path: ./backend/yarn.lock
 
     - name: Run backend tests
-      run: yarn test
+      run: yarn test:ci
