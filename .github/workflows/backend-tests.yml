@@ -11,6 +11,8 @@ on:
   pull_request:
     branches: [ "**" ]
 
+env:
+  RIS_TEST_DATA: 2024-09-04_testdata_projects_updated.json
 
 jobs:
   test:
