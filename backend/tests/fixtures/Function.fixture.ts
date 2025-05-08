@@ -11,7 +11,10 @@ export default {
     // description: '',
     code: "function hello() {\nreturn 'Hello, world!'\n}",
     // language: 'javascript',
-  }
+  },
+
+  // so far 'all' it is only used in the test file: transform.test.ts
+  all: []
 
   /*
     {

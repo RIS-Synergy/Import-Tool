@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { Transform } from '../src/models/Transform'
+import mockFixtures from './fixtures/Function.fixture'
 
 const input = {
   name: 'John Doe',
@@ -9,6 +10,12 @@ const input = {
 const settings = {
   person: 'John Doe'
 }
+
+vi.mock('../src/models/Function', () => ({
+  Function: {
+    all: vi.fn(() => mockFixtures.all),
+  }
+}));
 
 describe('Transform', () => {
   it('constructor', async () => {
