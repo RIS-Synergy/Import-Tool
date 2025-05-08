@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import * as fs from 'fs';
 import * as yaml from 'yaml';
 
@@ -15,6 +15,13 @@ const settings = {
   person: '0000-0002-0131-2191',
   organization: 'b2a38757-9395-4089-a2ba-ef39502950c3',
 }
+
+import mockFixtures from './fixtures/Function.fixture'
+vi.mock('../src/models/Function', () => ({
+  Function: {
+    all: vi.fn(() => mockFixtures.all),
+  }
+}));
 
 describe('YAML', () => {
   it('transform ETL project from FWF to PURE', async () => {

@@ -1,33 +1,38 @@
 export default {
   read: {
     name: 'function1',
-    // description: '',
     code: "function hello() {\nreturn 'Hello, world!'\n}",
-    // language: 'javascript',
   },
 
   createOrUpdate: {
     name: 'function1',
-    // description: '',
     code: "function hello() {\nreturn 'Hello, world!'\n}",
-    // language: 'javascript',
   },
 
-  // so far 'all' it is only used in the test file: transform.test.ts
-  all: []
-
-  /*
+  all: [
     {
-    id: 1759,
+      name: 'getByLang',
+      code: 'const pass = args[0]\n' +
+        'const lang = args[1]\n' +
+        '\n' +
+        'var title = input[pass].find(t => t.lang === lang);\n' +
+        '\n' +
+        'if (!title || !title.text) {\n' +
+        "  return 'Title not found';\n" +
+        '}\n' +
+        '\n' +
+        '// replace title with \\r\\n with <br>\n' +
+        "title = title.text.replace(/\\r\\n/g, '<br/>');\n" +
+        '\n' +
+        'return title',
+    },
+    {
     name: 'function1',
-    description: '',
     code: "function hello() {\nreturn 'Hello, world!'\n}",
     language: 'javascript',
   },
   {
-    id: 1748,
     name: 'getByLang',
-    description: '',
     code: 'const pass = args[0]\n' +
       'const lang = args[1]\n' +
       '\n' +
@@ -41,22 +46,16 @@ export default {
       "title = title.text.replace(/\\r\\n/g, '<br/>');\n" +
       '\n' +
       'return title',
-    language: 'javascript',
   },
   {
-    id: 83,
     name: 'getIdentifier',
-    description: '',
     code: 'const type = args[0]\n' +
       'return input.identifiers\n' +
       '  .find(i => i.type === type)\n' +
       '  .value',
-    language: 'javascript',
   },
   {
-    id: 85,
     name: 'grantAmount',
-    description: '',
     code: 'for (let i = 0; i < input.funded.length; i++) {\n' +
       '  const _as = input.funded[i].as\n' +
       '  if (!_as) {\n' +
@@ -68,19 +67,14 @@ export default {
       '  }\n' +
       '}\n' +
       "return ''",
-    language: 'javascript',
   },
   {
-    id: 1776,
     name: 'hello',
-    description: '',
     code: "return input.startDate // 'world'",
     language: 'javascript',
   },
   {
-    id: 86,
     name: 'keywords',
-    description: '',
     code: '// Function to get the locale string based on the language code\n' +
       'function getLocale(lang) {\n' +
       "  return lang === 'en' ? 'en_GB' : 'de_DE';\n" +
@@ -105,19 +99,13 @@ export default {
       '  locale: getLocale(lang),\n' +
       '  freeKeywords: texts\n' +
       '}));',
-    language: 'javascript',
   },
   {
-    id: 1751,
     name: 'literallyInput',
-    description: '',
     code: 'return input',
-    language: 'javascript',
   },
   {
-    id: 87,
     name: 'oefos2012',
-    description: '',
     code: "//import { getValue } from '../views/oefos'\n" +
       '\n' +
       'const { subjects } = input\n' +
@@ -135,7 +123,5 @@ export default {
       '})\n' +
       '\n' +
       'return result',
-    language: 'javascript',
-  }
-  */
+  }]
 }

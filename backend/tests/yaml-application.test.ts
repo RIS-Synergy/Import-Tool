@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import * as fs from "fs";
 
 const projectsFile = `./samples/projects/${process.env.RIS_TEST_DATA}`
@@ -13,6 +13,13 @@ const yamlContent = fs.readFileSync(
 );
 
 const settings = {};
+
+import mockFixtures from './fixtures/Function.fixture'
+vi.mock('../src/models/Function', () => ({
+  Function: {
+    all: vi.fn(() => mockFixtures.all),
+  }
+}));
 
 describe("Application", () => {
   it("transform ETL application from FA to RI", async () => {
