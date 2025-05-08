@@ -1,6 +1,20 @@
-export default [
+export default {
+  read: {
+    name: 'function1',
+    // description: '',
+    code: "function hello() {\nreturn 'Hello, world!'\n}",
+    // language: 'javascript',
+  },
+
+  createOrUpdate: {
+    name: 'function1',
+    // description: '',
+    code: "function hello() {\nreturn 'Hello, world!'\n}",
+    // language: 'javascript',
+  }
+
   /*
-  {
+    {
     id: 1759,
     name: 'function1',
     description: '',
@@ -121,4 +135,4 @@ export default [
     language: 'javascript',
   }
   */
-]
+}
