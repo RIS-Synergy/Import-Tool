@@ -10,6 +10,13 @@ import yamlTemplateTestData from './yamlTemplateTestData'
 import yamlTemplateApplication from './template/application1'
 import crisDataApplication1 from './crisData/application1'
 
+import mockFixtures from '../fixtures/Function.fixture'
+vi.mock('../../src/models/Function', () => ({
+  Function: {
+    all: vi.fn(() => mockFixtures.all),
+  }
+}));
+
 const A = {
   foo: 'a',
   bar: {
