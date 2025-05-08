@@ -7,9 +7,9 @@ defaults:
 on:
   workflow_dispatch:
   push:
-    branches: [ main, master ]
+    branches: [ "**" ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ "**" ]
 
 
 jobs:
@@ -23,6 +23,12 @@ jobs:
         cache: 'yarn'
         node-version: lts/*
         cache-dependency-path: ./backend/yarn.lock
+
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+
+    - name: Generate Prisma client
+      run: npx prisma generate
 
     - name: Run backend tests
       run: yarn test:ci
