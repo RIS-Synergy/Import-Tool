@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { DiffSync } from '../src/models/DiffSync'
 import { parseTimeoutString } from '../src/utils/sync'
+import mockTemplate from './fixtures/Template.fixture'
 
 vi.mock('../src/models/Diff', () => ({
   Diff: vi.fn().mockImplementation(() => ({
@@ -22,6 +23,12 @@ vi.mock('../src/models/ResearchInstitution', () => ({
     }] }),
     entityToRISId: vi.fn().mockReturnValue('test-ris-id')
   }))
+}));
+
+vi.mock('../src/models/Template', () => ({
+  Template: {
+    first: vi.fn(() => mockTemplate)
+  }
 }));
 
 describe('utils', () => {
