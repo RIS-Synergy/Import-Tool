@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import { unexpectedErrorHandler } from './middleware/errorHandler'
 
 import auth from './middleware/auth'
+import { Logger } from './utils/logger'
+const log = new Logger({ name: 'app' });
 
 const app = express()
 
@@ -10,6 +12,8 @@ app.use(express.json())
 
 // root url
 app.get('/', (_req: Request, res: Response) => {
+  // log.info('GET /', {foo: "bar"})
+  log.info('GET /', {foo: "bar"})
   res.json({
     info: 'RIS Synergy API'
   })
