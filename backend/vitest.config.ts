@@ -16,5 +16,9 @@ export default defineConfig({
       reporter: ['html'],
       reportsDirectory: './tests/coverage'
     },
+
+    env: {
+      LOKI_HOST: null
+    }
   },
 })
