@@ -1,4 +1,4 @@
-import { Logger } from "tslog"
+import { Logger } from "../utils/logger";
 const log = new Logger({ name: "env" });
 
 const passKeys = [
@@ -9,9 +9,9 @@ const passKeys = [
 ]
 
 export function envLogs() {
-  log.silly('=====================')
+  log.info('=====================')
   log.info('Env:', process.env.NODE_ENV)
-  log.silly('=====================')
+  log.info('=====================')
   Object.entries(process.env).sort().forEach(([key, value]) => {
     if (passKeys.includes(key)) {
       console.log(`${key}=*****`)

@@ -1,4 +1,4 @@
-import { Logger } from "tslog"
+import { Logger } from "../utils/logger";
 import { ResearchInstitution } from "./ResearchInstitution"
 import { Diff } from "./Diff";
 import { Template } from "./Template";

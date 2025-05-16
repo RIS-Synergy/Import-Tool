@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from "express"
-import { Logger } from "tslog";
+import { Logger } from "../utils/logger";
 const fs = require('fs')
 const router: Router = express.Router()
 

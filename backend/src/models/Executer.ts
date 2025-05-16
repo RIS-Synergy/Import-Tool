@@ -2,7 +2,7 @@ import ivm from "isolated-vm";
 import { replacePlaceholders } from '../utils/yaml';
 import { getValue as oefosValue } from '../views/oefos';
 
-import { Logger } from "tslog";
+import { Logger } from "../utils/logger";
 const log = new Logger({ name: "Executer" });
 
 async function isolatedFunction(context, jail, timeout, name, functionBody, input, settings, args) {

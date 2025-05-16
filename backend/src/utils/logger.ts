@@ -24,7 +24,7 @@ class WrappedLogger {
     this.tslogger[level](...args);
 
     const logObj: ILogObj = this.tsJsonLogger[level](...args);
-    console.log(logObj)
+    // console.log(logObj)
   }
 
   trace(...args: any[]): void { this.log('trace', ...args); }

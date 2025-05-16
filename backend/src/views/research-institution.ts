@@ -2,7 +2,7 @@ import express, { Router, Request, Response } from "express"
 
 import { callRIApi } from '../utils/ri-api'
 
-import { Logger } from "tslog";
+import { Logger } from "../utils/logger";
 const log = new Logger({ name: 'view:ri' });
 
 import { PrismaClient } from '@prisma/client'

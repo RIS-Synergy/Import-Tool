@@ -1,4 +1,4 @@
-import { Logger } from "tslog";
+import { Logger } from "../utils/logger";
 const log = new Logger({ name: 'utils:ri-api' });
 
 import { ResearchInstitutionError } from '../utils/errors'

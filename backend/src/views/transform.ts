@@ -2,7 +2,7 @@ import express, { Router, Request, Response } from "express"
 
 import { Transform } from '../models/Transform'
 
-import { Logger } from "tslog";
+import { Logger } from "../utils/logger";
 const log = new Logger({ name: 'view:transform'});
 
 const router: Router = express.Router()

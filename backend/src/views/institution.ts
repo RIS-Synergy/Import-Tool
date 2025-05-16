@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from "express"
 
-import { Logger } from "tslog";
+import { Logger } from "../utils/logger";
 const log = new Logger({ name: 'view:project' });
 
 const router: any = express.Router()

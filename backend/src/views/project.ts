@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from "express"
 import * as XLSX from "xlsx";
-import { Logger } from "tslog";
+import { Logger } from "../utils/logger";
 const log = new Logger({ name: 'view:project' });
 // const fs = require('fs')
 const router: any = express.Router()

@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import app from './app'
-import { Logger } from "tslog"
+import { Logger } from "./utils/logger";
 import { envLogs } from "./utils/env-logs";
 import { FundingAgency } from "./models/FundingAgency";
 import { DiffSync } from "./models/DiffSync";

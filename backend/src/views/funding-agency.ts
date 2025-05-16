@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 import { getAuthEndpoint } from "../utils/oauth2";
-import { Logger } from "tslog";
+import { Logger } from "../utils/logger";
 const log = new Logger({ name: "view:funding-agency" });
 import { Registry } from "../models/Registry";
 import { filter as filterValidator } from './validators'

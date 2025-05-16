@@ -1,5 +1,5 @@
 import { callRIApi } from '../utils/ri-api'
-import { Logger } from "tslog";
+import { Logger } from "../utils/logger";
 const log = new Logger({ name: 'model:RI' });
 import _ from 'lodash/fp';
 

@@ -1,13 +1,14 @@
 import { PrismaClient } from '@prisma/client'
 
-import { Logger } from "tslog";
-
 import { Project } from './Project'
 import { Differ } from './Diff'
 import { getAuthEndpoint } from "../utils/oauth2";
 
 const prisma = new PrismaClient()
+
+import { Logger } from "../utils/logger";
 const log = new Logger({ name: 'model:FundingAgency' });
+
 import { parseTimeoutString } from "../utils/sync";
 
 export class FundingAgency {

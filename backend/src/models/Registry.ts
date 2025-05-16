@@ -1,7 +1,7 @@
 import { ofetch } from "ofetch";
 import { getAuthEndpoint } from '../utils/oauth2'
 
-import { Logger } from "tslog";
+import { Logger } from "../utils/logger";
 const log = new Logger({ name: 'RIS Registry' });
 
 const registryURL = 'https://forschungsdaten.at/registry/registry.json'

@@ -10,7 +10,7 @@ import { login } from './validators'
 import validator from '../middleware/validator'
 
 export const prisma = new PrismaClient()
-import { Logger } from "tslog";
+import { Logger } from "../utils/logger";
 const log = new Logger({ name: 'view:auth' });
 
 const router: Router = express.Router()
