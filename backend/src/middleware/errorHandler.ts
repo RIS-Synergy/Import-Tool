@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { CustomError, BadRequestError, ResearchInstitutionError } from '../utils/errors'
 
-import { Logger } from "tslog";
+import { Logger } from "../utils/logger";
 const log = new Logger({ name: 'error:unexpected'});
 
 export function unexpectedErrorHandler(err: Error, _req: Request, res: Response, next: Function) {
@@ -20,7 +20,9 @@ export function unexpectedErrorHandler(err: Error, _req: Request, res: Response,
     return res.json(err)
   }
   else {
-    log.error('Unexpected Error', _req.path, status, err)
+    log.error(err, 'Unexpected Error', _req.path, status, err)
+    // log.error(err, 'Unexpected Error')
+
   }
 
   return res.json({

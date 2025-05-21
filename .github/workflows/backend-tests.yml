@@ -13,6 +13,7 @@ on:
 
 env:
   RIS_TEST_DATA: 2024-09-04_testdata_projects_updated.json
+  LOKI_HOST: null
 
 jobs:
   test:
