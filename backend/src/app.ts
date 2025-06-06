@@ -12,8 +12,6 @@ app.use(express.json())
 
 // root url
 app.get('/', (_req: Request, res: Response) => {
-  // log.info('GET /', {foo: "bar"})
-  log.info('GET /', {foo: "bar"})
   res.json({
     info: 'RIS Synergy API'
   })
