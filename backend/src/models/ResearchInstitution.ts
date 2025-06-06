@@ -1,4 +1,5 @@
 import { callRIApi } from '../utils/ri-api'
+import { ResearchInstitutionError } from '../utils/errors'
 import { Logger } from "../utils/logger";
 const log = new Logger({ name: 'model:RI' });
 import _ from 'lodash/fp';
@@ -106,7 +107,7 @@ export class ResearchInstitution {
     var results = []
 
     const promises = entityTypes.map(entityType =>
-      callRIApi(`/${entityType}/search`, 'POST', {
+      this.callApi(`/${entityType}/search`, 'POST', {
         size: 10,
         offset: 0,
         searchString
@@ -151,7 +152,15 @@ Source: ${source}.`
 
   async callApi(endpoint: string, method: Method = 'POST', body = null) {
     log.debug(`>>> RI ${method} ${endpoint}`)
-    return await callRIApi(endpoint, method, body)
+    let result
+    try {
+      result = await callRIApi(endpoint, method, body)
+    } catch (error) {
+      log.error(`Error calling RI-API`, error.status, error)
+      throw new ResearchInstitutionError('Error calling RI-API', method, endpoint, 500)
+    }
+    log.debug(`<<< RI ${method} ${endpoint}`, result)
+    return result
   }
 
   async createEntity(entity: Category, data: any) {

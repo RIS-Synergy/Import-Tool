@@ -16,17 +16,29 @@ export async function callRIApi(endpoint: string, method = 'POST', body = null):
   const url = `${process.env.PURE_API_URL}${endpoint}`
 
   log.debug(`>>> ${method} ${endpoint}`)
+  let response: Response
 
-  let response = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      'api-key': process.env.RIS_RI_API_KEY,
-    },
-    // mode: 'no-cors',
-    // mode: 'cors',
-    body: method === 'GET' ? null : JSON.stringify(body),
-  })
+  try {
+    response = await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        'api-key': process.env.RIS_RI_API_KEY,
+      },
+      // mode: 'no-cors',
+      // mode: 'cors',
+      body: method === 'GET' ? null : JSON.stringify(body),
+    })
+  } catch (error) {
+    // if it's an ConnectTimeoutError, show warning
+    if (error.cause.name === 'ConnectTimeoutError') {
+      log.warn('ConnectTimeoutError', endpoint, error.cause.message)
+      throw new ResearchInstitutionError('ConnectTimeoutError', method, endpoint, 500)
+    } else {
+      log.error(`Error calling RI-API`, error)
+      throw new ResearchInstitutionError('Error calling RI-API', method, endpoint, 500)
+    }
+  }
 
   const contentType: string = response.headers.get("content-type")
   log.debug(`<<< ${response.status} ${endpoint}`)
