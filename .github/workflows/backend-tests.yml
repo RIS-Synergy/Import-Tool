@@ -21,6 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - name: Pre-install yarn for local runners
+      run: npm install -g yarn
     - uses: actions/setup-node@v4
       with:
         cache: 'yarn'

@@ -1,5 +1,5 @@
 {
-  "name": "ris-api",
+  "name": "ris-backend",
   "version": "1.0.0",
   "description": "RIS-Synergy API: Funder -> PURE interface",
   "scripts": {
@@ -24,8 +24,8 @@
   },
   "keywords": [],
   "author": "Kirill Stytsenko <kirill@styts.com>",
-  "license": "Unlicensed",
   "private": true,
+  "license": "EUPL-1.2",
   "devDependencies": {
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.10",
