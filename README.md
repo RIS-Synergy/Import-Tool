@@ -16,6 +16,7 @@
 
 ## Documentation
 
+* [Architecture](./docs/architecture.md)
 * [Development](./docs/development.md)
 * [Docker](./docs/docker.md)
 * [Production](./docs/production.md)
