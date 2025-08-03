@@ -152,12 +152,12 @@ Source: ${source}.`
 
   async callApi(endpoint: string, method: Method = 'POST', body = null) {
     log.debug(`>>> RI ${method} ${endpoint}`)
-    let result
+    let result: any
     try {
       result = await callRIApi(endpoint, method, body)
     } catch (error) {
       log.error(`Error calling RI-API`, error.status, error)
-      throw new ResearchInstitutionError('Error calling RI-API', method, endpoint, 500)
+      throw new ResearchInstitutionError('Error calling RI-API', method, endpoint, error)
     }
     log.debug(`<<< RI ${method} ${endpoint}`, result)
     return result

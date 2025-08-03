@@ -35,8 +35,8 @@ export async function callRIApi(endpoint: string, method = 'POST', body = null):
       log.warn('ConnectTimeoutError', endpoint, error.cause.message)
       throw new ResearchInstitutionError('ConnectTimeoutError', method, endpoint, 500)
     } else {
-      log.error(`Error calling RI-API`, error)
-      throw new ResearchInstitutionError('Error calling RI-API', method, endpoint, 500)
+      log.error(`Error calling RI-API [legacy callRIApi()]`, error)
+      throw new ResearchInstitutionError(error.errors || error.title, method, endpoint, 500)
     }
   }
 
@@ -70,7 +70,6 @@ export async function callRIApi(endpoint: string, method = 'POST', body = null):
   }
   else if (contentType.startsWith('application/problem+json')) {
     const error = await response.json()
-    log.error(`Error from RI-API`, error)
     throw new ResearchInstitutionError(error.detail || error.title, method, endpoint, response.status)
   }
 

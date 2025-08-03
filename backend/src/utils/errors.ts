@@ -49,7 +49,7 @@ export class ResearchInstitutionError extends CustomError {
   constructor(public message = 'Research Institution Error',
               public method: string,
               public endpoint: string,
-              public apiStatus: number) {
+              public apiErrorResponse: any) {
     super(message)
     Object.setPrototypeOf(this, ResearchInstitutionError.prototype)
   }

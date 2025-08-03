@@ -12,12 +12,14 @@
       </div>
       <div>
         {{ error.method }} <i>{{ error.endpoint }}</i
-        >, {{ error.apiStatus }}
+                                                  >, {{ error.apiStatus }}
       </div>
       <hr class="my-2" />
-      <div>
-        {{ error.message }}
+      <div if="error && error.apiErrorResponse && error.apiErrorResponse.message">
+        {{ error.apiErrorResponse.message }}
+        <hr class="my-2" />
       </div>
+      <pre class="small-error">{{ error.apiErrorResponse || error }}</pre>
     </div>
     <div v-else>
       <div>
@@ -83,3 +85,11 @@ nuxt.$listen("snackbar:info", (i, area) => {
   error.value = null;
 });
 </script>
+
+<style scoped>
+.small-error {
+  font-size: 0.8em;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+</style>
