@@ -65,7 +65,6 @@ export class Diff {
 
     // apply omit list
     diffSet = new Omits().apply(diffSet)
-    // log.info('Omitted', diffSet)
 
     var diffList = []
     diffSet.forEach((item: string) => {
@@ -81,13 +80,10 @@ export class Diff {
       }
     })
 
-    // log.info('DiffList', diffList)
-
     return {
       diffSet,
       diffList
     }
-
   }
 
   improveOutput(diffList: any) {
@@ -113,7 +109,7 @@ export class Diff {
 
 
   // save to DB
-  async save (risId: string, data: any, templateId: number) {
+  async save(risId: string, data: any, templateId: number) {
     // create or update
     await prisma.diff.upsert({
       where: { id: risId },
@@ -190,6 +186,35 @@ export function getValues(sourceA, sourceB, path) {
   }
 }
 
+
+function ensureValueOrdering(a: object, b: object, path: string): boolean {
+  const keys = path.split('.')
+  const lastKey = keys[keys.length - 2]
+  const preLastKey = keys[keys.length - 1]
+  if (lastKey && !isNaN(Number(lastKey))) {
+    // if it's a number
+    const lastListKey = keys.slice(0, -2).join('.')
+    const lastListList = _.get(b, lastListKey)
+
+    const bList = lastListList.map((item: any) => {
+      return _.get(item, preLastKey)
+    })
+
+    const aValue = _.get(a, path)
+
+    if (bList.includes(aValue)) {
+      // if the value is in the list, return true
+      return true
+    } else {
+      // if the value is not in the list, return false
+      return false
+    }
+  } else {
+    // if the latest key is not a number, this ordering issue is not relevant
+    return false
+  }
+}
+
 export class Differ {
   constructor(public a: object, public b: object) {
   }
@@ -197,8 +222,11 @@ export class Differ {
   diff(): Set<string> {
     const result = new Set<string>()
     const list = findDeepDiff(this.a, this.b)
+
     list.forEach((item: string) => {
-      result.add(item)
+      if (!ensureValueOrdering(this.a, this.b, item)) {
+        result.add(item)
+      }
     })
     return result
   }

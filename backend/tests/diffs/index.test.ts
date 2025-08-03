@@ -49,12 +49,82 @@ vi.mock('../../src/models/Project', () => ({
   }
 }))
 
-describe('Differ findDeepDiff', () => {
+describe('Differ.diff(a, b)', () => {
+  const C_standard = {
+    my: {
+      list: [
+        // standard
+        { key: "first" },
+        { key: "second" },
+      ]
+    }
+  }
+
+  const C_reversed = {
+    my: {
+      list: [
+        // same values, inverted order
+        { key: "second" },
+        { key: "first" },
+      ],
+    }
+  }
+
+  const C_only_first = {
+    my: {
+      list: [
+        { key: "first" },
+      ],
+    }
+  }
+
+  const C_only_second = {
+    my: {
+      list: [
+        { key: "second" },
+      ],
+    }
+  }
+
+  const C1_third = {
+    my: {
+      list: [
+        { key: "first" },
+        { key: "second" },
+        { key: "third" }, // has a 'third', not present in the 'standard' (C1)
+      ]
+    }
+  }
+
   it('with identical objects: empty', () => {
-    expect(findDeepDiff(A, A)).toEqual([])
+    expect(new Differ(A, A).diff()).toEqual(new Set([]))
   })
   it('with different objects: one difference point', () => {
-    expect(findDeepDiff(A, B)).toEqual(['foo'])
+    expect(new Differ(A, B).diff()).toEqual(new Set(['foo']))
+  })
+
+  describe('Comparing lists with different orders and elements', () => {
+    it('identical lists: no differences', () => {
+      expect(new Differ(C_standard, C_standard).diff()).toEqual(new Set([]))
+    })
+    it('lists with same elements in different order: no differences', () => {
+      expect(new Differ(C_standard, C_reversed).diff()).toEqual(new Set([]))
+    })
+    it('list with additional element: detects additional element', () => {
+      expect(new Differ(C1_third, C_standard).diff()).toEqual(new Set(["my.list.2"]))
+    })
+    it('list missing an element: detects missing element', () => {
+      expect(new Differ(C_standard, C_only_first).diff()).toEqual(new Set(["my.list.1"]))
+    })
+    it('list with only one element: no differences when compared to itself', () => {
+      expect(new Differ(C_only_first, C_standard).diff()).toEqual(new Set([]))
+    })
+    it('list with only one element: no differences when order is reversed', () => {
+      expect(new Differ(C_only_first, C_reversed).diff()).toEqual(new Set([]))
+    })
+    it('completely different single-element lists: detects difference', () => {
+      expect(new Differ(C_only_second, C_only_first).diff()).toEqual(new Set(["my.list.0.key"]))
+    })
   })
 })
 
@@ -203,6 +273,29 @@ describe('not runPipeline, but Diff', () => {
       }
     ])
     expect(diffSet).toEqual(new Set(["period.endDate"]))
+  })
+
+  it('CRIS data is not in the same order', async () => {
+    const diff = new Diff('', '')
+    diff.setProjectData(risTestData)
+
+    diff.crisData = {
+      "keywordGroups": [
+        {
+          "classifications": [
+            { uri: "/dk/atira/pure/core/oefos2012/1/103002" },
+            { uri: "/dk/atira/pure/core/oefos2012/2/201201" },
+            { uri: "/dk/atira/pure/core/oefos2012/6/604022" },
+            { uri: "/dk/atira/pure/core/oefos2012/6/604024" },
+          ]
+        },
+      ]
+    }
+    diff.settings = settings
+    diff.yamlTemplate = yaml.dump({ output: yamlTemplateTestData }, { indent: 2 })
+    const { diffSet, diffList } = await diff.runPipeline()
+    expect(diffList).toEqual([])
+    expect(diffSet).toEqual(new Set([]))
   })
 })
 
