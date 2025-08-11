@@ -44,7 +44,7 @@ class CustomSystem extends RISystem {
 
 export class ResearchInstitution {
   system: RISystem
-  searchSizeMax = 100000
+  searchSizeMax = 100
 
   constructor() {
     this.system = new Pure()
