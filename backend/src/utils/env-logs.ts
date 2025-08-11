@@ -6,6 +6,7 @@ const passKeys = [
   'RIS_RI_API_KEY',
   'JWT_SECRET',
   'DATABASE_PASSWORD',
+  'DATABASE_URL',
 ]
 
 export function envLogs() {

@@ -35,6 +35,9 @@ else
           echo "JWT_SECRET=*****"
       elif [[ $line == DATABASE_PASSWORD=* ]]; then
           echo "DATABASE_PASSWORD=*****"
+          # DATABASE_URL
+      elif [[ $line == DATABASE_URL=* ]]; then
+          echo "DATABASE_URL=*****"
       else
           echo "$line"
       fi
