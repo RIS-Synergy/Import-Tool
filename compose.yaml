@@ -12,7 +12,7 @@ services:
       - data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ris-user
-      POSTGRES_PASSWORD: dummy
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ris_db
 
   backend:
