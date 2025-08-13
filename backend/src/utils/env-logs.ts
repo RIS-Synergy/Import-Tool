@@ -7,6 +7,8 @@ const passKeys = [
   'JWT_SECRET',
   'DATABASE_PASSWORD',
   'DATABASE_URL',
+  'GF_ADMIN_USER',
+  'GF_ADMIN_PASSWORD',
 ]
 
 export function envLogs() {
