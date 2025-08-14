@@ -52,8 +52,7 @@ router.get('/likelihood/:id', async (req: Request, res: Response) => {
   const totalResults = calculateSimilarityResults(texts, searchResults, 0.8);
   const groupedResults = groupAndSortResults(totalResults);
 
-  // log.debug(groupedResults);
-  res.json(groupedResults);
+  res.json(await ri.sortByEntity(groupedResults));
 });
 
 function calculateSimilarityResults(texts: string[], searchResults: any[], maxDiffQuota: number) {

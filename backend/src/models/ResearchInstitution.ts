@@ -220,4 +220,13 @@ Source: ${source}.`
     log.info('CRIS found', result.items.length, `${category}s. Response time:`, responseTime, 'seconds. Size:', responseSizeKB, 'KB')
     return result;
   }
+
+  async sortByEntity(list: Array<object>) {
+    const order = { 'project': 1, 'application': 2, 'award': 3 };
+    return list.sort((a: any, b: any) => {
+      const aName = a.systemName ? a.systemName.toLowerCase() : 'zzz';
+      const bName = b.systemName ? b.systemName.toLowerCase() : 'zzz';
+      return order[aName] - order[bName];
+    });
+  }
 }

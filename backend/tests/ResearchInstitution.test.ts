@@ -53,7 +53,22 @@ describe('RI', () => {
       ...uploadData
     })
   })
-})
+  it('should handle entities without systemName gracefully', async () => {
+    const entities = [
+      { id: 1 },
+      { systemName: 'Application', id: 2 },
+      { systemName: 'Award', id: 3 }
+    ];
+
+    const sortedEntities = await ri.sortByEntity(entities);
+
+    expect(sortedEntities).toEqual([
+      { systemName: 'Application', id: 2 },
+      { systemName: 'Award', id: 3 },
+      { id: 1 }
+    ]);
+  });
+});
 
 describe('RI - entity to RIS ID', () => {
   const crisData = {
@@ -72,5 +87,59 @@ describe('RI - entity to RIS ID', () => {
     const ri = new ResearchInstitution()
     const result = ri.entityToRISId({ ...crisData, identifiers: [] })
     expect(result).toEqual(null)
+  })
+});
+
+describe.only('RI - sortByEntity', () => {
+  const ri = new ResearchInstitution();
+
+  it('should sort entities by systemName in the order: Project, Application, Award', async () => {
+    const entities = [
+      { systemName: 'Award', id: 3 },
+      { systemName: 'Project', id: 1 },
+      { systemName: 'Application', id: 2 }
+    ];
+
+    const sortedEntities = await ri.sortByEntity(entities);
+
+    expect(sortedEntities).toEqual([
+      { systemName: 'Project', id: 1 },
+      { systemName: 'Application', id: 2 },
+      { systemName: 'Award', id: 3 }
+    ]);
+  });
+
+  it('should handle entities without systemName gracefully', async () => {
+    const entities = [
+      { id: 1 },
+      { systemName: 'Application', id: 2 },
+      { systemName: 'Award', id: 3 }
+    ];
+
+    const sortedEntities = await ri.sortByEntity(entities);
+
+    expect(sortedEntities).toEqual([
+      { id: 1 },
+      { systemName: 'Application', id: 2 },
+      { systemName: 'Award', id: 3 },
+    ]);
+  });
+
+  it('should handle many systemName object', async () => {
+    const entities = [
+      { systemName: 'Project', id: 4 },
+      { systemName: 'Award', id: 3 },
+      { systemName: 'Project', id: 1 },
+      { systemName: 'Application', id: 2 }
+    ];
+
+    const sortedEntities = await ri.sortByEntity(entities);
+
+    expect(sortedEntities).toEqual([
+      { systemName: 'Project', id: 4 },
+      { systemName: 'Project', id: 1 },
+      { systemName: 'Application', id: 2 },
+      { systemName: 'Award', id: 3 }
+    ]);
   })
 })
