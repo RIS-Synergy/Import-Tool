@@ -1,7 +1,7 @@
 services:
   loki:
     container_name: loki
-    image: grafana/loki:3.4
+    image: grafana/loki:3.5
     ports:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
@@ -11,6 +11,7 @@ services:
   grafana:
     container_name: grafana
     image: grafana/grafana:latest
+    restart: unless-stopped
     ports:
       - "127.0.0.1:3000:3000"
     environment:
