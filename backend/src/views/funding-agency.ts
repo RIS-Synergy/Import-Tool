@@ -123,32 +123,41 @@ EXISTS (
     const take = items;
 
     const diffSQL = diffsSQL(filters.diffs);
-    const rawSQL = `
+    const projectsQuery = prisma.$queryRawUnsafe(
+      `
 SELECT p.*, d.length AS "diffLength", d.list AS "diffList" FROM "Project" p
 LEFT JOIN "Diff" d ON p."risId" = d.id
 WHERE (
-  ${domainQuery} OR ${orgUnitQuery}
+${domainQuery} OR ${orgUnitQuery}
 )
 AND (${whereFilters})
 AND (${diffSQL})
 ORDER BY p."risData"->>'${sortBy.key}' ${sortBy.order}
 OFFSET ${skip} LIMIT ${take}
 `
-    var timeBefore = new Date();
-    log.debug("SQL", rawSQL);
-    const projects: Array<any> = await prisma.$queryRawUnsafe(rawSQL);
-    if (projects && projects.length > 0) {
-      log.debug(projects[0].risData[sortBy.key]);
-    }
-    log.debug("SQL Time", new Date().getTime() - timeBefore.getTime());
+    );
 
-    const totalProjects = await prisma.$queryRawUnsafe(`
+    const totalProjectsQuery = prisma.$queryRawUnsafe(`
 SELECT COUNT(*) FROM "Project" p
 LEFT JOIN "Diff" d ON p."risId" = d.id
 WHERE (${domainQuery} OR ${orgUnitQuery})
 AND (${whereFilters})
 AND (${diffSQL})
 `);
+
+    var timeBefore = new Date();
+    log.debug("SQL Queries initiated");
+
+    const [projects, totalProjects] = await Promise.all([
+      projectsQuery,
+      totalProjectsQuery,
+    ]);
+
+    // @ts-ignore
+    if (projects && projects.length > 0) {
+      log.debug(projects[0].risData[sortBy.key]);
+    }
+    log.debug("SQL Time", new Date().getTime() - timeBefore.getTime());
     log.debug("Time incl. Count(*)", new Date().getTime() - timeBefore.getTime());
 
     res.json({

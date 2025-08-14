@@ -159,7 +159,7 @@ Source: ${source}.`
       log.error(`Error calling RI-API`, error.status, error)
       throw new ResearchInstitutionError('Error calling RI-API', method, endpoint, error)
     }
-    log.debug(`<<< RI ${method} ${endpoint}`, result)
+    log.debug(`<<< RI ${method} ${endpoint}`, 'Items:', result.items.length)
     return result
   }
 
