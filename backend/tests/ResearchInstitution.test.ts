@@ -53,21 +53,6 @@ describe('RI', () => {
       ...uploadData
     })
   })
-  it('should handle entities without systemName gracefully', async () => {
-    const entities = [
-      { id: 1 },
-      { systemName: 'Application', id: 2 },
-      { systemName: 'Award', id: 3 }
-    ];
-
-    const sortedEntities = await ri.sortByEntity(entities);
-
-    expect(sortedEntities).toEqual([
-      { systemName: 'Application', id: 2 },
-      { systemName: 'Award', id: 3 },
-      { id: 1 }
-    ]);
-  });
 });
 
 describe('RI - entity to RIS ID', () => {
@@ -90,7 +75,7 @@ describe('RI - entity to RIS ID', () => {
   })
 });
 
-describe.only('RI - sortByEntity', () => {
+describe('RI - sortByEntity', () => {
   const ri = new ResearchInstitution();
 
   it('should sort entities by systemName in the order: Project, Application, Award', async () => {
