@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
   reporter: [
-    ['html', { outputFolder: 'playwright-report' }]
+    ['html', { outputFolder: 'test-results' }]
   ],
   use: {
     baseURL: 'http://localhost:3032/',
