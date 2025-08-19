@@ -10,7 +10,11 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "refactor-helper": "node ./scripts/refactor-helper.js"
+    "refactor-helper": "node ./scripts/refactor-helper.js",
+    "playwright:ui": "npx playwright test -c ./tests/playwright.config.ts --ui",
+    "playwright:test": "npx playwright test -c ./tests/playwright.config.ts --workers=1",
+    "playwright:ci":   "npx playwright test -c ./tests/playwright.config.ts --workers=1",
+    "playwright:codegen": "npx playwright codegen --target=html --output=./tests/playwright/demo.html --"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
@@ -30,5 +34,8 @@
     "vue-router": "^4.3.0",
     "vue3-ace-editor": "^2.2.4",
     "vuetify": "^3.6.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.2"
   }
 }

@@ -19,3 +19,8 @@ backend/projects/
 
 # Research Institutions database
 backend/resources/whitelistProjects.json
+
+# Frontend
+# Tests for Playwright
+frontend/tests/playwright-report/
+frontend/tests/test-results/
