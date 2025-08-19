@@ -55,10 +55,9 @@ jobs:
       # 4️⃣  Upload the report as an artifact
       # ----------------------------------------------------
       - name: 📁 Upload Playwright report
-        # even if the tests failed, we still want the report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-test-results
-          path: tests/test-results/
+          path: frontend/tests/test-results/
           retention-days: 30
