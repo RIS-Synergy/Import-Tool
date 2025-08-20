@@ -19,28 +19,50 @@ jobs:
       - name: 🎁 Checkout repo
         uses: actions/checkout@v4
 
-      - name: 🚀 Start All Services From Pre-built Images
+      - name: Print GITHUB_WORKSPACE folder
+        run: |
+          echo === GITHUB_WORKSPACE =======
+          echo ${GITHUB_WORKSPACE:-.}
+          echo ============================
+
+      - name: 🧪 Build Frontend Image
+        run: |
+          docker build \
+            --tag my-ci-test-frontend \
+            ${GITHUB_WORKSPACE:-.}/frontend
+
+      - name: ⚽ Build Playwright Image
+        run: |
+          docker build \
+            --tag my-ci-test-playwright \
+            --file ./frontend/Dockerfile.ci \
+            ${GITHUB_WORKSPACE:-.}/frontend
+
+      - name: 🚀 Start All Services From Pre-built Images (not playright)
         run: >
           docker compose -f docker-compose.ci.yml -p my-ci-test --env-file env-test
-          up -d
+          up frontend -d --no-build
 
       - name: ▶️ Run Playwright tests
         run: >
           docker compose -f docker-compose.ci.yml -p my-ci-test --env-file env-test
           run --rm playwright
 
+      - name: 💾 Save Frontend Logs on Failure
+        if: failure()
+        run: |
+          docker logs frontend-ci > \
+          ${GITHUB_WORKSPACE:-.}/frontend/test-results/frontend-logs.txt \
+          2>&1
+          # ${GITHUB_WORKSPACE:-.}/.github/frontend-logs.txt \
+
       - name: 📁 Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-test-results
-          path: frontend/tests/test-results/
+          path: frontend/test-results/
           retention-days: 30
-
-      - name: 💾 Save Frontend Logs on Failure
-        if: failure()
-        run: |
-          docker logs frontend-ci > fontend/tests/test-results/frontend-logs.txt 2>&1
 
       - name: Stop services
         if: always()
