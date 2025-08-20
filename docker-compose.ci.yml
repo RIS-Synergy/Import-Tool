@@ -1,0 +1,26 @@
+services:
+  frontend:
+    container_name: frontend-ci
+    build:
+      context: ${GITHUB_WORKSPACE:-.}/frontend
+      dockerfile: Dockerfile
+      target: development
+      args:
+        BACKEND_API_PROXY: http://backend-ci:3001
+    ports:
+      - "3052:3000"
+    volumes:
+      - ${GITHUB_WORKSPACE:-.}/frontend:/app
+      - /app/node_modules
+      - /app/.nuxt
+
+  playwright:
+    container_name: playwright-ci
+    image: mcr.microsoft.com/playwright:v1.54.0-noble
+    volumes:
+      - ${GITHUB_WORKSPACE:-.}/frontend:/app
+    working_dir: /app/frontend
+    command: npm run playwright:ci
+    environment:
+      PLAYWRIGHT_BASE_URL: http://frontend-ci:3000
+      PLAYWRIGHT_OUTPUT_DIR: ${GITHUB_WORKSPACE:-.}/tests/test-results
