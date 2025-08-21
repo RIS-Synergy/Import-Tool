@@ -1,4 +1,3 @@
-# FROM node:lts-slim AS development
 FROM node:lts-slim
 
 WORKDIR /app

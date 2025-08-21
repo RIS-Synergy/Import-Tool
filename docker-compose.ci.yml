@@ -11,11 +11,13 @@ services:
     image: my-ci-test-playwright
     depends_on:
       - frontend
-    restart: "no"
     volumes:
       - ${GITHUB_WORKSPACE:-.}:/app
+      - ./frontend/playwright-report:/app/frontend/playwright-report
+      - /app/frontend/node_modules # The "Mask": Covers the node_modules part of the window
+      # - /app/frontend/playwright-report
+      # - /app/frontend/test-results
     working_dir: /app/frontend
-    command: yarn playwright:ci
+    # command: npm run playwright:ci
     environment:
       PLAYWRIGHT_BASE_URL: http://frontend-ci:3000
-      PLAYWRIGHT_OUTPUT_DIR: test-results

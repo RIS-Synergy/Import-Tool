@@ -7,4 +7,7 @@ RUN yarn install --frozen-lockfile
 
 COPY . .
 
+# RUN npm install @playwright/test
 RUN npx playwright install
+
+CMD ["yarn", "sleep"]

@@ -12,9 +12,10 @@
     "postinstall": "nuxt prepare",
     "refactor-helper": "node ./scripts/refactor-helper.js",
     "playwright:test": "npx playwright test -c ./tests/playwright.config.ts --workers=1",
-    "playwright:ui": "npx playwright test -c ./tests/playwright.config.ts --ui",
     "playwright:ci":   "npx playwright test -c ./tests/playwright.config.ts --workers=1",
-    "playwright:codegen": "npx playwright codegen --target=html --output=./tests/playwright/demo.html --"
+    "playwright:ui": "npx playwright test -c ./tests/playwright.config.ts --ui",
+    "playwright:codegen": "npx playwright codegen --target=html --output=./tests/playwright/demo.html --",
+    "sleep": "sleep infinity"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",

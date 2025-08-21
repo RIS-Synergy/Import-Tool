@@ -44,28 +44,43 @@ jobs:
           up frontend -d --no-build
 
       - name: ▶️ Run Playwright tests
-        run: >
-          docker compose -f docker-compose.ci.yml -p my-ci-test --env-file env-test
-          run --rm playwright
+        run: |
+          docker compose -f docker-compose.ci.yml -p my-ci-test --env-file env-test \
+          run playwright npm run playwright:ci
+
+      - name: 📄 Copy Playwright report from container
+        if: always()
+        run: |
+          # Get the last container created for this service (even if exited)
+          CONTAINER_ID=$(docker ps -aqf "name=my-ci-test-playwright-run" | tail -n 1)
+          echo "Playwright container ID: $CONTAINER_ID"
+
+          # Copy the report from the container to the host
+          docker cp $CONTAINER_ID:/app/frontend/playwright-report ./frontend/playwright-report || true
 
       - name: 💾 Save Frontend Logs on Failure
-        if: failure()
+        if: always()
         run: |
-          docker logs frontend-ci > \
-          ${GITHUB_WORKSPACE:-.}/frontend/test-results/frontend-logs.txt \
-          2>&1
-          # ${GITHUB_WORKSPACE:-.}/.github/frontend-logs.txt \
+          docker compose -p my-ci-test logs frontend > ./frontend/frontend-logs.txt 2>&1
 
       - name: 📁 Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-test-results
-          path: frontend/test-results/
+          name: playwright-report
+          path: frontend/playwright-report/
+          retention-days: 30
+
+      - name: 📁 Upload Frontend Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-log
+          path: frontend/frontend-logs.txt
           retention-days: 30
 
       - name: Stop services
         if: always()
-        run: >
-          docker compose -f docker-compose.ci.yml -p my-ci-test
-          down
+        run: |
+          docker compose -f docker-compose.ci.yml -p my-ci-test down
+          docker rm -f $(docker ps -a -qf "name=my-ci-test-playwright-run")
