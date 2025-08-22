@@ -1,0 +1,24 @@
+FROM node:lts-slim
+
+# Install required system dependencies
+# otherise this would be an error:
+#    Prisma cannot find the required `libssl` system library
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openssl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Install dependencies
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+
+COPY . .
+
+EXPOSE 3000
+
+# Generate Prisma client
+RUN npx prisma generate
+
+CMD ["yarn", "dev"]

@@ -1,10 +1,20 @@
+# we have to remove the backend yarn dev PORT 3001,
+# best to have 3000 for everyone
+
 services:
+  backend:
+    container_name: backend-ci
+    image: my-ci-test-backend
+    working_dir: /app
+    environment:
+      - FA_SYNC_TIME=1h
+
   frontend:
     container_name: frontend-ci
     image: my-ci-test-frontend
     working_dir: /app
     environment:
-        BACKEND_API_PROXY: http://backend-ci:3001
+      BACKEND_API_PROXY: http://backend-ci:3001/**
 
   playwright:
     container_name: playwright-ci
@@ -15,9 +25,7 @@ services:
       - ${GITHUB_WORKSPACE:-.}:/app
       - ./frontend/playwright-report:/app/frontend/playwright-report
       - /app/frontend/node_modules # The "Mask": Covers the node_modules part of the window
-      # - /app/frontend/playwright-report
-      # - /app/frontend/test-results
     working_dir: /app/frontend
-    # command: npm run playwright:ci
     environment:
-      PLAYWRIGHT_BASE_URL: http://frontend-ci:3000
+      - NODE_ENV=ci
+      - PLAYWRIGHT_BASE_URL=http://frontend-ci:3000

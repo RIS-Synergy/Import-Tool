@@ -22,10 +22,10 @@ RUN yarn install --frozen-lockfile
 # Copy application source code
 COPY . .
 
+EXPOSE 3000
+
 # Generate Prisma client
 RUN npx prisma generate
-
-EXPOSE 3001
 
 # Development stage
 FROM base AS development

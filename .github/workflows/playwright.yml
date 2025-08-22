@@ -25,6 +25,13 @@ jobs:
           echo ${GITHUB_WORKSPACE:-.}
           echo ============================
 
+      - name: ☕ Build Backend Image
+        run: |
+          docker build \
+            --tag my-ci-test-backend \
+            --file ./backend/Dockerfile.ci \
+            ${GITHUB_WORKSPACE:-.}/backend
+
       - name: 🧪 Build Frontend Image
         run: |
           docker build \
@@ -41,7 +48,7 @@ jobs:
       - name: 🚀 Start All Services From Pre-built Images (not playright)
         run: >
           docker compose -f docker-compose.ci.yml -p my-ci-test --env-file env-test
-          up frontend -d --no-build
+          up backend frontend -d --no-build
 
       - name: ▶️ Run Playwright tests
         run: |
@@ -58,6 +65,11 @@ jobs:
           # Copy the report from the container to the host
           docker cp $CONTAINER_ID:/app/frontend/playwright-report ./frontend/playwright-report || true
 
+      - name: 💾 Save Backend Logs
+        if: always()
+        run: |
+          docker compose -p my-ci-test logs backend > backend-logs.txt
+
       - name: 💾 Save Frontend Logs on Failure
         if: always()
         run: |
@@ -69,6 +81,14 @@ jobs:
         with:
           name: playwright-report
           path: frontend/playwright-report/
+          retention-days: 30
+
+      - name: 📁 Upload Backend Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-log
+          path: backend-logs.txt
           retention-days: 30
 
       - name: 📁 Upload Frontend Logs

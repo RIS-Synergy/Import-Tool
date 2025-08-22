@@ -28,10 +28,11 @@ services:
       sh -c "yarn debug"
 
   frontend:
+    # build:
+    #   target: development
+    env_file: frontend/.env.dev
     environment:
-      - NODE_ENV=development
-    build:
-      target: development
+      - BACKEND_API_PROXY="http://backend:3001/**"
     ports:
       - "3032:3000"
       - "24678:24678"

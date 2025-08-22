@@ -11,10 +11,10 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "refactor-helper": "node ./scripts/refactor-helper.js",
-    "playwright:test": "npx playwright test -c ./tests/playwright.config.ts --workers=1",
-    "playwright:ci":   "npx playwright test -c ./tests/playwright.config.ts --workers=1",
-    "playwright:ui": "npx playwright test -c ./tests/playwright.config.ts --ui",
-    "playwright:codegen": "npx playwright codegen --target=html --output=./tests/playwright/demo.html --",
+    "playwright:test": "NODE_ENV=development npx playwright test -c ./tests/playwright.config.ts --workers=1",
+    "playwright:ui": "NODE_ENV=development npx playwright test -c ./tests/playwright.config.ts --ui",
+    "playwright:codegen": "NODE_ENV=development npx playwright codegen --target=html --output=./tests/playwright/demo.html --",
+    "playwright:ci": "NODE_ENV=ci npx playwright test -c ./tests/playwright.config.ts --workers=1",
     "sleep": "sleep infinity"
   },
   "dependencies": {
