@@ -25,3 +25,5 @@ backend/resources/whitelistProjects.json
 /frontend/playwright-report/
 /frontend/test-results/
 /frontend/tests/playwright-report/
+/frontend/.playwright-dev/
+/frontend/.playwright-ci/

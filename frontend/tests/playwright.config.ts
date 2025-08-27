@@ -31,6 +31,7 @@ export default defineConfig({
     actionTimeout: 60000,
   },
   testDir: '.',
+  outputDir: process.env.PLAYWRIGHT_OUTPUT_DIR,
   projects: [
     {
       name: 'dev',

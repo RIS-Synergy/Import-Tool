@@ -56,3 +56,6 @@ services:
     environment:
       - NODE_ENV=ci
       - PLAYWRIGHT_BASE_URL=http://frontend-ci:3000
+      - PLAYWRIGHT_HTML_OUTPUT_DIR=/app/frontend/.playwright-ci
+      - PLAYWRIGHT_OUTPUT_DIR=/app/frontend/.playwright-ci
+

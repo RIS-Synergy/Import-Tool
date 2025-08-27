@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Playwright e2e tests
 
 on:
   push:
@@ -70,7 +70,7 @@ jobs:
           echo "Playwright container ID: $CONTAINER_ID"
 
           # Copy the report from the container to the host
-          docker cp $CONTAINER_ID:/app/frontend/playwright-report ./frontend/playwright-report || true
+          docker cp $CONTAINER_ID:/app/frontend/.playwright-ci ./frontend/.playwright-ci || true
 
       - name: 💾 Save Backend Logs
         if: always()
@@ -87,7 +87,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
-          path: frontend/playwright-report/
+          path: frontend/.playwright-ci/index.html
           retention-days: 30
 
       - name: 📁 Upload Backend Logs
