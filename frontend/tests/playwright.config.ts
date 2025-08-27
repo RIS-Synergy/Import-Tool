@@ -33,7 +33,13 @@ export default defineConfig({
   testDir: '.',
   projects: [
     {
+      name: 'dev',
+      testMatch: '*tests/*.dev.spec.ts',
+    },
+    {
+      name: 'ci',
       testMatch: '*tests/*.spec.ts',
-    }
+      testIgnore: /.*dev\.spec\.ts/
+    },
   ]
 })

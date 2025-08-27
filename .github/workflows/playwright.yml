@@ -45,10 +45,17 @@ jobs:
             --file ./frontend/Dockerfile.ci \
             ${GITHUB_WORKSPACE:-.}/frontend
 
-      - name: 🚀 Start All Services From Pre-built Images (not playright)
+      - name: 🚀 Start All Services From Pre-built Images (not playwright)
         run: >
           docker compose -f docker-compose.ci.yml -p my-ci-test --env-file env-test
-          up backend frontend -d --no-build
+          up db backend frontend -d --no-build
+
+      - name: 🗄️ Initialize Test Database
+        run: |
+          docker compose -f docker-compose.ci.yml -p my-ci-test --env-file env-test \
+          exec backend yarn prisma migrate deploy || true
+          docker compose -f docker-compose.ci.yml -p my-ci-test --env-file env-test \
+          exec backend npm run db-init || true
 
       - name: ▶️ Run Playwright tests
         run: |

@@ -4,9 +4,9 @@ import { hash } from '../src/utils/auth'
 
 const prisma = new PrismaClient()
 
-// only allowed in development mode
-if (process.env.NODE_ENV !== 'development') {
-  console.error('This script is only allowed in development mode')
+// only allowed in development mode or ci mode
+if (process.env.NODE_ENV !== 'development' && process.env.NODE_ENV !== 'ci') {
+  console.error('This script is only allowed in development or ci mode. Exiting...')
   process.exit(1)
 }
 

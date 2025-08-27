@@ -23,7 +23,10 @@ Dockerfile
 # Tests
 tests/**
 vitest.config.ts
-samples
+
+#### The folder 'samples' is now being commented out because
+#### it is being used in the CI process.
+# samples
 
 # **/.classpath
 # **/.dockerignore
