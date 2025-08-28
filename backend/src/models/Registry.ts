@@ -4,7 +4,7 @@ import { getAuthEndpoint } from '../utils/oauth2'
 import { Logger } from "../utils/logger";
 const log = new Logger({ name: 'RIS Registry' });
 
-const registryURL = 'https://forschungsdaten.at/registry/registry.json'
+const registryURL = process.env.RIS_REGISTRY_URL
 
 type Member = {
   id: string,

@@ -1,0 +1,60 @@
+{
+  "member": [
+    {
+      "id": "UL",
+      "acronym": "AAU",
+      "name": "Alpen Adria Universitaet Klagenfurt",
+      "contact": "mario.schautz@aau.at",
+      "oauth2": "https://oauth2-staging.aau.at/oauth/token",
+      "info": "https://cris.aau.at/ris-synergy/info/v1/info"
+    },
+    {
+      "id": "UC",
+      "acronym": "UIBK",
+      "name": "Leopold-Franzens-Universitaet Innsbruck",
+      "contact": "guenther.polig@uibk.ac.at",
+      "oauth2": "https://lfuonline.uibk.ac.at/ris-synergy/oauth/token/",
+      "info": "https://lfuonline.uibk.ac.at/ris-synergy/v1/info/"
+    },
+    {
+      "id": "UT",
+      "acronym": "MDW",
+      "name": "Universitaet fuer Musik und darstellende Kunst Wien ",
+      "contact": "szepe@mdw.ac.at",
+      "oauth2": "https://idp.mdw.ac.at/realms/mdw-ris-staging/protocol/openid-connect/token",
+      "info": "https://ris-synergy.mdw.ac.at/ris-synergy/v1/info"
+    },
+    {
+      "id": "UE",
+      "acronym": "TUW",
+      "name": "Technische Universität Wien ",
+      "contact": "daniel.niederlechner@tuwien.ac.at",
+      "oauth2": "https://ris-synergy.csd.tuwien.ac.at/auth/realms/ris-synergy/protocol/openid-connect/token",
+      "info": "https://ris-synergy.csd.tuwien.ac.at/info/v1/info"
+    },
+    {
+      "id": "UA",
+      "acronym": "univie",
+      "name": "Universität Wien",
+      "contact": "agile.dev5@univie.ac.at",
+      "oauth2": "https://auth.univie.ac.at/token",
+      "info": "https://api.univie.ac.at/ris-synergy/v1/info"
+    },
+    {
+      "id": "FWF",
+      "acronym": "FWF",
+      "name": "FWF Österreichischer Wissenschatfsfonds",
+      "contact": "itsupport@fwf.ac.at",
+      "oauth2": "https://sso.fwf.ac.at/auth/realms/sso/protocol/openid-connect/token",
+      "info": "https://risapi.prod.fwf.ac.at/info/v1/info/"
+    },
+    {
+      "id": "FWF_Test",
+      "acronym": "FWF Test",
+      "name": "FWF Österreichischer Wissenschatfsfonds Test",
+      "contact": "itsupport@fwf.ac.at",
+      "oauth2": "https://tsso.fwf.ac.at/auth/realms/sso/protocol/openid-connect/token",
+      "info": "https://risapi.test.fwf.ac.at/info/v1/info/"
+    }
+  ]
+}
