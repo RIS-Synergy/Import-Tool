@@ -47,6 +47,12 @@ app.use('/auth', require('./views/auth').default)
 // Institution
 app.use('/institution', auth, require('./views/institution').default)
 
+// if in development mode or ci
+if (process.env.NODE_ENV === 'development' || process.env.CI) {
+  // Development CRIS API mock
+  app.use('/test-cris-api', require('./utils/dev/cris-api').default)
+}
+
 // error handler last
 app.use(unexpectedErrorHandler)
 

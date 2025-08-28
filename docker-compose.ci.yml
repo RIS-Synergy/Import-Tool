@@ -33,6 +33,7 @@ services:
       - JWT_EXPIRES_IN=1h
       - FA_SYNC_TIME=1h
       - RIS_TEST_DATA=2024-09-04_testdata_projects_updated.json
+      - PURE_API_URL="http://backend:3001/test-cris-api"
 
   frontend:
     container_name: frontend-ci

@@ -114,7 +114,7 @@ export class ResearchInstitution {
       }).then((result: any) => {
         // console.log('SearchResults', result)
 
-        result.items.map((item: any) => {
+        result.items && result.items.map((item: any) => {
           results.push({
             ...item,
             // pureId: item.pureId,

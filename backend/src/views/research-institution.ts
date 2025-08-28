@@ -193,11 +193,11 @@ router.post('/search', async (req: Request, res: Response) => {
     })
 
     // log.info(`Number of "${entity.name}" users:`, results.length)
-    result && result.items.map((item: any) => {
+    result && result.items && result.items.map((item: any) => {
       results.push({
         pureId: item.pureId,
         uuid: item.uuid,
-        name: item.name.firstName + ' ' + item.name.lastName,
+        name: item.name && item.name.firstName + ' ' + item.name.lastName,
         user: item.user && item.user.uuid,
         details: item,
         entity,
