@@ -34,13 +34,15 @@ class WrappedLogger {
     });
     this.tsJsonLogger.stackDepthLevel = stackDepthLevel;
 
-    this.pinoLogger = pino(
-      {
-        base: {}, // removes pid, hostname, etc.
-        level: 'info',
-      },
-      pinoTransport
-    );
+    if (process.env.LOKI_HOST) {
+      this.pinoLogger = pino(
+        {
+          base: {}, // removes pid, hostname, etc.
+          level: 'info',
+        },
+        pinoTransport
+      );
+    }
   }
 
   private log(level: string, ...args: any[]): void {
@@ -83,15 +85,17 @@ class WrappedLogger {
       ...objectsWitoutNumbers,
     }
 
-    if (listOfNumbers.length === 1) {
-      // only one message
-      this.pinoLogger[level](props, ...args);
-    } else {
-      // multiple messages
-      this.pinoLogger[level]({
-        ...props,
-        msgs: listOfNumbers,
-      });
+    if (process.env.LOKI_HOST) {
+      if (listOfNumbers.length === 1) {
+        // only one message
+        this.pinoLogger[level](props, ...args);
+      } else {
+        // multiple messages
+        this.pinoLogger[level]({
+          ...props,
+          msgs: listOfNumbers,
+        });
+      }
     }
   }
 
