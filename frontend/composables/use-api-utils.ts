@@ -8,9 +8,9 @@ export async function apiCall(url = '', method = 'GET', data: any = {}) {
       `/api/${url}`,
       {
         method,
-        headers: {
+        headers: store.token ? {
           Authorization: `Bearer ${store.token}`
-        },
+        } : {},
         ...data
       });
   } catch (e: any) {
