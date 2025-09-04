@@ -49,7 +49,10 @@ app.use('/institution', auth, require('./views/institution').default)
 
 // if in development mode or ci
 if (process.env.NODE_ENV === 'development' || process.env.CI) {
-  // Development CRIS API mock
+  // Funding Agency API mock
+  app.use('/test-fa-api', require('./utils/dev/fa-api').default)
+
+  // CRIS API mock
   app.use('/test-cris-api', require('./utils/dev/cris-api').default)
 }
 

@@ -7,6 +7,7 @@ const prisma = new PrismaClient()
 
 vi.mock('../src/utils/oauth2', () => ({
   getAuthEndpoint: vi.fn()
+    .mockResolvedValueOnce([]) // something to do with Registry (& FundingAgency)
     .mockResolvedValueOnce(
       [
         { id: 'project1' },
@@ -58,6 +59,7 @@ describe('FundingAgency', () => {
     delete agency.start
 
     const projects = await agency.fetchAllPages();
+    console.log(projects)
     expect(projects[0].id).toBe('project1');
     expect(projects[1].id).toBe('project2');
     expect(projects[2].id).toBe('project3');

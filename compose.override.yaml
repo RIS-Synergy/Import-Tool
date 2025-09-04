@@ -18,8 +18,10 @@ services:
     environment:
       - NODE_ENV=development
       - JWT_SECRET=nosecret
-      - RIS_TEST_DATA=2024-09-04_testdata_projects_updated.json
+      - RIS_REGISTRY_URL=https://forschungsdaten.at/registry/registry.json
+      - RIS_MEMBER_ID=FWF_Test
       - LOKI_HOST=${LOKI_HOST}
+      - VITEST_COVERAGE__REPORTSDIRECTORY=./tests/.coverage
     ports:
       - "3031:3001"
       - "51204:51204" # vitest, incl. UI

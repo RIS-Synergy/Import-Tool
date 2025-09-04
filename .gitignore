@@ -20,6 +20,10 @@ backend/projects/
 # Research Institutions database
 backend/resources/whitelistProjects.json
 
+# Backend
+# Tests
+/backend/tests/.coverage/
+
 # Frontend
 # Tests for Playwright
 /frontend/playwright-report/

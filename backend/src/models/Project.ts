@@ -1,13 +1,17 @@
 import { PrismaClient } from '@prisma/client'
 import { Logger } from "../utils/logger";
+import { Registry } from "./Registry";
 
 const prisma = new PrismaClient()
 const log = new Logger({ name: 'model:Project' });
 
 import { ResearchInstitution } from './ResearchInstitution'
-import { Registry } from './Registry'
+// import { registry } from "../server";
 
 type FundedItem = Record<string, any>; // Generic type for unknown nested structures
+
+export const registry = new Registry()
+registry.run()
 
 export class Project {
   constructor(public risId: string) { }
@@ -79,7 +83,7 @@ export class Project {
   }
 
   static getUrl(url: 'PROJECTS' | 'PROJECT') {
-    return Registry.getURL('project', url)
+    return registry.getURL('project', url)
   }
 
   /**

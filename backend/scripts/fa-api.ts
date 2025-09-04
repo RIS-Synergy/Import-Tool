@@ -21,9 +21,10 @@ const mapDomain = {}
 const riRORs = {}
 
 async function main() {
-  await Registry.run()
+  const registry = new Registry()
+  await registry.run()
 
-  const url = `${Registry.getURL(prefixUrl, 'PROJECTS')}?page[page]=${page * pageSize}&page[size]=${pageSize}`
+  const url = `${registry.getURL(prefixUrl, 'PROJECTS')}?page[page]=${page * pageSize}&page[size]=${pageSize}`
   console.log('url', url)
 
   const result = await getAuthEndpoint(url)

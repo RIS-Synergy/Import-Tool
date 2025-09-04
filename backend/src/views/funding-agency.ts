@@ -6,14 +6,18 @@ const prisma = new PrismaClient();
 import { getAuthEndpoint } from "../utils/oauth2";
 import { Logger } from "../utils/logger";
 const log = new Logger({ name: "view:funding-agency" });
+
 import { Registry } from "../models/Registry";
+const registry = new Registry()
+registry.run()
+
 import { filter as filterValidator } from './validators'
 import validator from '../middleware/validator'
 
 const router: Router = express.Router();
 
 router.get("/info", async (req: Request, res: Response) => {
-  const result = Registry.endpoints
+  const result = registry.endpoints
 
   // Map to json
   const jsonResult = {}

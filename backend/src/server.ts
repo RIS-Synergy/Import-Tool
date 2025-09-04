@@ -4,7 +4,6 @@ import { Logger } from "./utils/logger";
 import { envLogs } from "./utils/env-logs";
 import { FundingAgency } from "./models/FundingAgency";
 import { DiffSync } from "./models/DiffSync";
-import { Registry } from "./models/Registry";
 
 const log = new Logger({ name: "server" });
 const port = process.env.PORT || 3000
@@ -12,8 +11,6 @@ const port = process.env.PORT || 3000
 Error.stackTraceLimit = 32;
 
 dotenv.config()
-
-Registry.run()
 
 envLogs()
 

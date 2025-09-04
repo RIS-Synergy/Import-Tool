@@ -1,11 +1,12 @@
-import prompts from 'prompts';
+// import prompts from 'prompts';
 import { FundingAgency } from '../src/models/FundingAgency';
 import { Registry } from '../src/models/Registry';
 
 async function main () {
   // console.log(process.env.AUTH_SERVER, process.env.AUTH_CLIENT_ID)
 
-  await Registry.run()
+  const registry = new Registry()
+  await registry.run()
 
   const agency = new FundingAgency()
   // const projects = await agency.fetchAllPages()
