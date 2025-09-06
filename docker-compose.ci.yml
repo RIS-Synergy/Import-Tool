@@ -33,6 +33,7 @@ services:
       - JWT_EXPIRES_IN=1h
       - FA_SYNC_TIME=1h
       - RIS_TEST_DATA=2024-09-04_testdata_projects_updated.json
+      # - RIS_MEMBER_ID='FWF_Test' # this is definately unelegant that we need this parameter
       - PURE_API_URL="http://backend:3001/test-cris-api"
 
   frontend:
@@ -52,7 +53,7 @@ services:
     volumes:
       - ${GITHUB_WORKSPACE:-.}:/app
       - ./frontend/playwright-report:/app/frontend/playwright-report
-      - /app/frontend/node_modules # The "Mask": Covers the node_modules part of the window
+      # - /app/frontend/node_modules # The "Mask": Covers the node_modules part of the window
     working_dir: /app/frontend
     environment:
       - NODE_ENV=ci

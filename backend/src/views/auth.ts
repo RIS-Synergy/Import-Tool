@@ -18,6 +18,8 @@ const router: Router = express.Router()
 router.post('/login', validator(login), async (req: Request, res: Response) => {
   const { username, password } = req.body
 
+  log.info(`🧑 Login attempt for user: ${username}`)
+
   const user = await prisma.user.findUnique({
     where: {
       username

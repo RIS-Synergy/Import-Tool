@@ -5,9 +5,8 @@ WORKDIR /app/frontend
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
-COPY . .
+RUN npx playwright install --with-deps
 
-# RUN npm install @playwright/test
-RUN npx playwright install
+COPY . .
 
 CMD ["yarn", "sleep"]

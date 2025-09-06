@@ -7,7 +7,7 @@ on:
     branches: [ "**" ]
 
 jobs:
-  test:
+  e2e:
     runs-on: ubuntu-latest
     concurrency: 1
     timeout-minutes: 5
@@ -46,8 +46,8 @@ jobs:
             ${GITHUB_WORKSPACE:-.}/frontend
 
       - name: 🚀 Start All Services From Pre-built Images (not playwright)
-        run: >
-          docker compose -f docker-compose.ci.yml -p my-ci-test --env-file env-test
+        run: |
+          docker compose -f docker-compose.ci.yml -p my-ci-test --env-file env-test \
           up db backend frontend -d --no-build
 
       - name: 🗄️ Initialize Test Database

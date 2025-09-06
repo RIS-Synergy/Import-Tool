@@ -1,5 +1,5 @@
 import { defineConfig } from '@playwright/test'
-import { resolve } from 'path';
+import { resolve, join } from 'path';
 import { config } from 'dotenv';
 
 // Determine the env variables source
@@ -17,14 +17,13 @@ if (process.env.NODE_ENV == 'development') {
   throw new Error('NODE_ENV must be set to `development` or `ci`');
 }
 
+// const vidDir = join(process.cwd(), process.env.PLAYWRIGHT_HTML_OUTPUT_DIR, 'videos');
+// console.log('📹 Videos will be stored in:', vidDir)
+
 export default defineConfig({
-  reporter: [
-    ['html', { open: 'never', }]],
+  reporter: [['html', { open: 'never',}]],
   use: {
     baseURL: process.env.PLAYWRIGHT_BASE_URL,
-    trace: 'retain-on-failure',
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
     ignoreHTTPSErrors: true,
     locale: 'en-US',
     timezoneId: 'Europe/Vienna',
@@ -33,14 +32,32 @@ export default defineConfig({
   testDir: '.',
   outputDir: process.env.PLAYWRIGHT_OUTPUT_DIR,
   projects: [
+    { name: 'setup', testMatch: /.*\.setup\.ts/ },
     {
       name: 'dev',
-      testMatch: '*tests/*.dev.spec.ts',
+      use: {
+        browserName: "chromium",
+        headless: false,
+        video: "on",
+        trace: "on",
+        screenshot: "on",
+      },
+      testMatch: '*tests/*.spec.ts',
+      dependencies: ['setup'],
     },
     {
       name: 'ci',
+      use: {
+        browserName: "chromium",
+        video: "retain-on-failure",
+        trace: "on",
+        screenshot: "on"
+      },
       testMatch: '*tests/*.spec.ts',
-      testIgnore: /.*dev\.spec\.ts/
+      testIgnore: /.*dev\.spec\.ts/,
+      dependencies: ['setup'],
     },
-  ]
+  ],
+  globalSetup: "global-setup.ts",
+  globalTeardown: "global-teardown.ts"
 })
