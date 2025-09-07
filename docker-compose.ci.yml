@@ -53,7 +53,7 @@ services:
     volumes:
       - ${GITHUB_WORKSPACE:-.}:/app
       - ./frontend/playwright-report:/app/frontend/playwright-report
-      # - /app/frontend/node_modules # The "Mask": Covers the node_modules part of the window
+      - /app/frontend/node_modules # The "Mask": Covers the node_modules part of the window
     working_dir: /app/frontend
     environment:
       - NODE_ENV=ci
