@@ -1,12 +1,10 @@
-FROM "mcr.microsoft.com/playwright:v1.54.2-noble"
+FROM "mcr.microsoft.com/playwright:v1.55.0-noble"
 
 WORKDIR /app/frontend
 
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
-RUN npx playwright install --with-deps
-
 COPY . .
 
-CMD ["yarn", "sleep"]
+CMD ["bash"]
