@@ -60,7 +60,7 @@ jobs:
       - name: ▶️ Run Playwright tests
         run: |
           docker compose -f docker-compose.ci.yml -p my-ci-test --env-file env-test \
-          run playwright yarn playwright:ci
+          run --rm playwright yarn playwright:ci
 
       - name: 📄 Copy Playwright report from container
         if: always()
@@ -110,4 +110,3 @@ jobs:
         if: always()
         run: |
           docker compose -f docker-compose.ci.yml -p my-ci-test down
-          docker rm -f $(docker ps -a -qf "name=my-ci-test-playwright-run")
