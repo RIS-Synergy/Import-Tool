@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { Schema } from 'joi'
 import { BadRequestError } from '../utils/errors'
 
+// Legacy! (see function below)
 export default (schema: Schema) => {
   return (req: Request, _res: Response, next: NextFunction) => {
     let data = {}
@@ -31,3 +32,16 @@ export default (schema: Schema) => {
     }
   }
 }
+
+export const validate = (schema: Schema, property: 'body' | 'params') => {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    const { error } = schema.validate(req[property]);
+    if (error) {
+      res.status(400).json({
+        message: `Validation failed: ${error.details[0].message}`,
+      });
+      return;
+    }
+    next();
+  };
+};

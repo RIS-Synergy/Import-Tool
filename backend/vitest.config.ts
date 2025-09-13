@@ -2,6 +2,11 @@ import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   test: {
+    globals: true, // Use Vitest globals (describe, it, expect)
+    environment: 'node', // Specify the environment
+    clearMocks: true, // Automatically clear mocks between tests
+    setupFiles: ['./vitest.setup.ts'], // not needed for now
+
     // exclude file with 'flycheck_'
     exclude: [
       '**/flycheck_*',
@@ -16,8 +21,6 @@ export default defineConfig({
       reporter: ['html'],
       reportsDirectory: process.env.VITEST_COVERAGE__REPORTSDIRECTORY || './tests/coverage'
     },
-
-    setupFiles: ['./vitest.setup.ts'],
 
     env: {
       LOKI_HOST: null,

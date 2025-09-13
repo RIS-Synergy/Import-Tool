@@ -13,12 +13,22 @@
             "src/types",
             "node_modules/@types"
         ],
-        "rootDir": "./src"
+        "rootDir": "./src",
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ]
+        }
     },
     "include": [
         "src/**/*.ts",
     ],
     "exclude": [
         "node_modules"
-    ]
+    ],
+    // "ts-node": {
+    //     "esm": true,
+    //     "experimentalSpecifierResolution": "node"
+    // }
 }

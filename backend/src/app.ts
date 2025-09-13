@@ -56,6 +56,9 @@ if (process.env.NODE_ENV === 'development' || process.env.CI) {
   app.use('/test-cris-api', require('./utils/dev/cris-api').default)
 }
 
+// Users
+app.use('/user', auth, require('./features/user/user.routes').default)
+
 // error handler last
 app.use(unexpectedErrorHandler)
 
