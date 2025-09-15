@@ -39,7 +39,7 @@ export default defineConfig({
       name: 'dev',
       use: {
         browserName: "chromium",
-        headless: false,
+        headless: true, // set to false if you want to see the browser
         video: "on",
         trace: "on",
         screenshot: "on",

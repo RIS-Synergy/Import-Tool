@@ -300,6 +300,7 @@ export const useApiUtils = () => {
     return result;
   }
 
+  const user = import ("./api/use-api-user")
   return {
     apiCall,
     getTemplates,
@@ -327,6 +328,9 @@ export const useApiUtils = () => {
     getFunction,
     setFunction,
     createFunction,
-    hasCRIS
+    hasCRIS,
+
+    // new API structure:
+    user
   };
 };

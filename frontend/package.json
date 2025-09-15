@@ -13,7 +13,7 @@
     "refactor-helper": "node ./scripts/refactor-helper.js",
     "playwright:test": "NODE_ENV=development npx playwright test -c ./tests/playwright.config.ts --workers=1 --project=dev",
     "playwright:ui": "NODE_ENV=development npx playwright test -c ./tests/playwright.config.ts --ui --project=dev",
-    "playwright:codegen": "NODE_ENV=development npx playwright codegen --target=html --output=./tests/playwright/demo.html --",
+    "playwright:codegen": "NODE_ENV=development npx playwright codegen --",
     "playwright:ci": "NODE_ENV=ci playwright test -c ./tests/playwright.config.ts --workers=1 test --project=ci"
   },
   "dependencies": {
