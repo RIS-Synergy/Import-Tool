@@ -5,7 +5,6 @@
       align="center" justify="center">
       <v-col>
         <v-sheet class="mx-auto" width="300">
-
           <div class="text-h3 mb-2">
             RIS Synergy
           </div>

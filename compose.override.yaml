@@ -23,16 +23,11 @@ services:
       - LOKI_HOST=${LOKI_HOST}
       - VITEST_COVERAGE__REPORTSDIRECTORY=./tests/.coverage
     ports:
-      - "3031:3001"
+      - "3031:3001"   # the backend itself
       - "51204:51204" # vitest, incl. UI
       - "3029:9229"   # debugger
-    command: >
-      sh -c "yarn debug"
 
   frontend:
-    # build:
-    #   target: development
-    env_file: frontend/.env.dev
     environment:
       - BACKEND_API_PROXY="http://backend:3001/**"
     ports:

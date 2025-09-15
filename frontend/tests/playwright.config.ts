@@ -8,10 +8,12 @@ if (process.env.NODE_ENV == 'development') {
   console.log('Using development environment variables from .env.dev');
   console.log('NODE_ENV', process.env.NODE_ENV)
   console.log('PLAYWRIGHT_BASE_URL', process.env.PLAYWRIGHT_BASE_URL)
+  console.log('BACKEND_API_PROXY', process.env.BACKEND_API_PROXY)
 } else if (process.env.NODE_ENV == 'ci') {
   console.log('Using CI environment variables from the compose file');
   console.log('NODE_ENV', process.env.NODE_ENV)
   console.log('PLAYWRIGHT_BASE_URL', process.env.PLAYWRIGHT_BASE_URL)
+  console.log('BACKEND_API_PROXY', process.env.BACKEND_API_PROXY)
 } else {
   console.log('NODE_ENV', process.env.NODE_ENV)
   throw new Error('NODE_ENV must be set to `development` or `ci`');

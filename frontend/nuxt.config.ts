@@ -63,3 +63,6 @@ export default defineNuxtConfig({
     }
   },
 })
+
+console.log('🛠️ NODE_ENV:', process.env.NODE_ENV)
+console.log('🔧 BACKEND_API_PROXY', process.env.BACKEND_API_PROXY)

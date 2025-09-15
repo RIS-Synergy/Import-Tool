@@ -6,6 +6,8 @@ const log = new Logger({ name: 'RIS Registry' });
 
 const registryURL = process.env.RIS_REGISTRY_URL
 
+import localRegistry from '../../resources/ris-registry.json' with { type: "json" };
+
 type Member = {
   id: string,
   acronym: string,
@@ -35,7 +37,6 @@ async function fetchRegistry() {
 }
 
 function getLocalRegistryFile() {
-  const localRegistry = require('../../resources/ris-registry.json')
   return localRegistry.member
 }
 
