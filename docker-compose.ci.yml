@@ -60,3 +60,4 @@ services:
       - PLAYWRIGHT_BASE_URL=http://frontend-ci:3000
       - PLAYWRIGHT_HTML_OUTPUT_DIR=/app/frontend/.playwright-ci
       - PLAYWRIGHT_OUTPUT_DIR=/app/frontend/.playwright-ci
+      - CI_TIME_DELAY=7 # prevent errors when the runner (GitHub Actions) is slow

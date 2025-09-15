@@ -29,10 +29,15 @@ setup('authenticate', async ({ page }) => {
 
   // This is important ❗
   if (process.env.NODE_ENV === "ci") {
+    var delay = 3000;
+    if (process.env.CI_TIME_DELAY) {
+      delay = parseInt(process.env.CI_TIME_DELAY) * 1000;
+    }
+
     // This is needed for making Nuxt load properly withing GitHub Action,
     // when everything needs to be running when a new docker file is being started
-    console.log('🚧 CI, 3 second delay...')
-    await page.waitForTimeout(3000);
+    console.log(`🚧 CI, ${delay / 1000} second delay...`)
+    await page.waitForTimeout(delay);
   }
 
   await page.getByRole('textbox', { name: 'User name User name' }).fill('admin');
