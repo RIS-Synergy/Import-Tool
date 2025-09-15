@@ -1,34 +1,31 @@
 {
-    "compilerOptions": {
-        "target": "ESNext",
-        "module": "CommonJS",
-        "sourceMap": true,
-        "outDir": "./dist",
-        "esModuleInterop": true,
-        "resolveJsonModule": true,
-        "types": [
-            "node"
-        ],
-        "typeRoots": [
-            "src/types",
-            "node_modules/@types"
-        ],
-        "rootDir": "./src",
-        "baseUrl": ".",
-        "paths": {
-            "@/*": [
-                "src/*"
-            ]
-        }
-    },
-    "include": [
-        "src/**/*.ts",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ESNext",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "types": [
+      "node"
     ],
-    "exclude": [
-        "node_modules"
+    "typeRoots": [
+      "src/types",
+      "node_modules/@types"
     ],
-    // "ts-node": {
-    //     "esm": true,
-    //     "experimentalSpecifierResolution": "node"
-    // }
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

@@ -1,7 +1,6 @@
 import express, { Router, Request, Response } from "express"
-import { Logger } from "../utils/logger";
+import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: 'view:templates'});
-const fs = require('fs')
 const router: Router = express.Router()
 
 import { PrismaClient } from '@prisma/client'

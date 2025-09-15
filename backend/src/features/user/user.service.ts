@@ -1,6 +1,6 @@
-import prisma from '@/lib/prisma';
+import prisma from '../../lib/prisma.js';
 
-import { User } from './user.model';
+import { User } from './user.model.js';
 
 type UserCreationParams = Omit<User, 'id'>;
 

@@ -1,11 +1,11 @@
 import { PrismaClient } from '@prisma/client'
-import { Logger } from "../utils/logger";
-import { Registry } from "./Registry";
+import { Logger } from "../utils/logger.js";
+import { Registry } from "./Registry.js";
 
 const prisma = new PrismaClient()
 const log = new Logger({ name: 'model:Project' });
 
-import { ResearchInstitution } from './ResearchInstitution'
+import { ResearchInstitution } from './ResearchInstitution.js'
 // import { registry } from "../server";
 
 type FundedItem = Record<string, any>; // Generic type for unknown nested structures

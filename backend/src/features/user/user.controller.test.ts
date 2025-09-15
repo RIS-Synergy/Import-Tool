@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
+import { UserController } from './user.controller.js';
+import { UserService } from './user.service.js';
 import { Request, Response } from 'express';
-import { User } from './user.model';
+import { User } from './user.model.js';
 
 vi.mock('./user.service', () => {
   const mockUserService = {};

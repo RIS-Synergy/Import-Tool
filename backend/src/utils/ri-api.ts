@@ -1,7 +1,7 @@
-import { Logger } from "../utils/logger";
+import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: 'utils:ri-api' });
 
-import { ResearchInstitutionError } from '../utils/errors'
+import { ResearchInstitutionError } from '../utils/errors.js'
 
 type RISResult = {
   error?: any

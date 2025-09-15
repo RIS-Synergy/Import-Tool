@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
-import { CustomError, BadRequestError, ResearchInstitutionError, AuthenticationError } from '../utils/errors'
+import { CustomError, BadRequestError, ResearchInstitutionError, AuthenticationError } from '../utils/errors.js'
 
-import { Logger } from "../utils/logger";
+import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: 'error:unexpected'});
 
 export function unexpectedErrorHandler(err: Error, _req: Request, res: Response, next: Function) {

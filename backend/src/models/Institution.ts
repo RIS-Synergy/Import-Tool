@@ -1,4 +1,4 @@
-import domains from '../../resources/ri-domains.json'
+import domains from '../../resources/ri-domains.json' with { type: "json" };
 
 type InstitutionDomain = {
   name: string

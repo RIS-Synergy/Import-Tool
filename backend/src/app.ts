@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
-import { unexpectedErrorHandler } from './middleware/errorHandler'
+import { unexpectedErrorHandler } from './middleware/errorHandler.js'
 
-import auth from './middleware/auth'
-import { Logger } from './utils/logger'
+import auth from './middleware/auth.js'
+import { Logger } from './utils/logger.js'
 const log = new Logger({ name: 'app' });
 
 const app = express()
@@ -18,46 +18,46 @@ app.get('/', (_req: Request, res: Response) => {
 })
 
 // fa: funding agency (Fördergeber)
-app.use('/fa', auth, require('./views/funding-agency').default)
+app.use('/fa', auth, (await import('./views/funding-agency.js')).default)
 
 // ri: research institution (Forschungsstätte)
-app.use('/ri', auth, require('./views/research-institution').default)
+app.use('/ri', auth, (await import('./views/research-institution.js')).default)
 
 // transform: Transformations
-app.use('/transform', auth, require('./views/transform').default)
+app.use('/transform', auth, (await import('./views/transform.js')).default)
 
 // functions
-app.use('/functions', auth, require('./views/functions').default)
+app.use('/functions', auth, (await import('./views/functions.js')).default)
 
 // ÖFOS 2012
-app.use('/oefos', require('./views/oefos').default)
+app.use('/oefos', (await import('./views/oefos.js')).default)
 
 // Project
-app.use('/project', auth, require('./views/project').default)
+app.use('/project', auth, (await import('./views/project.js')).default)
 
 // Templates
-app.use('/templates', auth, require('./views/templates').default)
+app.use('/templates', auth, (await import('./views/templates.js')).default)
 
 // Differences
-app.use('/diff', auth, require('./views/diff').default)
+app.use('/diff', auth, (await import('./views/diff.js')).default)
 
 // Authentication
-app.use('/auth', require('./views/auth').default)
+app.use('/auth', (await import('./views/auth.js')).default)
 
 // Institution
-app.use('/institution', auth, require('./views/institution').default)
+app.use('/institution', auth, (await import('./views/institution.js')).default)
 
 // if in development mode or ci
 if (process.env.NODE_ENV === 'development' || process.env.CI) {
   // Funding Agency API mock
-  app.use('/test-fa-api', require('./utils/dev/fa-api').default)
+  app.use('/test-fa-api', (await import('./utils/dev/fa-api.js')).default)
 
   // CRIS API mock
-  app.use('/test-cris-api', require('./utils/dev/cris-api').default)
+  app.use('/test-cris-api', (await import('./utils/dev/cris-api.js')).default)
 }
 
 // Users
-app.use('/user', auth, require('./features/user/user.routes').default)
+app.use('/user', auth, (await import('./features/user/user.routes.js')).default)
 
 // error handler last
 app.use(unexpectedErrorHandler)

@@ -1,14 +1,14 @@
 import express, { Router, Request, Response } from "express"
 
-import { callRIApi } from '../utils/ri-api'
+import { callRIApi } from '../utils/ri-api.js'
 
-import { Logger } from "../utils/logger";
+import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: 'view:ri' });
 
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
-import { ResearchInstitution } from "../models/ResearchInstitution"
-import { Transform } from '../models/Transform'
+import { ResearchInstitution } from "../models/ResearchInstitution.js"
+import { Transform } from '../models/Transform.js'
 
 const router: Router = express.Router()
 

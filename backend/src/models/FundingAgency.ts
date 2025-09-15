@@ -1,15 +1,15 @@
 import { PrismaClient } from '@prisma/client'
 
-import { Project } from './Project'
-import { Differ } from './Diff'
-import { getAuthEndpoint } from "../utils/oauth2";
+import { Project } from './Project.js'
+import { Differ } from './Diff.js'
+import { getAuthEndpoint } from "../utils/oauth2.js";
 
 const prisma = new PrismaClient()
 
-import { Logger } from "../utils/logger";
+import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: 'model:FundingAgency' });
 
-import { parseTimeoutString } from "../utils/sync";
+import { parseTimeoutString } from "../utils/sync.js";
 
 export class FundingAgency {
   pageSize = 1000;

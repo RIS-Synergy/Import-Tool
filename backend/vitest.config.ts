@@ -1,6 +1,12 @@
 import { defineConfig } from 'vitest/config'
+import { resolve } from "path";
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "src"),
+    },
+  },
   test: {
     globals: true, // Use Vitest globals (describe, it, expect)
     environment: 'node', // Specify the environment
@@ -12,6 +18,7 @@ export default defineConfig({
       '**/flycheck_*',
       '**/node_modules/**',
       "scripts",
+      'dist/**',
       "resources",
     ],
 

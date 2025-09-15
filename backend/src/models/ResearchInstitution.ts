@@ -1,8 +1,8 @@
-import { callRIApi } from '../utils/ri-api'
-import { ResearchInstitutionError } from '../utils/errors'
-import { Logger } from "../utils/logger";
+import { callRIApi } from '../utils/ri-api.js'
+import { ResearchInstitutionError } from '../utils/errors.js'
+import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: 'model:RI' });
-import _ from 'lodash/fp';
+import _ from 'lodash';
 
 type RISystemID = 'Pure' | 'Custom'
 type Category = 'Project' | 'Application' | 'Award'

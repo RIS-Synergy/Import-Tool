@@ -1,10 +1,10 @@
-import { Logger } from "../utils/logger";
+import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: 'model:Function' });
 
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-import { Executer } from './Executer'
+import { Executer } from './Executer.js'
 
 export class Function {
   name: string

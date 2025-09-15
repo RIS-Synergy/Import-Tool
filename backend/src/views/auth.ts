@@ -2,15 +2,15 @@ import express, { Router, Request, Response } from "express"
 
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { AuthenticationError } from '../utils/errors'
+import { AuthenticationError } from '../utils/errors.js'
 
 import { PrismaClient } from '@prisma/client'
-import auth from '../middleware/auth'
-import { login } from './validators'
-import validator from '../middleware/validator'
+import auth from '../middleware/auth.js'
+import { login } from './validators.js'
+import validator from '../middleware/validator.js'
 
 export const prisma = new PrismaClient()
-import { Logger } from "../utils/logger";
+import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: 'view:auth' });
 
 const router: Router = express.Router()

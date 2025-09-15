@@ -1,11 +1,11 @@
 import express, { Router, Request, Response } from "express"
 
-import { Logger } from "../utils/logger";
+import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: 'view:functions' });
 
 const router: Router = express.Router()
 
-import { Function } from '../models/Function'
+import { Function } from '../models/Function.js'
 
 // list all functions
 router.get('/', async (req: Request, res: Response) => {

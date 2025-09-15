@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
-import { AuthenticationError } from '../utils/errors'
+import { AuthenticationError } from '../utils/errors.js'
 
-import { Logger } from '../utils/logger'
+import { Logger } from '../utils/logger.js'
 const log = new Logger({ name: 'middleware:auth' });
 
 export default (req: Request, _res: Response, next: NextFunction) => {

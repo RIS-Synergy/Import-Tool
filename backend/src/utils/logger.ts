@@ -1,5 +1,5 @@
 import { Logger as TSLogger, ILogObj } from "tslog";
-import pino from 'pino'
+import { pino } from 'pino'
 import type { LokiOptions } from 'pino-loki'
 
 const pinoTransport = pino.transport<LokiOptions>({

@@ -1,7 +1,7 @@
 import { ofetch } from "ofetch";
-import { getAuthEndpoint } from '../utils/oauth2'
+import { getAuthEndpoint } from '../utils/oauth2.js'
 
-import { Logger } from "../utils/logger";
+import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: 'RIS Registry' });
 
 const registryURL = process.env.RIS_REGISTRY_URL

@@ -1,5 +1,5 @@
-import { Function } from "./Function";
-import { Executer } from "./Executer";
+import { Function } from "./Function.js";
+import { Executer } from "./Executer.js";
 
 export class Transform {
   public functions: Function[] = null

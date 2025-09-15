@@ -1,14 +1,14 @@
 import express, { Router, Request, Response } from "express"
 
-import { Logger } from "../utils/logger";
+import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: 'view:transform' });
-import { Project } from '../models/Project';
-import { Diff } from '../models/Diff';
-import similarity from '../utils/similarity'
+import { Project } from '../models/Project.js';
+import { Diff } from '../models/Diff.js';
+import similarity from '../utils/similarity.js'
 
 const router: Router = express.Router()
 
-import { ResearchInstitution } from '../models/ResearchInstitution'
+import { ResearchInstitution } from '../models/ResearchInstitution.js'
 const ri = new ResearchInstitution()
 
 router.post('/:id', async (req: Request, res: Response) => {

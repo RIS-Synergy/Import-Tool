@@ -1,15 +1,15 @@
 import express, { Router, Request, Response } from "express"
 import * as XLSX from "xlsx";
-import { Logger } from "../utils/logger";
+import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: 'view:project' });
 // const fs = require('fs')
 const router: any = express.Router()
 
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
-import { Project } from '../models/Project'
-import { Institution } from '../models/Institution'
-import { Excel } from '../models/Excel'
+import { Project } from '../models/Project.js'
+import { Institution } from '../models/Institution.js'
+import { Excel } from '../models/Excel.js'
 
 import multer from 'multer'
 const upload = multer();

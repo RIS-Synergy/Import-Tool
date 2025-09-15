@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from "express"
-import { Logger } from "../utils/logger";
-const fs = require('fs')
+import { Logger } from "../utils/logger.js";
+import fs from 'fs'
 const router: Router = express.Router()
 
 // ÖFOS 2012 from https://www.data.gv.at/katalog/dataset/stat_ofos-2012

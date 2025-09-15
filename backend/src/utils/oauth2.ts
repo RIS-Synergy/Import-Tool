@@ -1,9 +1,9 @@
 import { ofetch } from "ofetch";
 
-import { Logger } from "../utils/logger";
+import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: 'utils:oauth2'});
 
-import { envLogs } from "./env-logs";
+import { envLogs } from "./env-logs.js";
 
 export async function getAuthEndpoint (url: string) {
   try {

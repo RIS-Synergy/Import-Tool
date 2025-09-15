@@ -1,10 +1,10 @@
-import { Logger } from "../utils/logger";
-import { ResearchInstitution } from "./ResearchInstitution"
-import { Diff } from "./Diff";
-import { Template } from "./Template";
+import { Logger } from "../utils/logger.js";
+import { ResearchInstitution } from "./ResearchInstitution.js"
+import { Diff } from "./Diff.js";
+import { Template } from "./Template.js";
 const log = new Logger({ name: "DiffSync" });
 
-import { parseTimeoutString } from "../utils/sync";
+import { parseTimeoutString } from "../utils/sync.js";
 
 type FoundDiff = {
   risId: string;

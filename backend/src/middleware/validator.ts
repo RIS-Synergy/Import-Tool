@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { Schema } from 'joi'
-import { BadRequestError } from '../utils/errors'
+import { BadRequestError } from '../utils/errors.js'
 
 // Legacy! (see function below)
 export default (schema: Schema) => {

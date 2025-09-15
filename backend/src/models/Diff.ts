@@ -3,13 +3,13 @@ import _ from 'lodash';
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-import { Logger } from "../utils/logger";
+import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: 'Diff' });
 
-import { Project } from './Project';
-import { Template } from './Template';
-import { Transform } from './Transform';
-import { ResearchInstitution } from './ResearchInstitution';
+import { Project } from './Project.js';
+import { Template } from './Template.js';
+import { Transform } from './Transform.js';
+import { ResearchInstitution } from './ResearchInstitution.js';
 
 export class Diff {
   risData = null

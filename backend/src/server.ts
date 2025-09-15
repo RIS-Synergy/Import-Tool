@@ -1,9 +1,9 @@
 import dotenv from "dotenv";
-import app from './app'
-import { Logger } from "./utils/logger";
-import { envLogs } from "./utils/env-logs";
-import { FundingAgency } from "./models/FundingAgency";
-import { DiffSync } from "./models/DiffSync";
+import app from './app.js'
+import { Logger } from "./utils/logger.js";
+import { envLogs } from "./utils/env-logs.js";
+import { FundingAgency } from "./models/FundingAgency.js";
+import { DiffSync } from "./models/DiffSync.js";
 
 const log = new Logger({ name: "server" });
 const port = process.env.PORT || 3000

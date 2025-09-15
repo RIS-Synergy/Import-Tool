@@ -3,16 +3,16 @@ import express, { Router, Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-import { getAuthEndpoint } from "../utils/oauth2";
-import { Logger } from "../utils/logger";
+import { getAuthEndpoint } from "../utils/oauth2.js";
+import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: "view:funding-agency" });
 
-import { Registry } from "../models/Registry";
+import { Registry } from "../models/Registry.js";
 const registry = new Registry()
 registry.run()
 
-import { filter as filterValidator } from './validators'
-import validator from '../middleware/validator'
+import { filter as filterValidator } from './validators.js'
+import validator from '../middleware/validator.js'
 
 const router: Router = express.Router();
 
