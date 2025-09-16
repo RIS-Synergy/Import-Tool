@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ResearchInstitutionService } from './research-institution.service.js';
+import { ResearchInstitutionService } from './services/research-institution.service.js';
 
 export class ResearchInstitutionController {
   private readonly researchInstitutionService = new ResearchInstitutionService();

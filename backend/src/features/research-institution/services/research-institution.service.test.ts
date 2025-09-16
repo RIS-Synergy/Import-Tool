@@ -42,9 +42,9 @@ describe('ResearchInstitutionService', () => {
   });
 
   it('should find a research institution by id', async () => {
-    const mockInstitution = { 
-      id: 1, 
-      name: 'Test Institution', 
+    const mockInstitution = {
+      id: 1,
+      name: 'Test Institution',
       domain: 'test.edu',
       rorId: 'https://ror.org/12345'
     };

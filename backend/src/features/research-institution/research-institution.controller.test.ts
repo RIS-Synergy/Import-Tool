@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
 import { ResearchInstitutionController } from './research-institution.controller.js';
-import { ResearchInstitutionService } from './research-institution.service.js';
+import { ResearchInstitutionService } from './services/research-institution.service.js';
 import { Request, Response } from 'express';
 import { ResearchInstitution } from './research-institution.model.js';
 
-vi.mock('./research-institution.service', () => {
+vi.mock('./services/research-institution.service', () => {
   const mockResearchInstitutionService = {};
   return { ResearchInstitutionService: vi.fn(() => mockResearchInstitutionService) };
 });
@@ -38,7 +38,9 @@ describe('ResearchInstitutionController', () => {
         id: 1,
         name: 'Test Institution',
         domain: 'test.edu',
-        rorId: 'https://ror.org/12345'
+        rorId: 'https://ror.org/12345',
+        createdDate: new Date(),
+        modifiedDate: new Date()
       }
     ];
     mockResearchInstitutionService.findAll.mockResolvedValue(mockInstitutions);
@@ -56,7 +58,9 @@ describe('ResearchInstitutionController', () => {
       id: 1,
       name: 'New Institution',
       domain: 'new.edu',
-      rorId: 'https://ror.org/67890'
+      rorId: 'https://ror.org/67890',
+      createdDate: new Date(),
+      modifiedDate: new Date()
     };
     mockRequest.body = newInstitutionInput;
     mockResearchInstitutionService.create.mockResolvedValue(createdInstitution);
@@ -70,9 +74,9 @@ describe('ResearchInstitutionController', () => {
 
   describe('getResearchInstitutionById', () => {
     it('should return an institution with a 200 status', async () => {
-      const mockInstitution = { 
-        id: 1, 
-        name: 'Test Institution', 
+      const mockInstitution = {
+        id: 1,
+        name: 'Test Institution',
         domain: 'test.edu',
         rorId: 'https://ror.org/12345'
       };

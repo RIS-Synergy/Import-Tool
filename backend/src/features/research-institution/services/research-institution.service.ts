@@ -1,5 +1,5 @@
-import prisma from '../../lib/prisma.js';
-import { ResearchInstitution } from './research-institution.model.js';
+import prisma from '../../../lib/prisma.js';
+import { ResearchInstitution } from '../research-institution.model.js';
 
 type ResearchInstitutionCreationParams = Omit<ResearchInstitution, 'id'>;
 
