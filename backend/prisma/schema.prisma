@@ -67,6 +67,8 @@ model User {
   password String?
 
   researchInstitution ResearchInstitution? @relation(fields: [researchInstitutionId], references: [id])
+  researchInstitutionId Int?
+
   permission String[] @default(["edit"])
 }
 

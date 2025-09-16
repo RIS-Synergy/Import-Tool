@@ -20,7 +20,7 @@ prisma.project.count().then((count) => {
 
 async function createUsers() {
   await prisma.user.create({
-    data: { username: 'admin', password: hash('admin') }
+    data: { username: 'admin', password: hash('admin'), permission: ['admin', 'edit'] }
   })
   await prisma.user.create({
     data: { username: 'user', password: hash('password') }
