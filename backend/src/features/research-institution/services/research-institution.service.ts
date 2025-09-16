@@ -1,5 +1,7 @@
 import prisma from '../../../lib/prisma.js';
 import { ResearchInstitution } from '../research-institution.model.js';
+import domains from '../../../../resources/ri-domains.json' with { type: "json" };
+import { importDomains } from './import-domains.js';
 
 type ResearchInstitutionCreationParams = Omit<ResearchInstitution, 'id'>;
 
@@ -18,5 +20,9 @@ export class ResearchInstitutionService {
     return prisma.researchInstitution.create({
       data: institutionData,
     });
+  }
+
+  public async importDomains() {
+    importDomains(domains);
   }
 }
