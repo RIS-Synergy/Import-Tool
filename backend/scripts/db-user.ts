@@ -18,19 +18,33 @@ async function createUsers() {
     message: 'Enter password'
   });
 
-  // console.log(username, password)
-  // process.exit(1)
+  var { isAdmin } = await prompts({
+    type: 'confirm',
+    name: 'isAdmin',
+    message: 'Should this user have admin permissions?',
+    initial: false
+  });
 
   if (!username || !password) {
     console.error('Username and password are required')
     process.exit(1)
   }
 
+  // Set permissions based on admin selection
+  const permissions = isAdmin ? ['admin', 'edit'] : ['edit'];
+
   // create or update user
   await prisma.user.upsert({
     where: { username },
-    update: { password: hash(password) },
-    create: { username, password: hash(password) }
+    update: {
+      password: hash(password),
+      permission: permissions
+    },
+    create: {
+      username,
+      password: hash(password),
+      permission: permissions
+    }
   })
 }
 

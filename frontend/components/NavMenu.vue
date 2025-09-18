@@ -49,6 +49,16 @@
       link
       title="Awards / Grants"
     />
+    <v-list-item v-if="isAdmin()">
+      <span>
+        im an admin
+      </span>
+    </v-list-item>
+    <v-list-item v-else>
+      <span>
+        im <b>NOT</b> an admin
+      </span>
+    </v-list-item>
     <v-divider></v-divider>
     <v-list-item :to="`/searchCRIS`" link title="CRIS Search">
       <template v-slot:append>
@@ -75,6 +85,8 @@ import { useTheme } from "vuetify";
 const theme = useTheme();
 
 const store = useUserSettingsStore();
+
+const { isAdmin } = useUser();
 
 // if (store.dark) {
 //   theme.global.name.value = "dark";

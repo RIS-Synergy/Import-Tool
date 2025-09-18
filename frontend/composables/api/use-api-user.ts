@@ -1,7 +1,7 @@
-const store = useUserSettingsStore()
-const router = useRouter()
-
 const logout = async (name: string) => {
+  const store = useUserSettingsStore()
+  const router = useRouter()
+
   store.setToken(null);
   store.setUser(null);
 

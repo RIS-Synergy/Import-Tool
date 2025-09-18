@@ -25,6 +25,7 @@ router.post('/login', validator(login), async (req: Request, res: Response) => {
       username
     }
   })
+  log.info(user)
 
   if (!user) {
     throw new AuthenticationError()
@@ -33,10 +34,15 @@ router.post('/login', validator(login), async (req: Request, res: Response) => {
   if (!validPass) {
     throw new AuthenticationError()
   }
+
+  const userDisplay = {
+    username: user.username,
+    permission: user.permission,
+  }
   const token = {
     user: {
-      username: user.username,
-      id: user.id
+      id: user.id,
+      ...userDisplay
     }
   }
   const tokenSigned = jwt.sign(token, process.env.JWT_SECRET, {
@@ -45,9 +51,7 @@ router.post('/login', validator(login), async (req: Request, res: Response) => {
 
   res.json({
     token: tokenSigned,
-    user: {
-      username: user.username,
-    }
+    user: userDisplay
   })
 })
 
