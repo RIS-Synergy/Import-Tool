@@ -1,6 +1,8 @@
 export default () => {
   const isAdmin = () => {
     const { user } = useUserSettingsStore()
+    if (!user) return false
+
     const { permission, username } = user
     const isAdmin = permission &&
       Array.isArray(permission) &&
