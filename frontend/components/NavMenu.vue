@@ -49,16 +49,6 @@
       link
       title="Awards / Grants"
     />
-    <v-list-item v-if="isAdmin()">
-      <span>
-        im an admin
-      </span>
-    </v-list-item>
-    <v-list-item v-else>
-      <span>
-        im <b>NOT</b> an admin
-      </span>
-    </v-list-item>
     <v-divider></v-divider>
     <v-list-item :to="`/searchCRIS`" link title="CRIS Search">
       <template v-slot:append>
@@ -71,11 +61,17 @@
         <v-icon>mdi-file-code-outline</v-icon>
       </template>
     </v-list-item>
-
     <v-divider></v-divider>
-    <!-- <v-list-item :to="`/fundings`" link title="Fundings" /> -->
     <v-list-item :to="`/info`" link title="Info" />
-    <!-- <v-list-item :to="`/pure`" link title="Pure" /> -->
+    <!-- Admin -->
+    <v-divider v-if="isAdmin()"></v-divider>
+    <v-list-item v-if="isAdmin()" :to="`/ri`" link title="Research Institutions">
+      <template v-slot:append>
+        <v-icon>mdi-school-outline</v-icon>
+      </template>
+    </v-list-item>
+    <v-divider v-if="isAdmin()"></v-divider>
+    <!-- End Admin -->
   </v-list>
 </template>
 

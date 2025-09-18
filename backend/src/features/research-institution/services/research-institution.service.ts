@@ -7,7 +7,9 @@ type ResearchInstitutionCreationParams = Omit<ResearchInstitution, 'id'>;
 
 export class ResearchInstitutionService {
   public async findAll(): Promise<ResearchInstitution[]> {
-    return prisma.researchInstitution.findMany();
+    return prisma.researchInstitution.findMany({
+      orderBy: { name: 'asc' },
+    });
   }
 
   public async findById(id: number): Promise<ResearchInstitution | null> {

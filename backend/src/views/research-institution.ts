@@ -10,9 +10,14 @@ const prisma = new PrismaClient()
 import { ResearchInstitution } from "../models/ResearchInstitution.js"
 import { Transform } from '../models/Transform.js'
 
+import { ResearchInstitutionController } from '../features/research-institution/research-institution.controller.js';
+
 const router: Router = express.Router()
 
 const ri = new ResearchInstitution()
+
+const researchInstitutionController = new ResearchInstitutionController();
+router.get('/', researchInstitutionController.getAllResearchInstitutions);
 
 router.post('/searchAny', async (req: any, res: any) => {
   // TODO there is a class for this already in ResearchInstitution.searchCategories

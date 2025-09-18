@@ -301,6 +301,8 @@ export const useApiUtils = () => {
   }
 
   const user = import ("./api/use-api-user")
+  const ri = import ("./api/ri")
+
   return {
     apiCall,
     getTemplates,
@@ -331,6 +333,7 @@ export const useApiUtils = () => {
     hasCRIS,
 
     // new API structure:
-    user
+    user,
+    ri
   };
 };
