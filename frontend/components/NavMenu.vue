@@ -70,6 +70,11 @@
         <v-icon>mdi-school-outline</v-icon>
       </template>
     </v-list-item>
+    <v-list-item v-if="isAdmin()" :to="`/users`" link title="Users">
+      <template v-slot:append>
+        <v-icon>mdi-account-group</v-icon>
+      </template>
+    </v-list-item>
     <v-divider v-if="isAdmin()"></v-divider>
     <!-- End Admin -->
   </v-list>

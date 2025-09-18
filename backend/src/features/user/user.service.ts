@@ -4,9 +4,20 @@ import { User } from './user.model.js';
 
 type UserCreationParams = Omit<User, 'id'>;
 
+type UserWithoutPassword = Omit<User, 'password'>;
+
 export class UserService {
-  public async findAll(): Promise<User[]> {
-    return prisma.user.findMany();
+  public async findAll(): Promise<UserWithoutPassword[]> {
+    return prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        researchInstitution: true,
+        permission: true
+        // Exclude password by not selecting it
+      },
+    });
   }
 
   public async findById(id: number): Promise<User | null> {
