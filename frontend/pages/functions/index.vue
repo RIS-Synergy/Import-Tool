@@ -1,4 +1,6 @@
 <template>
+  <AppBar title="Functions" />
+
   <v-container>
     <v-card v-for="f in data" class="mb-1">
       <v-card-title>{{ f.name }}</v-card-title>

@@ -1,6 +1,7 @@
 <template>
+  <AppBar title="CRIS Search" />
+
   <v-container>
-    <h2>CRIS Search</h2>
     <v-row align="center">
       <v-col cols="11">
         <v-text-field

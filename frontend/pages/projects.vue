@@ -65,6 +65,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+  layout: "projects",
+});
+
 const loading = ref(false);
 const serverItems = ref([]);
 const totalItems = ref(0);

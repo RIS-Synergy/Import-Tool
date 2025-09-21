@@ -31,4 +31,4 @@ backend/resources/whitelistProjects.json
 /frontend/tests/playwright-report/
 /frontend/.playwright-dev/
 /frontend/.playwright-ci/
-/frontend/tests/.auth
+/frontend/tests/.auth-*
