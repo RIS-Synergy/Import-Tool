@@ -66,7 +66,7 @@ model User {
   username String  @unique
   password String?
 
-  researchInstitution ResearchInstitution? @relation(fields: [researchInstitutionId], references: [id])
+  researchInstitution   ResearchInstitution? @relation(fields: [researchInstitutionId], references: [id])
   researchInstitutionId Int?
 
   permission String[] @default(["edit"])
@@ -99,10 +99,10 @@ model Diff {
 }
 
 model ResearchInstitution {
-  id   Int    @id @default(autoincrement())
-  name String @unique
+  id     Int    @id @default(autoincrement())
+  name   String @unique
   domain String @unique
-  rorId String @unique
+  rorId  String @unique
 
   users User[]
 

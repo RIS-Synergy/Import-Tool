@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "@prisma/client": "5.20.0",
+    "@types/yargs": "^17.0.33",
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.7.2",
     "dotenv": "^16.4.5",
@@ -72,6 +73,7 @@
     "tsx": "^4.20.5",
     "undici": "^7.5.0",
     "xlsx": "^0.18.5",
-    "yaml": "^2.4.3"
+    "yaml": "^2.4.3",
+    "yargs": "^18.0.0"
   }
 }
