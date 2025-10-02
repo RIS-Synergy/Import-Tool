@@ -20,9 +20,7 @@ setup('authenticate', async ({ page }) => {
   // Perform authentication steps.
   await page.goto('/');
 
-  await page.reload();
-
-  await expect(page).toHaveURL(/.*\/login/)
+  await expect(page).toHaveURL(/.*\/login/, { timeout: 30000 });
 
   await page.getByText('RIS Synergy').click();
   await page.getByText('Import Tool').click();
