@@ -51,9 +51,10 @@ export default defineConfig({
       name: 'ci',
       use: {
         browserName: "chromium",
+        headless: true,
         video: "retain-on-failure",
         trace: "on",
-        screenshot: "on"
+        screenshot: "on",
       },
       testMatch: '*tests/*.spec.ts',
       testIgnore: /.*dev\.spec\.ts/,

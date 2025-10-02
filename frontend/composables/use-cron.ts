@@ -2,6 +2,11 @@ import { apiCall } from './use-api-utils'
 
 const refresh = async () => {
   const store = useUserSettingsStore();
+  if (!store.token) {
+    console.log('No token; skip refresh')
+    return;
+  }
+
   const router = useRouter();
   const result = await apiCall('auth/refresh', 'GET')
   if (result && result.token) {
