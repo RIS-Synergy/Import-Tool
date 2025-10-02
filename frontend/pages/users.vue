@@ -14,7 +14,7 @@
       <tr v-for="item in data" :key="item.id">
         <td>{{ item.username }}</td>
         <td>{{ item.email }}</td>
-        <td>{{ item.researchInstitution }}</td>
+        <td>{{ riName(item) }}</td>
         <td>
           <v-chip
             v-for="(permission, index) in item.permission"
@@ -34,4 +34,9 @@
 const { users } = useApiUtils();
 const { listAll } = (await users).default;
 const data = await listAll();
+
+// item.researchInstitution.name
+function riName (item) {
+  return item.researchInstitution ? item.researchInstitution.name : '-';
+}
 </script>

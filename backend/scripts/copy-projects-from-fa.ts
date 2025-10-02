@@ -8,6 +8,9 @@ async function main () {
   const registry = new Registry()
   await registry.run()
 
+  // sleep a few seconds
+  await new Promise(resolve => setTimeout(resolve, 3000));
+
   const agency = new FundingAgency()
   // const projects = await agency.fetchAllPages()
   await agency.copyProjectToDatabase()
