@@ -6,11 +6,12 @@ export class UserController {
 
   public getAllUsers = async (req: Request, res: Response): Promise<void> => {
     let where = {};
-    if (!req.user.permission.includes('admin')) {
+    const permissions = req.user.permission || []
+    if (!permissions.includes('admin')) {
       // If not admin, only show users from the same research institution
       where = {
         researchInstitutionId: req.user.ri
-      };
+      }
     }
 
     try {

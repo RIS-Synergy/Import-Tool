@@ -18,6 +18,7 @@ describe('UserController', () => {
   beforeEach(() => {
     mockUserService = {
       findAll: vi.fn(),
+      findMany: vi.fn(),
       findById: vi.fn(),
       create: vi.fn(),
     };
@@ -25,7 +26,8 @@ describe('UserController', () => {
     (UserService as Mock).mockImplementation(() => mockUserService);
 
     userController = new UserController();
-    mockRequest = {};
+    mockRequest = {
+    };
     mockResponse = {
       status: vi.fn().mockReturnThis(),
       json: vi.fn(),
@@ -39,13 +41,17 @@ describe('UserController', () => {
         email: 'alice@example.com',
         username: 'alice',
         password: 'Wonderland!',
+        permission: ['admin'],
+        researchInstitutionId: 1,
       }
     ];
-    mockUserService.findAll.mockResolvedValue(mockUsers);
+    mockRequest.user = { permission: ['admin'] };
+
+    mockUserService.findMany.mockResolvedValue(mockUsers);
 
     await userController.getAllUsers(mockRequest as Request, mockResponse as Response);
 
-    expect(mockUserService.findAll).toHaveBeenCalledTimes(1);
+    expect(mockUserService.findMany).toHaveBeenCalledTimes(1);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith(mockUsers);
   });
@@ -57,6 +63,8 @@ describe('UserController', () => {
       email: 'alice@example.com',
       username: 'alice',
       password: 'Wonderland!',
+      permission: ['admin'],
+      researchInstitutionId: 1,
     };
     mockRequest.body = newUserInput;
     mockUserService.create.mockResolvedValue(createdUser);
@@ -106,12 +114,15 @@ describe('UserController', () => {
   describe('error handling', () => {
     // Test error handling for getAllUsers
     it('getAllUsers should return 500 on error', async () => {
-      mockUserService.findAll.mockRejectedValue(new Error('Something went wrong'));
+      mockRequest.user = { permission: ['user'] };
+
+      const errorMessage = 'Error retrieving users';
+      mockUserService.findMany.mockRejectedValue(new Error(errorMessage));
 
       await userController.getAllUsers(mockRequest as Request, mockResponse as Response);
 
       expect(mockResponse.status).toHaveBeenCalledWith(500);
-      expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Error retrieving users' });
+      expect(mockResponse.json).toHaveBeenCalledWith({ message: errorMessage });
     });
 
     // Test error handling for createUser
