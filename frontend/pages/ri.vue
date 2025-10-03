@@ -11,7 +11,8 @@
     </thead>
     <tbody>
       <tr v-for="item in data" :key="item.id">
-        <td>{{ item.name }}</td>
+        <td v-if="item.id === userRI"><b>{{ item.name }}</b></td>
+        <td v-else>{{ item.name }}</td>
         <td>{{ item.domain }}</td>
         <td>
           <v-btn
@@ -35,6 +36,9 @@
 const { ri } = useApiUtils();
 const { listAll } = (await ri).default;
 const data = await listAll();
+
+const store = useUserSettingsStore();
+const userRI = store.user && store.user.ri;
 
 function rorUrl(id) {
   return `https://ror.org/${id}`;

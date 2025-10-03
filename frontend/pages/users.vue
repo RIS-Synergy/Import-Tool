@@ -12,7 +12,10 @@
     </thead>
     <tbody>
       <tr v-for="item in data" :key="item.id">
-        <td>{{ item.username }}</td>
+        <td>
+          <b v-if="item.username === username">{{ item.username }}</b>
+          <span v-else> {{ item.username }} </span>
+        </td>
         <td>{{ item.email }}</td>
         <td>{{ riName(item) }}</td>
         <td>
@@ -35,8 +38,12 @@ const { users } = useApiUtils();
 const { listAll } = (await users).default;
 const data = await listAll();
 
+const store = useUserSettingsStore();
+
+const username = store.user && store.user.username;
+
 // item.researchInstitution.name
-function riName (item) {
-  return item.researchInstitution ? item.researchInstitution.name : '-';
+function riName(item) {
+  return item.researchInstitution ? item.researchInstitution.name : "-";
 }
 </script>

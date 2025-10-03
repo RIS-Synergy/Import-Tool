@@ -63,19 +63,22 @@
     </v-list-item>
     <v-divider></v-divider>
     <v-list-item :to="`/info`" link title="Info" />
+    <v-divider />
     <!-- Admin -->
-    <v-divider v-if="isAdmin()"></v-divider>
-    <v-list-item v-if="isAdmin()" :to="`/ri`" link title="Research Institutions">
+    <!-- <v-divider v-if="isAdmin()"></v-divider> -->
+    <v-list-item :to="`/ri`" link title="Research Institutions">
       <template v-slot:append>
         <v-icon>mdi-school-outline</v-icon>
       </template>
     </v-list-item>
+    <v-divider />
     <v-list-item :to="`/users`" link title="Users">
       <template v-slot:append>
         <v-icon>mdi-account-group</v-icon>
       </template>
     </v-list-item>
-    <v-divider v-if="isAdmin()"></v-divider>
+    <v-divider />
+    <!-- <v-divider v-if="isAdmin()"></v-divider> -->
     <!-- End Admin -->
   </v-list>
 </template>
