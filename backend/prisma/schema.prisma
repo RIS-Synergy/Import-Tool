@@ -105,7 +105,21 @@ model ResearchInstitution {
   rorId  String @unique
 
   users User[]
+  cris  CRIS[]
 
   createdDate  DateTime @default(now())
   modifiedDate DateTime @updatedAt
+}
+
+model CRIS {
+  id Int @id @default(autoincrement())
+
+  name   String @default("")
+  apiUrl String @default("")
+  data   Json   @default("{}")
+
+  researchInstitution   ResearchInstitution? @relation(fields: [researchInstitutionId], references: [id])
+  researchInstitutionId Int?
+
+  @@unique([researchInstitutionId, name])
 }

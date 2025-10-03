@@ -22,6 +22,7 @@
     "create-system-user": "tsx ./scripts/create-system-user.ts",
     "create-functions": "tsx ./scripts/create-functions.ts",
     "create-ri": "tsx ./scripts/create-ri.ts",
+    "create-cris": "tsx ./scripts/create-cris.ts",
     "copy": "tsx ./scripts/copy-projects-from-fa.ts",
     "fa-api": "tsx ./scripts/fa-api.ts",
     "json-to-excel": "tsx ./scripts/json-to-excel.ts"
