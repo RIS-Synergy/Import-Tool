@@ -20,6 +20,20 @@ export class UserService {
     });
   }
 
+  public async findMany(where: any): Promise<UserWithoutPassword[]> {
+    return prisma.user.findMany({
+      where,
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        researchInstitution: true,
+        permission: true
+        // Exclude password by not selecting it
+      },
+    });
+  }
+
   public async findById(id: number): Promise<User | null> {
     return prisma.user.findUnique({
       where: { id },

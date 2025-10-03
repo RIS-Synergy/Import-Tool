@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { user } from './utils';
+import { user, admin } from './utils';
 
 test.use(user);
 
@@ -24,3 +24,34 @@ test('User can Logout', async ({ page }) => {
   await expect(page).toHaveURL(/.*\/login/);
 
 });
+
+test.describe("User: 'user'", () => {
+  test.use(user);
+
+  test('Users table', async ({ page }) => {
+    await page.goto('/users');
+
+    // there should be only 1️⃣ users in the table
+    await expect(page.locator('table tbody tr')).toHaveCount(1);
+  });
+})
+
+test.describe("User: 'admin' 🔑", () => {
+  test.use(admin);
+
+  test('Users table', async ({ page }) => {
+    await page.goto('/users');
+
+    // general checks
+    await expect(page.getByRole('cell', { name: 'user', exact: true })).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'admin', exact: true })).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'admin edit' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'edit', exact: true })).toBeVisible();
+
+    // does not exist
+    await expect(page.getByRole('cell', { name: 'foo', exact: true })).not.toBeVisible();
+
+    // there should be only 2️⃣ users in the table
+    await expect(page.locator('table tbody tr')).toHaveCount(2);
+  });
+})

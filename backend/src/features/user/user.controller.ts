@@ -5,8 +5,16 @@ export class UserController {
   private readonly userService = new UserService();
 
   public getAllUsers = async (req: Request, res: Response): Promise<void> => {
+    let where = {};
+    if (!req.user.permission.includes('admin')) {
+      // If not admin, only show users from the same research institution
+      where = {
+        researchInstitutionId: req.user.ri
+      };
+    }
+
     try {
-      const users = await this.userService.findAll();
+      const users = await this.userService.findMany(where);
       res.status(200).json(users);
     } catch (error) {
       res.status(500).json({ message: 'Error retrieving users' });

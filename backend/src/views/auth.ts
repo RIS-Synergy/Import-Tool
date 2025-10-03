@@ -38,6 +38,7 @@ router.post('/login', validator(login), async (req: Request, res: Response) => {
   const userDisplay = {
     username: user.username,
     permission: user.permission,
+    ri: user.researchInstitutionId
   }
   const token = {
     user: {

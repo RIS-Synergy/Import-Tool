@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs'
 import { PrismaClient, TemplateType } from '@prisma/client'
 import { hash } from '../src/utils/auth'
+import { ResearchInstitutionService } from '../src/features/research-institution/services/research-institution.service.js';
 
 const prisma = new PrismaClient()
 
@@ -18,18 +19,38 @@ prisma.project.count().then((count) => {
   }
 })
 
+async function createResearchInstitutions() {
+  const service = new ResearchInstitutionService()
+  service.importDomains()
+}
+
 async function createUsers() {
-  await prisma.user.create({
-    data: { username: 'admin', password: hash('admin'), permission: ['admin', 'edit'] }
+  await prisma.user.upsert({
+    where: { username: 'admin' },
+    create: { username: 'admin', password: hash('admin'), permission: ['admin', 'edit'] },
+    update: { password: hash('admin'), permission: ['admin', 'edit'] }
   })
-  await prisma.user.create({
-    data: { username: 'user', password: hash('password') }
+  await prisma.user.upsert({
+    where: { username: 'user' },
+    create: {
+      username: 'user',
+      password: hash('user'),
+      researchInstitution: {
+        connect: { name: 'Universität Wien' }
+      }
+    },
+    update: {
+      password: hash('user'),
+      researchInstitution: {
+        connect: { name: 'Universität Wien' }
+      }
+    }
   })
 }
 
-async function importProjects () {
+async function importProjects() {
   // development
-  const jsonFile =  `./samples/projects/${process.env.RIS_TEST_DATA}`
+  const jsonFile = `./samples/projects/${process.env.RIS_TEST_DATA}`
   const result = await fs.readFile(jsonFile).then((data) => JSON.parse(data.toString()))
 
   result.forEach(async (project) => {
@@ -54,7 +75,7 @@ async function importProjects () {
   })
 }
 
-async function createTemplates () {
+async function createTemplates() {
   const templates = [
     {
       id: 1,
@@ -107,13 +128,14 @@ async function createTemplates () {
   })
 }
 
-function calculateCountOf (type: string) {
+function calculateCountOf(type: string) {
   prisma[type].count().then((count) => {
     console.log(`Count of ${type}s: ${count}`)
   })
 }
 
 async function main() {
+  await createResearchInstitutions()
   await createUsers()
   await importProjects()
   await createTemplates()

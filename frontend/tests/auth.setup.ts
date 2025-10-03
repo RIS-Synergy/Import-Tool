@@ -3,9 +3,10 @@ import { join } from 'path';
 import { existsSync } from 'fs';
 
 const env = process.env.NODE_ENV;
-const authFile = join(process.cwd(), `tests/.auth-${env}/user.json`);
 
-setup('authenticate', async ({ page }) => {
+async function authenticateUser(page: any, username: string, password: string) {
+  const authFile = join(process.cwd(), `tests/.auth-${env}/${username}.json`);
+
   // only if authFile file does not exist
   if (existsSync(authFile)) {
     console.log('✔ Auth file exists', authFile);
@@ -15,7 +16,6 @@ setup('authenticate', async ({ page }) => {
   // make sure backend is ready
   await page.goto('/api');
   await expect(page.getByText('RIS Synergy API')).toBeVisible();
-  // console.log('👆 Backend is ready')
 
   // Perform authentication steps.
   await page.goto('/');
@@ -38,8 +38,8 @@ setup('authenticate', async ({ page }) => {
     await page.waitForTimeout(delay);
   }
 
-  await page.getByRole('textbox', { name: 'User name User name' }).fill('admin');
-  await page.getByRole('textbox', { name: 'Password Password' }).fill('admin');
+  await page.getByRole('textbox', { name: 'User name User name' }).fill(username);
+  await page.getByRole('textbox', { name: 'Password Password' }).fill(password);
 
   const [loginRequest, loginResponse] = await Promise.all([
     page.waitForRequest('**/api/auth/login'),
@@ -50,8 +50,8 @@ setup('authenticate', async ({ page }) => {
   const postData = loginRequest.postDataJSON();
   console.log('➡️', postData)
 
-  expect(postData.username).toBe('admin');
-  expect(postData.password).toBe('admin');
+  expect(postData.username).toBe(username);
+  expect(postData.password).toBe(password);
 
   // Example: Wait for login response and check status
   console.log('⬅️', await loginResponse.json())
@@ -72,4 +72,12 @@ setup('authenticate', async ({ page }) => {
   // End of authentication steps.
   await page.context().storageState({ path: authFile });
   console.log('🔑 Auth file created', authFile);
+}
+
+setup('authenticate admin', async ({ page }) => {
+  await authenticateUser(page, 'admin', 'admin');
+});
+
+setup('authenticate user', async ({ page }) => {
+  await authenticateUser(page, 'user', 'user');
 });
