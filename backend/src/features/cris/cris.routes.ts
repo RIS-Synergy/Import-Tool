@@ -4,12 +4,12 @@ import { createCRISSchema, crisIdSchema } from './cris.validation.js';
 import { validate } from '../../middleware/validator.js'
 
 const router = Router();
-const crisController = new CRISController();
+const controller = new CRISController();
 
-router.get('/', crisController.getAllCRIS);
-router.post('/', validate(createCRISSchema, "body"), crisController.createCRIS);
-router.get('/:id', validate(crisIdSchema, "params"), crisController.getCRISById);
-router.put('/:id', validate(crisIdSchema, "params"), validate(createCRISSchema, "body"), crisController.updateCRIS);
-router.delete('/:id', validate(crisIdSchema, "params"), crisController.deleteCRIS);
+router.get('/', controller.getMany);
+router.post('/', validate(createCRISSchema, "body"), controller.create);
+router.get('/:id', validate(crisIdSchema, "params"), controller.getById);
+router.put('/:id', validate(crisIdSchema, "params"), validate(createCRISSchema, "body"), controller.update);
+router.delete('/:id', validate(crisIdSchema, "params"), controller.delete);
 
 export default router;

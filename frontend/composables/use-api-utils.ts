@@ -303,6 +303,7 @@ export const useApiUtils = () => {
   const user = import ("./api/use-api-user")
   const ri = import ("./api/ri")
   const users = import ("./api/users")
+  const cris = import ("./api/cris")
 
   return {
     apiCall,
@@ -336,6 +337,7 @@ export const useApiUtils = () => {
     // new API structure:
     user,
     ri,
-    users
+    users,
+    cris
   };
 };

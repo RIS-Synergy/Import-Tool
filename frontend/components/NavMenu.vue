@@ -78,6 +78,12 @@
       </template>
     </v-list-item>
     <v-divider />
+    <v-list-item :to="`/cris`" link title="CRIS">
+      <template v-slot:append>
+        <v-icon>mdi-api</v-icon>
+      </template>
+    </v-list-item>
+    <v-divider />
     <!-- <v-divider v-if="isAdmin()"></v-divider> -->
     <!-- End Admin -->
   </v-list>

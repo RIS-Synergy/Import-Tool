@@ -59,6 +59,9 @@ if (process.env.NODE_ENV === 'development' || process.env.CI) {
 // Users
 app.use('/user', auth, (await import('./features/user/user.routes.js')).default)
 
+// CRIS Systems
+app.use('/cris', auth, (await import('./features/cris/cris.routes.js')).default)
+
 // error handler last
 app.use(unexpectedErrorHandler)
 

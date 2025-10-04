@@ -4,9 +4,17 @@ import { CRIS } from '../cris.model.js';
 type CRISCreationParams = Omit<CRIS, 'id'>;
 
 export class CRISService {
-  public async findAll(): Promise<CRIS[]> {
+  public async findMany(limitByUserPermission = {}): Promise<CRIS[]> {
     return prisma.cRIS.findMany({
       orderBy: { name: 'asc' },
+      where: limitByUserPermission,
+      select: {
+        name: true,
+        apiUrl: true,
+        researchInstitution: {
+          select: { name: true }
+        }
+      },
     });
   }
 

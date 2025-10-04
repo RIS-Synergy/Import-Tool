@@ -1,22 +1,43 @@
 import { Request, Response } from 'express';
+
+import { Logger } from "../../utils/logger.js";
+const log = new Logger({ name: "feature:cris:controller" });
+
 import { CRISService } from './services/cris.service.js';
 
-export class CRISController {
-  private readonly crisService = new CRISService();
+// similar code is duplicated from features/user/user.controller.ts, move to a common file
+function limitByUserPermission(reqUser: any) {
+  const permissions = reqUser.permission || []
 
-  public getAllCRIS = async (req: Request, res: Response): Promise<void> => {
+  // Regular user (not an admin). Only show items from the same RI
+  if (!permissions.includes('admin')) {
+    return {
+      researchInstitutionId: reqUser.ri
+    }
+  }
+
+  // All items, including 'admin'
+  return {}
+}
+
+export class CRISController {
+  private readonly service = new CRISService();
+
+  public getMany = async (req: Request, res: Response): Promise<void> => {
     try {
-      const crisList = await this.crisService.findAll();
+      const where = limitByUserPermission(req.user)
+      const crisList = await this.service.findMany(where);
       res.status(200).json(crisList);
     } catch (error) {
+      console.log('Error retrieving CRIS:', error);
       res.status(500).json({ message: 'Error retrieving CRIS' });
     }
   };
 
-  public getCRISById = async (req: Request, res: Response): Promise<void> => {
+  public getById = async (req: Request, res: Response): Promise<void> => {
     try {
       const id = parseInt(req.params.id, 10);
-      const cris = await this.crisService.findById(id);
+      const cris = await this.service.findById(id);
 
       if (cris) {
         res.status(200).json(cris);
@@ -28,29 +49,29 @@ export class CRISController {
     }
   };
 
-  public createCRIS = async (req: Request, res: Response): Promise<void> => {
+  public create = async (req: Request, res: Response): Promise<void> => {
     try {
-      const newCRIS = await this.crisService.create(req.body);
+      const newCRIS = await this.service.create(req.body);
       res.status(201).json(newCRIS);
     } catch (error) {
       res.status(500).json({ message: 'Error creating CRIS' });
     }
   };
 
-  public updateCRIS = async (req: Request, res: Response): Promise<void> => {
+  public update = async (req: Request, res: Response): Promise<void> => {
     try {
       const id = parseInt(req.params.id, 10);
-      const updatedCRIS = await this.crisService.update(id, req.body);
+      const updatedCRIS = await this.service.update(id, req.body);
       res.status(200).json(updatedCRIS);
     } catch (error) {
       res.status(500).json({ message: 'Error updating CRIS' });
     }
   };
 
-  public deleteCRIS = async (req: Request, res: Response): Promise<void> => {
+  public delete = async (req: Request, res: Response): Promise<void> => {
     try {
       const id = parseInt(req.params.id, 10);
-      const deletedCRIS = await this.crisService.delete(id);
+      const deletedCRIS = await this.service.delete(id);
       res.status(200).json(deletedCRIS);
     } catch (error) {
       res.status(500).json({ message: 'Error deleting CRIS' });
