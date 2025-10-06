@@ -69,6 +69,9 @@ definePageMeta({
   layout: "projects",
 });
 
+const { project } = useApiUtils();
+const { listAll } = (await project).default;
+
 const loading = ref(false);
 const serverItems = ref([]);
 const totalItems = ref(0);
@@ -81,7 +84,8 @@ async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
 
   const filters = storeFilter || store.projectFilters;
 
-  const { total, items } = await getProjectsList({
+  // const { total, items } = await getProjectsList({
+  const { total, items } = await listAll({
     page,
     itemsPerPage,
     sortBy,

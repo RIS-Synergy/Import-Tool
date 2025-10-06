@@ -34,6 +34,9 @@ app.use('/oefos', (await import('./views/oefos.js')).default)
 
 // Project
 app.use('/project', auth, (await import('./views/project.js')).default)
+// XXX using this for development for now.
+// will migrate it over later
+app.use('/project2', auth, (await import('./features/project/project.routes.js')).default)
 
 // Templates
 app.use('/templates', auth, (await import('./views/templates.js')).default)

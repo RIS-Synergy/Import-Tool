@@ -1,0 +1,116 @@
+import { Request, Response } from 'express';
+import { Logger } from "../../utils/logger.js";
+const log = new Logger({ name: "feature:project:controller" });
+import { ProjectService } from './services/project.service.js';
+
+function limitByUserPermission(reqUser: any) {
+  // XXX for now, do not limit by user permission
+
+  // const permissions = reqUser.permission || [];
+
+  // if (!permissions.includes('admin')) {
+  //   return {
+  //     researchInstitutionId: reqUser.ri
+  //   };
+  // }
+
+  const sizeLimit = 10
+
+  return {
+    where: {
+      // Limit to 10 results for now
+    },
+    take: sizeLimit
+  };
+}
+
+export class ProjectController {
+  private readonly service = new ProjectService();
+
+  public getMany = async (req: Request, res: Response): Promise<void> => {
+    log.info('ProjectController.getMany', req.body)
+
+    try {
+      const query = limitByUserPermission(req.user);
+
+      const filters = req.body.filters || {
+        status: [],
+        piDomain: { domain: "", ror: "" },
+        diffs: "All",
+        orderBy: "startDate:desc", itemsPerPage: '10'
+      };
+
+      const page = req.body.page || "1";
+
+      const projects = await this.service.findMany(query, filters, page);
+      res.status(200).json(projects);
+    } catch (error) {
+      log.error('Error retrieving projects:', error);
+      res.status(500).json({ message: 'Error retrieving projects' });
+    }
+  };
+
+  public getById = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      const project = await this.service.findById(id);
+
+      if (project) {
+        res.status(200).json(project);
+      } else {
+        res.status(404).json({ message: `Project with id ${id} not found.` });
+      }
+    } catch (error) {
+      log.error('Error retrieving project:', error);
+      res.status(500).json({ message: 'Error retrieving project' });
+    }
+  };
+
+  public getByRisId = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const risId = req.params.risId;
+      const project = await this.service.findByRisId(risId);
+
+      if (project) {
+        res.status(200).json(project);
+      } else {
+        res.status(404).json({ message: `Project with risId ${risId} not found.` });
+      }
+    } catch (error) {
+      log.error('Error retrieving project:', error);
+      res.status(500).json({ message: 'Error retrieving project' });
+    }
+  };
+
+  public create = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const newProject = await this.service.create(req.body);
+      res.status(201).json(newProject);
+    } catch (error) {
+      log.error('Error creating project:', error);
+      res.status(500).json({ message: 'Error creating project' });
+    }
+  };
+
+  public update = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      const updatedProject = await this.service.update(id, req.body);
+      res.status(200).json(updatedProject);
+    } catch (error) {
+      log.error('Error updating project:', error);
+      res.status(500).json({ message: 'Error updating project' });
+    }
+  };
+
+  public delete = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      const deletedProject = await this.service.delete(id);
+      res.status(200).json(deletedProject);
+    } catch (error) {
+      log.error('Error deleting project:', error);
+      res.status(500).json({ message: 'Error deleting project' });
+    }
+  };
+}
