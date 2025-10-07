@@ -6,9 +6,33 @@ import { importDomains } from './import-domains.js';
 type ResearchInstitutionCreationParams = Omit<ResearchInstitution, 'id'>;
 
 export class ResearchInstitutionService {
-  public async findAll(): Promise<ResearchInstitution[]> {
+  public async findAll(): Promise<any[]> {
     return prisma.researchInstitution.findMany({
-      orderBy: { name: 'asc' },
+      orderBy: {
+        projects: {
+          _count: 'desc'
+        }
+      },
+      where: {
+        // domain is not containing 'placeholder' inside and ends with '.at'
+        domain: {
+          not: {
+            contains: 'placeholder'
+          },
+          endsWith: '.at'
+        }
+      },
+      select: {
+        id: true,
+        name: true,
+        domain: true,
+        rorId: true,
+        _count: {
+          select: {
+            projects: true
+          }
+        }
+      },
     });
   }
 

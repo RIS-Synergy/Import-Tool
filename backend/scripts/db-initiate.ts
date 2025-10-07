@@ -21,31 +21,58 @@ prisma.project.count().then((count) => {
 
 async function createResearchInstitutions() {
   const service = new ResearchInstitutionService()
-  service.importDomains()
+  await service.importDomains()
 }
 
 async function createUsers() {
+  // First, ensure 'Universität Wien' exists, create if it doesn't
+  let uniWien = await prisma.researchInstitution.findFirst({
+    where: {
+      name: 'Universität Wien'
+    }
+  });
+
+  if (!uniWien) {
+    console.log('Universität Wien not found, creating...')
+
+    // Create 'Universität Wien' if it doesn't exist
+    uniWien = await prisma.researchInstitution.upsert({
+      where: { rorId: '03prydq77' },
+      create: {
+        name: 'Universität Wien',
+        domain: 'univie.ac.at',
+        rorId: '03prydq77'
+      },
+      update: {
+        name: 'Universität Wien',
+        domain: 'univie.ac.at'
+      }
+    });
+    console.log('Created Universität Wien research institution');
+  }
+
   await prisma.user.upsert({
     where: { username: 'admin' },
     create: { username: 'admin', password: hash('admin'), permission: ['admin', 'edit'] },
     update: { password: hash('admin'), permission: ['admin', 'edit'] }
-  })
+  });
+
   await prisma.user.upsert({
     where: { username: 'user' },
     create: {
       username: 'user',
       password: hash('user'),
       researchInstitution: {
-        connect: { name: 'Universität Wien' }
+        connect: { id: uniWien.id }
       }
     },
     update: {
       password: hash('user'),
       researchInstitution: {
-        connect: { name: 'Universität Wien' }
+        connect: { id: uniWien.id }
       }
     }
-  })
+  });
 }
 
 async function importProjects() {

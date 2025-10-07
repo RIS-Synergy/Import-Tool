@@ -6,6 +6,7 @@
       <tr>
         <th>Name</th>
         <th>Domain</th>
+        <th>Projects</th>
         <th>ROR</th>
       </tr>
     </thead>
@@ -14,6 +15,7 @@
         <td v-if="item.id === userRI"><b>{{ item.name }}</b></td>
         <td v-else>{{ item.name }}</td>
         <td>{{ item.domain }}</td>
+        <td>{{ item._count?.projects || 0 }}</td>
         <td>
           <v-btn
             class=""

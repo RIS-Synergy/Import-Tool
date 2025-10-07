@@ -31,7 +31,7 @@ export async function importDomains(domains: InstitutionDomain[]) {
             rorId
           }
         });
-        console.log(`Updated research institution: ${name} (${rorId})`);
+        // console.log(`Updated research institution: ${name} (${rorId})`);
       } else {
         // Create new institution
         await prisma.researchInstitution.create({
@@ -41,7 +41,7 @@ export async function importDomains(domains: InstitutionDomain[]) {
             rorId
           }
         });
-        console.log(`Created research institution: ${name} (${rorId})`);
+        // console.log(`Created research institution: ${name} (${rorId})`);
       }
     }
     console.log('Import completed successfully');
