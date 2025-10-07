@@ -23,6 +23,7 @@
     "create-functions": "tsx ./scripts/create-functions.ts",
     "create-ri": "tsx ./scripts/create-ri.ts",
     "create-cris": "tsx ./scripts/create-cris.ts",
+    "connect-project-ri": "tsx ./scripts/connect-project-ri.ts",
     "copy": "tsx ./scripts/copy-projects-from-fa.ts",
     "fa-api": "tsx ./scripts/fa-api.ts",
     "json-to-excel": "tsx ./scripts/json-to-excel.ts"

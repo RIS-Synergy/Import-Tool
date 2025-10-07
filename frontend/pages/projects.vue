@@ -84,9 +84,9 @@ async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
 
   const filters = storeFilter || store.projectFilters;
 
-  // const { total, items } = await getProjectsList({
-  const { total, items } = await listAll({
-    page,
+  const { total, items } = await getProjectsList({
+    // const { total, items } = await listAll({
+      page,
     itemsPerPage,
     sortBy,
     filters,

@@ -23,6 +23,8 @@ model Project {
   crisId   String?
   crisUUID String?
 
+  researchInstitutions ResearchInstitution[] @relation("ProjectToResearchInstitution")
+
   createdDate  DateTime @default(now())
   modifiedDate DateTime @updatedAt
   Diff         Diff[]
@@ -104,8 +106,9 @@ model ResearchInstitution {
   domain String @unique
   rorId  String @unique
 
-  users User[]
-  cris  CRIS[]
+  users    User[]
+  cris     CRIS[]
+  projects Project[] @relation("ProjectToResearchInstitution")
 
   createdDate  DateTime @default(now())
   modifiedDate DateTime @updatedAt
