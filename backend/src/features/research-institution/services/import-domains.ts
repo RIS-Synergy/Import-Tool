@@ -11,28 +11,38 @@ export async function importDomains(domains: InstitutionDomain[]) {
     for (const item of domains) {
       const { name, domain } = item;
 
-      // The domain must end with .ac.at
-      if (!domain.endsWith('.ac.at')) {
-        console.log(`Skipping domain ${domain}`)
-        continue;
-      }
-
       // Extract the ROR ID from the URL
       const rorId = item.ror.replace('https://ror.org/', '');
 
-      // Insert (of Update) the research institution
-      await prisma.researchInstitution.upsert({
-        where: { domain: item.domain },
-        update: {
-          name,
+      // Check if a research institution with this rorId already exists
+      const existingInstitution = await prisma.researchInstitution.findFirst({
+        where: {
           rorId
-        },
-        create: {
-          name,
-          domain,
-          rorId
-        },
+        }
       });
+
+      if (existingInstitution) {
+        // Update the existing record with new data
+        await prisma.researchInstitution.update({
+          where: { id: existingInstitution.id },
+          data: {
+            name,
+            domain,
+            rorId
+          }
+        });
+        console.log(`Updated research institution: ${name} (${rorId})`);
+      } else {
+        // Create new institution
+        await prisma.researchInstitution.create({
+          data: {
+            name,
+            domain,
+            rorId
+          }
+        });
+        console.log(`Created research institution: ${name} (${rorId})`);
+      }
     }
     console.log('Import completed successfully');
   } catch (error) {

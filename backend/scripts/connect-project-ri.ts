@@ -121,7 +121,13 @@ async function mainWithOptions(options: CliOptions) {
         console.log(`Processing institution: ${institution.name} (ROR: ${institution.rorId})`);
 
         // Get projects that match the ROR ID pattern
-        const projects: any[] = await getProjectsForResearchInstitution(institution.rorId);
+        var projects: any[];
+        try {
+          projects = await getProjectsForResearchInstitution(institution.rorId);
+        } catch (error) {
+          console.error(`Error fetching projects for ROR ID ${institution.rorId}:`, error);
+          continue; // Skip to the next institution
+        }
 
         console.log(`Found ${projects.length} projects for ${institution.name}`);
 
