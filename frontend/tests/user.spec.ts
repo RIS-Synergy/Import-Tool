@@ -6,6 +6,11 @@ test.use(user);
 test('User can Logout', async ({ page }) => {
   await page.goto('/');
 
+  const projects = await page.waitForResponse('**/api/project2');
+  const numProjects = (await projects.json()).items.length;
+  // assert .items have more than 0 items
+  expect(numProjects).toBe(4)
+
   await expect(page.getByText('Status:')
     .nth(0))
     .toBeVisible({ timeout: 10000 })

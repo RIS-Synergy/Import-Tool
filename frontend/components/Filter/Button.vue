@@ -21,11 +21,11 @@
           <v-autocomplete
             v-model="store.projectFilters.piDomain"
             :items="projectStatusDomain"
-            label="PI Domain"
+            label="Research Institution"
             chips
             :clearable="false"
             :multiple="false"
-            :rules="[v => !!v || 'PI Domain is required']"
+            :rules="[v => !!v || 'Research Institution is required']"
             outlined
           ></v-autocomplete>
           <v-select
@@ -69,7 +69,7 @@
 const dialog = ref(false);
 
 const projectStatus = [
-  "IN_PREPERATION",
+  "IN_PREPARATION",
   "ACTIVE",
   "COMPLETED",
   "CANCELLED",

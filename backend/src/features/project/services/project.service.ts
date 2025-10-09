@@ -225,13 +225,13 @@ AND (${diffSQL})
     });
   }
 
-  public async create(projectData: Omit<Project, 'id'>): Promise<Project> {
+  public create(projectData: Omit<Project, 'id'>): Promise<Project> {
     return prisma.project.create({
       data: { ...projectData, ...updateData(projectData.risData) },
     });
   }
 
-  public async update(id: number, projectData: Partial<Project>): Promise<Project> {
+  public update(id: number, projectData: Partial<Project>): Promise<Project> {
     return prisma.project.update({
       where: { id },
       data: { ...projectData, ...updateData(projectData.risData) },

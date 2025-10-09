@@ -2,8 +2,10 @@ import { promises as fs } from 'fs'
 import { PrismaClient, TemplateType } from '@prisma/client'
 import { hash } from '../src/utils/auth'
 import { ResearchInstitutionService } from '../src/features/research-institution/services/research-institution.service.js';
+import { ProjectService } from '../src/features/project/services/project.service.js';
 
 const prisma = new PrismaClient()
+const projectService = new ProjectService()
 
 // only allowed in development mode or ci mode
 if (process.env.NODE_ENV !== 'development' && process.env.NODE_ENV !== 'ci') {
@@ -81,23 +83,17 @@ async function importProjects() {
   const result = await fs.readFile(jsonFile).then((data) => JSON.parse(data.toString()))
 
   result.forEach(async (project) => {
-    // if not exists
-    const projectExists = await prisma.project.findUnique({
-      where: {
-        risId: project.id
-      }
-    })
-
-    if (!projectExists) {
-      const newProject = await prisma.project.create({
-        data: {
-          risId: project.id,
-          risData: project
-        }
+    try {
+      await projectService.create({
+        risId: project.id,
+        risData: project
       })
-      // console.log(newProject)
-    } else {
-      // console.log(`Project ${project.id} already exists`)
+    } catch (error) {
+      // these are expected because the
+      // sample data contains Univerität Wien multiple times with different ROR ids
+      if (error.code !== 'P2002') {
+        console.error('Error creating project:', project.id, error)
+      }
     }
   })
 }
@@ -162,7 +158,7 @@ function calculateCountOf(type: string) {
 }
 
 async function main() {
-  await createResearchInstitutions()
+  // await createResearchInstitutions()
   await createUsers()
   await importProjects()
   await createTemplates()
