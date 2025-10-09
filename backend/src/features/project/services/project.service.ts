@@ -34,12 +34,62 @@ function diffsSQL(diffs: DiffFilter) {
   }
 }
 
+type FindManyProjects = {
+  items: any[]
+  total: number
+  page: number
+  itemsPerPage: number
+}
+
 export class ProjectService {
+  public async findMany2(
+    limitByUserPermission = {},
+    filters: Filter,
+    page: string,
+  ): Promise<FindManyProjects | undefined> {
+    try {
+      var sortBy: SortBy = { key: "startDate", order: "desc" };
+
+      sortBy.key = filters.orderBy.split(":")[0];
+      sortBy.order = filters.orderBy.split(":")[1];
+      log.info("SortBy", sortBy)
+
+      var itemsPerPage = filters.itemsPerPage;
+
+      const pageNumber = parseInt(page as string, 10);
+      const items = parseInt(itemsPerPage as string, 10);
+
+      const [projects, total] = await Promise.all([
+        // TODO 'where' within a json
+        prisma.project.findMany({
+          ...limitByUserPermission,
+          take: items,
+          skip: (pageNumber - 1) * items,
+        }),
+        prisma.project.count(limitByUserPermission),
+      ]);
+      console.log('total', total)
+
+      const result = {
+        items: projects,
+        total,
+        page: pageNumber,
+        itemsPerPage: items,
+      }
+
+      return result
+    } catch (error) {
+      log.error(error);
+      return
+    }
+  }
+
+  /*
   public async findMany(
     limitByUserPermission = {},
     filters: Filter,
     page: string,
-  ) {// Promise<Project[]> {
+  ) {
     console.log('limitByUserPermission', limitByUserPermission)
 
     try {
@@ -47,15 +97,13 @@ export class ProjectService {
 
       var sortBy: SortBy = { key: "startDate", order: "desc" };
 
-      // var filters: Filter;
       if (!filters) {
-      //   filters = req.body.filters;
-      // } else {
         filters = {
           status: [],
           piDomain: { domain: "", ror: "" },
           diffs: "All",
-          orderBy: "startDate:desc", itemsPerPage: '10'
+          orderBy: "startDate:desc",
+          itemsPerPage: '10'
         };
       }
 
@@ -140,17 +188,9 @@ AND (${diffSQL})
     } catch (error) {
       console.error(error);
       return
-      // res
-      //   .status(500)
-      //   .json({ error: "An error occurred while fetching projects" });
     }
-
-
-    return prisma.project.findMany({
-      // orderBy: { risId: 'asc' },
-      ...limitByUserPermission,
-    });
   }
+  */
 
   public async findById(id: number): Promise<Project | null> {
     return prisma.project.findUnique({

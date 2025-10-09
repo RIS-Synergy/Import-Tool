@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 import { Logger } from "../../utils/logger.js";
 const log = new Logger({ name: "feature:project:controller" });
 import { ProjectService } from './services/project.service.js';
+import { researchInstitutionIdSchema } from '../research-institution/research-institution.validation.js';
 
-function limitByUserPermission(reqUser: any) {
+function limitByUserPermission(reqUser: any, domain: string) {
   // XXX for now, do not limit by user permission
 
   // const permissions = reqUser.permission || [];
@@ -13,14 +14,13 @@ function limitByUserPermission(reqUser: any) {
   //     researchInstitutionId: reqUser.ri
   //   };
   // }
-
-  const sizeLimit = 10
-
   return {
     where: {
-      // Limit to 10 results for now
+      // Limit to research institution by domain
+      researchInstitutions: {
+        some: { domain }
+      }
     },
-    take: sizeLimit
   };
 }
 
@@ -31,8 +31,6 @@ export class ProjectController {
     log.info('ProjectController.getMany', req.body)
 
     try {
-      const query = limitByUserPermission(req.user);
-
       const filters = req.body.filters || {
         status: [],
         piDomain: { domain: "", ror: "" },
@@ -40,9 +38,13 @@ export class ProjectController {
         orderBy: "startDate:desc", itemsPerPage: '10'
       };
 
+      // XXX not secure limitation!
+      const query = limitByUserPermission(req.user, filters.piDomain.domain);
+      // console.log('query', query)
+
       const page = req.body.page || "1";
 
-      const projects = await this.service.findMany(query, filters, page);
+      const projects = await this.service.findMany2(query, filters, page);
       res.status(200).json(projects);
     } catch (error) {
       log.error('Error retrieving projects:', error);
