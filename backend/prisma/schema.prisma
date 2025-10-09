@@ -18,6 +18,12 @@ model Project {
   risId   String @unique
   risData Json   @default("{}")
 
+  // the dates are obtained from RIS Data
+  startDate DateTime?
+  endDate   DateTime?
+  // use the status
+  status    String?
+
   savedTemplate SavedTemplate[]
 
   crisId   String?

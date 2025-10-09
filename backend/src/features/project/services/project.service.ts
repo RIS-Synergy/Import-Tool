@@ -1,5 +1,6 @@
 import prisma from '../../../lib/prisma.js';
 import { Project } from '../project.model.js';
+import { updateData } from './update-data.js';
 
 import { Logger } from "../../../utils/logger.js";
 const log = new Logger({ name: "feature:project:service" });
@@ -21,6 +22,7 @@ type Filter = {
   itemsPerPage: string;
 }
 
+/*
 function diffsSQL(diffs: DiffFilter) {
   switch (diffs) {
     case "NULL":
@@ -33,6 +35,7 @@ function diffsSQL(diffs: DiffFilter) {
       return "1=1"
   }
 }
+*/
 
 type FindManyProjects = {
   items: any[]
@@ -48,39 +51,57 @@ export class ProjectService {
     page: string,
   ): Promise<FindManyProjects | undefined> {
     try {
-      var sortBy: SortBy = { key: "startDate", order: "desc" };
+      const sortBy: SortBy = { key: "startDate", order: "desc" };
+      const [key, order] = filters.orderBy.split(":");
+      sortBy.key = key;
+      sortBy.order = order.toUpperCase();
+      log.info("SortBy", sortBy);
 
-      sortBy.key = filters.orderBy.split(":")[0];
-      sortBy.order = filters.orderBy.split(":")[1];
-      log.info("SortBy", sortBy)
+      // Build the where clause
+      const whereClause: any = {
+        ...limitByUserPermission.where,
+      };
 
-      var itemsPerPage = filters.itemsPerPage;
+      // Add status filter if provided
+      if (filters.status && filters.status.length > 0) {
+        whereClause.status = {
+          in: filters.status
+        };
+      }
 
-      const pageNumber = parseInt(page as string, 10);
-      const items = parseInt(itemsPerPage as string, 10);
+      // Determine orderBy
+      const orderBy: any = {};
+      // Convert the order to Prisma's format
+      const orderDirection = sortBy.order.toUpperCase() === 'DESC' ? 'desc' : 'asc';
+      orderBy[sortBy.key] = orderDirection;
+
+      const itemsPerPage = parseInt(filters.itemsPerPage, 10);
+      const pageNumber = parseInt(page, 10);
+      const skip = (pageNumber - 1) * itemsPerPage;
 
       const [projects, total] = await Promise.all([
-        // TODO 'where' within a json
         prisma.project.findMany({
-          ...limitByUserPermission,
-          take: items,
-          skip: (pageNumber - 1) * items,
+          where: whereClause,
+          orderBy: orderBy,
+          take: itemsPerPage,
+          skip: skip,
         }),
-        prisma.project.count(limitByUserPermission),
+        prisma.project.count({
+          where: whereClause,
+        }),
       ]);
-      console.log('total', total)
 
       const result = {
         items: projects,
         total,
         page: pageNumber,
-        itemsPerPage: items,
-      }
+        itemsPerPage
+      };
 
-      return result
+      return result;
     } catch (error) {
       log.error(error);
-      return
+      return;
     }
   }
 
@@ -206,14 +227,14 @@ AND (${diffSQL})
 
   public async create(projectData: Omit<Project, 'id'>): Promise<Project> {
     return prisma.project.create({
-      data: projectData,
+      data: { ...projectData, ...updateData(projectData.risData) },
     });
   }
 
   public async update(id: number, projectData: Partial<Project>): Promise<Project> {
     return prisma.project.update({
       where: { id },
-      data: projectData,
+      data: { ...projectData, ...updateData(projectData.risData) },
     });
   }
 
