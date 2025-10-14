@@ -17,7 +17,8 @@ export const useUserSettingsStore = defineStore('user-settings', {
     sortBy: [{ key: 'startDate', order: 'desc' }],
     projectFilters,
     token: null,
-    user: null
+    user: null,
+    cris: 0
   }),
   actions: {
     setToken(token: any) {
@@ -28,6 +29,9 @@ export const useUserSettingsStore = defineStore('user-settings', {
     },
     clearFilters() {
       this.projectFilters = projectFilters
+    },
+    setCRIS(cris: number) {
+      this.cris = cris
     }
   },
   persist: true

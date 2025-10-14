@@ -9,6 +9,7 @@ export class CRISService {
       orderBy: { name: 'asc' },
       where: limitByUserPermission,
       select: {
+        id: true,
         name: true,
         apiUrl: true,
         researchInstitution: {
