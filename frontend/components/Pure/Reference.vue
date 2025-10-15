@@ -136,17 +136,14 @@ const orgIsAssigned = computed(() => {
 });
 
 function assignGroup() {
-  // console.log(props)
-  // console.log(store)
   return (store.settings.organization = props.data.uuid);
 }
 
 onMounted(async () => {
-  const { riReference } = useApiUtils();
-  const res = await riReference(systemName, uuid);
-  // $fetch(`/api/ri/reference/${systemName}/${uuid}`).then(
-  //   (res) => (result.value = res),
-  // );
+  const { cris } = useApiUtils();
+  const { referenceApi } = (await cris).default;
+  const res = await referenceApi(systemName, uuid);
+
   result.value = res;
 });
 </script>

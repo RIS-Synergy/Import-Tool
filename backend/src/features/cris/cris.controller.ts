@@ -78,32 +78,48 @@ export class CRISController {
     }
   };
 
-  public search = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const where = limitByUserPermission(req.user)
-      const crisList = await this.service.findMany(where, {
-        apiKey: true // show API key only in the backend, not in the frontend
-      })
+  private async getCrisData(crisId: number, reqUser) {
+    const where = limitByUserPermission(reqUser)
+    const crisList = await this.service.findMany(where, {
+      apiKey: true // show API key only in the backend, not in the frontend
+    })
 
-      // Find 1 CRIS of given ID
-      const crisData = crisList.find(c => c.id === req.body.crisId)
+    // Find 1 CRIS of given ID
+    const crisData = crisList.find(c => c.id === crisId)
 
-      // if not found, return error
-      if(!crisData) {
-        res.status(400).json({ message: 'CRIS not found or not accessible' });
-        return
-      }
-
-      const searchResults = await this.service.search(
-        req.body.query,
-        crisData.apiUrl,
-        crisData.apiKey,
-        req.body.entityTypes,
-      );
-
-      res.status(200).json(searchResults);
-    } catch (error) {
-      res.status(500).json({ message: 'Error searching CRIS' });
+    // if not found, return error
+    if (!crisData) {
+      throw new Error('CRIS not found or not accessible')
     }
+
+    return crisData
+  }
+
+  public search = async (req: Request, res: Response): Promise<void> => {
+    const crisData = await this.getCrisData(req.body.crisId, req.user)
+
+    const searchResults = await this.service.search(
+      req.body.query,
+      crisData.apiUrl,
+      crisData.apiKey,
+      req.body.entityTypes,
+    );
+
+    res.json(searchResults);
+  }
+
+  public reference = async (req: Request, res: Response): Promise<void> => {
+    // TODO
+    const crisData = await this.getCrisData(req.body.crisId, req.user)
+    const result = await this.service.reference(
+      crisData.apiUrl,
+      crisData.apiKey,
+      {
+        systemName: req.body.systemName,
+        uuid: req.body.uuid,
+      }
+    )
+
+    res.json(result);
   }
 }

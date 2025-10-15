@@ -2,6 +2,7 @@ import prisma from '../../../lib/prisma.js';
 import { CRIS } from '../cris.model.js';
 import { BadRequestError } from '../../../utils/errors.js';
 import { search as searchService } from './cris.search.service.js';
+import { reference as referenceService } from './cris.reference.service.js';
 
 type CRISCreationParams = Omit<CRIS, 'id'>;
 
@@ -83,7 +84,11 @@ export class CRISService {
     });
   }
 
-  public async search(query: string, apiUrl: string, apiKey: string, entityTypes: string[]): Promise<CRIS[]> {
+  public search(query: string, apiUrl: string, apiKey: string, entityTypes: string[]): Promise<CRIS[]> {
     return searchService(query, apiUrl, apiKey, entityTypes);
+  }
+
+  public reference(apiUrl: string, apiKey: string, params: { systemName: string, uuid: string }): Promise<CRIS[]> {
+    return referenceService(apiUrl, apiKey, params);
   }
 }

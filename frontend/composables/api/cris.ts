@@ -28,8 +28,21 @@ const searchForPeople = async (searchString: string) => {
   return result
 }
 
+const referenceApi = async (systemName: string, uuid: string) => {
+  const store = useUserSettingsStore();
+  const result = await apiCall('cris/reference', 'POST', {
+    body: JSON.stringify({
+      crisId: store.cris,
+      systemName,
+      uuid
+    }),
+  })
+  return result
+}
+
 export default {
   listAll,
   searchApi,
-  searchForPeople
+  searchForPeople,
+  referenceApi
 }

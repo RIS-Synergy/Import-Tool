@@ -1,89 +1,15 @@
 import { CRIS } from '../cris.model.js';
-import { ResearchInstitutionError } from '../../../utils/errors.js'
+
+import { callCrisApi } from './cris.api.service.js';
+
 import { Logger } from "../../../utils/logger.js";
 const log = new Logger({ name: 'feature:cris:service' });
 
-type Method = 'GET' | 'POST' | 'PUT' // | 'DELETE'
-
-type CRISError = {
-  detail: string
-}
-
-// XXX this is not only for 'search' (might be placed into a new file)
-export async function callRIApi(
-  apiUrl: string, apiKey: string,
-  endpoint: string,
-  method: Method = 'POST',
-  body = null): Promise<any> {
-  const url = `${apiUrl}${endpoint}`
-
-  log.debug(`>>> ${method} ${endpoint}`)
-  let response: Response
-
-  try {
-    response = await fetch(url, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-        'api-key': apiKey,
-      },
-      // mode: 'no-cors',
-      // mode: 'cors',
-      body: method === 'GET' ? null : JSON.stringify(body),
-    })
-  } catch (error) {
-    // if it's an ConnectTimeoutError, show warning
-    if (error.cause.name === 'ConnectTimeoutError') {
-      log.warn('ConnectTimeoutError', endpoint, error.cause.message)
-      throw new ResearchInstitutionError('ConnectTimeoutError', method, endpoint, 500)
-    } else {
-      log.error(`Error calling RI-API [legacy callRIApi()]`, error)
-      throw new ResearchInstitutionError(error.errors || error.title, method, endpoint, 500)
-    }
-  }
-
-  const contentType: string = response.headers.get("content-type")
-  log.debug(`<<< ${response.status} ${endpoint}`)
-
-  if (response.status === 500) {
-    log.warn('Body status 500 >>>>>>>>>>', body)
-  }
-
-  if (response.redirected) {
-    const err: CRISError = {
-      detail: `Redirected to ${response.url}`
-    }
-    log.error(`Redirected to ${response.url}`)
-    return {
-      error: err
-    }
-  }
-  else if (contentType.startsWith('application/json')) {
-    const data = await response.json().catch((error) => {
-      log.error(`Error parsing response from RI-API`, error)
-      return { error }
-    })
-
-    if (!response.ok) {
-      return { error: data }
-    }
-
-    return data
-  }
-  else if (contentType.startsWith('application/problem+json')) {
-    const error = await response.json()
-    throw new ResearchInstitutionError(error.detail || error.title, method, endpoint, response.status)
-  }
-
-  return {
-    detail: `Unknown content-type: ${contentType}`
-  } as CRISError
-}
-
-// XXX this search function is PURE-specific
-export async function search(query: string, apiUrl: string, apiKey: string,
-                             entityTypes = ['projects', 'applications', 'awards', 'persons', 'external-persons']
-                            ): Promise<CRIS[]> {
+// this 'search' function is PURE-specific
+export async function search(
+  query: string, apiUrl: string, apiKey: string,
+  entityTypes = ['projects', 'applications', 'awards', 'persons', 'external-persons']
+): Promise<CRIS[]> {
   const maxItemSize = 10
 
   log.info("Searching for:", query);
@@ -92,7 +18,7 @@ export async function search(query: string, apiUrl: string, apiKey: string,
   const promises = entityTypes.map(entityType => {
     const endpoint = `/${entityType}/search`
 
-    return callRIApi(apiUrl, apiKey, endpoint, 'POST', {
+    return callCrisApi(apiUrl, apiKey, endpoint, 'POST', {
       size: maxItemSize,
       offset: 0,
       searchString: query

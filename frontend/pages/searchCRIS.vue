@@ -38,10 +38,14 @@
           <td>{{ item.pureId }}</td>
           <td>{{ item.uuid }}</td>
           <td>
-            <span v-if="item.name">{{ item.name.firstName + ' ' }}</span>
+            <span v-if="item.name">{{ item.name.firstName + " " }}</span>
             <span v-if="item.name">{{ item.name.lastName }}</span>
-            <span v-if="item.title && item.title.en_GB"><span class="grey">en</span> {{ item.title.en_GB }}</span>
-            <span v-if="item.title && item.title.de_DE"><br/><span class="grey">de</span> {{ item.title.de_DE }}</span>
+            <span v-if="item.title && item.title.en_GB"
+              ><span class="grey">en</span> {{ item.title.en_GB }}</span
+            >
+            <span v-if="item.title && item.title.de_DE"
+              ><br /><span class="grey">de</span> {{ item.title.de_DE }}</span
+            >
           </td>
           <td>{{ item.entity }}</td>
           <td class="modDate">{{ modDate(item.modifiedDate) }}</td>
@@ -74,7 +78,13 @@ const { cris } = useApiUtils();
 const { searchApi } = (await cris).default;
 
 async function startSearch() {
-  result.value = await searchApi(search.value);
+  var rawResults = await searchApi(search.value);
+
+  for (const r of rawResults) {
+    r.entity = r.systemName
+  }
+
+  result.value = rawResults;
 }
 
 import { formatDistance } from "date-fns";
