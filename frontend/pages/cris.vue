@@ -28,6 +28,14 @@
           >
             select
           </v-btn>
+          <v-btn
+            v-else
+            variant="outlined"
+            size="small"
+            @click="selectCRIS(null)"
+          >
+            deselect
+          </v-btn>
         </td>
       </tr>
     </tbody>

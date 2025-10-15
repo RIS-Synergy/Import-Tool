@@ -20,7 +20,10 @@
 <script setup>
 const model = defineModel();
 
-const { hasCRIS } = useApiUtils();
+const store = useUserSettingsStore();
+function hasCRIS () {
+  return !!store.cris
+}
 </script>
 
 <style scoped></style>

@@ -97,7 +97,8 @@ export class CRISController {
       const searchResults = await this.service.search(
         req.body.query,
         crisData.apiUrl,
-        crisData.apiKey
+        crisData.apiKey,
+        req.body.entityTypes,
       );
 
       res.status(200).json(searchResults);

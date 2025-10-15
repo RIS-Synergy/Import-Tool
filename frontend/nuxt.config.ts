@@ -23,7 +23,8 @@ export default defineNuxtConfig({
       valuePerson: process.env.RIS_DEV_VALUE_PERSON || null,
 
       // Some instances do not have a CRIS. Some UI Components will otherwise show errors
-      hasCRIS: !!process.env.PURE_API_URL || false,
+      // hasCRIS: !!process.env.PURE_API_URL || false,
+      hasCRIS: true
     }
   },
 

@@ -134,10 +134,24 @@ function setOfOrganization(items) {
 
 const search = ref(null);
 
-const { searchApi } = useApiUtils();
+const { cris } = useApiUtils();
+const { searchForPeople } = (await cris).default;
 
 async function searchApiPost(str: string, entity: string) {
-  const result = await searchApi(str.value, entity);
+  var result = await searchForPeople(str.value);
+
+  result = result.map((item) => {
+    return {
+      pureId: item.pureId,
+      uuid: item.uuid,
+      name: item.name && item.name.firstName + " " + item.name.lastName,
+      user: item.user && item.user.uuid,
+      details: item,
+      entity: entity,
+      systemName: item.systemName,
+    };
+  });
+
   search.value = result;
 }
 

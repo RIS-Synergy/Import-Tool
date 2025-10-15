@@ -81,19 +81,13 @@ export async function callRIApi(
 }
 
 // XXX this search function is PURE-specific
-export async function search(query: string, apiUrl: string, apiKey: string): Promise<CRIS[]> {
+export async function search(query: string, apiUrl: string, apiKey: string,
+                             entityTypes = ['projects', 'applications', 'awards', 'persons', 'external-persons']
+                            ): Promise<CRIS[]> {
   const maxItemSize = 10
 
   log.info("Searching for:", query);
   var results = []
-
-  const entityTypes = [
-    'projects',
-    'applications',
-    'awards',
-    'persons',
-    'external-persons',
-  ]
 
   const promises = entityTypes.map(entityType => {
     const endpoint = `/${entityType}/search`
@@ -106,9 +100,7 @@ export async function search(query: string, apiUrl: string, apiKey: string): Pro
       log.debug('SearchResults', endpoint, result.items.length)
 
       result.items && result.items.map((item: any) => {
-        results.push({
-          ...item,
-        });
+        results.push(item);
       });
     }).catch(error => {
       log.error('Error searching', endpoint, error)

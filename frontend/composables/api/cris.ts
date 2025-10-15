@@ -16,7 +16,20 @@ const searchApi = async (searchString: string) => {
   return result
 }
 
+const searchForPeople = async (searchString: string) => {
+  const store = useUserSettingsStore();
+  const result = await apiCall('cris/search', 'POST', {
+    body: JSON.stringify({
+      query: searchString,
+      crisId: store.cris || null,
+      entityTypes: ['persons', 'external-persons'],
+    }),
+  })
+  return result
+}
+
 export default {
   listAll,
   searchApi,
+  searchForPeople
 }

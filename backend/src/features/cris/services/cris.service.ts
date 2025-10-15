@@ -83,7 +83,7 @@ export class CRISService {
     });
   }
 
-  public async search(query: string, apiUrl: string, apiKey: string): Promise<CRIS[]> {
-    return searchService(query, apiUrl, apiKey);
+  public async search(query: string, apiUrl: string, apiKey: string, entityTypes: string[]): Promise<CRIS[]> {
+    return searchService(query, apiUrl, apiKey, entityTypes);
   }
 }
