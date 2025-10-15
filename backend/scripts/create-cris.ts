@@ -11,6 +11,7 @@ const prisma = new PrismaClient()
 interface CreateCRISArgs {
   name?: string;
   apiUrl?: string;
+  apiKey?: string;
   domain?: number;
   help?: boolean;
 }
@@ -55,6 +56,7 @@ Usage: create-cris.ts [options]
 Options:
 --name <name>          Name for the new CRIS
 --apiUrl <apiUrl>      API URL for the CRIS
+--apiKey <apiKey>      API Key for the CRIS (optional)
 --domain <domain>      Research institution domain, default: univie.ac.at
 --help                 Show this help message
 `);
@@ -85,6 +87,17 @@ Options:
     apiUrl = response.apiUrl;
   }
 
+  // Get apiKey
+  let apiKey = args.apiKey;
+  if (apiKey === undefined) {
+    const response = await prompts({
+      type: 'text',
+      name: 'apiKey',
+      message: 'Enter CRIS API Key (optional)'
+    });
+    apiKey = response.apiKey;
+  }
+
   if (!name || !apiUrl || domain === undefined) {
     console.error('Name, API URL, and Research Institution domain are required')
     process.exit(1)
@@ -98,11 +111,16 @@ Options:
     const cris = await crisService.create({
       name,
       apiUrl,
+      apiKey: apiKey || '',
     }, domain);
 
     console.log(`CRIS ${name} has been created successfully with ID: ${cris.id}`);
   } catch (error) {
-    console.error('Error creating CRIS:', error);
+    if (error instanceof Error && error.message.includes('already exists')) {
+      console.error(`Error: ${error.message}`);
+    } else {
+      console.error('Error creating CRIS:', error);
+    }
     process.exit(1);
   }
 }
@@ -120,6 +138,10 @@ async function main() {
     .option('apiUrl', {
       type: 'string',
       description: 'API URL for the CRIS'
+    })
+    .option('apiKey', {
+      type: 'string',
+      description: 'API Key for the CRIS (optional)'
     })
     .option('help', {
       type: 'boolean',

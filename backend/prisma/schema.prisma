@@ -123,9 +123,10 @@ model ResearchInstitution {
 model CRIS {
   id Int @id @default(autoincrement())
 
-  name   String @default("")
-  apiUrl String @default("")
-  data   Json   @default("{}")
+  name   String  @default("")
+  apiUrl String  @default("")
+  apiKey String? @default("")
+  data   Json    @default("{}")
 
   researchInstitution   ResearchInstitution? @relation(fields: [researchInstitutionId], references: [id])
   researchInstitutionId Int?

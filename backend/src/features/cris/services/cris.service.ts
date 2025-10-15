@@ -1,5 +1,6 @@
 import prisma from '../../../lib/prisma.js';
 import { CRIS } from '../cris.model.js';
+import { BadRequestError } from '../../../utils/errors.js';
 
 type CRISCreationParams = Omit<CRIS, 'id'>;
 
@@ -26,14 +27,45 @@ export class CRISService {
   }
 
   public async create(crisData: CRISCreationParams, domain: string): Promise<CRIS> {
-    return prisma.cRIS.create({
-      data: {
-        ...crisData,
-        researchInstitution: {
-          connect: { domain },
-        },
+    try {
+      // Find the research institution by domain
+      const researchInstitution = await prisma.researchInstitution.findFirst({
+        where: { domain },
+      });
+
+      if (!researchInstitution) {
+        throw new BadRequestError(`Research institution with domain ${domain} not found`);
       }
-    });
+
+      // Check if a CRIS with the same name already exists for this research institution
+      const existingCRIS = await prisma.cRIS.findFirst({
+        where: {
+          name: crisData.name,
+          researchInstitutionId: researchInstitution.id,
+        },
+      });
+
+      if (existingCRIS) {
+        throw new BadRequestError(`CRIS with name "${crisData.name}" already exists for research institution "${researchInstitution.name}"`);
+      }
+
+      // Connect using the rorId which is unique
+      return await prisma.cRIS.create({
+        data: {
+          ...crisData,
+          researchInstitution: {
+            connect: {
+              rorId: researchInstitution.rorId,
+            },
+          },
+        }
+      });
+    } catch (error) {
+      if (error instanceof BadRequestError) {
+        throw error;
+      }
+      throw new BadRequestError('Failed to create CRIS: ' + (error instanceof Error ? error.message : String(error)));
+    }
   }
 
   public async update(id: number, crisData: Partial<CRISCreationParams>): Promise<CRIS> {
