@@ -1,21 +1,23 @@
 import prisma from '../../../lib/prisma.js';
 import { CRIS } from '../cris.model.js';
 import { BadRequestError } from '../../../utils/errors.js';
+import { search as searchService } from './cris.search.service.js';
 
 type CRISCreationParams = Omit<CRIS, 'id'>;
 
 export class CRISService {
-  public async findMany(limitByUserPermission = {}): Promise<CRIS[]> {
+  public async findMany(limitByUserPermission = {}, select = {}): Promise<CRIS[]> {
     return prisma.cRIS.findMany({
       orderBy: { name: 'asc' },
       where: limitByUserPermission,
       select: {
         id: true,
         name: true,
-        apiUrl: true,
+        apiUrl: true, // insecure to show it
         researchInstitution: {
           select: { name: true }
-        }
+        },
+        ...select
       },
     });
   }
@@ -79,5 +81,9 @@ export class CRISService {
     return prisma.cRIS.delete({
       where: { id },
     });
+  }
+
+  public async search(query: string, apiUrl: string, apiKey: string): Promise<CRIS[]> {
+    return searchService(query, apiUrl, apiKey);
   }
 }

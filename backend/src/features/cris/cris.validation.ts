@@ -10,3 +10,8 @@ export const createCRISSchema = Joi.object({
 export const crisIdSchema = Joi.object({
   id: Joi.number().integer().min(1).required(),
 });
+
+export const searchSchema = Joi.object({
+  query: Joi.string().required(),
+  crisId: Joi.number().integer().min(1).optional(),
+});

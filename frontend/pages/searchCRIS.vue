@@ -70,10 +70,11 @@
 const search = ref("");
 const result = ref([]);
 
-const { searchAny } = useApiUtils();
+const { cris } = useApiUtils();
+const { searchApi } = (await cris).default;
 
 async function startSearch() {
-  result.value = await searchAny(search.value);
+  result.value = await searchApi(search.value);
 }
 
 import { formatDistance } from "date-fns";
