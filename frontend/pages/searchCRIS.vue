@@ -47,7 +47,7 @@
               ><br /><span class="grey">de</span> {{ item.title.de_DE }}</span
             >
           </td>
-          <td>{{ item.entity }}</td>
+          <td>{{ item.systemName }}</td>
           <td class="modDate">{{ modDate(item.modifiedDate) }}</td>
           <td>
             <v-dialog max-width="1400">
@@ -60,7 +60,7 @@
               </template>
 
               <template v-slot:default="{ isActive }">
-                <PureUUID :uuid="item.uuid" :entity="item.entity" />
+                <PureUUID :uuid="item.uuid" :systemName="item.systemName" />
               </template>
             </v-dialog>
           </td>
@@ -79,11 +79,6 @@ const { searchApi } = (await cris).default;
 
 async function startSearch() {
   var rawResults = await searchApi(search.value);
-
-  for (const r of rawResults) {
-    r.entity = r.systemName
-  }
-
   result.value = rawResults;
 }
 

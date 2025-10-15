@@ -7,8 +7,13 @@ export async function reference(
 ): Promise<CRIS[]> {
 
   const systemNameMapping = {
+    'Application': 'applications',
+    'Award': 'awards',
+    'ExternalPerson': 'external-persons',
     'Organization': 'organizations',
-    'User': 'users'
+    'Person': 'persons',
+    'Project': 'projects',
+    'User': 'users',
   }
 
   const { systemName, uuid } = params

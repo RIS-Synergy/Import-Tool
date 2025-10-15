@@ -109,7 +109,6 @@ export class CRISController {
   }
 
   public reference = async (req: Request, res: Response): Promise<void> => {
-    // TODO
     const crisData = await this.getCrisData(req.body.crisId, req.user)
     const result = await this.service.reference(
       crisData.apiUrl,

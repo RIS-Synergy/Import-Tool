@@ -10,16 +10,18 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  entity: {
+  systemName: {
     type: String,
     required: true,
-  }
+  },
 });
 
 const data = ref({});
 
-const { riEntityUUID } = useApiUtils();
-data.value = await riEntityUUID(props.entity, props.uuid);
+const { cris } = useApiUtils();
+const { referenceApi } = (await cris).default;
+
+data.value = await referenceApi(props.systemName, props.uuid);
 </script>
 
 <style></style>
