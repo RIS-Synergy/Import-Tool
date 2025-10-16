@@ -2,7 +2,7 @@ import { CRIS } from '../cris.model.js';
 
 import { callCrisApi } from './cris.api.service.js';
 
-import { Logger } from "../../../utils/logger.js";
+import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: 'feature:cris:service' });
 
 // this 'search' function is PURE-specific

@@ -1,6 +1,6 @@
-import { ResearchInstitutionError } from '../../../utils/errors.js'
+import { ResearchInstitutionError } from '@/utils/errors.js'
 
-import { Logger } from "../../../utils/logger.js";
+import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: 'cris-api' });
 
 type Method = 'GET' | 'POST' | 'PUT' // | 'DELETE'

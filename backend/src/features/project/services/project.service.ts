@@ -1,8 +1,8 @@
-import prisma from '../../../lib/prisma.js';
+import prisma from '@/lib/prisma.js';
 import { Project } from '../project.model.js';
 import { updateData } from './update-data.js';
 
-import { Logger } from "../../../utils/logger.js";
+import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: "feature:project:service" });
 
 type SortBy = {

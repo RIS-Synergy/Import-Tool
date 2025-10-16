@@ -1,6 +1,6 @@
-import prisma from '../../../lib/prisma.js';
+import prisma from '@/lib/prisma.js';
 import { CRIS } from '../cris.model.js';
-import { BadRequestError } from '../../../utils/errors.js';
+import { BadRequestError } from '@/utils/errors.js';
 import { search as searchService } from './cris.search.service.js';
 import { reference as referenceService } from './cris.reference.service.js';
 

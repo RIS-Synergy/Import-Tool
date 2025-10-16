@@ -1,10 +1,10 @@
-import prisma from '../../../lib/prisma.js';
+import prisma from '@/lib/prisma.js';
 
-import { Logger } from "../../../utils/logger.js";
+import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: "feature:fa" });
 
 import { FundingAgency } from '../funding-agency.model.js';
-import { BadRequestError } from '../../../utils/errors.js';
+import { BadRequestError } from '@/utils/errors.js';
 import { updateFromRegistry } from './fa-registry.service.js';
 
 type FundingAgencyCreationParams = FundingAgency;
