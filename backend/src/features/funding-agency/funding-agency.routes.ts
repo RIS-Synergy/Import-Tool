@@ -1,0 +1,15 @@
+import { Router } from 'express';
+import { FundingAgencyController } from './funding-agency.controller.js';
+import { createFundingAgencySchema, fundingAgencyIdSchema } from './funding-agency.validation.js';
+import { validate } from '../../middleware/validator.js'
+
+const router = Router();
+const controller = new FundingAgencyController();
+
+router.get('/', controller.getMany);
+router.post('/', validate(createFundingAgencySchema, "body"), controller.create);
+router.get('/:id', validate(fundingAgencyIdSchema, "params"), controller.getById);
+router.put('/:id', validate(fundingAgencyIdSchema, "params"), validate(createFundingAgencySchema, "body"), controller.update);
+router.delete('/:id', validate(fundingAgencyIdSchema, "params"), controller.delete);
+
+export default router;

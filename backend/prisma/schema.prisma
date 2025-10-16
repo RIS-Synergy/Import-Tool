@@ -11,6 +11,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model FundingAgency {
+  id String @id
+
+  clientSecret String?
+  clientId     String?
+  data         Json    @default("{}")
+}
+
 // RIS
 model Project {
   id Int @id @default(autoincrement())
