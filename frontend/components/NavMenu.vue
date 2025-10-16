@@ -84,6 +84,12 @@
       </template>
     </v-list-item>
     <v-divider />
+    <v-list-item :to="`/fa`" link title="Funding Agencies">
+      <template v-slot:append>
+        <v-icon>mdi-cash-multiple</v-icon>
+      </template>
+    </v-list-item>
+    <v-divider />
     <!-- <v-divider v-if="isAdmin()"></v-divider> -->
     <!-- End Admin -->
   </v-list>

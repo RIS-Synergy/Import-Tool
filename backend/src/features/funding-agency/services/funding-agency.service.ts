@@ -9,8 +9,8 @@ export class FundingAgencyService {
     return prisma.fundingAgency.findMany({
       select: {
         id: true,
-        clientSecret: true,
-        clientId: true,
+        clientSecret: false,
+        clientId: false,
         data: true,
         ...select
       },

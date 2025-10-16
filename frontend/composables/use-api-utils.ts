@@ -305,6 +305,7 @@ export const useApiUtils = () => {
   const users = import ("./api/users")
   const cris = import ("./api/cris")
   const project = import ("./api/project")
+  const fa = import ("./api/fa")
 
   return {
     apiCall,
@@ -340,6 +341,7 @@ export const useApiUtils = () => {
     ri,
     users,
     cris,
-    project
+    project,
+    fa
   };
 };

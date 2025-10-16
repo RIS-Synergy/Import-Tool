@@ -65,6 +65,9 @@ app.use('/user', auth, (await import('./features/user/user.routes.js')).default)
 // CRIS Systems
 app.use('/cris', auth, (await import('./features/cris/cris.routes.js')).default)
 
+// Funding Agency (new version)
+app.use('/fa2', auth, (await import('./features/funding-agency/funding-agency.routes.js')).default)
+
 // error handler last
 app.use(unexpectedErrorHandler)
 
