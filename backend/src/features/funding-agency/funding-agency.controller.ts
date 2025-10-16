@@ -52,11 +52,11 @@ export class FundingAgencyController {
     }
   };
 
-  public delete = async (req: Request, res: Response): Promise<void> => {
+  public sync = async (req: Request, res: Response): Promise<void> => {
     try {
       const id = req.params.id;
-      const deletedFundingAgency = await this.service.delete(id);
-      res.status(200).json(deletedFundingAgency);
+      const sync = this.service.startSync(id)
+      res.status(200).json(sync);
     } catch (error) {
       res.status(500).json({ message: 'Error deleting FundingAgency' });
     }

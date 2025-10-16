@@ -20,6 +20,9 @@
           {{ item.data.name }}
         </td>
         <td>
+          <v-btn variant="outlined" size="small" @click="startSync(item.id)">
+            Sync
+          </v-btn>
         </td>
       </tr>
     </tbody>
@@ -28,6 +31,6 @@
 
 <script setup>
 const { fa } = useApiUtils();
-const { listAll } = (await fa).default;
+const { listAll, startSync } = (await fa).default;
 const data = await listAll();
 </script>

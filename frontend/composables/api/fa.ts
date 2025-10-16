@@ -5,6 +5,12 @@ const listAll = async () => {
   return result
 }
 
+const startSync = async (id: string) => {
+  const result = await apiCall(`fa2/${id}/sync`)
+  return result
+}
+
 export default {
   listAll,
+  startSync
 }

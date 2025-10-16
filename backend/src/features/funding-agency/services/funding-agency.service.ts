@@ -65,4 +65,11 @@ export class FundingAgencyService {
       log.error('Error updating from registry:', error);
     }
   }
+
+  public async startSync(id: string): Promise<FundingAgency> {
+    log.info(`Starting sync for FundingAgency with id ${id}`);
+    const fa = await this.findById(id)
+    log.debug(fa)
+    return fa
+  }
 }
