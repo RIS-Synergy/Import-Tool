@@ -2,7 +2,7 @@ import prisma from '../../../lib/prisma.js';
 import { FundingAgency } from '../funding-agency.model.js';
 import { BadRequestError } from '../../../utils/errors.js';
 
-type FundingAgencyCreationParams = Omit<FundingAgency, 'id'>;
+type FundingAgencyCreationParams = FundingAgency;
 
 export class FundingAgencyService {
   public async findMany(select = {}): Promise<FundingAgency[]> {
