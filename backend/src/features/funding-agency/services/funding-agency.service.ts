@@ -1,6 +1,11 @@
 import prisma from '../../../lib/prisma.js';
+
+import { Logger } from "../../../utils/logger.js";
+const log = new Logger({ name: "feature:fa" });
+
 import { FundingAgency } from '../funding-agency.model.js';
 import { BadRequestError } from '../../../utils/errors.js';
+import { updateFromRegistry } from './fa-registry.service.js';
 
 type FundingAgencyCreationParams = FundingAgency;
 
@@ -40,9 +45,24 @@ export class FundingAgencyService {
     });
   }
 
-  public async delete(id: string): Promise<FundingAgency> {
-    return prisma.fundingAgency.delete({
-      where: { id },
-    });
+  public async updateFromRegistry() {
+    try {
+      const members = updateFromRegistry()
+      for (const member of members) {
+        const result = await prisma.fundingAgency.upsert({
+          where: { id: member.id },
+          update: {
+            data: member
+          },
+          create: {
+            id: member.id,
+            data: member
+          }
+        })
+      }
+
+    } catch (error) {
+      log.error('Error updating from registry:', error);
+    }
   }
 }

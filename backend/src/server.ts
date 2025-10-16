@@ -4,6 +4,7 @@ import { Logger } from "./utils/logger.js";
 import { envLogs } from "./utils/env-logs.js";
 import { FundingAgency } from "./models/FundingAgency.js";
 import { DiffSync } from "./models/DiffSync.js";
+import { FundingAgencyService } from "./features/funding-agency/services/funding-agency.service.js";
 
 const log = new Logger({ name: "server" });
 const port = process.env.PORT || 3000
@@ -17,6 +18,9 @@ envLogs()
 app.listen(port, () => {
   log.info(`RIS-Synergy API listening on port ${port}`)
 })
+
+const faService = new FundingAgencyService()
+faService.updateFromRegistry()
 
 const fundingAgency = new FundingAgency()
 fundingAgency.start()

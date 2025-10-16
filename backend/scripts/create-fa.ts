@@ -91,7 +91,6 @@ Options:
         id,
         clientSecret,
         clientId,
-        data: {}
       });
       console.log(`Funding Agency ${id} has been created successfully`);
     }

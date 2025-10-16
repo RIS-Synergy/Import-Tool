@@ -5,12 +5,20 @@
     <thead>
       <tr>
         <th>ID</th>
+        <th>Acronym</th>
+        <th>Name</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="item in data" :key="item.id">
         <td>{{ item.id }}</td>
+        <td>
+          {{ item.data.acronym }}
+        </td>
+        <td>
+          {{ item.data.name }}
+        </td>
         <td>
         </td>
       </tr>
