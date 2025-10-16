@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma.js';
 import { ResearchInstitution } from '../research-institution.model.js';
-import domains from '@/resources/ri-domains.json' with { type: "json" };
+import domains from 'resources/ri-domains.json' with { type: "json" };
 
 import { importDomains } from './import-domains.js';
 
