@@ -6,6 +6,7 @@ const log = new Logger({ name: "feature:fa" });
 import { FundingAgency } from '../funding-agency.model.js';
 import { BadRequestError } from '@/utils/errors.js';
 import { updateFromRegistry } from './fa-registry.service.js';
+import { FundingAgencySync } from './fa-sync.service.js';
 
 type FundingAgencyCreationParams = FundingAgency;
 
@@ -69,7 +70,16 @@ export class FundingAgencyService {
   public async startSync(id: string): Promise<FundingAgency> {
     log.info(`Starting sync for FundingAgency with id ${id}`);
     const fa = await this.findById(id)
-    log.debug(fa)
+    log.debug({
+      ...fa,
+      clientSecret: fa ? '****' : undefined,
+      clientId: fa ? '****' : undefined
+    })
+
+    const faSync = new FundingAgencySync(
+      fa.clientId, fa.clientSecret, fa.data.info)
+    faSync.start()
+
     return fa
   }
 }

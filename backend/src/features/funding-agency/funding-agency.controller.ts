@@ -1,8 +1,5 @@
 import { Request, Response } from 'express';
 
-import { Logger } from "../../utils/logger.js";
-const log = new Logger({ name: "feature:funding-agency:controller" });
-
 import { FundingAgencyService } from './services/funding-agency.service.js';
 
 export class FundingAgencyController {
@@ -58,7 +55,7 @@ export class FundingAgencyController {
       const sync = this.service.startSync(id)
       res.status(200).json(sync);
     } catch (error) {
-      res.status(500).json({ message: 'Error deleting FundingAgency' });
+      res.status(500).json({ message: 'Error running Sync for FundingAgency' });
     }
   };
 }
