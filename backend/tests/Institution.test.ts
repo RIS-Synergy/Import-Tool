@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { Institution } from '../src/models/Institution'
+import { Institution } from '@/models/Institution'
 
 describe('Institution', () => {
   it('by ROR ID', async () => {

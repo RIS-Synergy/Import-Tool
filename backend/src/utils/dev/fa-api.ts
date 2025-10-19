@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from "express"
 
-import { Logger } from "../../utils/logger.js";
+import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: 'dev:fa-api' });
 
 const router: any = express.Router()

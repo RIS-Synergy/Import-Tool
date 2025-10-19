@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Logger } from "../../utils/logger.js";
+import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: "feature:project:controller" });
 import { ProjectService } from './services/project.service.js';
 import { researchInstitutionIdSchema } from '../research-institution/research-institution.validation.js';

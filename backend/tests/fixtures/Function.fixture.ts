@@ -106,7 +106,7 @@ export default {
   },
   {
     name: 'oefos2012',
-    code: "//import { getValue } from '../views/oefos'\n" +
+    code: "//import { getValue } from '@/views/oefos'\n" +
       '\n' +
       'const { subjects } = input\n' +
       '\n' +

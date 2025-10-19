@@ -1,6 +1,6 @@
 import { ofetch } from "ofetch";
 
-import { Logger } from "../utils/logger.js";
+import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: 'utils:oauth2'});
 
 import { envLogs } from "./env-logs.js";

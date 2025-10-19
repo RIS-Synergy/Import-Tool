@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from "express"
 
-import { Transform } from '../models/Transform.js'
+import { Transform } from '@/models/Transform.js'
 
 import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: 'view:transform'});

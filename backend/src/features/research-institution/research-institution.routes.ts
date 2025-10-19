@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { ResearchInstitutionController } from './research-institution.controller.js';
 import { createResearchInstitutionSchema, researchInstitutionIdSchema } from './research-institution.validation.js';
-import { validate } from '../../middleware/validator.js'
+import { validate } from '@/middleware/validator.js'
 
 const router = Router();
 const researchInstitutionController = new ResearchInstitutionController();

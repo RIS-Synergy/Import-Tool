@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { CRISController } from './cris.controller.js';
 import { createCRISSchema, crisIdSchema, searchSchema, referenceSchema } from './cris.validation.js';
-import { validate } from '../../middleware/validator.js'
+import { validate } from '@/middleware/validator.js'
 
 const router = Router();
 const controller = new CRISController();

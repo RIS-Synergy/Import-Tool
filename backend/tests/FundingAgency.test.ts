@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
-import { FundingAgency } from '../src/models/FundingAgency'
-import { Project } from '../src/models/Project'
+import { FundingAgency } from '@/models/FundingAgency'
+import { Project } from '@/models/Project'
 
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()

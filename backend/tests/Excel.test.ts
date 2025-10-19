@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 import { describe, it, expect, vi } from 'vitest'
-import * as excel from '../src/models/Excel'
-import { Excel } from '../src/models/Excel'
+import * as excel from '@/models/Excel'
+import { Excel } from '@/models/Excel'
 
 const projectsFile = `./samples/projects/${process.env.RIS_TEST_DATA}`
 const projects = JSON.parse(readFileSync(projectsFile, 'utf8'))

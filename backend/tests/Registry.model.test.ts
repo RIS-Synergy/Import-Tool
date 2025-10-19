@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 
-import { Registry } from '../src/models/Registry'
+import { Registry } from '@/models/Registry'
 
 const mocked_endpoints = {
   "endpoints": {

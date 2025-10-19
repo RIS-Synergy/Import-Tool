@@ -7,9 +7,9 @@ const router: any = express.Router()
 
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
-import { Project } from '../models/Project.js'
-import { Institution } from '../models/Institution.js'
-import { Excel } from '../models/Excel.js'
+import { Project } from '@/models/Project.js'
+import { Institution } from '@/models/Institution.js'
+import { Excel } from '@/models/Excel.js'
 
 import multer from 'multer'
 const upload = multer();

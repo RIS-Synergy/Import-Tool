@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
-import { ResearchInstitution } from '../src/models/ResearchInstitution'
+import { ResearchInstitution } from '@/models/ResearchInstitution'
 
-import { callRIApi } from "../src/utils/ri-api";
+import { callRIApi } from "@/utils/ri-api";
 
 const crisData = {
   hello: 'old world',

@@ -5,7 +5,7 @@ const log = new Logger({ name: 'view:functions' });
 
 const router: Router = express.Router()
 
-import { Function } from '../models/Function.js'
+import { Function } from '@/models/Function.js'
 
 // list all functions
 router.get('/', async (req: Request, res: Response) => {

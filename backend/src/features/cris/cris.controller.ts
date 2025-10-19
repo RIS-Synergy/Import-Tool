@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { Logger } from "../../utils/logger.js";
+import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: "feature:cris:controller" });
 
 import { CRISService } from './services/cris.service.js';

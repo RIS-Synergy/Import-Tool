@@ -5,7 +5,7 @@ const log = new Logger({ name: 'view:project' });
 
 const router: any = express.Router()
 
-import { Institution } from '../models/Institution.js'
+import { Institution } from '@/models/Institution.js'
 
 router.get('/list', async (req, res) => {
   const results = Institution.list()

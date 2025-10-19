@@ -1,4 +1,4 @@
-import localRegistry from '@/../resources/ris-registry.json' with { type: "json" };
+import localRegistry from '@/resources/ris-registry.json' with { type: "json" };
 
 // For now we will just use these,
 // because the `registry.json` also has research institutions,

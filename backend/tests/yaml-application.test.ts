@@ -3,7 +3,7 @@ import * as fs from "fs";
 
 const projectsFile = `./samples/projects/${process.env.RIS_TEST_DATA}`
 const projects = JSON.parse(fs.readFileSync(projectsFile, 'utf8'))
-import { Transform } from '../src/models/Transform'
+import { Transform } from '@/models/Transform'
 
 const p = projects.find((p) => p.id === "P34707");
 

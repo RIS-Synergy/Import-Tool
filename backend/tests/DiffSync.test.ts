@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
-import { DiffSync } from '../src/models/DiffSync'
-import { parseTimeoutString } from '../src/utils/sync'
+import { DiffSync } from '@/models/DiffSync'
+import { parseTimeoutString } from '@/utils/sync'
 import mockTemplate from './fixtures/Template.fixture'
 
 vi.mock('../src/models/Diff', () => ({

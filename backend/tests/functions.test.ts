@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
-import { Function } from '../src/models/Function'
-import { Executer } from '../src/models/Executer'
+import { Function } from '@/models/Function'
+import { Executer } from '@/models/Executer'
 
 import mockFixtures from './fixtures/Function.fixture'
 

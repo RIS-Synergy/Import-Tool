@@ -1,6 +1,6 @@
-import { callRIApi } from '../utils/ri-api.js'
-import { ResearchInstitutionError } from '../utils/errors.js'
-import { Logger } from "../utils/logger.js";
+import { callRIApi } from '@/utils/ri-api.js'
+import { ResearchInstitutionError } from '@/utils/errors.js'
+import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: 'model:RI' });
 import _ from 'lodash';
 

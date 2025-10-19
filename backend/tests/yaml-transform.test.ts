@@ -4,8 +4,8 @@ import * as yaml from 'yaml';
 
 const projectsFile = `./samples/projects/${process.env.RIS_TEST_DATA}`
 const projects = JSON.parse(fs.readFileSync(projectsFile, 'utf8'))
-import { awaitAllPromises } from '../src/utils/promise'
-import { Transform } from '../src/models/Transform'
+import { awaitAllPromises } from '@/utils/promise'
+import { Transform } from '@/models/Transform'
 
 const p = projects.find(p => p.id === 'PUB3333')
 

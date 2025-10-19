@@ -1,6 +1,6 @@
 import ivm from "isolated-vm";
-import { replacePlaceholders } from '../utils/yaml.js';
-import { getValue as oefosValue } from '../views/oefos.js';
+import { replacePlaceholders } from '@/utils/yaml.js';
+import { getValue as oefosValue } from '@/views/oefos.js';
 
 import { Logger } from "../utils/logger.js";
 const log = new Logger({ name: "Executer" });

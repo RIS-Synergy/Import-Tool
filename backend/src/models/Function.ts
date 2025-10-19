@@ -1,4 +1,4 @@
-import { Logger } from "../utils/logger.js";
+import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: 'model:Function' });
 
 import { PrismaClient } from '@prisma/client'

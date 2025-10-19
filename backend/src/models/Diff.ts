@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-import { Logger } from "../utils/logger.js";
+import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: 'Diff' });
 
 import { Project } from './Project.js';

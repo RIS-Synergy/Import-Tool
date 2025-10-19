@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { Transform } from '../src/models/Transform'
+import { Transform } from '@/models/Transform'
 import mockFixtures from './fixtures/Function.fixture'
 
 const input = {
