@@ -23,6 +23,7 @@
           <v-btn variant="outlined" size="small" @click="startSync(item.id)">
             Sync
           </v-btn>
+          <DeleteButton :item-id="item.id" @deleted="handleDeleted" />
         </td>
       </tr>
     </tbody>
@@ -30,7 +31,14 @@
 </template>
 
 <script setup>
+import DeleteButton from '@/components/FA/DeleteButton.vue'
+
 const { fa } = useApiUtils();
 const { listAll, startSync } = (await fa).default;
-const data = await listAll();
+const data = ref(await listAll());
+
+const handleDeleted = (deletedId) => {
+  // Remove the deleted item from the data array
+  data.value = data.value.filter(item => item.id !== deletedId);
+}
 </script>

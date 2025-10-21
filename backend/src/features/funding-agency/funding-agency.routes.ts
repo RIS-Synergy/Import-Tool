@@ -12,5 +12,6 @@ router.post('/', validate(createFundingAgencySchema, "body"), controller.create)
 router.get('/:id/sync', permission('admin'), controller.sync);
 router.get('/:id', validate(fundingAgencyIdSchema, "params"), controller.getById);
 router.put('/:id', validate(fundingAgencyIdSchema, "params"), validate(createFundingAgencySchema, "body"), controller.update);
+router.delete('/:id', validate(fundingAgencyIdSchema, "params"), controller.delete);
 
 export default router;

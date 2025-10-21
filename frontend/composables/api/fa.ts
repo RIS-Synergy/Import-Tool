@@ -10,7 +10,13 @@ const startSync = async (id: string) => {
   return result
 }
 
+const deleteFa = async (id: string) => {
+  const result = await apiCall(`fa2/${id}`, 'DELETE')
+  return result
+}
+
 export default {
   listAll,
-  startSync
+  startSync,
+  deleteFa
 }

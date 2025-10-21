@@ -58,4 +58,15 @@ export class FundingAgencyController {
       res.status(500).json({ message: 'Error running Sync for FundingAgency' });
     }
   };
+
+  public delete = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const id = req.params.id;
+      await this.service.delete(id);
+      res.status(204).send();
+    } catch (error) {
+      console.log('Error deleting FundingAgency:', error);
+      res.status(500).json({ message: 'Error deleting FundingAgency' });
+    }
+  };
 }

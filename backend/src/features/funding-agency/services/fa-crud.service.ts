@@ -54,4 +54,14 @@ export class FundingAgencyCRUD implements CRUD<FundingAgency> {
       data: fundingAgencyData,
     });
   }
+
+  public async delete(id: string): Promise<void> {
+    try {
+      await prisma.fundingAgency.delete({
+        where: { id },
+      });
+    } catch (error) {
+      throw new BadRequestError('Failed to delete FundingAgency: ' + (error instanceof Error ? error.message : String(error)));
+    }
+  }
 }
