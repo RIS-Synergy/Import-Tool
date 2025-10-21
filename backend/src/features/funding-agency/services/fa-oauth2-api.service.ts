@@ -6,12 +6,13 @@ const log = new Logger({ name: 'funding-agency:fa-oauth2-api.service'});
 // V2 _must_ have the clientId and clientSecret arguments
 export async function getAuthEndpointV2 (
   url: string,
+  oauth2Server: string,
   clientId: string,
   clientSecret: string,
 ) {
   try {
     /* First we need to get the OAuth2 token */
-    const response = await ofetch(process.env.AUTH_SERVER, {
+    const response = await ofetch(oauth2Server, {
       method: 'POST',
       headers: {
         // @ts-ignore

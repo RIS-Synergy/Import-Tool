@@ -33,20 +33,19 @@ type Endpoint = {
 }
 
 export class Registry {
-  infoURL: string
   endpoints = new Map<string, any[]>()
 
   constructor(
-    public members?: Array<any>
+    private oauth2Server: string
   ) { }
 
   async getEndpoints(infoURL: string, clientId: string, clientSecret: string) {
     try {
-      const response = await getAuthEndpointV2(infoURL, clientId, clientSecret)
-      // log.info('Received the Registry Info', response)
+      const response = await getAuthEndpointV2(
+        infoURL, this.oauth2Server, clientId, clientSecret)
       return response.endpoints
     } catch (error) {
-      log.error('Error fetching authenticated Registry member', process.env.RIS_REGISTRY_URL)
+      log.error('Error fetching authenticated Registry member', error)
     }
   }
 

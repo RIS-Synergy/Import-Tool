@@ -42,7 +42,7 @@ export class FundingAgencyService extends FundingAgencyCRUD {
     })
 
     const faSync = new FundingAgencySync(
-      fa.clientId, fa.clientSecret, fa.data.info)
+      fa.clientId, fa.clientSecret, fa.data)
     faSync.start()
 
     return fa

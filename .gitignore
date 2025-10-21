@@ -13,6 +13,7 @@ node_modules/
 
 # AI tools
 .aider*
+.prompts
 
 # just for dev, sometimes
 backend/projects/
