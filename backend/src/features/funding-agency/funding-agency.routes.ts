@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { FundingAgencyController } from './funding-agency.controller.js';
-import { createFundingAgencySchema, fundingAgencyIdSchema } from './funding-agency.validation.js';
+import { createFundingAgencySchema, fundingAgencyIdSchema, fundingAgencyUpdateSchema } from './funding-agency.validation.js';
 import { validate } from '@/middleware/validator.js'
 import { permission } from '@/middleware/permission.js'
 
@@ -11,7 +11,10 @@ router.get('/', controller.getMany);
 router.post('/', validate(createFundingAgencySchema, "body"), controller.create);
 router.get('/:id/sync', permission('admin'), controller.sync);
 router.get('/:id', validate(fundingAgencyIdSchema, "params"), controller.getById);
-router.put('/:id', validate(fundingAgencyIdSchema, "params"), validate(createFundingAgencySchema, "body"), controller.update);
+router.put('/:id',
+           validate(fundingAgencyIdSchema, "params"),
+           validate(fundingAgencyUpdateSchema, "body"),
+           controller.update);
 router.delete('/:id', validate(fundingAgencyIdSchema, "params"), controller.delete);
 
 export default router;

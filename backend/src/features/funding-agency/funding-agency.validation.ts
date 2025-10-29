@@ -10,3 +10,8 @@ export const createFundingAgencySchema = Joi.object({
 export const fundingAgencyIdSchema = Joi.object({
   id: Joi.string().required(),
 });
+
+export const fundingAgencyUpdateSchema = Joi.object({
+  clientSecret: Joi.string().optional(),
+  clientId: Joi.string().optional(),
+});

@@ -15,8 +15,16 @@ const deleteFa = async (id: string) => {
   return result
 }
 
+const updateFa = async (id: string, data: { clientId: string; clientSecret: string }) => {
+  const result = await apiCall(`fa2/${id}`, "PUT", {
+    body: data
+  })
+  return result
+}
+
 export default {
   listAll,
   startSync,
-  deleteFa
+  deleteFa,
+  updateFa
 }

@@ -3,9 +3,6 @@ import { FundingAgency } from '../funding-agency.model.js';
 import { BadRequestError } from '@/utils/errors.js';
 import { CRUD } from '@/models/CRUD.js';
 
-import { Logger } from "@/utils/logger.js";
-const log = new Logger({ name: 'fa:fa-crud' });
-
 type FundingAgencyCreationParams = Partial<FundingAgency>;
 
 export class FundingAgencyCRUD implements CRUD<FundingAgency> {
@@ -27,12 +24,10 @@ export class FundingAgencyCRUD implements CRUD<FundingAgency> {
       return acronymA.localeCompare(acronymB);
     });
 
-    log.debug('sortedFundingAgencies', sortedFundingAgencies)
-
     return sortedFundingAgencies;
   }
-
   public async findById(id: string): Promise<FundingAgency | null> {
+    console.log(`Finding FundingAgency by id: ${id}`)
     return prisma.fundingAgency.findUnique({
       where: { id },
     });

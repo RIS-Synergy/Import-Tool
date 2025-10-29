@@ -1,6 +1,5 @@
 <template>
   <AppBar title="Funding Agencies" />
-
   <v-table density="compact">
     <thead>
       <tr>
@@ -23,7 +22,11 @@
           <v-btn variant="outlined" size="small" @click="startSync(item.id)">
             Sync
           </v-btn>
-          <DeleteButton :item-id="item.id" @deleted="handleDeleted" />
+          <FADeleteButton :item-id="item.id" @deleted="handleDeleted" />
+          <FAFormButton
+            :item-id="item.id"
+            @submitted="(formData) => handleFormSubmit(formData, item.id)"
+          />
         </td>
       </tr>
     </tbody>
@@ -31,14 +34,27 @@
 </template>
 
 <script setup>
-import DeleteButton from '@/components/FA/DeleteButton.vue'
+import { ref } from "vue";
 
 const { fa } = useApiUtils();
-const { listAll, startSync } = (await fa).default;
+const { listAll, startSync, createFa, updateFa } = (await fa).default;
 const data = ref(await listAll());
 
+const handleFormSubmit = async (formData, itemId) => {
+  try {
+    if (itemId) {
+      await updateFa(itemId, formData);
+    } else {
+      await createFa(formData);
+    }
+
+    data.value = await listAll();
+  } catch (error) {
+    console.error("Error saving funding agency:", error);
+  }
+};
+
 const handleDeleted = (deletedId) => {
-  // Remove the deleted item from the data array
-  data.value = data.value.filter(item => item.id !== deletedId);
-}
+  data.value = data.value.filter((item) => item.id !== deletedId);
+};
 </script>
