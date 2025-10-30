@@ -8,8 +8,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
 # install python for gyp
-RUN apt-get install -y python3 make g++ && \
-  npm config set python /usr/bin/python3
+# RUN apt-get install -y python3 make g++ && \
+#   npm config set python /usr/bin/python3
 
 # Set the working directory
 WORKDIR /app
