@@ -3,6 +3,7 @@ import { CRIS } from '../cris.model.js';
 import { BadRequestError } from '@/utils/errors.js';
 import { search as searchService } from './cris.search.service.js';
 import { reference as referenceService } from './cris.reference.service.js';
+import { upload as uploadService } from './cris.upload.service.js';
 
 type CRISCreationParams = Omit<CRIS, 'id'>;
 
@@ -90,5 +91,9 @@ export class CRISService {
 
   public reference(apiUrl: string, apiKey: string, params: { systemName: string, uuid: string }): Promise<CRIS[]> {
     return referenceService(apiUrl, apiKey, params);
+  }
+
+  public upload (apiUrl: string, apiKey: string, params: {}): Promise<any> {
+    return uploadService(apiUrl, apiKey, params);
   }
 }

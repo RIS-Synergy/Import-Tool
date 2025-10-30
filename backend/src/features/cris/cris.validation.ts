@@ -22,3 +22,12 @@ export const referenceSchema = Joi.object({
   systemName: Joi.string().required(),
   uuid: Joi.string().required(),
 });
+
+export const uploadSchema = Joi.object({
+  crisId: Joi.number().integer().min(1).required(),
+  ris: Joi.object().required(),
+  settings: Joi.object().required(),
+  uuid: Joi.string().allow(null).required(),
+  templateId: Joi.number().integer().min(1).required(),
+  entity: Joi.string().valid('project', 'application', 'award').required(),
+});

@@ -121,4 +121,22 @@ export class CRISController {
 
     res.json(result);
   }
+
+  public upload = async (req: Request, res: Response): Promise<void> => {
+    const crisData = await this.getCrisData(req.body.crisId, req.user)
+
+    try {
+      const result = await this.service.upload(
+        crisData.apiUrl,
+        crisData.apiKey,
+        req.body
+      )
+
+      res.json(result);
+    } catch (error) {
+      log.error('Error uploading to CRIS:', error);
+      res.status(500).json({ message: 'Error uploading to CRIS' });
+    }
+  }
+
 }

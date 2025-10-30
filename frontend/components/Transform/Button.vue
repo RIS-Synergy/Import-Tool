@@ -41,17 +41,20 @@ const store = useProjectStore();
 const alert = useAlertStore();
 const snackbar = useSnackbar();
 
-const { uploadToPure } = useApiUtils();
+const { cris } = useApiUtils();
+const { uploadApi } = (await cris).default;
 
 async function saveTransformUpload(crud) {
   // create or edit
   store.error = null;
-  const result = await uploadToPure(
-    store.risData,
-    store.settings,
-    props.uuid,
-    store.template,
-    props.entityType,
+  const result = await uploadApi(
+    {
+      ris: store.risData,
+      settings: store.settings,
+      uuid: props.uuid,
+      templateId: store.template[`${props.entityType}Id`],
+      entity: props.entityType,
+    }
   );
   if (result && !result.error) {
     // turn off the left 'O' "Select" button

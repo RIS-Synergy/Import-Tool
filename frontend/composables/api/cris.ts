@@ -40,9 +40,22 @@ const referenceApi = async (systemName: string, uuid: string) => {
   return result
 }
 
+const uploadApi = async (data: any) => {
+  const store = useUserSettingsStore();
+  const body = {
+    ...data,
+    crisId: store.cris,
+  }
+  const result = await apiCall('cris/upload', 'POST', {
+    body: JSON.stringify(body),
+  })
+  return result
+}
+
 export default {
   listAll,
   searchApi,
   searchForPeople,
-  referenceApi
+  referenceApi,
+  uploadApi
 }
