@@ -1,23 +1,20 @@
 <template>
-  <div v-if="data" class="ml-4">
-    {{ data.user.username }}
-  </div>
+  <v-list-item>
+    User: <b>{{ user.username }}</b>
+    <template v-slot:append>
+      <v-chip
+        density="compact"
+        v-if="user.permission.includes('admin')" size="small" class="ma-0">
+      admin
+    </v-chip>
+    <UserButton />
+    </template>
+  </v-list-item>
+
 </template>
 
 <script setup>
-const { token } = useUserSettingsStore();
-
-const user = ref(null)
-
-const { data } = await useFetch("/user", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({ token: token }),
-});
+const { token, user } = useUserSettingsStore();
 </script>
 
-<style scoped>
-</style>
-
+<style scoped></style>

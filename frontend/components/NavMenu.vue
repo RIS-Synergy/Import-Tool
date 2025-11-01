@@ -7,15 +7,8 @@
       prepend-icon="mdi-google-circles-extended"
     ></v-list-item>
     <v-divider></v-divider>
-    <v-list-item>
-      <!-- <UserLable /> -->
-      User
-      <template v-slot:append>
-        <!-- <v-btn icon="mdi-menu-down" size="small" variant="text"></v-btn> -->
-        <UserButton />
-      </template>
-    </v-list-item>
-
+    <UserLable />
+    <CrisLable />
     <v-divider></v-divider>
     <!-- dark mode switcher -->
     <v-list-item
@@ -28,7 +21,12 @@
     <v-divider></v-divider>
     <v-list-item to="/projects" title="Projects" />
     <v-list-item class="smaller" :to="`/project/upload`" link title="Upload" />
-    <v-list-item class="smaller" :to="`/project/download`" link title="Download" />
+    <v-list-item
+      class="smaller"
+      :to="`/project/download`"
+      link
+      title="Download"
+    />
     <v-divider></v-divider>
     <v-list-item type="subheader" class="subheader"> Templates </v-list-item>
     <v-list-item

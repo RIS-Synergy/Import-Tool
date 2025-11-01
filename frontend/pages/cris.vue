@@ -24,7 +24,7 @@
             v-if="item.id !== currentCRIS"
             variant="outlined"
             size="small"
-            @click="selectCRIS(item.id)"
+            @click="setCRIS(item.id, item.name)"
           >
             select
           </v-btn>
@@ -32,7 +32,7 @@
             v-else
             variant="outlined"
             size="small"
-            @click="selectCRIS(null)"
+            @click="setCRIS(null, null)"
           >
             deselect
           </v-btn>
@@ -51,9 +51,5 @@ const data = await listAll();
 
 const userSettingsStore = useUserSettingsStore();
 const { setCRIS } = userSettingsStore;
-const currentCRIS = computed(() => userSettingsStore.cris);
-
-const selectCRIS = (id) => {
-  setCRIS(id);
-};
+const currentCRIS = computed(() => userSettingsStore.cris.id);
 </script>

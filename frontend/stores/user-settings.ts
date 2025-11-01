@@ -1,5 +1,10 @@
 import { defineStore } from 'pinia'
 
+type CRIS = {
+  id: string | null,
+  name: string | null
+}
+
 const projectFilters = {
   status: [],
   piDomain: {
@@ -18,7 +23,10 @@ export const useUserSettingsStore = defineStore('user-settings', {
     projectFilters,
     token: null,
     user: null,
-    cris: 0
+    cris: {
+      id: null,
+      name: null
+    }
   }),
   actions: {
     setToken(token: any) {
@@ -30,8 +38,9 @@ export const useUserSettingsStore = defineStore('user-settings', {
     clearFilters() {
       this.projectFilters = projectFilters
     },
-    setCRIS(cris: number) {
-      this.cris = cris
+    setCRIS(id: string, name: string) {
+      this.cris.id = id
+      this.cris.name = name
     }
   },
   persist: true
