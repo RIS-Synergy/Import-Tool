@@ -1,6 +1,5 @@
 <template>
   <v-list>
-    <!-- subtitle="hello world" -->
     <v-list-item
       class="my-2"
       title="Import Tool"
@@ -10,16 +9,11 @@
     <UserLable />
     <CrisLable />
     <v-divider></v-divider>
-    <!-- dark mode switcher -->
-    <v-list-item
-      class="my-2"
-      v-model="theme.global.current.dark"
-      title="Dark Mode"
-      @prepend-icon="prepare_icon()"
-      @click="toggleTheme"
-    />
-    <v-divider></v-divider>
-    <v-list-item to="/projects" title="Projects" />
+    <v-list-item to="/projects" title="Projects" >
+      <template v-slot:append>
+        <v-icon>mdi-book-open-page-variant</v-icon>
+      </template>
+    </v-list-item>
     <v-list-item class="smaller" :to="`/project/upload`" link title="Upload" />
     <v-list-item
       class="smaller"
@@ -28,7 +22,11 @@
       title="Download"
     />
     <v-divider></v-divider>
-    <v-list-item type="subheader" class="subheader"> Templates </v-list-item>
+    <v-list-item type="subheader" class="subheader"> Templates
+      <template v-slot:append>
+        <v-icon>mdi-file-code</v-icon>
+      </template>
+    </v-list-item>
     <v-list-item
       class="smaller"
       :to="`/template/project`"
@@ -60,7 +58,7 @@
       </template>
     </v-list-item>
     <v-divider></v-divider>
-    <v-list-item :to="`/info`" link title="Info" />
+    <v-list-item v-if="false" :to="`/info`" link title="Info" />
     <v-divider />
     <!-- Admin -->
     <!-- <v-divider v-if="isAdmin()"></v-divider> -->
@@ -90,6 +88,19 @@
     <v-divider />
     <!-- <v-divider v-if="isAdmin()"></v-divider> -->
     <!-- End Admin -->
+
+    <v-list-item
+      class="my-0"
+      v-model="theme.global.current.dark"
+      title="(Dark Mode)"
+      @prepend-icon="prepare_icon()"
+      @click="toggleTheme"
+    >
+      <template v-slot:append>
+        <v-icon>{{ prepend_icon() }}</v-icon>
+      </template>
+    </v-list-item>
+    <v-divider></v-divider>
   </v-list>
 </template>
 

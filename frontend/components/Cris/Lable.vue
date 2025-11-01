@@ -1,5 +1,5 @@
 <template>
-  <v-list-item density="compact">
+  <v-list-item>
     CRIS API: <b>{{ cris.name }}</b>
   </v-list-item>
 </template>
