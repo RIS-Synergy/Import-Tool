@@ -26,7 +26,7 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         cache: 'yarn'
-        node-version: lts/*
+        node-version: 22
         cache-dependency-path: ./backend/yarn.lock
 
     - name: Install dependencies

@@ -7,7 +7,7 @@
         </b>
         <template v-slot:append>
           <v-chip
-            v-if="user.permission.includes('admin')"
+            v-if="user && user.permission.includes('admin')"
             size="small"
             class="mr-1"
           >

@@ -20,7 +20,8 @@ test('User can Logout', async ({ page }) => {
   await expect(page.getByRole('banner').getByText('Projects')).toBeVisible();
 
   // open user menu
-  await page.getByRole('listbox').getByRole('button').click();
+  await page.locator('.mdi-account').click();
+  // await page.getByRole('listbox').getByRole('button').click();
 
   // click Logout
   await page.getByRole('button', { name: 'Logout' }).click();
