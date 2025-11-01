@@ -105,8 +105,8 @@ Options:
   // Find the research institution ID using the domain
   let researchInstitutionId = null;
   if (domain) {
-    const researchInstitution = await prisma.researchInstitution.findUnique({
-      where: { domain: domain }
+    const researchInstitution = await prisma.researchInstitution.findFirst({
+      where: { domain }
     });
 
     if (researchInstitution) {
