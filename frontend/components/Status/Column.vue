@@ -6,6 +6,7 @@
     :uuid="props.data.uuid"
     :same="projectEqualDiff"
   />
+  <span v-else-if="noCris" />
   <v-chip v-else class="text-none" color="orange">Unknown</v-chip>
 </template>
 
@@ -17,7 +18,8 @@ const props = defineProps({
 
 const loading = ref(true);
 
-const { diffRILikelihood } = useApiUtils();
+const { cris } = useApiUtils();
+const { diffRILikelihood } = (await cris).default;
 
 const likelihood = ref(null);
 const likely = ref(false);
@@ -26,6 +28,11 @@ const projectEqualDiff = ref(false);
 const store = useProjectStore();
 const templateSelected = computed(() => {
   return store.getTemplateByEntity("Project");
+});
+
+const { cris: crisId } = useUserSettingsStore();
+const noCris = computed(() => {
+  return !crisId || !crisId.id
 });
 
 const { getDiffs } = useApiUtils();
