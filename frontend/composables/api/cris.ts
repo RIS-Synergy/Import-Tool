@@ -52,10 +52,21 @@ const uploadApi = async (data: any) => {
   return result
 }
 
+const diffRILikelihood = async (risId: string) => {
+  const store = useUserSettingsStore();
+  const result = await apiCall(`cris/likelihood/${risId}`, 'POST', {
+    body: JSON.stringify({
+      crisId: store.cris.id
+    }),
+  })
+  return result;
+}
+
 export default {
   listAll,
   searchApi,
   searchForPeople,
   referenceApi,
-  uploadApi
+  uploadApi,
+  diffRILikelihood
 }

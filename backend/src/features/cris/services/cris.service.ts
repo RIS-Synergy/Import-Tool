@@ -4,6 +4,7 @@ import { BadRequestError } from '@/utils/errors.js';
 import { search as searchService } from './cris.search.service.js';
 import { reference as referenceService } from './cris.reference.service.js';
 import { upload as uploadService } from './cris.upload.service.js';
+import { calculateLikelihood } from './cris.diff.service.js';
 
 type CRISCreationParams = Omit<CRIS, 'id'>;
 
@@ -95,5 +96,9 @@ export class CRISService {
 
   public upload (apiUrl: string, apiKey: string, params: any): Promise<any> {
     return uploadService(apiUrl, apiKey, params);
+  }
+
+  public async likelihood(id: string): Promise<any> {
+    return await calculateLikelihood(id);
   }
 }

@@ -23,7 +23,9 @@ definePageMeta({
   layout: "project",
 });
 
-const { diffRILikelihood } = useApiUtils();
+const { cris } = useApiUtils();
+const { diffRILikelihood } = (await cris).default;
+
 const route = useRoute();
 const likelyhood = await diffRILikelihood(route.params.id);
 

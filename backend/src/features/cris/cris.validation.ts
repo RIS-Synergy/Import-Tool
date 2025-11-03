@@ -31,3 +31,11 @@ export const uploadSchema = Joi.object({
   templateId: Joi.number().integer().min(1).required(),
   entity: Joi.string().valid('project', 'application', 'award').required(),
 });
+
+export const likelihoodIdParamsSchema = Joi.object({
+  id: Joi.string().required()
+});
+
+export const likelihoodIdBodySchema = Joi.object({
+  crisId: Joi.number().integer().min(1).required(),
+});

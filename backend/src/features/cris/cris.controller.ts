@@ -4,6 +4,7 @@ import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: "feature:cris:controller" });
 
 import { CRISService } from './services/cris.service.js';
+import { calculateLikelihood } from './services/cris.diff.service.js';
 
 // similar code is duplicated from features/user/user.controller.ts, move to a common file
 function limitByUserPermission(reqUser: any) {
@@ -139,4 +140,20 @@ export class CRISController {
     }
   }
 
+  public likelihood = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const crisData = await this.getCrisData(req.body.crisId, req.user);
+      const id = req.params.id;
+
+      const result = await calculateLikelihood(id, crisData.apiUrl, crisData.apiKey);
+      res.json(result);
+    } catch (error) {
+      log.error('Error in likelihood calculation:', error);
+      if (error.message === 'CRIS not found or not accessible') {
+        res.status(404).json({ message: error.message });
+      } else {
+        res.status(500).json({ message: 'Error calculating likelihood' });
+      }
+    }
+  }
 }
