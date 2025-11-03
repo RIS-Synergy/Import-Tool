@@ -140,6 +140,9 @@ const { searchForPeople } = (await cris).default;
 async function searchApiPost(str: string, entity: string) {
   var result = await searchForPeople(str.value);
 
+  // remove the items with key errorType
+  result = result.filter((item) => !item.errorType);
+
   result = result.map((item) => {
     return {
       pureId: item.pureId,
@@ -175,5 +178,10 @@ onMounted(() => {
 .similarity {
   font-size: 0.9em;
   color: #676;
+}
+
+.v-table {
+  position: relative;
+  left: 0;
 }
 </style>

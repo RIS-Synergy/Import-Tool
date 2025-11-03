@@ -93,7 +93,7 @@ export class CRISService {
     return referenceService(apiUrl, apiKey, params);
   }
 
-  public upload (apiUrl: string, apiKey: string, params: {}): Promise<any> {
+  public upload (apiUrl: string, apiKey: string, params: any): Promise<any> {
     return uploadService(apiUrl, apiKey, params);
   }
 }

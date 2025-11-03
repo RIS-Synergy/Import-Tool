@@ -10,7 +10,7 @@ const searchApi = async (searchString: string) => {
   const result = await apiCall('cris/search', 'POST', {
     body: JSON.stringify({
       query: searchString,
-      crisId: store.cris || null,
+      crisId: store.cris.id || null,
     }),
   })
   return result
@@ -21,7 +21,7 @@ const searchForPeople = async (searchString: string) => {
   const result = await apiCall('cris/search', 'POST', {
     body: JSON.stringify({
       query: searchString,
-      crisId: store.cris || null,
+      crisId: store.cris.id || null,
       entityTypes: ['persons', 'external-persons'],
     }),
   })
@@ -32,7 +32,7 @@ const referenceApi = async (systemName: string, uuid: string) => {
   const store = useUserSettingsStore();
   const result = await apiCall('cris/reference', 'POST', {
     body: JSON.stringify({
-      crisId: store.cris,
+      crisId: store.cris.id,
       systemName,
       uuid
     }),
@@ -44,7 +44,7 @@ const uploadApi = async (data: any) => {
   const store = useUserSettingsStore();
   const body = {
     ...data,
-    crisId: store.cris,
+    crisId: store.cris.id,
   }
   const result = await apiCall('cris/upload', 'POST', {
     body: JSON.stringify(body),

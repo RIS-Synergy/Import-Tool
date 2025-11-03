@@ -9,3 +9,6 @@ export type Upload = {
   templateId: number;
   entity: string;
 }
+
+export type CrisError = {
+}

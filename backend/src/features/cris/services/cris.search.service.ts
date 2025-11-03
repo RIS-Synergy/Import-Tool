@@ -3,6 +3,7 @@ import { CRIS } from '../cris.model.js';
 import { callCrisApi } from './cris.api.service.js';
 
 import { Logger } from "@/utils/logger.js";
+import { ResearchInstitutionError } from '@/utils/errors.js';
 const log = new Logger({ name: 'feature:cris:service' });
 
 // this 'search' function is PURE-specific
@@ -18,7 +19,8 @@ export async function search(
   const promises = entityTypes.map(entityType => {
     const endpoint = `/${entityType}/search`
 
-    return callCrisApi(apiUrl, apiKey, endpoint, 'POST', {
+    const method = 'POST';
+    return callCrisApi(apiUrl, apiKey, endpoint, method, {
       size: maxItemSize,
       offset: 0,
       searchString: query
@@ -30,6 +32,16 @@ export async function search(
       });
     }).catch(error => {
       log.error('Error searching', endpoint, error)
+      if (error instanceof ResearchInstitutionError) {
+        log.debug('ResearchInstitutionError ignored for search:', endpoint)
+        results.push({
+          errorType: 'ResearchInstitutionError',
+          endpoint,
+          method,
+          message: error.message,
+          status: error.status
+        });
+      }
     })
   });
 
