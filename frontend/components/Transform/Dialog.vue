@@ -41,7 +41,8 @@ const { template } = useProjectStore();
 const id = computed(() => template[props.templateType + "Id"]);
 const store = useProjectStore();
 
-const { loadTransformation } = useApiUtils();
+const { transform } = useApiUtils();
+const { loadTransformation } = (await transform).default;
 
 function onClickView () {
   loadTransformation(store, id.value, props.templateType)

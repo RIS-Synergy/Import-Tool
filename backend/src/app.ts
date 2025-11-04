@@ -24,7 +24,8 @@ app.use('/fa', auth, (await import('./views/funding-agency.js')).default)
 app.use('/ri', auth, (await import('./views/research-institution.js')).default)
 
 // transform: Transformations
-app.use('/transform', auth, (await import('./views/transform.js')).default)
+// app.use('/transform', auth, (await import('./views/transform.js')).default)
+app.use('/transform', auth, (await import('./features/transform/transform.routes.js')).default)
 
 // functions
 app.use('/functions', auth, (await import('./views/functions.js')).default)
