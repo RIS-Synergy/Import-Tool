@@ -61,12 +61,12 @@ export class TemplateController {
   public updateYaml = async (req: Request, res: Response): Promise<void> => {
     try {
       const id = parseInt(req.params.id, 10);
-      const { text } = req.body;
+      const { yamlTemplate } = req.body;
 
-      const updatedTemplate = await this.service.updateYamlTemplate(id, text);
+      const updatedTemplate = await this.service.updateYamlTemplate(id, yamlTemplate);
       res.status(200).json({
         ...updatedTemplate,
-        yamlTemplate: text.replace(/\\n/g, '')
+        yamlTemplate: yamlTemplate.replace(/\\n/g, '')
       });
     } catch (error) {
       res.status(500).json({ message: 'Error updating template YAML' });
@@ -93,7 +93,7 @@ export class TemplateController {
       res.json(result);
     } catch (e) {
       log.error('yaml error', e);
-      res.status(400).json({
+      res.status(423).json({
         error: e
       });
     }

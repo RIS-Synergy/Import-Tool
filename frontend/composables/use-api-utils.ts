@@ -19,6 +19,8 @@ export async function apiCall(url = '', method = 'GET', data: any = {}) {
     }
     else if (e.status === 422) {
       snackbar.error(e.data, 'ResearchInstitutionError')
+    } else if (e.status === 423) {
+      snackbar.error(e.data, 'yamlError')
     } else {
       console.warn(e, result);
       snackbar.error(e, 'apiCallError')

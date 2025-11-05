@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { TemplateController } from './template.controller.js';
 import {
   createTemplateSchema,
-  // updateTemplateSchema,
+  updateTemplateSchema,
   templateIdSchema,
   templateTypeSchema,
   verifyTemplateSchema,
@@ -22,8 +22,12 @@ router.get('/:type/:id',
 router.post('/', validate(createTemplateSchema, "body"), controller.create);
 router.put('/:id',
            validate(templateIdSchema, "params"),
-           validate(verifyTemplateSchema, "body"),
+           validate(updateTemplateSchema, "body"),
            controller.update);
+router.put('/:id/yaml',
+           validate(templateIdSchema, "params"),
+           validate(verifyTemplateSchema, "body"),
+           controller.updateYaml);
 router.post('/verify', validate(verifyTemplateSchema, "body"), controller.verify);
 
 export default router;

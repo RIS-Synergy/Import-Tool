@@ -73,7 +73,7 @@ const highlightedYaml = computed(() => {
 });
 
 const { template } = useApiUtils();
-const { updateTemplate, verifyTemplate } = (await template).default;
+const { updateTemplateYaml, verifyTemplate } = (await template).default;
 
 const error = ref(null);
 const okResult = ref(null);
@@ -95,7 +95,7 @@ async function save() {
     okResult.value = result;
   }
 
-  const updated = await updateTemplate(store.templateId, textData.value);
+  const updated = await updateTemplateYaml(store.templateId, textData.value);
   if (updated.error) {
     error.value = updated.error;
     return;

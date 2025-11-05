@@ -82,7 +82,7 @@ const titleCreateOrUpdate = computed(() => {
 });
 
 const { template: apiTemplate } = useApiUtils();
-const { createOrUpdateTemplate } = (await apiTemplate).default;
+const { updateTemplateDetails, createTemplate } = (await apiTemplate).default;
 
 function enableEditDialog(item) {
   name.value = item.name;
@@ -97,12 +97,23 @@ async function createOrUpdate() {
     console.log("Form is not valid");
     return;
   } else {
-    const result = await createOrUpdateTemplate(
-      props.templateType,
-      store.templateId,
-      name.value,
-      description.value,
-    );
+    let result;
+    if (store.templateId) {
+      // Update existing template
+      result = await updateTemplateDetails(
+        store.templateId,
+        props.templateType,
+        name.value,
+        description.value
+      );
+    } else {
+      // Create new template
+      result = await createTemplate(
+        props.templateType,
+        name.value,
+        description.value
+      );
+    }
     console.log("result", result);
     name.value = "";
     description.value = "";
