@@ -22,45 +22,6 @@ export class Template {
     return null
   }
 
-  // async createOrUpdateCrisLink(crisData: any) {
-  //   const data = {
-  //     crisId: crisData.pureId.toString(),
-  //     crisUUID: crisData.uuid
-  //   }
-  //   log.info('Data', data)
-  //   try {
-  //     const project = await prisma.project.update({
-  //       where: {
-  //         risId: this.risId
-  //       },
-  //       data
-  //     })
-  //     return project
-  //   } catch (error) {
-  //     log.error('Error creating or updating project', error)
-  //   }
-  //   return null
-  // }
-
-  // get crisUUID() {
-  //   return prisma.project.findUnique({
-  //     where: {
-  //       risId: this.risId
-  //     }
-  //   }).then((project) => {
-  //     return project.crisUUID
-  //   }).catch((error) => {
-  //     log.error('Error getting crisUUID', error)
-  //     return null
-  //   })
-  // }
-
-  // async fetchCrisData() {
-  //   const ri = new ResearchInstitution()
-  //   const crisData = await ri.getProjectData(await this.crisUUID)
-  //   return crisData
-  // }
-
   static async first (templateType: TemplateType) {
     const latestProjectTemplate = await prisma.template.findFirst({
       where: {
@@ -70,7 +31,6 @@ export class Template {
         modifiedDate: 'desc',
       },
     });
-    // log.info('Latest Project Template', latestProjectTemplate.id);
     return latestProjectTemplate;
   }
 }

@@ -81,7 +81,8 @@ const titleCreateOrUpdate = computed(() => {
   return store.templateId ? "Update" : "Create";
 });
 
-const { createOrUpdateTemplate } = useApiUtils();
+const { template: apiTemplate } = useApiUtils();
+const { createOrUpdateTemplate } = (await apiTemplate).default;
 
 function enableEditDialog(item) {
   name.value = item.name;
@@ -127,8 +128,10 @@ const newTemplateTitle = computed(() => {
   // return `${newOrUpdate} ${props.templateType.charAt(0).toUpperCase() + props.templateType.slice(1)} template`;
   return `${newOrUpdate} ${firstLetterCapitalized} template`;
 });
-const { getTemplates } = useApiUtils();
 const data = ref([]);
+
+const { template } = useApiUtils();
+const { getTemplates } = (await template).default;
 
 async function getListData() {
   data.value = await getTemplates(props.templateType);

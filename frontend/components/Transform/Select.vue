@@ -31,7 +31,8 @@ const emit = defineEmits(["change"]);
 
 const store = useProjectStore();
 
-const { getTemplates } = useApiUtils();
+const { template } = useApiUtils();
+const { getTemplates } = (await template).default;
 templates.value = await getTemplates(props.templateType);
 
 const templateItems = computed(() => {

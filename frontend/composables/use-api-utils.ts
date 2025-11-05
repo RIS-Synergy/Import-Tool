@@ -38,32 +38,6 @@ export function hasCRIS () {
 }
 
 export const useApiUtils = () => {
-  const getTemplates = async (type: string) => {
-    const result = await apiCall(`templates/${type}`)
-    return result;
-  };
-
-  const getTemplateId = async (type: string, id: string) => {
-    return await apiCall(`templates/${type}/${id}`);
-  };
-
-  const createOrUpdateTemplate = async (templateType, templateId, name, description) => {
-    return await apiCall('templates', 'POST', {
-      body: JSON.stringify({ name, description, templateId, templateType })
-    })
-  };
-
-  const updateTemplate = async (id, text) => {
-    return await apiCall(`templates/${id}`, 'PUT', {
-      body: JSON.stringify({ text })
-    })
-  };
-
-  const verifyTemplate = async (text) => {
-    return await apiCall('templates/verify', 'POST', {
-      body: JSON.stringify({ text })
-    })
-  };
 
   const setProjectId = async (store, route) => {
     const risId = store.risData && store.risData.id;
@@ -289,7 +263,6 @@ export const useApiUtils = () => {
     return result;
   }
 
-
   const createFunction = async (name: string) => {
     // same as setFunction, but with POST
     const result = await apiCall(`functions/`, 'PUT', {
@@ -307,14 +280,10 @@ export const useApiUtils = () => {
   const project = import ("./api/project")
   const fa = import ("./api/fa")
   const transform = import ("./api/transform")
+  const template = import ("./api/template")
 
   return {
     apiCall,
-    getTemplates,
-    getTemplateId,
-    verifyTemplate,
-    createOrUpdateTemplate,
-    updateTemplate,
     setProjectId,
     getProjectsList,
     loadTransformation,
@@ -344,6 +313,7 @@ export const useApiUtils = () => {
     cris,
     project,
     fa,
-    transform
+    transform,
+    template
   };
 };

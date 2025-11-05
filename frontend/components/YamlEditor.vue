@@ -72,7 +72,8 @@ const highlightedYaml = computed(() => {
   return hljs.highlight(textData.value, { language: "yaml" }).value;
 });
 
-const { verifyTemplate, updateTemplate } = useApiUtils();
+const { template } = useApiUtils();
+const { updateTemplate, verifyTemplate } = (await template).default;
 
 const error = ref(null);
 const okResult = ref(null);

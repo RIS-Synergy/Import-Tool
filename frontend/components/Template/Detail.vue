@@ -1,6 +1,8 @@
 <template>
   <v-container>
-    <YamlEditor :data="data.yamlTemplate" />
+    <ClientOnly>
+      <YamlEditor :data="data.yamlTemplate" />
+    </ClientOnly>
   </v-container>
 </template>
 
@@ -16,12 +18,13 @@ const templateType = computed(() => {
 const route = useRoute();
 console.log(route);
 
-const { getTemplateId, verifyTemplate } = useApiUtils();
+const { template } = useApiUtils();
+const { getTemplateId, verifyTemplate } = (await template).default;
 const data = await getTemplateId(templateType.value, route.params.id);
 
 const store = useTemplateStore();
-store.templateTitle = data.name;
-store.templateId = data.id;
+store.templateTitle = data && data.name;
+store.templateId = data && data.id;
 
 // on route leave
 onBeforeRouteLeave((to, from) => {

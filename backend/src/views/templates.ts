@@ -44,31 +44,6 @@ router.post('/', async (req: Request, res: Response) => {
     })
   }
 
-  // const result = await prisma.template.create({
-  //   data: {
-  //     name,
-  //     description,
-  //     templateType: typeMap[templateType],
-  //     yamlTemplate: 'output:\n'
-  //   }
-  // })
-  // const result = await prisma.template.upsert({
-  //   where: templateId && {
-  //     id: templateId
-  //   } || null,
-  //   update: {
-  //     name,
-  //     description,
-  //     templateType: typeMap[templateType],
-  //   },
-  //   create: {
-  //     name,
-  //     description,
-  //     templateType: typeMap[templateType],
-  //     yamlTemplate: 'output:\n'
-  //   }
-  // })
-
   res.json(result)
 })
 
@@ -80,13 +55,9 @@ router.put('/:id', async (req: Request, res: Response) => {
 
 
   log.info('text', text)
-  // var textYaml = yaml.dump(text, { indent: 2, lineWidth: -1 })
 
   // replace any following visible signes
   const textYaml = text.replace(/\n$/gm, '');
-
-  // remove any \w at the end of the line
-  // textYaml = textYaml.replace(/\\w/g, '')
 
   log.info('yaml', textYaml)
   const result = await prisma.template.update({
@@ -136,17 +107,12 @@ router.get('/:type/:id', async (req: Request, res: Response) => {
     }
   })
 
-  // add yaml
-  // result.jsonTemplate = yaml.load(result.yamlTemplate)
-
   res.json({
     ...result,
-    // jsonTemplate: yaml.load(result.yamlTemplate)
   })
 })
 
 router.post('/verify', async (req: Request, res: Response) => {
-  // log.info('verify template')
   const { text } = req.body
   log.debug('====== text ======\n', text, '\n====== text ended ======')
   var result

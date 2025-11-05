@@ -62,7 +62,8 @@ const templates = ref([]);
 // const active = true;
 const selected = ref(store.template[typeId]);
 
-const { getTemplates } = useApiUtils();
+const { template } = useApiUtils();
+const { getTemplates } = (await template).default;
 templates.value = await getTemplates(props.templateType);
 
 function setSelect(val) {

@@ -24,7 +24,6 @@ app.use('/fa', auth, (await import('./views/funding-agency.js')).default)
 app.use('/ri', auth, (await import('./views/research-institution.js')).default)
 
 // transform: Transformations
-// app.use('/transform', auth, (await import('./views/transform.js')).default)
 app.use('/transform', auth, (await import('./features/transform/transform.routes.js')).default)
 
 // functions
@@ -40,7 +39,7 @@ app.use('/project', auth, (await import('./views/project.js')).default)
 app.use('/project2', auth, (await import('./features/project/project.routes.js')).default)
 
 // Templates
-app.use('/templates', auth, (await import('./views/templates.js')).default)
+app.use('/templates', auth, (await import('./features/template/template.routes.js')).default)
 
 // Differences
 app.use('/diff', auth, (await import('./views/diff.js')).default)

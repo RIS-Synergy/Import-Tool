@@ -28,9 +28,9 @@ export class TransformService {
     try {
       const yamlTemplate = await this.getTemplate(templateId);
       log.debug('Template', templateId, yamlTemplate?.substring(0, 100) + '...');
-      
+
       const result = await this.executorService.execute(yamlTemplate, ris, settings);
-      
+
       return {
         yamlTemplate,
         transformationResult: result.output,
