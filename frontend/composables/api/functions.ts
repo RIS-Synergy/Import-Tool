@@ -1,12 +1,32 @@
 import { apiCall } from '../use-api-utils'
 
-const getFunction = async (id: string = '') => {
-  const result = await apiCall('functions/' + id)
+const getFunctions = async () => {
+  const result = await apiCall('functions/')
   return result;
 }
 
-const setFunction = async (name: string, code: string, input: object, settings: object) => {
+const getFunction = async (name: string) => {
+  const result = await apiCall('functions/' + name)
+  return result;
+}
+
+const updateFunction = async (name: string, code: string, language: string = 'javascript', description: string = '') => {
   const result = await apiCall(`functions/${name}`, 'PUT', {
+    body: JSON.stringify({
+      code,
+      language,
+      description
+    }),
+  })
+  return result;
+}
+
+const verifyFunction = async (
+  name: string,
+  code: string,
+  input: object,
+  settings: object) => {
+  const result = await apiCall(`functions/${name}/verify`, 'PUT', {
     body: JSON.stringify({
       code,
       input,
@@ -16,7 +36,7 @@ const setFunction = async (name: string, code: string, input: object, settings: 
   return result;
 }
 
-const createFunction = async (name: string) => {
+const createFunction = async (name: string, code: string = '', language: string = 'javascript', description: string = '') => {
   const result = await apiCall(`functions/`, 'POST', {
     body: JSON.stringify({
       name,
@@ -25,8 +45,16 @@ const createFunction = async (name: string) => {
   return result;
 }
 
+const deleteFunction = async (name: string) => {
+  const result = await apiCall(`functions/${name}`, 'DELETE')
+  return result;
+}
+
 export default {
+  getFunctions,
   getFunction,
-  setFunction,
-  createFunction
+  updateFunction,
+  verifyFunction,
+  createFunction,
+  deleteFunction
 }

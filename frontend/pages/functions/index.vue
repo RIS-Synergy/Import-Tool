@@ -46,9 +46,9 @@
 
 <script setup>
 const { functions } = useApiUtils();
-const { getFunction, createFunction } = (await functions).default;
+const { getFunctions, createFunction } = (await functions).default;
 
-const data = await getFunction();
+const data = await getFunctions();
 const dialog = ref(false);
 const form = ref(null);
 const name = ref("");
@@ -81,20 +81,16 @@ async function createOrUpdate() {
     return;
   } else {
     const result = await createFunction(
-      // props.templateType,
-      // store.templateId,
       name.value,
-      // description.value,
     );
     console.log("result", result);
     name.value = "";
-    // description.value = "";
     dialog.value = false;
     getListData();
   }
 }
 
 async function getListData() {
-  data.value = await getFunction();
+  data.value = await getFunctions();
 }
 </script>
