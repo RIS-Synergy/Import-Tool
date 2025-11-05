@@ -17,7 +17,7 @@ type UploadParams = {
 /* workaround. will create a new directory 'template' or 'transform' */
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
-async function getTemplate (templateId: number, entity: Entity) {
+async function getTemplate(templateId: number, entity: Entity) {
   const template = await prisma.template.findUnique({
     // where: { id: templateId[`${entity}Id`] }
     where: { id: templateId }
@@ -28,11 +28,17 @@ async function getTemplate (templateId: number, entity: Entity) {
   return template.yamlTemplate
 }
 
-import { Transform } from '@/models/Transform.js'
-async function transform (yamlTemplate: string, ris: string, settings: object) {
-  const transformService = new Transform()
-  const templateResult = await transformService.run(yamlTemplate, ris, settings)
-  return templateResult.output
+import { TransformExecutorService } from '@/features/transform/services/transform.executor.service.js'
+
+async function transform(yamlTemplate: string, ris: any, settings: object) {
+  const executorService = new TransformExecutorService();
+  const result = await executorService.execute(yamlTemplate, ris, settings);
+
+  if (result.error) {
+    throw new Error(`Transformation error: ${result.error}`);
+  }
+
+  return result.output;
 }
 
 // type Category = 'Project' | 'Application' | 'Award'

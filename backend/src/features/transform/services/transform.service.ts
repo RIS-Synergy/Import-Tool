@@ -1,4 +1,6 @@
 import { TransformExecutorService } from './transform.executor.service.js';
+import { TransformFunctionService } from './transform.function.service.js';
+import { FunctionService } from '@/features/function/services/function.service.js';
 import { TemplateService } from '@/features/template/services/template.service.js';
 import { Logger } from '@/utils/logger.js';
 const log = new Logger({ name: 'feature:transform:service' });
@@ -8,7 +10,9 @@ export class TransformService {
   private templateService: TemplateService;
 
   constructor() {
-    this.executorService = new TransformExecutorService();
+    const functionService = new FunctionService();
+    const transformFunctionService = new TransformFunctionService(functionService);
+    this.executorService = new TransformExecutorService(transformFunctionService);
     this.templateService = new TemplateService();
   }
 

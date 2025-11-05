@@ -8,7 +8,6 @@ const log = new Logger({ name: 'view:ri' });
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 import { ResearchInstitution } from "../models/ResearchInstitution.js"
-import { Transform } from '../models/Transform.js'
 
 import { ResearchInstitutionController } from '../features/research-institution/research-institution.controller.js';
 
