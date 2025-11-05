@@ -59,7 +59,8 @@ const highlightedYaml = computed(() => {
   return hljs.highlight(textData.value, { language: props.lang }).value;
 });
 
-const { setFunction } = useApiUtils();
+const { functions } = useApiUtils();
+const { setFunction } = (await functions).default;
 
 const alert = useAlertStore()
 

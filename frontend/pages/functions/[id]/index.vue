@@ -14,8 +14,10 @@ definePageMeta({
   layout: "functions"
 });
 
-const { getFunction } = useApiUtils()
 const route = useRoute()
+
+const { functions } = useApiUtils();
+const { getFunction } = (await functions).default;
 
 const f = await getFunction(route.params.id)
 </script>

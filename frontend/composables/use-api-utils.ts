@@ -249,32 +249,6 @@ export const useApiUtils = () => {
     return result;
   }
 
-  const getFunction = async (id: string = '') => {
-    const result = await apiCall('functions/' + id)
-    return result;
-  }
-
-  const setFunction = async (name: string, code: string, input: object, settings: object) => {
-    const result = await apiCall(`functions/${name}`, 'PUT', {
-      body: JSON.stringify({
-        code,
-        input,
-        settings
-      }),
-    })
-    return result;
-  }
-
-  const createFunction = async (name: string) => {
-    // same as setFunction, but with POST
-    const result = await apiCall(`functions/`, 'PUT', {
-      body: JSON.stringify({
-        name,
-      }),
-    })
-    return result;
-  }
-
   const user = import ("./api/use-api-user")
   const ri = import ("./api/ri")
   const users = import ("./api/users")
@@ -283,6 +257,7 @@ export const useApiUtils = () => {
   const fa = import ("./api/fa")
   const transform = import ("./api/transform")
   const template = import ("./api/template")
+  const functions = import ("./api/functions")
 
   return {
     apiCall,
@@ -303,9 +278,6 @@ export const useApiUtils = () => {
     faApi,
     diffRILikelihood,
     assignCluster,
-    getFunction,
-    setFunction,
-    createFunction,
     hasCRIS,
 
     // new API structure:
@@ -316,6 +288,7 @@ export const useApiUtils = () => {
     project,
     fa,
     transform,
-    template
+    template,
+    functions
   };
 };

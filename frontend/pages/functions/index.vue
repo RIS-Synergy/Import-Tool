@@ -45,7 +45,9 @@
 </template>
 
 <script setup>
-const { getFunction } = useApiUtils();
+const { functions } = useApiUtils();
+const { getFunction, createFunction } = (await functions).default;
+
 const data = await getFunction();
 const dialog = ref(false);
 const form = ref(null);
@@ -70,8 +72,6 @@ const titleCreateOrUpdate = computed(() => {
   // return store.templateId ? "Update" : "Create";
   return 'Create'
 });
-
-const { createFunction } = useApiUtils();
 
 async function createOrUpdate() {
   const { valid } = await form.value.validate();

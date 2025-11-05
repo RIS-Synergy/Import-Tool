@@ -27,7 +27,8 @@ app.use('/ri', auth, (await import('./views/research-institution.js')).default)
 app.use('/transform', auth, (await import('./features/transform/transform.routes.js')).default)
 
 // functions
-app.use('/functions', auth, (await import('./views/functions.js')).default)
+// app.use('/functions', auth, (await import('./views/functions.js')).default)
+app.use('/functions', auth, (await import('./features/function/function.routes.js')).default)
 
 // ÖFOS 2012
 app.use('/oefos', (await import('./views/oefos.js')).default)
