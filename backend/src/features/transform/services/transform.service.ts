@@ -1,21 +1,19 @@
-import { PrismaClient } from '@prisma/client';
 import { TransformExecutorService } from './transform.executor.service.js';
+import { TemplateService } from '@/features/template/services/template.service.js';
 import { Logger } from '@/utils/logger.js';
 const log = new Logger({ name: 'feature:transform:service' });
 
-const prisma = new PrismaClient();
-
 export class TransformService {
   private executorService: TransformExecutorService;
+  private templateService: TemplateService;
 
   constructor() {
     this.executorService = new TransformExecutorService();
+    this.templateService = new TemplateService();
   }
 
   async getTemplate(templateId: number) {
-    const template = await prisma.template.findUnique({
-      where: { id: templateId }
-    });
+    const template = await this.templateService.findById(templateId);
 
     if (!template) {
       throw new Error(`Template with id ${templateId} not found`);
