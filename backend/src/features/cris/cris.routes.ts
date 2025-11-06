@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { CRISController } from './cris.controller.js';
 import {
   createCRISSchema, crisIdSchema, searchSchema, referenceSchema,
-  uploadSchema, likelihoodIdParamsSchema, likelihoodIdBodySchema
+  uploadSchema, likelihoodIdParamsSchema, likelihoodIdBodySchema, getDiffSchema
 } from './cris.validation.js';
 import { validate } from '@/middleware/validator.js'
 
@@ -18,6 +18,9 @@ router.post('/likelihood/:id',
   validate(likelihoodIdParamsSchema, "params"),
   validate(likelihoodIdBodySchema, "body"),
   controller.likelihood);
+router.post('/getDiffs/:id',
+            validate(likelihoodIdParamsSchema, "params"),
+            validate(getDiffSchema, "body"), controller.getDiffs)
 router.get('/:id', validate(crisIdSchema, "params"), controller.getById);
 router.put('/:id', validate(crisIdSchema, "params"), validate(createCRISSchema, "body"), controller.update);
 router.delete('/:id', validate(crisIdSchema, "params"), controller.delete);

@@ -5,6 +5,10 @@ import { search as searchService } from './cris.search.service.js';
 import { reference as referenceService } from './cris.reference.service.js';
 import { upload as uploadService } from './cris.upload.service.js';
 import { calculateLikelihood } from './cris.diff.service.js';
+import { getDiff } from './cris.getDiff.service.js';
+
+import { Logger } from "@/utils/logger.js";
+const log = new Logger({ name: 'feature:cris:service' });
 
 type CRISCreationParams = Omit<CRIS, 'id'>;
 
@@ -98,7 +102,19 @@ export class CRISService {
     return uploadService(apiUrl, apiKey, params);
   }
 
-  public async likelihood(id: string): Promise<any> {
-    return await calculateLikelihood(id);
+  public async likelihood(risId: string, apiUrl: string, apiKey: string): Promise<any> {
+    return calculateLikelihood(risId, apiUrl, apiKey);
+  }
+
+  public async getDiffs(
+    id: string,
+    systemName: string,
+    uuid: string,
+    templateSelected: number,
+    settings: object,
+    apiUrl: string,
+    apiKey: string): Promise<any> {
+    log.info(`Getting diffs for RIS ID: ${id}, System: ${systemName}, UUID: ${uuid}, Template: ${templateSelected}`);
+    return getDiff(id, systemName, uuid, templateSelected, settings, apiUrl, apiKey);
   }
 }

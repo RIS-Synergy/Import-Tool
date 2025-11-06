@@ -5,7 +5,7 @@ import { callCrisApi } from './cris.api.service.js';
 
 const log = new Logger({ name: 'feature:cris:diff:service' });
 
-export async function calculateLikelihood(id: string, apiUrl?: string, apiKey?: string) {
+export async function calculateLikelihood(id: string, apiUrl: string, apiKey: string) {
   const data = (await Project.getById(id)).risData as any;
   const texts = data.title.map((t: any) => t.text);
 
@@ -14,10 +14,13 @@ export async function calculateLikelihood(id: string, apiUrl?: string, apiKey?: 
   const totalResults = calculateSimilarityResults(texts, searchResults, 0.8);
   const groupedResults = groupAndSortResults(totalResults);
 
+  log.info(`Calculated likelihood for project ${id}, found ${groupedResults.length} potential matches`);
+  log.debug('Grouped Results', groupedResults.length)
+
   return sortByEntity(groupedResults);
 }
 
-async function searchCategories(searchString: string, entityTypes: string[], apiUrl?: string, apiKey?: string) {
+async function searchCategories(searchString: string, entityTypes: string[], apiUrl: string, apiKey: string) {
   const results = [];
 
   // If no API URL and key are provided, we can't search

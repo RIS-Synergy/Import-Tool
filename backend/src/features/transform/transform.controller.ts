@@ -12,14 +12,16 @@ export class TransformController {
 
   public upload = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { templateId, ris, settings } = req.body;
-      
-      const result = await this.service.transform(templateId, ris, settings);
-      
+      const result = await this.service.transformById(
+        req.body.templateId,
+        req.body.ris,
+        req.body.settings
+      );
+
       res.status(200).json(result);
     } catch (error) {
       log.error('Upload error:', error);
-      res.status(500).json({ 
+      res.status(500).json({
         message: 'Error during transformation',
         error: error instanceof Error ? error.message : 'Unknown error'
       });

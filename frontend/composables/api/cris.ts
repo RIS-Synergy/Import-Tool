@@ -65,11 +65,43 @@ const diffRILikelihood = async (risId: string) => {
   return result;
 }
 
+const getDiffs = async (
+  risId: string,
+  systemName: string,
+  uuid: string,
+  templateId: number) => {
+
+  const store = useUserSettingsStore();
+  if (!store.cris.id) {
+    return [];
+  }
+
+  const projectStore = useProjectStore();
+
+  if (!templateId) {
+    return null;
+  }
+
+  // if (!hasCRIS()) return
+  const result = await apiCall(`cris/getDiffs/${risId}`, "POST", {
+    body: JSON.stringify({
+      crisId: store.cris.id,
+      systemName,
+      uuid,
+      templateId,
+      settings: projectStore.settings
+    }),
+  });
+  return result;
+}
+
+
 export default {
   listAll,
   searchApi,
   searchForPeople,
   referenceApi,
   uploadApi,
-  diffRILikelihood
+  diffRILikelihood,
+  getDiffs
 }

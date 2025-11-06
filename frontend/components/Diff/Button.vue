@@ -57,14 +57,19 @@ const props = defineProps({
   }
 });
 
-const { getDiffs } = useApiUtils();
+const { cris } = useApiUtils();
+const { getDiffs } = (await cris).default;
 
 const isActive = ref(false);
 // const diffList = ref([]);
 const diffList = ref(null);
 
 onMounted(async () => {
-  const result = await getDiffs(props.risId, props.systemName, props.uuid, templateSelected.value);
+  const result = await getDiffs(
+    props.risId,
+    props.systemName,
+    props.uuid,
+    templateSelected.value);
   diffList.value = result.output;
 });
 

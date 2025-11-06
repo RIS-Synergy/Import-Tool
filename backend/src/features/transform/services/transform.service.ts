@@ -16,7 +16,7 @@ export class TransformService {
     this.templateService = new TemplateService();
   }
 
-  async getTemplate(templateId: number) {
+  private async getTemplate(templateId: number) {
     const template = await this.templateService.findById(templateId);
 
     if (!template) {
@@ -26,12 +26,26 @@ export class TransformService {
     return template.yamlTemplate;
   }
 
-  async transform(templateId: number, ris: any, settings: any) {
+  async transformById(templateId: number, data: object, settings: any) {
     try {
       const yamlTemplate = await this.getTemplate(templateId);
-      log.debug('Template', templateId, yamlTemplate?.substring(0, 100) + '...');
+      log.info('Transforming using template ID:', templateId);
+      return this.transformByYaml(yamlTemplate, data, settings);
+    } catch (error) {
+      log.error('Transform by ID error:', error);
+      throw error;
+    }
+  }
 
-      const result = await this.executorService.execute(yamlTemplate, ris, settings);
+  async transformByYaml(yamlTemplate: string, data: object, settings: any) {
+    try {
+      log.debug('Transform YAML Template\n', yamlTemplate.substring(0, 100) + '...');
+
+      const result = await this.executorService.execute(
+        yamlTemplate,
+        data,
+        settings
+      );
 
       return {
         yamlTemplate,

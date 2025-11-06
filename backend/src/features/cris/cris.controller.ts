@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
 
+import { CRISService } from './services/cris.service.js';
+
 import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: "feature:cris:controller" });
-
-import { CRISService } from './services/cris.service.js';
-import { calculateLikelihood } from './services/cris.diff.service.js';
 
 // similar code is duplicated from features/user/user.controller.ts, move to a common file
 function limitByUserPermission(reqUser: any) {
@@ -145,7 +144,7 @@ export class CRISController {
       const crisData = await this.getCrisData(req.body.crisId, req.user);
       const id = req.params.id;
 
-      const result = await calculateLikelihood(id, crisData.apiUrl, crisData.apiKey);
+      const result = await this.service.likelihood(id, crisData.apiUrl, crisData.apiKey);
       res.json(result);
     } catch (error) {
       log.error('Error in likelihood calculation:', error);
@@ -155,5 +154,22 @@ export class CRISController {
         res.status(500).json({ message: 'Error calculating likelihood' });
       }
     }
+  }
+
+  public getDiffs = async (req: Request, res: Response): Promise<void> => {
+    log.info(`req: ${req.path}`, 'CRISController:getDiffs', req.body)
+    const crisData = await this.getCrisData(req.body.crisId, req.user);
+
+    const result = await this.service.getDiffs(
+      req.params.id,
+      req.body.systemName,
+      req.body.uuid,
+      req.body.templateId,
+      req.body.settings,
+      crisData.apiUrl,
+      crisData.apiKey
+    );
+
+    res.json(result);
   }
 }

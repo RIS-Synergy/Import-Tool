@@ -98,17 +98,6 @@ export const useApiUtils = () => {
     store.viewLastTemplate(store.risData, store.settings, templateType)
   };
 
-  const getDiffs = async (risId: string, systemName: string, uuid: string, templateSelected: number) => {
-    if (!hasCRIS()) return
-    const result = await apiCall(`diff/${risId}`, "POST", {
-      body: JSON.stringify({
-        systemName,
-        uuid,
-        templateSelected
-      }),
-    });
-    return result;
-  }
 
   const submitLogin = async (username: string, password: string) => {
     const result = await apiCall("auth/login", "POST", {
@@ -226,12 +215,6 @@ export const useApiUtils = () => {
     return result;
   }
 
-  const diffRILikelihood = async (risId: string) => {
-    if (!hasCRIS()) return
-    const result = await apiCall(`diff/likelihood/${risId}`)
-    return result;
-  }
-
   const assignCluster = async (project: string, item) => {
     const snackbar = useSnackbar();
     const result = await apiCall('ri/assignCluster', 'POST', {
@@ -264,7 +247,6 @@ export const useApiUtils = () => {
     setProjectId,
     getProjectsList,
     loadTransformation,
-    getDiffs,
     submitLogin,
     updatePassword,
     searchApi,
@@ -276,7 +258,6 @@ export const useApiUtils = () => {
     searchAny,
     riEntityUUID,
     faApi,
-    diffRILikelihood,
     assignCluster,
     hasCRIS,
 
