@@ -47,6 +47,14 @@ function mapListToObject(source: Record<string, string>[], key = 'Code') {
 const data_de = mapListToObject(loadCSVFile('DE'));
 const data_en = mapListToObject(loadCSVFile('EN'));
 
+export function getValue (id, lang) {
+  if (lang === 'DE') {
+    return data_de[id]
+  } else {
+    return data_en[id]
+  }
+}
+
 export class OefosService {
   public getById(id: string) {
     log.debug('ÖFOS 2012 lookup', id);
@@ -63,4 +71,5 @@ export class OefosService {
       en: enEntry
     };
   }
+
 }

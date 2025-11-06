@@ -8,8 +8,10 @@ const log = new Logger({ name: 'Diff' });
 
 import { Project } from './Project.js';
 import { Template } from './Template.js';
-import { Transform } from './Transform.js';
 import { ResearchInstitution } from './ResearchInstitution.js';
+import {TransformExecutorService} from "@/features/transform/services/transform.executor.service.js";
+import {FunctionService} from "@/features/function/services/function.service.js";
+import {TransformFunctionService} from "@/features/transform/services/transform.function.service.js";
 
 export class Diff {
   risData = null
@@ -52,8 +54,11 @@ export class Diff {
       this.yamlTemplate = template.yamlTemplate
     }
 
-    const transform = new Transform()
-    const appliedTemplate = await transform.run(
+    // const transform = new Transform()
+    const functionService = new FunctionService()
+    const functionFunctionService = new TransformFunctionService(functionService)
+    const exec = new TransformExecutorService(functionFunctionService)
+    const appliedTemplate = await exec.execute(
       this.yamlTemplate,
       this.risData,
       this.settings

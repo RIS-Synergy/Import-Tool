@@ -1,6 +1,6 @@
 import ivm from "isolated-vm";
 import { replacePlaceholders } from '@/utils/yaml.js';
-import { getValue as oefosValue } from '@/views/oefos.js';
+import { getValue as oefosValue } from '@/features/oefos/oefos.service.js';
 import { TransformFunctionService } from './transform.function.service.js';
 import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: "Executer" });
