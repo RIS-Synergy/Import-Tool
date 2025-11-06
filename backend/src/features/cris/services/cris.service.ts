@@ -106,15 +106,24 @@ export class CRISService {
     return calculateLikelihood(risId, apiUrl, apiKey);
   }
 
-  public async getDiffs(
-    id: string,
+  public getDiffs(
+    risId: string,
     systemName: string,
     uuid: string,
     templateSelected: number,
     settings: object,
     apiUrl: string,
     apiKey: string): Promise<any> {
-    log.info(`Getting diffs for RIS ID: ${id}, System: ${systemName}, UUID: ${uuid}, Template: ${templateSelected}`);
-    return getDiff(id, systemName, uuid, templateSelected, settings, apiUrl, apiKey);
+    log.info('Getting diffs', templateSelected);
+
+    return getDiff(
+      risId,
+      systemName,
+      uuid,
+      templateSelected,
+      settings,
+      apiUrl,
+      apiKey
+    );
   }
 }

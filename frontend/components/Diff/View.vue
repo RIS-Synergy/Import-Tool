@@ -21,21 +21,21 @@
         <td class="path mt-2">{{ diff.path }}</td>
         <td class="data">
           <!-- if RIS is a string -->
-          <span class="string" v-if="typeof diff.ris === 'string'">{{ diff.ris }}</span>
+          <span class="string" v-if="typeof diff.a === 'string'">{{ diff.a }}</span>
           <!-- if it's a number -->
-          <span class="number" v-else-if="typeof diff.ris === 'number'">{{ diff.ris }}</span>
+          <span class="number" v-else-if="typeof diff.a === 'number'">{{ diff.a }}</span>
           <!-- if it's undefined -->
-          <span v-else-if="diff.ris === undefined"></span>
-          <Yaml v-else="diff.ris" :json="diff.ris" />
+          <span v-else-if="diff.a === undefined"></span>
+          <Yaml v-else="diff.a" :json="diff.a" />
         </td>
         <td class="data">
           <!-- if CRIS is a string -->
-          <span class="string" v-if="typeof diff.cris === 'string'">{{ diff.cris }}</span>
+          <span class="string" v-if="typeof diff.b === 'string'">{{ diff.b }}</span>
           <!-- if it's a number -->
-          <span class="number" v-else-if="typeof diff.cris === 'number'">{{ diff.cris }}</span>
+          <span class="number" v-else-if="typeof diff.b === 'number'">{{ diff.b }}</span>
           <!-- if it's undefined -->
-          <span v-else-if="diff.cris === undefined"></span>
-          <Yaml v-else="diff.cris" :json="diff.cris" />
+          <span v-else-if="diff.b === undefined"></span>
+          <Yaml v-else="diff.b" :json="diff.b" />
         </td>
       </tr>
     </tbody>
@@ -70,7 +70,7 @@ const tableList = computed(() => {
 
 function validate (diff) {
   if (store.diff.onlyRIS) {
-    return diff && !!diff.ris
+    return diff && !!diff.a
   }
   return true
 }

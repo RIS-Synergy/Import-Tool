@@ -19,7 +19,7 @@ const props = defineProps({
 const loading = ref(true);
 
 const { cris } = useApiUtils();
-const { diffRILikelihood } = (await cris).default;
+const { diffRILikelihood, getDiffs } = (await cris).default;
 
 const likelihood = ref(null);
 const likely = ref(false);
@@ -35,7 +35,6 @@ const noCris = computed(() => {
   return !crisId || !crisId.id
 });
 
-const { getDiffs } = useApiUtils();
 async function findProjectDiffs(uuid) {
   const result = await getDiffs(
     props.id,

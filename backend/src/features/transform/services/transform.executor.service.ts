@@ -1,12 +1,12 @@
 import ivm from "isolated-vm";
 import { replacePlaceholders } from '@/utils/yaml.js';
 import { getValue as oefosValue } from '@/features/oefos/oefos.service.js';
-import { TransformFunctionService } from './transform.function.service.js';
+import {FunctionService} from "@/features/function/services/function.service.js";
 import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: "Executer" });
 
 export class TransformExecutorService {
-  constructor(private functionService: TransformFunctionService) {}
+  // constructor(private functionService: TransformFunctionService) {}
 
   private async isolatedFunction(context, jail, timeout, name, functionBody, input, settings, args) {
     const preParse = `
@@ -25,6 +25,7 @@ try { settings = JSON.parse(settings) } catch (e) {};
 
     let value = null;
     try {
+      // log.debug(`Executing function "${name}" with args:`, args);
       value = context.evalSync(`
 args = JSON.parse(args);
 JSON.stringify(new Function(args, body)(...args));
@@ -98,8 +99,14 @@ JSON.stringify(new Function(args, body)(...args));
     }
   }
 
-  async execute(yamlTemplate: string, input: any, settings: any) {
-    const functions = await this.functionService.loadFunctions();
+  async execute(yamlTemplate: string, input: any, settings: any, functions?: any[]) {
+    if (!functions) {
+      const functionService = new FunctionService()
+      functions = await functionService.findAll()
+    }
+
+    // log.info('🧑‍💻 Loaded functions:', functions.map(f => f.name))
+    // log.info('Arguments:', { yamlTemplate, input, settings });
 
     // Create a new isolated VM
     const isolate = new ivm.Isolate({ memoryLimit: 8 });
@@ -119,7 +126,13 @@ JSON.stringify(new Function(args, body)(...args));
     });
 
     try {
-      const result = await this.replaceTags(processedYaml, input, settings, functionsMap, jail, context, 0);
+      const result = await this.replaceTags(
+        processedYaml,
+        input,
+        settings,
+        functionsMap,
+        jail,
+        context, 0);
       const finalResult = await this.allPromisesNested(result);
       return { output: finalResult, error: null };
     } catch (error) {

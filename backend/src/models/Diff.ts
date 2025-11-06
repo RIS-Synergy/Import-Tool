@@ -9,9 +9,9 @@ const log = new Logger({ name: 'Diff' });
 import { Project } from './Project.js';
 import { Template } from './Template.js';
 import { ResearchInstitution } from './ResearchInstitution.js';
-import {TransformExecutorService} from "@/features/transform/services/transform.executor.service.js";
-import {FunctionService} from "@/features/function/services/function.service.js";
-import {TransformFunctionService} from "@/features/transform/services/transform.function.service.js";
+import { TransformExecutorService } from "@/features/transform/services/transform.executor.service.js";
+import { FunctionService } from "@/features/function/services/function.service.js";
+import { TransformFunctionService } from "@/features/transform/services/transform.function.service.js";
 
 export class Diff {
   risData = null

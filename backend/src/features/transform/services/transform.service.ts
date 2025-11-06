@@ -1,6 +1,4 @@
 import { TransformExecutorService } from './transform.executor.service.js';
-import { TransformFunctionService } from './transform.function.service.js';
-import { FunctionService } from '@/features/function/services/function.service.js';
 import { TemplateService } from '@/features/template/services/template.service.js';
 import { Logger } from '@/utils/logger.js';
 const log = new Logger({ name: 'feature:transform:service' });
@@ -9,10 +7,8 @@ export class TransformService {
   private executorService: TransformExecutorService;
   private templateService: TemplateService;
 
-  constructor() {
-    const functionService = new FunctionService();
-    const transformFunctionService = new TransformFunctionService(functionService);
-    this.executorService = new TransformExecutorService(transformFunctionService);
+  constructor () {
+    this.executorService = new TransformExecutorService();
     this.templateService = new TemplateService();
   }
 
@@ -30,16 +26,18 @@ export class TransformService {
     try {
       const yamlTemplate = await this.getTemplate(templateId);
       log.info('Transforming using template ID:', templateId);
-      return this.transformByYaml(yamlTemplate, data, settings);
+      return await this.transformByYaml(yamlTemplate, data, settings);
     } catch (error) {
       log.error('Transform by ID error:', error);
       throw error;
     }
   }
 
-  async transformByYaml(yamlTemplate: string, data: object, settings: any) {
+  async transformByYaml(yamlTemplate: string, data: object, settings: object) {
     try {
       log.debug('Transform YAML Template\n', yamlTemplate.substring(0, 100) + '...');
+      log.debug('Transform Data\n', JSON.stringify(data).substring(0, 100) + '...');
+      log.debug('Transform Settings\n', JSON.stringify(settings).substring(0, 100) + '...');
 
       const result = await this.executorService.execute(
         yamlTemplate,

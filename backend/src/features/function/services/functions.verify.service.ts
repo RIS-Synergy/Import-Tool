@@ -1,12 +1,35 @@
 import ivm from 'isolated-vm';
+
+import { TransformService } from '@/features/transform/services/transform.service.js';
+
 import { Logger } from '@/utils/logger.js';
 const log = new Logger({ name: 'FunctionVerifyService' });
 
 export class FunctionVerifyService {
-  public async verify(name: string, code: string, input: object, settings: object): Promise<{ output: any, error: any }> {
-    // Create a simple YAML template that calls the function
-    const yamlTemplate = `output: "!<fn>${name}"`;
 
+  public async verify(name: string, code: string, input: object, settings: object): Promise<{ output: any, error: any }> {
+    const yamlTemplate = `output: 42`
+    const transformservice = new TransformService()
+    try {
+    const {transformationResult} = await transformservice.transformByYaml(
+      yamlTemplate,
+      input,
+      settings
+    )
+    return {
+      output: transformationResult,
+      error: null
+    };
+    } catch (error) {
+      log.error('Function verification error:', error);
+      return {
+        output: null,
+        error: error instanceof Error ? error.message : "Unknown error"
+      };
+    }
+  }
+
+  public async verify2(name: string, code: string, input: object, settings: object): Promise<{ output: any, error: any }> {
     try {
       // Create a new isolated VM
       const isolate = new ivm.Isolate({ memoryLimit: 8 });

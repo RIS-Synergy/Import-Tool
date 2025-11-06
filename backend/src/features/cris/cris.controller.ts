@@ -160,6 +160,7 @@ export class CRISController {
     log.info(`req: ${req.path}`, 'CRISController:getDiffs', req.body)
     const crisData = await this.getCrisData(req.body.crisId, req.user);
 
+    log.trace('backend/src/features/cris/cris.controller.ts req body', req.body)
     const result = await this.service.getDiffs(
       req.params.id,
       req.body.systemName,

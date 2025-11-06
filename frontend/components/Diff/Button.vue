@@ -70,7 +70,7 @@ onMounted(async () => {
     props.systemName,
     props.uuid,
     templateSelected.value);
-  diffList.value = result.output;
+  diffList.value = result && result.diffList;
 });
 
 const templateSelected = computed(() => {
