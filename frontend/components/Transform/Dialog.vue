@@ -34,17 +34,19 @@ const isActive = ref(false);
 
 const props = defineProps({
   templateType: String,
+  templateId: Number,
 });
 
 const { template } = useProjectStore();
 
-const id = computed(() => template[props.templateType + "Id"]);
+// const id = computed(() => template[props.templateType + "Id"]);
 const store = useProjectStore();
 
 const { transform } = useApiUtils();
 const { loadTransformation } = (await transform).default;
 
 function onClickView () {
-  loadTransformation(store, id.value, props.templateType)
+  // loadTransformation(store, id.value, props.templateType)
+  loadTransformation(store, props.templateId, props.templateType)
 }
 </script>

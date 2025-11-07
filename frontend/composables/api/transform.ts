@@ -1,7 +1,8 @@
 import { apiCall } from '../use-api-utils'
 
-const loadTransformation = async (store, templateId, templateType: string) => {
+const loadTransformation = async (store, templateId: number, templateType: string) => {
   if (!templateId) {
+    console.log("no templateId provided", templateId)
     return;
   }
 

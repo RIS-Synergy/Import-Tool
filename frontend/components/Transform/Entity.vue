@@ -26,7 +26,9 @@
           <i class="light-grey"> {{ template.description }}</i>
         </v-col>
         <v-col class="right" cols="3">
-          <TransformDialog :templateType="props.templateType" />
+          <TransformDialog
+            :templateId="template.id"
+            :templateType="props.templateType" />
         </v-col>
       </v-row>
     </v-card-text>

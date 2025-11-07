@@ -11,7 +11,7 @@
       <h3>
         Result
       </h3>
-      <Yaml :json="result" :tab="1" />
+      <Yaml :json="result.output" :tab="1" />
     </v-col>
   </v-row>
 </template>
