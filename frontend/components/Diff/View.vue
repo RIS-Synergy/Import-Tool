@@ -65,6 +65,7 @@ const hasAtLeastOne = computed(() => {
 });
 
 const tableList = computed(() => {
+  // console.log('📑 diffList', props.diffList);
   return props.diffList.filter(validate);
 });
 

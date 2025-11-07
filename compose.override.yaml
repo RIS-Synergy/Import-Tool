@@ -30,6 +30,7 @@ services:
   frontend:
     environment:
       - BACKEND_API_PROXY="http://backend:3001/**"
+      - DEV_TOOLS=${DEV_TOOLS}
     ports:
       - "3032:3000"
       - "24678:24678"

@@ -26,7 +26,7 @@ export async function getDiff(
   const projectService = new ProjectService()
   const { risData } = await projectService.findByRisId(risId)
 
-  // Fetch CRIS data
+  // # Fetch CRIS data
   const endpoint = `/${systemName.toLowerCase()}s/${uuid}`;
   var crisData: object
   try {
@@ -36,23 +36,21 @@ export async function getDiff(
     throw error;
   }
 
-  // Execute
+  // # Execute
   const transformservice = new TransformService()
   const { transformationResult } = await transformservice.transformById(
     templateSelected,
     risData as object,
     settings
   )
-  // log.trace('RIS Data', risData)
 
-  // Calculate diff
-  // const differ = new Differ(transformationResult.output, crisData)
-  const differ = new Differ(crisData, transformationResult.output)
+  // # Calculate diff
+  // We can also invert the order with:
+  // const differ = new Differ(crisData, transformationResult.output)
+  // Note: this a or b version affects frontend/components/Diff/View.vue:73:13
+  const differ = new Differ(transformationResult.output, crisData)
   const setOfDiffKeys: Set<string> = differ.diff()
-  // log.trace('Set of Diff Keys', setOfDiffKeys)
   const diffList: DiffList = differ.diffList(setOfDiffKeys)
-
-  // log.trace('Diff List', diffList)
 
   return diffList
 }

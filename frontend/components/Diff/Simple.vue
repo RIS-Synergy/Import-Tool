@@ -1,5 +1,3 @@
-This is copied from 'DiffButton'
-
 <template>
   <v-dialog v-model="dialog">
     <template v-slot:activator="{ props: activatorProps }">
