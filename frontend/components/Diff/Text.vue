@@ -26,7 +26,7 @@ const value = props.data;
 
 const countCRIS = value
   .map((v) => {
-    if (v.cris) {
+    if (v.a) {
       return v.path;
     }
   })
@@ -34,7 +34,7 @@ const countCRIS = value
 
 const countRIS = value
   .map((v) => {
-    if (v.ris) {
+    if (v.b) {
       return v.path;
     }
   })

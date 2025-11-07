@@ -1,13 +1,13 @@
 <template>
-  <v-btn
-    v-if="showButton"
-    class="float-right mr-5 toggleBtn"
-
-    variant="outlined"
-    @click="store.toggleDiff()">
-    <span v-if="store.diff.onlyRIS"> Only RIS Data </span>
-    <span v-else> All Diffs </span>
-  </v-btn>
+  <!-- <v-btn
+       v-if="showButton"
+       class="float-right mr-5 toggleBtn"
+       variant="outlined"
+       @click="store.toggleDiff()"
+       >
+       <span v-if="store.diff.onlyRIS"> Only RIS Data </span>
+       <span v-else> All Diffs </span>
+       </v-btn> -->
   <v-table v-if="hasAtLeastOne">
     <thead>
       <tr>
@@ -21,18 +21,26 @@
         <td class="path mt-2">{{ diff.path }}</td>
         <td class="data">
           <!-- if RIS is a string -->
-          <span class="string" v-if="typeof diff.a === 'string'">{{ diff.a }}</span>
+          <span class="string" v-if="typeof diff.a === 'string'">{{
+            diff.a
+          }}</span>
           <!-- if it's a number -->
-          <span class="number" v-else-if="typeof diff.a === 'number'">{{ diff.a }}</span>
+          <span class="number" v-else-if="typeof diff.a === 'number'">{{
+            diff.a
+          }}</span>
           <!-- if it's undefined -->
           <span v-else-if="diff.a === undefined"></span>
           <Yaml v-else="diff.a" :json="diff.a" />
         </td>
         <td class="data">
           <!-- if CRIS is a string -->
-          <span class="string" v-if="typeof diff.b === 'string'">{{ diff.b }}</span>
+          <span class="string" v-if="typeof diff.b === 'string'">{{
+            diff.b
+          }}</span>
           <!-- if it's a number -->
-          <span class="number" v-else-if="typeof diff.b === 'number'">{{ diff.b }}</span>
+          <span class="number" v-else-if="typeof diff.b === 'number'">{{
+            diff.b
+          }}</span>
           <!-- if it's undefined -->
           <span v-else-if="diff.b === undefined"></span>
           <Yaml v-else="diff.b" :json="diff.b" />
@@ -41,6 +49,7 @@
     </tbody>
   </v-table>
   <div v-else>
+    dd
     <v-alert type="success" variant="outlined"
       >The CRIS Data is identical to the transformed template.</v-alert
     >
@@ -69,11 +78,11 @@ const tableList = computed(() => {
   return props.diffList.filter(validate);
 });
 
-function validate (diff) {
+function validate(diff) {
   if (store.diff.onlyRIS) {
-    return diff && !!diff.a
+    return diff && !!diff.a;
   }
-  return true
+  return true;
 }
 </script>
 
