@@ -16,7 +16,7 @@
             </template>
 
             <template v-slot:default="{ isActive }">
-              <PureUUID :uuid="item.uuid" :entity="item.entity" />
+              <PureUUID :uuid="item.uuid" :systemName="item.systemName" />
             </template>
           </v-dialog>
 

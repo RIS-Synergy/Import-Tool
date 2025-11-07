@@ -60,9 +60,9 @@ const highlightedJson = computed(() => {
 
 <style scoped>
 pre {
-  /* padding: 1em; */
+  padding: 0;
   border-radius: 8px;
-  font-size: 0.8em;
+  font-size: 0.7em;
 }
 
 .v-card-title {
