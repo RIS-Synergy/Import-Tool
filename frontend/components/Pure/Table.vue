@@ -78,18 +78,33 @@
           <v-col cols="10">
             <v-chip
               v-if="item.applicationCluster"
-              size="small"
               class="mr-1"
+              size="small"
               color="blue-darken-4"
             >
               Application
-              <!-- {{ item.applicationCluster }} -->
+              <span class="ml-2 my-1">
+                {{ item.applicationCluster.uuid.split("-")[0] }}
+              </span>
             </v-chip>
             <v-chip v-if="item.awardCluster" size="small" color="blue-darken-4">
               Award
-              <!-- {{ item.awardCluster }} -->
+              <span class="ml-2 my-1">
+                {{ item.awardCluster.uuid.split("-")[0] }}
+                </span>
             </v-chip>
           </v-col>
+        </v-row>
+        <v-row v-if="item.cluster" dense>
+          <v-col style="margin: auto" class="bold" cols="2">Cluster</v-col>
+          <v-col cols="10">
+            <v-chip size="small" color="blue-darken-4">
+              {{ item.cluster.systemName.replace("Cluster", "") }}
+              <span class="ml-2 my-1">
+                {{ item.cluster.uuid.split("-")[0] }}
+              </span>
+            </v-chip>
+            </v-col>
         </v-row>
         <v-row dense>
           <v-col class="bold" cols="2">Title</v-col>
@@ -146,12 +161,12 @@
         </v-row>
         <PureClusterButton
           class="mt-2"
-          v-if="isTransformPage && item.systemName === 'Application'"
+          v-if="false && isTransformPage && item.systemName === 'Application'"
           :item="item"
         />
         <PureClusterButton
           class="mt-2"
-          v-if="isTransformPage && item.systemName === 'Award'"
+          v-if="false && isTransformPage && item.systemName === 'Award'"
           :item="item"
         />
       </v-card-text>

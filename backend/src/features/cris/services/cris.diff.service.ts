@@ -79,6 +79,7 @@ function calculateSimilarityResults(texts: string[], searchResults: any[], maxDi
               createdDate: item.createdDate,
               identifiers: item.identifiers,
               entity: item.entityType,
+              cluster: item.cluster || null,
               awardCluster: item.awardClusters && item.awardClusters[0] || null,
               applicationCluster: item.applicationClusters && item.applicationClusters[0] || null,
             });
@@ -119,6 +120,7 @@ function groupAndSortResults(results: any[]) {
       systemName: value[0].systemName,
       modifiedDate: value[0].modifiedDate,
       createdDate: value[0].createdDate,
+      cluster: value[0].cluster,
       entity: value[0].entity,
       identifiers: value[0].identifiers,
       awardCluster: value[0].awardCluster,

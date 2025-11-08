@@ -1,9 +1,7 @@
-import { CRIS } from '../cris.model.js';
-
 import { callCrisApi } from './cris.api.service.js';
 
 import { Logger } from "@/utils/logger.js";
-const log = new Logger({ name: 'feature:cris:service' });
+const log = new Logger({ name: 'feature:cris:upload' });
 
 type Entity = 'project' | 'application' | 'award'
 type UploadParams = {
@@ -30,27 +28,35 @@ async function getTemplate(templateId: number, entity: Entity) {
 
 import { TransformExecutorService } from '@/features/transform/services/transform.executor.service.js'
 
-async function transform(yamlTemplate: string, ris: any, settings: object) {
+async function transform(yamlTemplate: string, risData: any, settings: object) {
   const executorService = new TransformExecutorService();
-  const result = await executorService.execute(yamlTemplate, ris, settings);
+  const result = await executorService.execute(yamlTemplate, risData, settings);
 
   if (result.error) {
     throw new Error(`Transformation error: ${result.error}`);
   }
 
-  return result.output;
+  return result.output.output;
 }
 
 // type Category = 'Project' | 'Application' | 'Award'
 type PUREResult = {
   uuid: string
-  [key: string]: any
 }
+
 async function createEntity(apiUrl: string, apiKey: string, entity: Entity, data: object) {
-  // const endpoint = `/${entity.toLowerCase()}s/` /// XXXX
+  log.trace('Creating entity', entity, data);
+
   const endpoint = `/${entity}s/`
   const result: PUREResult = await callCrisApi(apiUrl, apiKey, endpoint, 'PUT', data)
   log.info(`${entity} created`, result.uuid)
+  return result
+}
+
+async function updateEntity (apiUrl: string, apiKey: string, entity: Entity, uuid: string, data: object) {
+  const endpoint = `/${entity}s/${uuid}`
+  const result: PUREResult = await callCrisApi(apiUrl, apiKey, endpoint, 'PUT', data)
+  log.info(`${entity} updated`, result.uuid)
   return result
 }
 
@@ -59,16 +65,23 @@ async function createEntity(apiUrl: string, apiKey: string, entity: Entity, data
 // this 'upload' function is PURE-specific
 export async function upload(
   apiUrl: string, apiKey: string, params: UploadParams
-): Promise<PUREResult[]> {
+): Promise<PUREResult> {
 
   const { ris, settings, uuid, templateId, entity } = params
   log.info('Upload request', uuid, templateId, entity);
 
-
   const templateYaml = await getTemplate(templateId, entity)
   const transformedData = await transform(templateYaml, ris, settings)
 
-  const result = await createEntity(apiUrl, apiKey, entity, transformedData)
+  var result: PUREResult
+  if (uuid) {
+    log.info('Updating existing entity', uuid)
+    result = await updateEntity(apiUrl, apiKey, entity, uuid, transformedData)
+    return result
+  } else {
+    log.info('Creating new entity')
+    result = await createEntity(apiUrl, apiKey, entity, transformedData)
+  }
 
   log.info(result)
 

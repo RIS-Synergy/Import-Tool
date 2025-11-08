@@ -49,7 +49,6 @@
     </tbody>
   </v-table>
   <div v-else>
-    dd
     <v-alert type="success" variant="outlined"
       >The CRIS Data is identical to the transformed template.</v-alert
     >
