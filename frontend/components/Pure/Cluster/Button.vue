@@ -1,8 +1,5 @@
 <template>
   <div v-if="canAssignCluster()">
-    <pre>
-      {{item}}
-    </pre>
     <v-btn
       v-if="!itemIsNotAlligned()"
       class="text-none"
