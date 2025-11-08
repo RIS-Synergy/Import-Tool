@@ -1,5 +1,8 @@
 <template>
   <div v-if="canAssignCluster()">
+    <pre>
+      {{item}}
+    </pre>
     <v-btn
       v-if="!itemIsNotAlligned()"
       class="text-none"
@@ -78,5 +81,6 @@ function canAssignCluster () {
   return result;
 }
 
-const { assignCluster } = useApiUtils()
+const { cris } = useApiUtils()
+const { assignCluster } = (await cris).default;
 </script>

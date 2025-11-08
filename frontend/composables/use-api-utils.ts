@@ -215,22 +215,22 @@ export const useApiUtils = () => {
     return result;
   }
 
-  const assignCluster = async (project: string, item) => {
-    const snackbar = useSnackbar();
-    const result = await apiCall('ri/assignCluster', 'POST', {
-      body: JSON.stringify({
-        systemName: item.systemName,
-        uuid: item.uuid,
-        projectUUID: project
-      }),
-    })
-    if (result && !result.error) {
-      snackbar.info('Upload successful')
-    } else {
-      snackbar.error(result.error)
-    }
-    return result;
-  }
+  // const assignCluster = async (project: string, item) => {
+  //   const snackbar = useSnackbar();
+  //   const result = await apiCall('ri/assignCluster', 'POST', {
+  //     body: JSON.stringify({
+  //       systemName: item.systemName,
+  //       uuid: item.uuid,
+  //       projectUUID: project
+  //     }),
+  //   })
+  //   if (result && !result.error) {
+  //     snackbar.info('Upload successful')
+  //   } else {
+  //     snackbar.error(result.error)
+  //   }
+  //   return result;
+  // }
 
   const user = import ("./api/use-api-user")
   const ri = import ("./api/ri")
@@ -258,7 +258,7 @@ export const useApiUtils = () => {
     searchAny,
     riEntityUUID,
     faApi,
-    assignCluster,
+    // assignCluster,
     hasCRIS,
 
     // new API structure:

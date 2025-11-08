@@ -5,6 +5,7 @@ import { CRISService } from './services/cris.service.js';
 import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: "feature:cris:controller" });
 
+
 // similar code is duplicated from features/user/user.controller.ts, move to a common file
 function limitByUserPermission(reqUser: any) {
   const permissions = reqUser.permission || []
@@ -172,5 +173,24 @@ export class CRISController {
     );
 
     res.json(result);
+  }
+
+  public assignCluster = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const crisData = await this.getCrisData(req.body.crisId, req.user);
+
+      const result = await this.service.assignCluster(
+        crisData.apiUrl,
+        crisData.apiKey,
+        req.body.projectUUID,
+        req.body.applicationUUID,
+        req.body.awardUUID
+      );
+
+      res.json(result);
+    } catch (error) {
+      log.error('Error assigning cluster:', error);
+      res.status(500).json({ message: 'Error assigning cluster' });
+    }
   }
 }

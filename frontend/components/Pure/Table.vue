@@ -161,12 +161,12 @@
         </v-row>
         <PureClusterButton
           class="mt-2"
-          v-if="false && isTransformPage && item.systemName === 'Application'"
+          v-if="isTransformPage && item.systemName === 'Application'"
           :item="item"
         />
         <PureClusterButton
           class="mt-2"
-          v-if="false && isTransformPage && item.systemName === 'Award'"
+          v-if="isTransformPage && item.systemName === 'Award'"
           :item="item"
         />
       </v-card-text>

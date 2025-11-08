@@ -6,6 +6,7 @@ import { reference as referenceService } from './cris.reference.service.js';
 import { upload as uploadService } from './cris.upload.service.js';
 import { calculateLikelihood } from './cris.diff.service.js';
 import { getDiff } from './cris.getDiff.service.js';
+import ClusterService from './cris.cluster.service.js';
 
 import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: 'feature:cris:service' });
@@ -98,7 +99,7 @@ export class CRISService {
     return referenceService(apiUrl, apiKey, params);
   }
 
-  public upload (apiUrl: string, apiKey: string, params: any): Promise<any> {
+  public upload(apiUrl: string, apiKey: string, params: any): Promise<any> {
     return uploadService(apiUrl, apiKey, params);
   }
 
@@ -125,5 +126,23 @@ export class CRISService {
       apiUrl,
       apiKey
     );
+  }
+
+  async assignCluster(
+    apiUrl: string,
+    apiKey: string,
+    projectUUID: string,
+    applicationUUID?: string,
+    awardUUID?: string
+  ) {
+    const clusterService = new ClusterService(
+      apiUrl,
+      apiKey,
+      )
+    return clusterService.assignCluster(
+      projectUUID,
+      applicationUUID,
+      awardUUID
+    )
   }
 }

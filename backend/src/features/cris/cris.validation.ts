@@ -47,3 +47,12 @@ export const getDiffSchema = Joi.object({
   templateId: Joi.number().integer().min(1).required(),
   settings: Joi.object().required(),
 });
+
+export const assignClusterSchema = Joi.object({
+  crisId: Joi.number().integer().min(1).required(),
+  projectUUID: Joi.string().required(),
+
+  applicationUUID: Joi.string().empty(null).optional(),
+  awardUUID: Joi.string().empty(null).optional()
+})
+  .xor('applicationUUID', 'awardUUID'); // either applicationUUID or  awardUUID must be provided

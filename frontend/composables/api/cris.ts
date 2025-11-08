@@ -95,6 +95,36 @@ const getDiffs = async (
   return result;
 }
 
+type ClusterWrapper = {
+  cluster: {
+    systemName: string
+    uuid: string
+  };
+};
+
+const assignCluster = async (projectUUID: string, item: ClusterWrapper) => {
+  const { cris } = useUserSettingsStore();
+
+  const systemName = item.cluster.systemName
+  const clusterUUID = item.cluster.uuid
+
+  const snackbar = useSnackbar();
+  const result = await apiCall('cris/assignCluster', 'POST', {
+    body: JSON.stringify({
+      crisId: cris.id,
+      projectUUID,
+      applicationUUID: systemName === 'ApplicationCluster' ? clusterUUID : null,
+      awardUUID: systemName === 'AwardCluster' ? clusterUUID : null,
+    }),
+  })
+  if (result && !result.error) {
+    snackbar.info('Upload successful')
+  } else {
+    snackbar.error(result.error)
+  }
+  return result;
+}
+
 
 export default {
   listAll,
@@ -103,5 +133,6 @@ export default {
   referenceApi,
   uploadApi,
   diffRILikelihood,
-  getDiffs
+  getDiffs,
+  assignCluster
 }
