@@ -26,11 +26,16 @@
             :entityType="item.systemName.toLowerCase()"
           />
 
-          <!-- <v-spacer /> -->
           <DiffButton :risId="risId"
-                      :systemName="item.systemName"
-                      :uuid="item.uuid"
-                      :pureId="item.pureId" />
+             :systemName="item.systemName"
+             :uuid="item.uuid"
+             :pureId="item.pureId" />
+
+          <DiffRefresh
+            :risId="risId"
+            :systemName="item.systemName"
+            :uuid="item.uuid"
+          />
         </div>
         <div class="lower-right">
           <TransformButton

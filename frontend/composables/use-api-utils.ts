@@ -241,6 +241,7 @@ export const useApiUtils = () => {
   const transform = import ("./api/transform")
   const template = import ("./api/template")
   const functions = import ("./api/functions")
+  const diff = import ("./api/diff")
 
   return {
     apiCall,
@@ -270,6 +271,7 @@ export const useApiUtils = () => {
     fa,
     transform,
     template,
-    functions
+    functions,
+    diff
   };
 };

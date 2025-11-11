@@ -162,13 +162,26 @@ export class CRISController {
 
     const { refreshDiff } = req.body;
     if (refreshDiff) {
-      this.service.refreshDiffsCache(req.params.id);
+      this.service.refreshDiffs(req.params.id);
     }
 
     const result = await this.service.getDiffs(
       req.params.id,
       req.body.crisId,
       req.body.systemName,
+    );
+
+    res.json(result);
+  }
+
+  public refreshDiff = async (req: Request, res: Response): Promise<void> => {
+    log.info(`req: ${req.path}`, 'CRISController:getDiffs', req.body)
+
+    const result = this.service.refreshDiff(
+      req.params.id,
+      req.body.crisId,
+      req.body.systemName,
+      req.body.uuid,
     );
 
     res.json(result);

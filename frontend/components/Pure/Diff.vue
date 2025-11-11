@@ -47,7 +47,10 @@ const hasAtLeastOne = computed(() => {
 
 onMounted(async () => {
   console.log("diff onMounted");
-  diffList.value = await getDiffs(route.params.id, props.templateId);
+  diffList.value = await getDiffs(
+    route.params.id,
+    props.templateId
+  );
 });
 </script>
 

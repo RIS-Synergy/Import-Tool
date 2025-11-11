@@ -100,6 +100,28 @@ export class CRISService {
     return referenceService(apiUrl, apiKey, params);
   }
 
+  async assignCluster(
+    apiUrl: string,
+    apiKey: string,
+    projectUUID: string,
+    applicationUUID?: string,
+    awardUUID?: string
+  ) {
+    const clusterService = new ClusterService(
+      apiUrl,
+      apiKey,
+      )
+    return clusterService.assignCluster(
+      projectUUID,
+      applicationUUID,
+      awardUUID
+    )
+  }
+
+  public async likelihood(risId: string, apiUrl: string, apiKey: string): Promise<any> {
+    return calculateLikelihood(risId, apiUrl, apiKey);
+  }
+
   public async upload(apiUrl: string, apiKey: string, params: UploadParams): Promise<any> {
     const uploadedResult = await uploadService(apiUrl, apiKey, params);
 
@@ -117,10 +139,6 @@ export class CRISService {
     )
 
     return saved
-  }
-
-  public async likelihood(risId: string, apiUrl: string, apiKey: string): Promise<any> {
-    return calculateLikelihood(risId, apiUrl, apiKey);
   }
 
   public executeAndSave(
@@ -150,21 +168,27 @@ export class CRISService {
     return getDiff(risId, crisId, systemName)
   }
 
-  async assignCluster(
-    apiUrl: string,
-    apiKey: string,
-    projectUUID: string,
-    applicationUUID?: string,
-    awardUUID?: string
-  ) {
-    const clusterService = new ClusterService(
-      apiUrl,
-      apiKey,
-      )
-    return clusterService.assignCluster(
-      projectUUID,
-      applicationUUID,
-      awardUUID
+  public async refreshDiff(risId: string, crisId: number, systemName: string, uuid: string){
+    const diff = await getDiff(risId, crisId, systemName, true, true)
+    // console.log('diff', diff)
+
+    if(!diff){
+      throw new BadRequestError('No diff found to refresh')
+    }
+
+    const saved = await executeAndSave(
+      risId,
+      crisId,
+      systemName,
+      uuid,
+      diff.savedTemplate.templateId,
+      diff.savedTemplate.settings,
+      diff.cris.apiUrl,
+      diff.cris.apiKey
     )
+
+    log.info('saved', saved)
+
+    return saved
   }
 }

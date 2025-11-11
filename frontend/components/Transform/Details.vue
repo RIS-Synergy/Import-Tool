@@ -1,20 +1,15 @@
 <template>
-  <div>
-    <PureTable :data="crisEntities"
-        :risId="id"
-        :entityType="entityType"
-    />
-    <!-- <PureDiff
+  <PureTable :data="crisEntities" :risId="id" :entityType="entityType" />
+  <!-- <PureDiff
          v-if="entityType === 'project'"
          class="mb-2"
          :templateId="templateId"
          /> -->
-    <!-- <TransformButton
+  <!-- <TransformButton
          v-if="canCreateNew()"
          class="mt-2"
          :entityType="entityType"
          /> -->
-  </div>
 </template>
 
 <script setup>
@@ -36,16 +31,15 @@ const templateId = computed(() => {
   return store.template[typeId];
 });
 
-function canCreateNew () {
+function canCreateNew() {
   // console.log(store.)
 
   // if none exists
 
   // if one exist
 
-  return true
+  return true;
 }
-
 
 // not ideal...
 const route = useRoute();

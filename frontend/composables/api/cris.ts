@@ -76,24 +76,24 @@ const getDiffs = async (
     return [];
   }
 
-  // const projectStore = useProjectStore();
+    // const projectStore = useProjectStore();
 
-  if (!templateId) {
-    return null;
+    if (!templateId) {
+      return null;
+    }
+
+    // if (!hasCRIS()) return
+    const result = await apiCall(`cris/getDiffs/${risId}`, "POST", {
+      body: JSON.stringify({
+        crisId: store.cris.id,
+        systemName,
+        uuid,
+        templateId,
+        // settings: projectStore.settings
+      }),
+    });
+    return result;
   }
-
-  // if (!hasCRIS()) return
-  const result = await apiCall(`cris/getDiffs/${risId}`, "POST", {
-    body: JSON.stringify({
-      crisId: store.cris.id,
-      systemName,
-      uuid,
-      templateId,
-      // settings: projectStore.settings
-    }),
-  });
-  return result;
-}
 
 type ClusterWrapper = {
   cluster: {
@@ -134,5 +134,5 @@ export default {
   uploadApi,
   diffRILikelihood,
   getDiffs,
-  assignCluster
+  assignCluster,
 }

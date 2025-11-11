@@ -57,3 +57,9 @@ export const assignClusterSchema = Joi.object({
   awardUUID: Joi.string().empty(null).optional()
 })
   .xor('applicationUUID', 'awardUUID'); // either applicationUUID or  awardUUID must be provided
+
+export const refreshDiffSchema = Joi.object({
+  crisId: Joi.number().integer().min(1).required(),
+  systemName: Joi.string().required(),
+  uuid: Joi.string().required(),
+});

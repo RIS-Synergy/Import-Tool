@@ -3,7 +3,7 @@ import { CRISController } from './cris.controller.js';
 import {
   createCRISSchema, crisIdSchema, searchSchema, referenceSchema,
   uploadSchema, likelihoodIdParamsSchema, likelihoodIdBodySchema,
-  getDiffSchema, assignClusterSchema
+  getDiffSchema, assignClusterSchema, refreshDiffSchema,
 } from './cris.validation.js';
 import { validate } from '@/middleware/validator.js'
 
@@ -33,10 +33,6 @@ router.post('/likelihood/:id',
   validate(likelihoodIdBodySchema, "body"),
   controller.likelihood);
 
-router.post('/getDiffs/:id',
-  validate(likelihoodIdParamsSchema, "params"),
-  validate(getDiffSchema, "body"), controller.getDiffs)
-
 router.get('/:id',
   validate(crisIdSchema, "params"),
   controller.getById);
@@ -52,5 +48,13 @@ router.delete('/:id',
 router.post('/assignCluster',
   validate(assignClusterSchema, "body"),
   controller.assignCluster);
+
+router.post('/getDiffs/:id',
+  validate(likelihoodIdParamsSchema, "params"),
+  validate(getDiffSchema, "body"), controller.getDiffs)
+
+router.post('/refreshDiff/:id',
+  validate(likelihoodIdParamsSchema, "params"),
+  validate(refreshDiffSchema, "body"), controller.refreshDiff)
 
 export default router;

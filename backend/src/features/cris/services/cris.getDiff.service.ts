@@ -16,9 +16,12 @@ type DiffList = {
   diffList: Array<{ path: string, a: any, b: any }>
 }
 
+type CRISData = {
+  uuid: string,
+}
+
 async function saveTemplate(
   project: Project,
-  systemName: string,
   templateSelected: number,
   settings: object
 ) {
@@ -53,7 +56,7 @@ function saveDiff(
   endpoint: string,
   method: string,
   transformationResult: any,
-  crisData: object
+  crisData: CRISData
 ) {
   const differ = new Differ(transformationResult.output, crisData)
   const setOfDiffKeys: Set<string> = differ.diff()
@@ -112,7 +115,6 @@ export async function executeAndSave(
   // # Save template
   const savedTempl = await saveTemplate(
     project,
-    systemName,
     templateSelected,
     settings
   )
@@ -138,26 +140,31 @@ export async function getDiff(
   risId: string,
   crisId: number,
   systemName: string,
+  useSavedTemplate = false,
+  useCris = false
 ): Promise<any> {
-  const diffs = await prisma.diff.findFirst({
-    where: {
-      crisId,
-      savedTemplate: {
-        project: {
-          risId, // filter by risId
+  try {
+    const diffs = await prisma.diff.findFirst({
+      where: {
+        crisId,
+        savedTemplate: {
+          project: {
+            risId, // filter by risId
+          },
+          templateType: systemName.toUpperCase(),
         },
-        templateType: systemName.toUpperCase(),
       },
-    },
-    include: {
-      savedTemplate: false,
-      cris: false
-    },
-    orderBy: {
-      createdDate: "desc",
-    },
-  });
-
-  log.info(diffs)
-  return diffs
+      include: {
+        savedTemplate: useSavedTemplate,
+        cris: useCris
+      },
+      orderBy: {
+        createdDate: "desc",
+      },
+    });
+    return diffs
+  } catch (error) {
+    log.error('Error fetching diff', error);
+    throw error;
+  }
 }

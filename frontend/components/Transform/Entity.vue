@@ -82,6 +82,7 @@ function saveToStore() {
 function templateClass(id) {
   let hidden = false;
   if (selected.value && selected.value !== id) {
+    console.log('hide template', id, ';', 'SelectedValue', selected.value);
     hidden = true;
   }
   return {

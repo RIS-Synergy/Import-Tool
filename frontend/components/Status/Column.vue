@@ -43,7 +43,7 @@ async function findProjectDiffs(uuid) {
     templateSelected.value,
   );
   // console.log(props.id, uuid, result.countRIS);
-  if (result.countRIS === 0) {
+  if (result?.diffList?.length === 0) {
     projectEqualDiff.value = true;
   }
 }
