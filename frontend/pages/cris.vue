@@ -24,7 +24,7 @@
             v-if="item.id !== currentCRIS"
             variant="outlined"
             size="small"
-            @click="setCRIS(item.id, item.name)"
+            @click="select(item.id, item.name)"
           >
             select
           </v-btn>
@@ -32,7 +32,7 @@
             v-else
             variant="outlined"
             size="small"
-            @click="setCRIS(null, null)"
+            @click="deselect()"
           >
             deselect
           </v-btn>
@@ -42,7 +42,7 @@
   </v-table>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 
 const { cris } = useApiUtils();
@@ -51,5 +51,13 @@ const data = await listAll();
 
 const userSettingsStore = useUserSettingsStore();
 const { setCRIS } = userSettingsStore;
-const currentCRIS = computed(() => userSettingsStore.cris.id);
+const currentCRIS = computed(() => userSettingsStore.cris.id || null);
+
+function select (itemId?: number, itemName: string) {
+  setCRIS(itemId || null, itemName || null)
+}
+
+function deselect () {
+  setCRIS(null, null)
+}
 </script>

@@ -159,9 +159,25 @@ export class CRISController {
 
   public getDiffs = async (req: Request, res: Response): Promise<void> => {
     log.info(`req: ${req.path}`, 'CRISController:getDiffs', req.body)
+
+    const { refreshDiff } = req.body;
+    if (refreshDiff) {
+      this.service.refreshDiffsCache(req.params.id);
+    }
+
+    const result = await this.service.getDiffs(
+      req.params.id,
+      req.body.crisId,
+      req.body.systemName,
+    );
+
+    res.json(result);
+  }
+
+  public executeAndSave = async (req: Request, res: Response): Promise<void> => {
+    log.info(`req: ${req.path}`, 'CRISController:getDiffs', req.body)
     const crisData = await this.getCrisData(req.body.crisId, req.user);
 
-    log.trace('backend/src/features/cris/cris.controller.ts req body', req.body)
     const result = await this.service.getDiffs(
       req.params.id,
       req.body.systemName,

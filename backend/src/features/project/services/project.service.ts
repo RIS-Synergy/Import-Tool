@@ -62,6 +62,8 @@ export class ProjectService {
         ...limitByUserPermission.where,
       };
 
+      log.debug("❔ Where Clause", whereClause)
+
       // Add status filter if provided
       if (filters.status && filters.status.length > 0) {
         whereClause.status = {

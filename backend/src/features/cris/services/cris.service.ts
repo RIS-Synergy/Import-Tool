@@ -3,15 +3,16 @@ import { CRIS } from '../cris.model.js';
 import { BadRequestError } from '@/utils/errors.js';
 import { search as searchService } from './cris.search.service.js';
 import { reference as referenceService } from './cris.reference.service.js';
-import { upload as uploadService } from './cris.upload.service.js';
+import { upload as uploadService, UploadParams } from './cris.upload.service.js';
 import { calculateLikelihood } from './cris.diff.service.js';
-import { getDiff } from './cris.getDiff.service.js';
+import { getDiff, executeAndSave } from './cris.getDiff.service.js';
 import ClusterService from './cris.cluster.service.js';
 
 import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: 'feature:cris:service' });
 
 type CRISCreationParams = Omit<CRIS, 'id'>;
+
 
 export class CRISService {
   public async findMany(limitByUserPermission = {}, select = {}): Promise<CRIS[]> {
@@ -99,16 +100,32 @@ export class CRISService {
     return referenceService(apiUrl, apiKey, params);
   }
 
-  public upload(apiUrl: string, apiKey: string, params: any): Promise<any> {
-    return uploadService(apiUrl, apiKey, params);
+  public async upload(apiUrl: string, apiKey: string, params: UploadParams): Promise<any> {
+    const uploadedResult = await uploadService(apiUrl, apiKey, params);
+
+    const saved = await executeAndSave(
+      // @ts-ignore
+      params.ris.id,
+      params.crisId,
+      // first letter uppercase
+      params.entity.charAt(0).toUpperCase() + params.entity.slice(1),
+      uploadedResult.uuid,
+      params.templateId,
+      params.settings,
+      apiUrl,
+      apiKey
+    )
+
+    return saved
   }
 
   public async likelihood(risId: string, apiUrl: string, apiKey: string): Promise<any> {
     return calculateLikelihood(risId, apiUrl, apiKey);
   }
 
-  public getDiffs(
+  public executeAndSave(
     risId: string,
+    crisId: number,
     systemName: string,
     uuid: string,
     templateSelected: number,
@@ -117,8 +134,9 @@ export class CRISService {
     apiKey: string): Promise<any> {
     log.info('Getting diffs', templateSelected);
 
-    return getDiff(
+    return executeAndSave(
       risId,
+      crisId,
       systemName,
       uuid,
       templateSelected,
@@ -126,6 +144,10 @@ export class CRISService {
       apiUrl,
       apiKey
     );
+  }
+
+  public getDiffs(risId: string, crisId: number, systemName: string){
+    return getDiff(risId, crisId, systemName)
   }
 
   async assignCluster(

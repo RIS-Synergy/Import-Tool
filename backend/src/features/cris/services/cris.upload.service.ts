@@ -4,12 +4,13 @@ import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: 'feature:cris:upload' });
 
 type Entity = 'project' | 'application' | 'award'
-type UploadParams = {
-  ris: string
-  settings: object
-  uuid: string
-  templateId: number
-  entity: Entity
+export type UploadParams = {
+  crisId: number;
+  ris: object;
+  settings: object;
+  uuid: string | null;
+  templateId: number;
+  entity: 'project' | 'application' | 'award';
 }
 
 /* workaround. will create a new directory 'template' or 'transform' */

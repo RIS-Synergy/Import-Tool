@@ -45,7 +45,8 @@ export const getDiffSchema = Joi.object({
   systemName: Joi.string().required(),
   uuid: Joi.string().required(),
   templateId: Joi.number().integer().min(1).required(),
-  settings: Joi.object().required(),
+  // settings: Joi.object().required(),
+  refreshDiff: Joi.boolean().default(false)
 });
 
 export const assignClusterSchema = Joi.object({

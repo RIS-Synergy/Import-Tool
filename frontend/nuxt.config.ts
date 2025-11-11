@@ -47,7 +47,8 @@ export default defineNuxtConfig({
   },
   nitro: {
     routeRules: {
-      '/api/**': { proxy: process.env.BACKEND_API_PROXY }
+      // '/api/**': { proxy: process.env.BACKEND_API_PROXY }
+      '/api/**': { proxy: `${process.env.BACKEND_API_PROXY}/**` }
     }
   },
   vite: {

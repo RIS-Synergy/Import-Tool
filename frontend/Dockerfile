@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["yarn", "nuxt", "dev"]
+CMD ["yarn", "dev:docker"]

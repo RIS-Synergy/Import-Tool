@@ -39,7 +39,7 @@ export class ProjectController {
       };
 
       // XXX not secure limitation!
-      const query = limitByUserPermission(req.user, filters.piDomain.domain);
+      const query = limitByUserPermission(req.user, filters.piDomain?.domain);
       // console.log('query', query)
 
       const page = req.body.page || "1";

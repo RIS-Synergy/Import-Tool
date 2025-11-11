@@ -76,7 +76,7 @@ const getDiffs = async (
     return [];
   }
 
-  const projectStore = useProjectStore();
+  // const projectStore = useProjectStore();
 
   if (!templateId) {
     return null;
@@ -89,7 +89,7 @@ const getDiffs = async (
       systemName,
       uuid,
       templateId,
-      settings: projectStore.settings
+      // settings: projectStore.settings
     }),
   });
   return result;
