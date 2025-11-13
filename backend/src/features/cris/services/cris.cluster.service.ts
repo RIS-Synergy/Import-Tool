@@ -1,17 +1,14 @@
-import { callCrisApi } from './cris.api.service.js';
+import CrisAPI from './cris.api.service.js';
 
 import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: 'feature:cris:cluster:service' });
 
 export default class ClusterService {
-  constructor(
-    private apiUrl: string,
-    private apiKey: string,
-  ) {}
+  constructor(private crisAPI: CrisAPI) {}
 
   private getProjectData(endpoint: string) {
     try {
-      return callCrisApi(this.apiUrl, this.apiKey, endpoint, "GET")
+      return this.crisAPI.get(endpoint)
     } catch (error) {
       log.error('Error fetching CRIS data', error);
       throw error;
@@ -57,11 +54,8 @@ export default class ClusterService {
     }
 
     // Update project with cluster info
-    const result = await callCrisApi(
-      this.apiUrl,
-      this.apiKey,
+    const result = await this.crisAPI.put(
       `/projects/${projectUUID}`,
-      'PUT',
       projectData
     );
     return result;

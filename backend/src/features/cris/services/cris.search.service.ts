@@ -8,9 +8,7 @@ export default class CRISSearchService {
   entityTypes = ['projects', 'applications', 'awards', 'persons', 'external-persons']
   maxItemSize = 10
 
-  constructor(
-    private crisAPI: CrisAPI,
-  ) { }
+  constructor(private crisAPI: CrisAPI) {}
 
   // this 'search' function is PURE-specific
   public async search(query: string): Promise<CRIS[]> {

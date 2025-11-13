@@ -112,10 +112,9 @@ export class CRISService {
     applicationUUID?: string,
     awardUUID?: string
   ) {
-    const clusterService = new ClusterService(
-      apiUrl,
-      apiKey,
-      )
+    const crisAPI = new CrisAPI(apiUrl, apiKey);
+    const clusterService = new ClusterService(crisAPI)
+
     return clusterService.assignCluster(
       projectUUID,
       applicationUUID,
