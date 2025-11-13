@@ -103,7 +103,6 @@ export class CRISController {
       req.body.query,
       crisData.apiUrl,
       crisData.apiKey,
-      req.body.entityTypes,
     );
 
     res.json(searchResults);

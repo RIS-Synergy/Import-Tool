@@ -2,7 +2,7 @@ import prisma from '@/lib/prisma.js';
 import { CRIS } from '../cris.model.js';
 import { BadRequestError } from '@/utils/errors.js';
 import SearchService from './cris.search.service.js';
-import { reference as referenceService } from './cris.reference.service.js';
+import CRISReferenceService from './cris.reference.service.js';
 import { upload as uploadService, UploadParams } from './cris.upload.service.js';
 import { calculateLikelihood } from './cris.diff.service.js';
 import { getDiff, executeAndSave } from './cris.getDiff.service.js';
@@ -93,14 +93,16 @@ export class CRISService {
     });
   }
 
-  public search(query: string, apiUrl: string, apiKey: string, entityTypes: string[]): Promise<CRIS[]> {
+  public search(query: string, apiUrl: string, apiKey: string): Promise<CRIS[]> {
     const crisAPI = new CrisAPI(apiUrl, apiKey);
     const searchService = new SearchService(crisAPI);
-    return searchService.search(query, entityTypes);
+    return searchService.search(query);
   }
 
   public reference(apiUrl: string, apiKey: string, params: { systemName: string, uuid: string }): Promise<CRIS[]> {
-    return referenceService(apiUrl, apiKey, params);
+    const crisAPI = new CrisAPI(apiUrl, apiKey);
+    const referenceService = new CRISReferenceService(crisAPI);
+    return referenceService.reference(params);
   }
 
   async assignCluster(

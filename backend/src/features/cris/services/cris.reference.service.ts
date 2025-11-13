@@ -1,12 +1,8 @@
 import { CRIS } from '../cris.model.js';
-import { callCrisApi } from './cris.api.service.js';
+import CrisAPI from './cris.api.service.js';
 
-export async function reference(
-  apiUrl: string, apiKey: string,
-  params: { systemName: string, uuid: string }
-): Promise<CRIS[]> {
-
-  const systemNameMapping = {
+export default class CRISReferenceService {
+  systemNameMapping = {
     'Application': 'applications',
     'Award': 'awards',
     'ExternalPerson': 'external-persons',
@@ -16,10 +12,14 @@ export async function reference(
     'User': 'users',
   }
 
-  const { systemName, uuid } = params
+  constructor(private crisAPI: CrisAPI,) {}
 
-  const endpoint = `/${systemNameMapping[systemName]}/${uuid}`
-  const results = await callCrisApi(apiUrl, apiKey, endpoint, 'GET')
+  public async reference(params: { systemName: string, uuid: string }): Promise<CRIS[]> {
+    const { systemName, uuid } = params
 
-  return results
+    const endpoint = `/${this.systemNameMapping[systemName]}/${uuid}`
+    const results = await this.crisAPI.get(endpoint)
+
+    return results
+  }
 }

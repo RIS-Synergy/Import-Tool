@@ -14,7 +14,7 @@ export const crisIdSchema = Joi.object({
 export const searchSchema = Joi.object({
   query: Joi.string().required(),
   crisId: Joi.number().integer().min(1).optional(),
-  entityTypes: Joi.array().items(Joi.string())
+  // entityTypes: Joi.array().items(Joi.string())
 });
 
 export const referenceSchema = Joi.object({
