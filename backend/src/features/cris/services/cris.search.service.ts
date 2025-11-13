@@ -1,50 +1,53 @@
 import { CRIS } from '../cris.model.js';
-
-import { callCrisApi } from './cris.api.service.js';
-
+import CrisAPI from './cris.api.service.js';
 import { Logger } from "@/utils/logger.js";
 import { ResearchInstitutionError } from '@/utils/errors.js';
 const log = new Logger({ name: 'feature:cris:service' });
 
-// this 'search' function is PURE-specific
-export async function search(
-  query: string, apiUrl: string, apiKey: string,
+export default class CRISSearchService {
   entityTypes = ['projects', 'applications', 'awards', 'persons', 'external-persons']
-): Promise<CRIS[]> {
-  const maxItemSize = 10
+  maxItemSize = 10
 
-  log.info("Searching for:", query);
-  var results = []
+  constructor(
+    private crisAPI: CrisAPI,
+  ) { }
 
-  const promises = entityTypes.map(entityType => {
-    const endpoint = `/${entityType}/search`
+  // this 'search' function is PURE-specific
+  public async search(query: string): Promise<CRIS[]> {
 
-    const method = 'POST';
-    return callCrisApi(apiUrl, apiKey, endpoint, method, {
-      size: maxItemSize,
-      offset: 0,
-      searchString: query
-    }).then((result: any) => {
-      log.debug('SearchResults', endpoint, result.items.length)
+    log.info("Searching for:", query);
+    var results = []
 
-      result.items && result.items.map((item: any) => {
-        results.push(item);
-      });
-    }).catch(error => {
-      log.error('Error searching', endpoint, error)
-      if (error instanceof ResearchInstitutionError) {
-        log.debug('ResearchInstitutionError ignored for search:', endpoint)
-        results.push({
-          errorType: 'ResearchInstitutionError',
-          endpoint,
-          method,
-          message: error.message,
-          status: error.status
+    const promises = this.entityTypes.map(entityType => {
+      const endpoint = `/${entityType}/search`
+
+      const method = 'POST';
+      return this.crisAPI.post(endpoint, {
+        size: this.maxItemSize,
+        offset: 0,
+        searchString: query
+      }).then((result: any) => {
+        log.debug('SearchResults', endpoint, result.items.length)
+
+        result.items && result.items.map((item: any) => {
+          results.push(item);
         });
-      }
-    })
-  });
+      }).catch(error => {
+        log.error('Error searching', endpoint, error)
+        if (error instanceof ResearchInstitutionError) {
+          log.debug('ResearchInstitutionError ignored for search:', endpoint)
+          results.push({
+            errorType: 'ResearchInstitutionError',
+            endpoint,
+            method,
+            message: error.message,
+            status: error.status
+          });
+        }
+      })
+    });
 
-  await Promise.all(promises);
-  return results
+    await Promise.all(promises);
+    return results
+  }
 }

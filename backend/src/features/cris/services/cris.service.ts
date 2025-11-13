@@ -1,11 +1,12 @@
 import prisma from '@/lib/prisma.js';
 import { CRIS } from '../cris.model.js';
 import { BadRequestError } from '@/utils/errors.js';
-import { search as searchService } from './cris.search.service.js';
+import SearchService from './cris.search.service.js';
 import { reference as referenceService } from './cris.reference.service.js';
 import { upload as uploadService, UploadParams } from './cris.upload.service.js';
 import { calculateLikelihood } from './cris.diff.service.js';
 import { getDiff, executeAndSave } from './cris.getDiff.service.js';
+import CrisAPI from './cris.api.service.js';
 import ClusterService from './cris.cluster.service.js';
 
 import { Logger } from "@/utils/logger.js";
@@ -93,7 +94,9 @@ export class CRISService {
   }
 
   public search(query: string, apiUrl: string, apiKey: string, entityTypes: string[]): Promise<CRIS[]> {
-    return searchService(query, apiUrl, apiKey, entityTypes);
+    const crisAPI = new CrisAPI(apiUrl, apiKey);
+    const searchService = new SearchService(crisAPI);
+    return searchService.search(query, entityTypes);
   }
 
   public reference(apiUrl: string, apiKey: string, params: { systemName: string, uuid: string }): Promise<CRIS[]> {

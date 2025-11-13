@@ -79,3 +79,24 @@ export async function callCrisApi(
     detail: `Unknown content-type: ${contentType}`
   } as CRISError
 }
+
+export default class CrisAPI {
+  constructor(
+    private apiUrl: string,
+    private apiKey: string,
+  ) { }
+
+  get (endpoint: string) {
+    return callCrisApi(this.apiUrl, this.apiKey, endpoint, 'GET')
+  }
+
+  post (endpoint: string, body: any) {
+    return callCrisApi(this.apiUrl, this.apiKey, endpoint, 'POST', body)
+  }
+
+  put (endpoint: string, body: any) {
+    return callCrisApi(this.apiUrl, this.apiKey, endpoint, 'PUT', body)
+  }
+
+  // we don't need to 'delete' CRIS entities via the API for now
+}
