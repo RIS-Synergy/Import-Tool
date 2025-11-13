@@ -103,6 +103,7 @@ export class CRISController {
       req.body.query,
       crisData.apiUrl,
       crisData.apiKey,
+      req.body.entityTypes
     );
 
     res.json(searchResults);
@@ -126,12 +127,7 @@ export class CRISController {
     const crisData = await this.getCrisData(req.body.crisId, req.user)
 
     try {
-      const result = await this.service.upload(
-        crisData.apiUrl,
-        crisData.apiKey,
-        req.body
-      )
-
+      const result = await this.service.upload(crisData.apiUrl, crisData.apiKey, req.body)
       res.json(result);
     } catch (error) {
       log.error('Error uploading to CRIS:', error);

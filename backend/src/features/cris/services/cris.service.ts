@@ -3,7 +3,7 @@ import { CRIS } from '../cris.model.js';
 import { BadRequestError } from '@/utils/errors.js';
 import SearchService from './cris.search.service.js';
 import CRISReferenceService from './cris.reference.service.js';
-import { upload as uploadService, UploadParams } from './cris.upload.service.js';
+import { CRISUploadService, UploadParams } from './cris.upload.service.js';
 import { calculateLikelihood } from './cris.diff.service.js';
 import { getDiff, executeAndSave } from './cris.getDiff.service.js';
 import CrisAPI from './cris.api.service.js';
@@ -93,10 +93,10 @@ export class CRISService {
     });
   }
 
-  public search(query: string, apiUrl: string, apiKey: string): Promise<CRIS[]> {
+  public search(query: string, apiUrl: string, apiKey: string, entryType: string[]): Promise<CRIS[]> {
     const crisAPI = new CrisAPI(apiUrl, apiKey);
     const searchService = new SearchService(crisAPI);
-    return searchService.search(query);
+    return searchService.search(query, entryType);
   }
 
   public reference(apiUrl: string, apiKey: string, params: { systemName: string, uuid: string }): Promise<CRIS[]> {
@@ -127,7 +127,11 @@ export class CRISService {
   }
 
   public async upload(apiUrl: string, apiKey: string, params: UploadParams): Promise<any> {
-    const uploadedResult = await uploadService(apiUrl, apiKey, params);
+    const crisAPI = new CrisAPI(apiUrl, apiKey);
+    const uploadService = new CRISUploadService(crisAPI);
+    const uploadedResult = await uploadService.upload(params);
+
+    log.debug('👉 Uploaded result:', uploadedResult.toString().slice(0, 100))
 
     const saved = await executeAndSave(
       // @ts-ignore

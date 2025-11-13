@@ -4,19 +4,20 @@ import { Logger } from "@/utils/logger.js";
 import { ResearchInstitutionError } from '@/utils/errors.js';
 const log = new Logger({ name: 'feature:cris:service' });
 
+const defaultEntityTypes = ['projects', 'applications', 'awards', 'persons', 'external-persons']
+
 export default class CRISSearchService {
-  entityTypes = ['projects', 'applications', 'awards', 'persons', 'external-persons']
   maxItemSize = 10
 
   constructor(private crisAPI: CrisAPI) {}
 
   // this 'search' function is PURE-specific
-  public async search(query: string): Promise<CRIS[]> {
+  public async search(query: string, entityTypes: string[] = defaultEntityTypes): Promise<CRIS[]> {
 
     log.info("Searching for:", query);
     var results = []
 
-    const promises = this.entityTypes.map(entityType => {
+    const promises = entityTypes.map(entityType => {
       const endpoint = `/${entityType}/search`
 
       const method = 'POST';
