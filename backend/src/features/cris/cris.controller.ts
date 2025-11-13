@@ -153,7 +153,7 @@ export class CRISController {
   }
 
   public getDiffs = async (req: Request, res: Response): Promise<void> => {
-    log.info(`req: ${req.path}`, 'CRISController:getDiffs', req.body)
+    // log.info(`req: ${req.path}`, 'CRISController:getDiffs', req.body)
 
     const { refreshDiff } = req.body;
     if (refreshDiff) {

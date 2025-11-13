@@ -1,61 +1,64 @@
 import { Logger } from "@/utils/logger.js";
-import { Project } from '@/models/Project.js'
+import { ProjectService } from '@/features/project/services/project.service.js'
 import similarity from '@/utils/similarity.js'
-import { callCrisApi } from './cris.api.service.js';
+import CrisAPI from './cris.api.service.js';
 
 const log = new Logger({ name: 'feature:cris:diff:service' });
 
-export async function calculateLikelihood(id: string, apiUrl: string, apiKey: string) {
-  const data = (await Project.getById(id)).risData as any;
-  const texts = data.title.map((t: any) => t.text);
+export class LikelyhoodService {
+  constructor(private crisAPI: CrisAPI) { }
 
-  // Search across all entity types
-  const searchResults = await searchCategories(texts.join(' '), ['projects', 'applications', 'awards'], apiUrl, apiKey);
-  const totalResults = calculateSimilarityResults(texts, searchResults, 0.8);
-  const groupedResults = groupAndSortResults(totalResults);
+  async searchCategories(searchStrings: string[], entityTypes: string[]) {
+    const results: any[] = [];
+    const maxItemSize = 10;
 
-  log.info(`Calculated likelihood for project ${id}, found ${groupedResults.length} potential matches`);
-  log.debug('Grouped Results', groupedResults.length)
+    // Create all search promises for all entity types and search strings
+    const promises = entityTypes.flatMap(entityType => {
+      const endpoint = `/${entityType}/search`;
 
-  return sortByEntity(groupedResults);
-}
+      return searchStrings.map(searchString =>
+        this.crisAPI.post(endpoint, {
+          size: maxItemSize,
+          offset: 0,
+          searchString,
+        })
+          .then((result: any) => {
+            if (result.items) {
+              result.items.forEach((item: any) => {
+                results.push({
+                  ...item,
+                  entityType,
+                  searchString,
+                });
+              });
+            }
+          })
+          .catch(error => {
+            log.error('Error searching', endpoint, { searchString, error });
+          })
+      );
+    });
 
-async function searchCategories(searchString: string, entityTypes: string[], apiUrl: string, apiKey: string) {
-  const results = [];
-
-  // If no API URL and key are provided, we can't search
-  if (!apiUrl || !apiKey) {
-    log.warn('No API URL or key provided for search');
+    await Promise.all(promises);
     return results;
   }
 
-  const maxItemSize = 10;
-  const promises = entityTypes.map(entityType => {
-    const endpoint = `/${entityType}/search`;
-    const method = 'POST';
+  public async calculate(id: string) {
+    const projectService = new ProjectService();
+    const data = (await projectService.findByRisId(id)).risData as any;
+    const texts = data.title.map((t: any) => t.text);
+    log.info('texts', texts);// TO-DO potentially do it with EN and with DE, not just "EN + DE"
 
-    return callCrisApi(apiUrl, apiKey, endpoint, method, {
-      size: maxItemSize,
-      offset: 0,
-      searchString
-    }).then((result: any) => {
-      if (result.items) {
-        result.items.forEach((item: any) => {
-          results.push({
-            ...item,
-            // Ensure we have the entity type
-            entityType: entityType
-          });
-        });
-      }
-    }).catch(error => {
-      log.error('Error searching', endpoint, error);
-      // Continue processing other entity types even if one fails
-    });
-  });
+    // Search across all entity types
+    const searchResults = await this.searchCategories(texts, ['projects', 'applications', 'awards']);
+    const totalResults = calculateSimilarityResults(texts, searchResults, 0.6);
+    const groupedResults = groupAndSortResults(totalResults);
 
-  await Promise.all(promises);
-  return results;
+    log.info(`🧮 Calculated likelihood for project '${id}', found ${groupedResults.length} potential matches`);
+    log.debug('Grouped Results', groupedResults.length)
+
+    return sortByEntity(groupedResults);
+  }
 }
 
 function calculateSimilarityResults(texts: string[], searchResults: any[], maxDiffQuota: number) {

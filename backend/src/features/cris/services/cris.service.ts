@@ -4,7 +4,7 @@ import { BadRequestError } from '@/utils/errors.js';
 import SearchService from './cris.search.service.js';
 import CRISReferenceService from './cris.reference.service.js';
 import { CRISUploadService, UploadParams } from './cris.upload.service.js';
-import { calculateLikelihood } from './cris.diff.service.js';
+import { LikelyhoodService } from './cris.diff.service.js';
 import { getDiff, executeAndSave } from './cris.getDiff.service.js';
 import CrisAPI from './cris.api.service.js';
 import ClusterService from './cris.cluster.service.js';
@@ -13,7 +13,6 @@ import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: 'feature:cris:service' });
 
 type CRISCreationParams = Omit<CRIS, 'id'>;
-
 
 export class CRISService {
   public async findMany(limitByUserPermission = {}, select = {}): Promise<CRIS[]> {
@@ -123,7 +122,11 @@ export class CRISService {
   }
 
   public async likelihood(risId: string, apiUrl: string, apiKey: string): Promise<any> {
-    return calculateLikelihood(risId, apiUrl, apiKey);
+    const crisAPI = new CrisAPI(apiUrl, apiKey);
+    const likelihoodService = new LikelyhoodService(crisAPI);
+    const results = await likelihoodService.calculate(risId);
+    log.debug('🟤 Likelihood results:', results.length)
+    return results;
   }
 
   public async upload(apiUrl: string, apiKey: string, params: UploadParams): Promise<any> {
