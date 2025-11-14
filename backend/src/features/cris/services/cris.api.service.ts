@@ -1,5 +1,8 @@
 import { ResearchInstitutionError } from '@/utils/errors.js'
 
+import { CRISService } from './cris.service.js';
+const crisService = new CRISService();
+
 import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: 'cris-api' });
 
@@ -85,6 +88,22 @@ export default class CrisAPI {
     private apiUrl: string,
     private apiKey: string,
   ) { }
+
+  async setByCrisId(crisId: number) {
+    const crisData = await crisService.findMany({
+      id: crisId
+    }, {
+      apiKey: true // show API key only in the backend, not in the frontend
+    })
+
+    // if not found, return error
+    if (!crisData) {
+      throw new Error('CRIS not found or not accessible')
+    }
+
+    this.apiUrl = crisData[0].apiUrl
+    this.apiKey = crisData[0].apiKey
+  }
 
   get (endpoint: string) {
     return callCrisApi(this.apiUrl, this.apiKey, endpoint, 'GET')

@@ -3,8 +3,35 @@ const log = new Logger({ name: 'cli:cris' });
 
 import yargs from 'yargs';
 import { getDiff } from './services/cris.getDiff.service.js';
+import CrisAPI from './services/cris.api.service.js'
+import { LikelyhoodService } from './services/cris.diff.service.js'
 
 await yargs(process.argv.slice(3))
+  .command(
+    'likelyhood',
+    'Fetch current CRIS entities',
+    (yargs) => {
+      return yargs
+        .option('cris-id', {
+          type: 'number',
+          description: 'CRIS ID',
+          demandOption: true
+        })
+        .option('ris-id', {
+          type: 'string',
+          description: 'RIS ID',
+          demandOption: true
+        })
+    },
+    async (argv) => {
+      const crisAPI = new CrisAPI("", "");
+      await crisAPI.setByCrisId(argv.crisId)
+      const likelihoodService = new LikelyhoodService(crisAPI);
+      const results = await likelihoodService.calculate(argv.risId);
+      log.debug('🟢 Likelihood results:', results)
+      log.debug('🟤 Likelihood results length:', results.length)
+    }
+  )
   .command(
     'getDiff',
     'Get diff for a CRIS entry',
@@ -56,4 +83,5 @@ await yargs(process.argv.slice(3))
   )
   .demandCommand(1, 'You need to specify a command')
   .strict()
+  .help()
   .parse();
