@@ -28,7 +28,8 @@
     "copy": "tsx ./scripts/copy-projects-from-fa.ts",
     "fa-api": "tsx ./scripts/fa-api.ts",
     "json-to-excel": "tsx ./scripts/json-to-excel.ts",
-    "update-projects": "tsx ./scripts/update-projects.ts"
+    "update-projects": "tsx ./scripts/update-projects.ts",
+    "cli": "tsx ./scripts/cli.ts"
   },
   "keywords": [],
   "author": "Kirill Stytsenko <kirill@styts.com>",

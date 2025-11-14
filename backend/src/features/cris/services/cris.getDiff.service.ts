@@ -11,6 +11,7 @@ export async function getDiff(
   useSavedTemplate = false,
   useCris = false
 ): Promise<any> {
+  // log.info(`Fetching diff for risId: ${risId}, crisId: ${crisId}, systemName: ${systemName}`);
   try {
     const diffs = await prisma.diff.findFirst({
       where: {
@@ -30,6 +31,7 @@ export async function getDiff(
         createdDate: "desc",
       },
     });
+    // log.debug('Diffs fetched:', diffs)
     return diffs
   } catch (error) {
     log.error('Error fetching diff', error);
