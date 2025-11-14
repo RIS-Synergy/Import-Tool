@@ -182,6 +182,7 @@ export class CRISController {
     res.json(result);
   }
 
+  /*
   public executeAndSave = async (req: Request, res: Response): Promise<void> => {
     log.info(`req: ${req.path}`, 'CRISController:getDiffs', req.body)
     const crisData = await this.getCrisData(req.body.crisId, req.user);
@@ -198,6 +199,7 @@ export class CRISController {
 
     res.json(result);
   }
+  */
 
   public assignCluster = async (req: Request, res: Response): Promise<void> => {
     try {

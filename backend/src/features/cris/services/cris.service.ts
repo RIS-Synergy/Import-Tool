@@ -5,9 +5,10 @@ import SearchService from './cris.search.service.js';
 import CRISReferenceService from './cris.reference.service.js';
 import { CRISUploadService, UploadParams } from './cris.upload.service.js';
 import { LikelyhoodService } from './cris.diff.service.js';
-import { getDiff, executeAndSave } from './cris.getDiff.service.js';
+import { getDiff} from './cris.getDiff.service.js';
 import CrisAPI from './cris.api.service.js';
 import ClusterService from './cris.cluster.service.js';
+import ExportSaveService from './execute-save.service.js';
 
 import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: 'feature:cris:service' });
@@ -135,8 +136,8 @@ export class CRISService {
     const uploadedResult = await uploadService.upload(params);
 
     log.debug('👉 Uploaded result:', uploadedResult.toString().slice(0, 100))
-
-    const saved = await executeAndSave(
+    const exportSaveService = new ExportSaveService(crisAPI)
+    const saved = await exportSaveService.executeAndSave(
       // @ts-ignore
       params.ris.id,
       params.crisId,
@@ -145,13 +146,12 @@ export class CRISService {
       uploadedResult.uuid,
       params.templateId,
       params.settings,
-      apiUrl,
-      apiKey
     )
 
     return saved
   }
 
+  /*
   public executeAndSave(
     risId: string,
     crisId: number,
@@ -174,11 +174,13 @@ export class CRISService {
       apiKey
     );
   }
+  */
 
   public getDiffs(risId: string, crisId: number, systemName: string){
     return getDiff(risId, crisId, systemName)
   }
 
+  /*
   public async refreshDiff(risId: string, crisId: number, systemName: string, uuid: string){
     const diff = await getDiff(risId, crisId, systemName, true, true)
     // console.log('diff', diff)
@@ -202,4 +204,5 @@ export class CRISService {
 
     return saved
   }
+  */
 }
