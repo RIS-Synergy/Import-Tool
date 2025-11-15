@@ -23,7 +23,6 @@ export function unexpectedErrorHandler(err: Error, _req: Request, res: Response,
   } else {
     log.error(err, 'Unexpected Error', _req.path, status, err)
     // log.error(err, 'Unexpected Error')
-
   }
 
   return res.json({

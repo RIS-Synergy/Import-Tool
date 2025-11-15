@@ -172,11 +172,12 @@ export class CRISController {
   public refreshDiff = async (req: Request, res: Response): Promise<void> => {
     log.info(`req: ${req.path}`, 'CRISController:getDiffs', req.body)
 
-    const result = this.service.refreshDiff(
+    const result = await this.service.refreshDiff(
       req.params.id,
       req.body.crisId,
       req.body.systemName,
       req.body.uuid,
+      req.body.templateId
     );
 
     res.json(result);

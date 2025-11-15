@@ -180,29 +180,30 @@ export class CRISService {
     return getDiff(risId, crisId, systemName)
   }
 
-  /*
-  public async refreshDiff(risId: string, crisId: number, systemName: string, uuid: string){
+  public async refreshDiff(risId: string, crisId: number, systemName: string, uuid: string, templateId: number){
     const diff = await getDiff(risId, crisId, systemName, true, true)
-    // console.log('diff', diff)
 
     if(!diff){
       throw new BadRequestError('No diff found to refresh')
     }
 
-    const saved = await executeAndSave(
+    const crisAPI = new CrisAPI("", "");
+    await crisAPI.setByCrisId(crisId)
+    const exportSaveService = new ExportSaveService(crisAPI)
+    var saved = await exportSaveService.executeAndSave(
       risId,
       crisId,
       systemName,
       uuid,
-      diff.savedTemplate.templateId,
+      templateId,
       diff.savedTemplate.settings,
-      diff.cris.apiUrl,
-      diff.cris.apiKey
     )
 
     log.info('saved', saved)
 
-    return saved
+    return {
+      diffList: saved.savedDiff.diffList,
+      modifiedDate: saved.savedDiff.modifiedDate,
+    }
   }
-  */
 }

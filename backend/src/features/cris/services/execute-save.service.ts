@@ -38,8 +38,8 @@ export default class ExportSaveService {
 
     const changed = diffList.diffList.length > 0
 
-    return prisma.diff.create({
-      data: {
+    return prisma.diff.upsert({
+      create: {
         savedTemplateId: saveTemplateId,
         crisId,
         crisUUID: crisData.uuid,
@@ -47,6 +47,22 @@ export default class ExportSaveService {
         method,
         diffList: diffList.diffList,
         changed
+      },
+      update: {
+        savedTemplateId: saveTemplateId,
+        crisId,
+        crisUUID: crisData.uuid,
+        endpoint,
+        method,
+        diffList: diffList.diffList,
+        changed
+      },
+      where: {
+        savedTemplateId_crisId_crisUUID: {
+          savedTemplateId: saveTemplateId,
+          crisId,
+          crisUUID: crisData.uuid,
+        }
       }
     })
   }

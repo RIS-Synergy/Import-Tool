@@ -126,6 +126,8 @@ model Diff {
 
   createdDate  DateTime @default(now())
   modifiedDate DateTime @updatedAt
+
+  @@unique([savedTemplateId, crisId, crisUUID])
 }
 
 model ResearchInstitution {

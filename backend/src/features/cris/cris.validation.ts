@@ -66,4 +66,5 @@ export const refreshDiffSchema = Joi.object({
   crisId: Joi.number().integer().min(1).required(),
   systemName: Joi.string().required(),
   uuid: Joi.string().required(),
+  templateId: Joi.number().integer().min(1).required(),
 });
