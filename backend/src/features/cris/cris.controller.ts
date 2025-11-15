@@ -131,7 +131,7 @@ export class CRISController {
       res.json(result);
     } catch (error) {
       log.error('Error uploading to CRIS:', error);
-      res.status(500).json({ message: 'Error uploading to CRIS' });
+      res.status(error.status || 423).json(error);
     }
   }
 

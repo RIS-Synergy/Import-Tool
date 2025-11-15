@@ -41,6 +41,8 @@ const referenceApi = async (systemName: string, uuid: string) => {
 }
 
 const uploadApi = async (data: any) => {
+  const snackbar = useSnackbar();
+
   const store = useUserSettingsStore();
   const body = {
     ...data,
@@ -49,6 +51,11 @@ const uploadApi = async (data: any) => {
   const result = await apiCall('cris/upload', 'POST', {
     body: JSON.stringify(body),
   })
+
+  if (result && !result.error) {
+    snackbar.info('Upload successful')
+  }
+
   return result
 }
 

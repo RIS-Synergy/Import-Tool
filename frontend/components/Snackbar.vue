@@ -17,6 +17,9 @@
       <hr class="my-2" />
       <div if="error && error.apiErrorResponse && error.apiErrorResponse.message">
         {{ error.apiErrorResponse.message }}
+      </div>
+      <div if="error && error.message">
+        {{ error.message }}
         <hr class="my-2" />
       </div>
       <pre class="small-error">{{ error.apiErrorResponse || error }}</pre>
@@ -26,7 +29,9 @@
         <b>Error</b>
       </div>
       <div>
-        {{ error }}
+        <pre class="small-error">
+          {{ error }}
+        </pre>
       </div>
     </div>
     <template v-slot:actions>
