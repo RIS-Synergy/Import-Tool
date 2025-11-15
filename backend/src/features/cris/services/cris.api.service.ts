@@ -1,7 +1,6 @@
 import { ResearchInstitutionError } from '@/utils/errors.js'
 
 import { CRISService } from './cris.service.js';
-const crisService = new CRISService();
 
 import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: 'cris-api' });
@@ -90,6 +89,7 @@ export default class CrisAPI {
   ) { }
 
   async setByCrisId(crisId: number) {
+    const crisService = new CRISService();
     const crisData = await crisService.findMany({
       id: crisId
     }, {

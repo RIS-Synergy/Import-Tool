@@ -157,3 +157,17 @@ model CRIS {
 
   @@unique([researchInstitutionId, name])
 }
+
+// Disabled for now
+// model ExternalEntity {
+//   id Int @id @default(autoincrement())
+
+//   uuid: String? @unique
+//   templateType TemplateType @default(PROJECT)
+
+//   projectId Int
+//   project   Project @relation(fields: [projectId], references: [id])
+
+//   crisId Int
+//   cris   CRIS   @relation(fields: [crisId], references: [id])
+// }
