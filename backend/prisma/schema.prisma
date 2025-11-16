@@ -39,10 +39,11 @@ model Project {
 
   researchInstitutions ResearchInstitution[] @relation("ProjectToResearchInstitution")
 
-  createdDate    DateTime        @default(now())
-  modifiedDate   DateTime        @updatedAt
+  createdDate      DateTime         @default(now())
+  modifiedDate     DateTime         @updatedAt
   // Diff         Diff[]
-  savedTemplates SavedTemplate[]
+  savedTemplates   SavedTemplate[]
+  externalEntities ExternalEntity[]
 }
 
 enum TemplateType {
@@ -155,21 +156,23 @@ model CRIS {
   researchInstitution   ResearchInstitution? @relation(fields: [researchInstitutionId], references: [id])
   researchInstitutionId Int?
 
-  diffs Diff[]
+  diffs            Diff[]
+  externalEntities ExternalEntity[]
 
   @@unique([researchInstitutionId, name])
 }
 
-// Disabled for now
-// model ExternalEntity {
-//   id Int @id @default(autoincrement())
+model ExternalEntity {
+  id Int @id @default(autoincrement())
 
-//   uuid: String? @unique
-//   templateType TemplateType @default(PROJECT)
+  uuid         String?
+  templateType TemplateType @default(PROJECT)
 
-//   projectId Int
-//   project   Project @relation(fields: [projectId], references: [id])
+  projectId Int
+  project   Project @relation(fields: [projectId], references: [id])
 
-//   crisId Int
-//   cris   CRIS   @relation(fields: [crisId], references: [id])
-// }
+  crisId Int
+  cris   CRIS @relation(fields: [crisId], references: [id])
+
+  @@unique([projectId, crisId, uuid, templateType])
+}

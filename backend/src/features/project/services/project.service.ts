@@ -87,6 +87,15 @@ export class ProjectService {
           orderBy: orderBy,
           take: itemsPerPage,
           skip: skip,
+          include: {
+            // TODO actually we need to limit this only the crisId
+            // of the user
+            // externalEntities: {
+            //   where: {
+            //     crisId: 17,
+            //   },
+            externalEntities: true
+          },
         }),
         prisma.project.count({
           where: whereClause,
@@ -97,7 +106,7 @@ export class ProjectService {
         items: projects,
         total,
         page: pageNumber,
-        itemsPerPage
+        itemsPerPage,
       };
 
       return result;

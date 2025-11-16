@@ -5,6 +5,27 @@ import CrisAPI from './cris.api.service.js';
 
 const log = new Logger({ name: 'feature:cris:diff:service' });
 
+export interface LikelihoodResultText {
+  lang: string;
+  diff: number;
+  crisText: string;
+}
+
+export interface LikelihoodResult {
+  pureId: string;
+  uuid: string;
+  risText: string;
+  texts: LikelihoodResultText[];
+  systemName: string;
+  modifiedDate: string;
+  createdDate: string;
+  cluster: any;
+  entity: string;
+  identifiers: any;
+  awardCluster: any;
+  applicationCluster: any;
+}
+
 export class LikelyhoodService {
   constructor(private crisAPI: CrisAPI) { }
 
@@ -43,7 +64,7 @@ export class LikelyhoodService {
     return results;
   }
 
-  public async calculate(id: string) {
+  public async calculate(id: string): Promise<LikelihoodResult[]> {
     const projectService = new ProjectService();
     const data = (await projectService.findByRisId(id)).risData as any;
     const texts = data.title.map((t: any) => t.text);

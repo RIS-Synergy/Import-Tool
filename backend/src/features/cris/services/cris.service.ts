@@ -122,11 +122,53 @@ export class CRISService {
     )
   }
 
-  public async likelihood(risId: string, apiUrl: string, apiKey: string): Promise<any> {
+  public async likelihood(risId: string, crisId: number, apiUrl: string, apiKey: string): Promise<any> {
     const crisAPI = new CrisAPI(apiUrl, apiKey);
     const likelihoodService = new LikelyhoodService(crisAPI);
     const results = await likelihoodService.calculate(risId);
+    // log.debug('👉 First result:', results[0])
     log.debug('🟤 Likelihood results:', results.length)
+
+    // need this for a unique project id in the DB
+    const project = await prisma.project.findUnique({
+      where: { risId },
+      select: { id: true },
+    });
+
+    // upsert ExternalEntity to DB
+    for (const result of results) {
+      await prisma.externalEntity.upsert({
+        where: {
+          projectId_crisId_uuid_templateType: {
+            uuid: result.uuid,
+            templateType: result.systemName.toUpperCase(),
+            projectId: project.id,
+            crisId: crisId,
+          }
+        },
+        update: {
+          uuid: result.uuid,
+          templateType: result.systemName.toUpperCase(),
+          project: {
+            connect: { risId }
+          },
+          cris: {
+            connect: { id: crisId }
+          },
+        },
+        create: {
+          uuid: result.uuid,
+          templateType: result.systemName.toUpperCase(),
+          project: {
+            connect: { risId }
+          },
+          cris: {
+            connect: { id: crisId }
+          },
+        },
+      });
+    }
+
     return results;
   }
 

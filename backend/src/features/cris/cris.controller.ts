@@ -140,7 +140,7 @@ export class CRISController {
       const crisData = await this.getCrisData(req.body.crisId, req.user);
       const id = req.params.id;
 
-      const result = await this.service.likelihood(id, crisData.apiUrl, crisData.apiKey);
+      const result = await this.service.likelihood(id, req.body.crisId, crisData.apiUrl, crisData.apiKey);
       res.json(result);
     } catch (error) {
       log.error('Error in likelihood calculation:', error);

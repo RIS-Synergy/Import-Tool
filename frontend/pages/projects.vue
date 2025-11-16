@@ -7,12 +7,12 @@
         cols="12"
         md="6"
       >
-        <v-card v-if="!loading" class="">
+        <v-card v-if="!loading">
           <v-card-title
             >{{ getLang(item.title, "de") }} <br />
             {{ getLang(item.title, "en") }}
           </v-card-title>
-          <v-card-text>
+          <v-card-text class="pb-2">
             <v-row>
               <v-col cols="8">
                 ID:
@@ -36,9 +36,11 @@
                     view
                   </v-btn>
                 </NuxtLink>
-                <StatusColumn v-if="hasCRIS()" class="bottom-right" :id="item.id" :data="columnData" />
+                <!-- Disable for now  -->
+                <!-- <StatusColumn v-if="hasCRIS()" class="bottom-right" :id="item.id" :data="columnData" /> -->
               </v-col>
             </v-row>
+            <ExternalEntities :externals="item.externalEntities" />
             <DiffSimple
               class="ml-1 mr-1"
               :diffList="item.diffList" />
@@ -95,6 +97,7 @@ async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
   serverItems.value = items.map((x) => {
     return {
       ...x.risData,
+      externalEntities: x.externalEntities,
       diffList: x.diffList,
       diffLength: x.diffLength
     }
@@ -197,12 +200,12 @@ a {
   font-weight: bold;
 }
 
-:deep(.v-chip) {
-  position: absolute;
-  right: 1em;
-  bottom: 1em;
-}
-
+/* :deep(.v-chip) {
+   position: absolute;
+   right: 1em;
+   bottom: 1em;
+   }
+ */
 .right {
   float: right;
 }
