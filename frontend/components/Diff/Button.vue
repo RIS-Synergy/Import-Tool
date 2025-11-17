@@ -54,7 +54,10 @@ const props = defineProps({
   uuid: {
     type: String,
     required: true,
-  }
+  },
+  externalEntityId: {
+    type: Number,
+  },
 });
 
 const { cris } = useApiUtils();
@@ -69,7 +72,9 @@ onMounted(async () => {
     props.risId,
     props.systemName,
     props.uuid,
-    templateSelected.value);
+    templateSelected.value,
+    props.externalEntityId,
+  );
   diffList.value = result && result.diffList;
 });
 

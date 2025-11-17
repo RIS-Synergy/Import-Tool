@@ -6,35 +6,29 @@ const log = new Logger({ name: 'feature:cris:getDiff' });
 // Get the latest diff for a given risId and crisId
 export async function getDiff(
   risId: string,
-  crisId: number,
   systemName: string,
-  useSavedTemplate = false,
-  useCris = false
+  externalEntityId: number,
 ): Promise<any> {
-  // log.info(`Fetching diff for risId: ${risId}, crisId: ${crisId}, systemName: ${systemName}`);
   try {
-    const diffs = await prisma.diff.findFirst({
+    const diffs = await prisma.savedTemplate.findFirst({
       where: {
-        crisId,
-        savedTemplate: {
           project: {
-            risId, // filter by risId
+            risId
           },
-          templateType: systemName.toUpperCase(),
-        },
-      },
-      include: {
-        savedTemplate: useSavedTemplate,
-        cris: useCris
+          template: {
+            templateType: systemName.toUpperCase(),
+          },
+          externalEntityId,
       },
       orderBy: {
         createdDate: "desc",
       },
     });
-    // log.debug('Diffs fetched:', diffs)
-    return diffs
+
+    log.debug("Diffs fetched:", diffs);
+    return diffs;
   } catch (error) {
-    log.error('Error fetching diff', error);
+    log.error("Error fetching diff", error);
     throw error;
   }
 }

@@ -164,6 +164,7 @@ export class CRISController {
       req.params.id,
       req.body.crisId,
       req.body.systemName,
+      req.body.externalEntityId
     );
 
     res.json(result);
@@ -177,7 +178,8 @@ export class CRISController {
       req.body.crisId,
       req.body.systemName,
       req.body.uuid,
-      req.body.templateId
+      req.body.templateId,
+      req.body.settings
     );
 
     res.json(result);

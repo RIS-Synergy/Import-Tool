@@ -10,7 +10,7 @@ const refreshDiff = async (
     return
   }
 
-  const { template } = useProjectStore()
+  const { template, settings } = useProjectStore()
   const templateId = template[systemName.toLowerCase() + "Id"]
 
   const result = await apiCall(`cris/refreshDiff/${risId}`, "POST", {
@@ -18,7 +18,8 @@ const refreshDiff = async (
       crisId: store.cris.id,
       systemName,
       uuid,
-      templateId
+      templateId,
+      settings
     }),
   });
   return result;

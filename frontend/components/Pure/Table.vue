@@ -29,7 +29,9 @@
           <DiffButton :risId="risId"
              :systemName="item.systemName"
              :uuid="item.uuid"
-             :pureId="item.pureId" />
+             :pureId="item.pureId"
+             :externalEntityId="item.externalEntityId"
+          />
 
           <DiffRefresh
             :risId="risId"

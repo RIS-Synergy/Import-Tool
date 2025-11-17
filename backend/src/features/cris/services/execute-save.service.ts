@@ -21,78 +21,80 @@ type CRISData = {
 }
 
 export default class ExportSaveService {
+  risId: string
+  crisId: number
+  systemName: string
+  uuid: string
+  templateSelected: number
+  settings: object
+
+  saveTemplateId: number
+  transformationResult: any
+  crisData: CRISData
+
   constructor(private crisApi: CrisAPI) { }
 
-  // this is not part of ui
-  private saveDiff(
-    saveTemplateId: number,
-    crisId: number,
-    endpoint: string,
-    method: string,
-    transformationResult: any,
-    crisData: CRISData
-  ) {
-    const differ = new Differ(transformationResult.output, crisData)
-    const setOfDiffKeys: Set<string> = differ.diff()
-    const diffList: DiffList = differ.diffList(setOfDiffKeys)
-
-    const changed = diffList.diffList.length > 0
-
-    return prisma.diff.upsert({
-      create: {
-        savedTemplateId: saveTemplateId,
-        crisId,
-        crisUUID: crisData.uuid,
-        endpoint,
-        method,
-        diffList: diffList.diffList,
-        changed
-      },
-      update: {
-        savedTemplateId: saveTemplateId,
-        crisId,
-        crisUUID: crisData.uuid,
-        endpoint,
-        method,
-        diffList: diffList.diffList,
-        changed
-      },
+  private async findExternal(projectId) {
+    const result = await prisma.externalEntity.findUnique({
       where: {
-        savedTemplateId_crisId_crisUUID: {
-          savedTemplateId: saveTemplateId,
-          crisId,
-          crisUUID: crisData.uuid,
+        projectId_crisId_uuid_templateType: {
+          projectId,
+          crisId: this.crisId,
+          uuid: this.uuid,
+          templateType: this.systemName.toUpperCase(),
         }
       }
     })
+    return result
   }
 
-  private async saveTemplate(
-    project: Project,
-    templateSelected: number,
-    settings: object
-  ) {
+  private async saveTemplate(project: Project) {
     const templateService = new TemplateService()
-    const template = await templateService.findById(templateSelected)
-    const yamlTemplate = template.yamlTemplate
+    const template = await templateService.findById(this.templateSelected)
 
     if (project?.id === undefined) {
       throw new Error('Project ID is undefined');
     }
 
-    const result = await prisma.savedTemplate.create({
-      data: {
-        projectId: project.id,
-        // @ts-ignore
+    const externalEntity = await this.findExternal(project.id)
+
+    const differ = new Differ(this.transformationResult.output, this.crisData)
+    const setOfDiffKeys: Set<string> = differ.diff()
+    const { diffList }: DiffList = differ.diffList(setOfDiffKeys)
+    const changed = diffList.length > 0
+
+    const result = await prisma.savedTemplate.upsert({
+      where: {
+        projectId_templateId_externalEntityId: {
+          projectId: project.id,
+          templateId: this.templateSelected,
+          externalEntityId: externalEntity.id
+        }
+      },
+      create: {
+        project: {
+          connect: { risId: project.risId }
+        },
         risData: project.risData,
-        settings,
-        yamlTemplate,
-        templateType: template.templateType,
-        templateId: templateSelected,
-      }
+        settings: this.settings,
+        template: {
+          connect: { id: this.templateSelected }
+        },
+        diffList,
+        changed,
+        externalEntity: {
+          connect: { id: externalEntity.id }
+        }
+      },
+      update: {
+        risData: project.risData,
+        settings: this.settings,
+        diffList,
+        changed,
+      },
     })
 
-    log.info(`Saved template ${template.templateType} (id: ${templateSelected}) for project '${project.risId}'`);
+    log.info(`Saved template ${template.templateType} (id: ${this.templateSelected}) for project '${project.risId}'`);
     return result
   }
 
@@ -104,6 +106,13 @@ export default class ExportSaveService {
     templateSelected: number,
     settings: object,
   ): Promise<any> {
+
+    this.risId = risId
+    this.crisId = crisId
+    this.systemName = systemName
+    this.uuid = uuid
+    this.templateSelected = templateSelected
+    this.settings = settings
 
     log.info(`Getting diff uuid ${uuid}, template ${templateSelected}, system ${systemName}`);
 
@@ -120,6 +129,7 @@ export default class ExportSaveService {
       log.error('Error fetching CRIS data', error);
       throw error;
     }
+    this.crisData = crisData as CRISData
 
     // # Execute
     const transformservice = new TransformService()
@@ -128,27 +138,14 @@ export default class ExportSaveService {
       project.risData as object,
       settings
     )
+    this.transformationResult = transformationResult
 
     // # Save template
-    const savedTempl = await this.saveTemplate(
-      project,
-      templateSelected,
-      settings
-    )
-
-    // # Save diff
-    const savedDiff = await this.saveDiff(
-      savedTempl.id,
-      crisId,
-      endpoint,
-      "GET",
-      transformationResult,
-      crisData
-    )
+    const savedTempl = await this.saveTemplate(project)
 
     return {
-      savedTemplate: savedTempl,
-      savedDiff
+      diffList: savedTempl.diffList,
+      modifiedDate: savedTempl.modifiedDate,
     }
   }
 }

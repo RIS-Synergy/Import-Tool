@@ -76,7 +76,9 @@ const getDiffs = async (
   risId: string,
   systemName: string,
   uuid: string,
-  templateId: number) => {
+  templateId: number,
+  externalEntityId?: number,
+) => {
 
   const store = useUserSettingsStore();
   if (!store.cris.id) {
@@ -96,7 +98,7 @@ const getDiffs = async (
         systemName,
         uuid,
         templateId,
-        // settings: projectStore.settings
+        externalEntityId
       }),
     });
     return result;

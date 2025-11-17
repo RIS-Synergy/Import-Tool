@@ -125,7 +125,7 @@ export class CRISService {
   public async likelihood(risId: string, crisId: number, apiUrl: string, apiKey: string): Promise<any> {
     const crisAPI = new CrisAPI(apiUrl, apiKey);
     const likelihoodService = new LikelyhoodService(crisAPI);
-    const results = await likelihoodService.calculate(risId);
+    var results = await likelihoodService.calculate(risId);
     // log.debug('👉 First result:', results[0])
     log.debug('🟤 Likelihood results:', results.length)
 
@@ -136,15 +136,16 @@ export class CRISService {
     });
 
     // upsert ExternalEntity to DB
+    var externals = [];
     for (const result of results) {
-      await prisma.externalEntity.upsert({
+      const external = await prisma.externalEntity.upsert({
         where: {
           projectId_crisId_uuid_templateType: {
             uuid: result.uuid,
             templateType: result.systemName.toUpperCase(),
             projectId: project.id,
             crisId: crisId,
-          }
+          },
         },
         update: {
           uuid: result.uuid,
@@ -167,6 +168,20 @@ export class CRISService {
           },
         },
       });
+      // log.info('Upserted external entity:', external)
+      externals.push(external);
+    }
+
+    // assign externalEntityId to `results`, we will need this in the frontend (but maybe not only there)
+    for (const ex of externals) {
+      results.forEach((res: any) => {
+        if (res.uuid === ex.uuid) {
+          res.externalEntityId = ex.id;
+          // log.debug(`Assigned externalEntityId ${ex.id} to result with uuid: ${res.uuid}`, ex.uuid);
+        } else {
+          // log.warn(`No matching external entity found for uuid: ${res.uuid}`, ex.uuid)
+        }
+      })
     }
 
     return results;
@@ -193,42 +208,13 @@ export class CRISService {
     return saved
   }
 
-  /*
-  public executeAndSave(
-    risId: string,
-    crisId: number,
-    systemName: string,
-    uuid: string,
-    templateSelected: number,
-    settings: object,
-    apiUrl: string,
-    apiKey: string): Promise<any> {
-    log.info('Getting diffs', templateSelected);
-
-    return executeAndSave(
-      risId,
-      crisId,
-      systemName,
-      uuid,
-      templateSelected,
-      settings,
-      apiUrl,
-      apiKey
-    );
-  }
-  */
-
-  public getDiffs(risId: string, crisId: number, systemName: string){
-    return getDiff(risId, crisId, systemName)
+  public getDiffs(risId: string, crisId: number, systemName: string, externalEntityId?: number){
+    log.info('getDiffs called', { risId, crisId, systemName, externalEntityId })
+    return getDiff(risId, systemName, externalEntityId)
   }
 
-  public async refreshDiff(risId: string, crisId: number, systemName: string, uuid: string, templateId: number){
-    const diff = await getDiff(risId, crisId, systemName, true, true)
-
-    if(!diff){
-      throw new BadRequestError('No diff found to refresh')
-    }
-
+  //
+  public async refreshDiff(risId: string, crisId: number, systemName: string, uuid: string, templateId: number, settings: object){
     const crisAPI = new CrisAPI("", "");
     await crisAPI.setByCrisId(crisId)
     const exportSaveService = new ExportSaveService(crisAPI)
@@ -238,14 +224,14 @@ export class CRISService {
       systemName,
       uuid,
       templateId,
-      diff.savedTemplate.settings,
+      settings
     )
 
     log.info('saved', saved)
 
     return {
-      diffList: saved.savedDiff.diffList,
-      modifiedDate: saved.savedDiff.modifiedDate,
+      diffList: saved.diffList,
+      modifiedDate: saved.modifiedDate,
     }
   }
 }

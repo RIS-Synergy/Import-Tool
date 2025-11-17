@@ -12,7 +12,7 @@
             >{{ getLang(item.title, "de") }} <br />
             {{ getLang(item.title, "en") }}
           </v-card-title>
-          <v-card-text class="pb-2">
+          <v-card-text class="pb-3">
             <v-row>
               <v-col cols="8">
                 ID:

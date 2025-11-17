@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-chip
-      class="mr-1 mt-1"
+      class="mr-1 mt-2"
       :class="chipClass(ex)"
       :color="chipColor(ex)"
       size="small"

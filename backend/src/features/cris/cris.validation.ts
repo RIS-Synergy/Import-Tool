@@ -50,7 +50,8 @@ export const getDiffSchema = Joi.object({
   uuid: Joi.string().required(),
   templateId: Joi.number().integer().min(1).required(),
   // settings: Joi.object().required(),
-  refreshDiff: Joi.boolean().default(false)
+  refreshDiff: Joi.boolean().default(false),
+  externalEntityId: Joi.number().integer().min(1).optional(),
 });
 
 export const assignClusterSchema = Joi.object({
@@ -67,4 +68,5 @@ export const refreshDiffSchema = Joi.object({
   systemName: Joi.string().required(),
   uuid: Joi.string().required(),
   templateId: Joi.number().integer().min(1).required(),
+  settings: Joi.object().required(),
 });
