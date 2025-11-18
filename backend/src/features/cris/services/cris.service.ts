@@ -5,7 +5,7 @@ import SearchService from './cris.search.service.js';
 import CRISReferenceService from './cris.reference.service.js';
 import { CRISUploadService, UploadParams } from './cris.upload.service.js';
 import { LikelyhoodService } from './cris.diff.service.js';
-import { getDiff} from './cris.getDiff.service.js';
+import { getDiff } from './cris.getDiff.service.js';
 import CrisAPI from './cris.api.service.js';
 import ClusterService from './cris.cluster.service.js';
 import ExportSaveService from './execute-save.service.js';
@@ -25,7 +25,7 @@ export class CRISService {
         name: true,
         apiUrl: true, // insecure to show it
         researchInstitution: {
-          select: { name: true }
+          select: { name: true, id: true }
         },
         ...select
       },
@@ -125,65 +125,10 @@ export class CRISService {
   public async likelihood(risId: string, crisId: number, apiUrl: string, apiKey: string): Promise<any> {
     const crisAPI = new CrisAPI(apiUrl, apiKey);
     const likelihoodService = new LikelyhoodService(crisAPI);
-    var results = await likelihoodService.calculate(risId);
+    var results = await likelihoodService.calculateAndSave(
+      risId, crisId);
     // log.debug('👉 First result:', results[0])
     log.debug('🟤 Likelihood results:', results.length)
-
-    // need this for a unique project id in the DB
-    const project = await prisma.project.findUnique({
-      where: { risId },
-      select: { id: true },
-    });
-
-    // upsert ExternalEntity to DB
-    var externals = [];
-    for (const result of results) {
-      const external = await prisma.externalEntity.upsert({
-        where: {
-          projectId_crisId_uuid_templateType: {
-            uuid: result.uuid,
-            templateType: result.systemName.toUpperCase(),
-            projectId: project.id,
-            crisId: crisId,
-          },
-        },
-        update: {
-          uuid: result.uuid,
-          templateType: result.systemName.toUpperCase(),
-          project: {
-            connect: { risId }
-          },
-          cris: {
-            connect: { id: crisId }
-          },
-        },
-        create: {
-          uuid: result.uuid,
-          templateType: result.systemName.toUpperCase(),
-          project: {
-            connect: { risId }
-          },
-          cris: {
-            connect: { id: crisId }
-          },
-        },
-      });
-      // log.info('Upserted external entity:', external)
-      externals.push(external);
-    }
-
-    // assign externalEntityId to `results`, we will need this in the frontend (but maybe not only there)
-    for (const ex of externals) {
-      results.forEach((res: any) => {
-        if (res.uuid === ex.uuid) {
-          res.externalEntityId = ex.id;
-          // log.debug(`Assigned externalEntityId ${ex.id} to result with uuid: ${res.uuid}`, ex.uuid);
-        } else {
-          // log.warn(`No matching external entity found for uuid: ${res.uuid}`, ex.uuid)
-        }
-      })
-    }
-
     return results;
   }
 
@@ -208,13 +153,13 @@ export class CRISService {
     return saved
   }
 
-  public getDiffs(risId: string, crisId: number, systemName: string, externalEntityId?: number){
+  public getDiffs(risId: string, crisId: number, systemName: string, externalEntityId?: number) {
     log.info('getDiffs called', { risId, crisId, systemName, externalEntityId })
     return getDiff(risId, systemName, externalEntityId)
   }
 
   //
-  public async refreshDiff(risId: string, crisId: number, systemName: string, uuid: string, templateId: number, settings: object){
+  public async refreshDiff(risId: string, crisId: number, systemName: string, uuid: string, templateId: number, settings: object) {
     const crisAPI = new CrisAPI("", "");
     await crisAPI.setByCrisId(crisId)
     const exportSaveService = new ExportSaveService(crisAPI)

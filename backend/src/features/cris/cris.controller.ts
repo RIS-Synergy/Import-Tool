@@ -5,6 +5,8 @@ import { CRISService } from './services/cris.service.js';
 import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: "feature:cris:controller" });
 
+import DiscoverExternalService from './services/discoverExternal.service.js';
+
 
 // similar code is duplicated from features/user/user.controller.ts, move to a common file
 function limitByUserPermission(reqUser: any) {
@@ -149,6 +151,19 @@ export class CRISController {
       } else {
         res.status(500).json({ message: 'Error calculating likelihood' });
       }
+    }
+  }
+
+  public discoverExternalEntities = async (req: Request, res: Response): Promise<void> => {
+    const crisData = await this.getCrisData(req.body.crisId, req.user);
+
+    try {
+      const discoverService = new DiscoverExternalService(crisData);
+      const result = discoverService.discover();
+      res.json(result);
+    } catch (error) {
+      log.error('Error discovering external entities:', error);
+      res.status(500).json({ message: 'Error discovering external entities' });
     }
   }
 

@@ -2,6 +2,7 @@ import { Logger } from "@/utils/logger.js";
 import { ProjectService } from '@/features/project/services/project.service.js'
 import similarity from '@/utils/similarity.js'
 import CrisAPI from './cris.api.service.js';
+import prisma from '@/lib/prisma.js';
 
 const log = new Logger({ name: 'feature:cris:diff:service' });
 
@@ -27,6 +28,8 @@ export interface LikelihoodResult {
 }
 
 export class LikelyhoodService {
+  projectId: number;
+
   constructor(private crisAPI: CrisAPI) { }
 
   async searchCategories(searchStrings: string[], entityTypes: string[]) {
@@ -64,10 +67,68 @@ export class LikelyhoodService {
     return results;
   }
 
-  public async calculate(id: string): Promise<LikelihoodResult[]> {
+  private async upsertExternals (
+    results: LikelihoodResult[],
+    risId: string,
+    crisId: number,
+    projectId: number){
+        var externals = [];
+    for (const result of results) {
+      const external = await prisma.externalEntity.upsert({
+        where: {
+          projectId_crisId_uuid_templateType: {
+            uuid: result.uuid,
+            templateType: result.systemName.toUpperCase(),
+            projectId: projectId,
+            crisId: crisId,
+          },
+        },
+        update: {
+          uuid: result.uuid,
+          templateType: result.systemName.toUpperCase(),
+          project: {
+            connect: { risId }
+          },
+          cris: {
+            connect: { id: crisId }
+          },
+        },
+        create: {
+          uuid: result.uuid,
+          templateType: result.systemName.toUpperCase(),
+          project: {
+            connect: { risId }
+          },
+          cris: {
+            connect: { id: crisId }
+          },
+        },
+      });
+      // log.info('Upserted external entity:', external)
+      externals.push(external);
+    }
+
+    // assign externalEntityId to `results`, we will need this in the frontend (but maybe not only there)
+    for (const ex of externals) {
+      results.forEach((res: any) => {
+        if (res.uuid === ex.uuid) {
+          res.externalEntityId = ex.id;
+          // log.debug(`Assigned externalEntityId ${ex.id} to result with uuid: ${res.uuid}`, ex.uuid);
+        } else {
+          // log.warn(`No matching external entity found for uuid: ${res.uuid}`, ex.uuid)
+        }
+      })
+    }
+
+    return results;
+  }
+
+  public async calculateAndSave(risId: string, crisId: number): Promise<LikelihoodResult[]> {
     const projectService = new ProjectService();
-    const data = (await projectService.findByRisId(id)).risData as any;
-    const texts = data.title.map((t: any) => t.text);
+    const project = (await projectService.findByRisId(risId) as any)
+    const projectId = project.id
+    const risData = project.risData;
+    const texts = risData.title.map((t: any) => t.text);
     log.info('texts', texts);// TO-DO potentially do it with EN and with DE, not just "EN + DE"
 
     // Search across all entity types
@@ -75,10 +136,12 @@ export class LikelyhoodService {
     const totalResults = calculateSimilarityResults(texts, searchResults, 0.6);
     const groupedResults = groupAndSortResults(totalResults);
 
-    log.info(`🧮 Calculated likelihood for project '${id}', found ${groupedResults.length} potential matches`);
+    log.info(`🧮 Calculated likelihood for project '${risId}', found ${groupedResults.length} potential matches`);
     log.debug('Grouped Results', groupedResults.length)
 
-    return sortByEntity(groupedResults);
+    var results = sortByEntity(groupedResults);
+    results = await this.upsertExternals(results, risId, crisId, projectId);
+    return results;
   }
 }
 

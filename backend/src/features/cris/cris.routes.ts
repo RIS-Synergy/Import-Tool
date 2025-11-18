@@ -57,4 +57,7 @@ router.post('/refreshDiff/:id',
   validate(likelihoodIdParamsSchema, "params"),
   validate(refreshDiffSchema, "body"), controller.refreshDiff)
 
+router.post('/discoverExternalEntities',
+  controller.discoverExternalEntities);
+
 export default router;

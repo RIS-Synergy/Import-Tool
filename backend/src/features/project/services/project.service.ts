@@ -125,6 +125,20 @@ export class ProjectService {
     }
   }
 
+  findByResearchInstitution(researchInstitutionId: number){
+    // count!
+    const results = prisma.project.count({
+      where: {
+        researchInstitutions: {
+          some: {
+            id: researchInstitutionId
+          }
+        }
+      },
+    });
+    return results;
+  }
+
   /*
   public async findMany(
     limitByUserPermission = {},

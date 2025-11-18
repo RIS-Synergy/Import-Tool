@@ -33,6 +33,10 @@
             <v-btn v-else variant="outlined" @click="deselect()">
               Deselect
             </v-btn>
+            <v-spacer />
+            <v-btn variant="outlined" @click="discover(item.id)">
+              Discover
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -44,7 +48,7 @@
 import { computed } from "vue";
 
 const { cris } = useApiUtils();
-const { listAll } = (await cris).default;
+const { listAll, discoverExternalEntities } = (await cris).default;
 const data = await listAll();
 
 const userSettingsStore = useUserSettingsStore();
@@ -57,5 +61,9 @@ function select(itemId?: number, itemName: string) {
 
 function deselect() {
   setCRIS(null, null);
+}
+
+function discover(itemId) {
+  discoverExternalEntities(itemId);
 }
 </script>

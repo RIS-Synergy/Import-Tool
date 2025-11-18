@@ -134,6 +134,18 @@ const assignCluster = async (projectUUID: string, item: ClusterWrapper) => {
   return result;
 }
 
+const discoverExternalEntities = async (thisCrisId: number) => {
+  const { cris } = useUserSettingsStore();
+
+  const result = await apiCall('cris/discoverExternalEntities', 'POST', {
+    body: JSON.stringify({
+      crisId: cris.id,
+      thisCrisId,
+    }),
+  })
+  return result;
+}
+
 
 export default {
   listAll,
@@ -144,4 +156,5 @@ export default {
   diffRILikelihood,
   getDiffs,
   assignCluster,
+  discoverExternalEntities,
 }
