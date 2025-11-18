@@ -4,12 +4,18 @@
       class="mr-1 mt-2"
       :class="chipClass(ex)"
       :color="chipColor(ex)"
-      size="small"
+      size="default"
       variant="outlined"
       v-for="ex in externals"
     >
       {{ ex.templateType }}
+      <v-chip size="small" class="ml-1" color="red" v-for="st in ex.SavedTemplate">
+        {{st.diffList.length}}
+      </v-chip>
     </v-chip>
+    <pre v-if="false" class="tiny">
+      {{externals}}
+    </pre>
   </div>
   <!-- if not, press button. (optoional)
        otherwise it will be fetched in the project/[id]/transform -->
@@ -43,5 +49,9 @@ function chipClass(ex) {
 
 <style scoped>
 .PROJECT = {
+}
+
+.tiny {
+  font-size: 0.7em;
 }
 </style>

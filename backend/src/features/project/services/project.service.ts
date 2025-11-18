@@ -82,19 +82,28 @@ export class ProjectService {
       const skip = (pageNumber - 1) * itemsPerPage;
 
       const [projects, total] = await Promise.all([
+        // TODO actually we need to limit this only the crisId
+        // of the user.
+        // Because for now we are using all the externalEntities, not only
+        // of one CRIS system but all of them, include other ResearchInstututions.
+        // this will be a problem when we use the Shared Service approach
         prisma.project.findMany({
           where: whereClause,
           orderBy: orderBy,
           take: itemsPerPage,
           skip: skip,
           include: {
-            // TODO actually we need to limit this only the crisId
-            // of the user
-            // externalEntities: {
-            //   where: {
-            //     crisId: 17,
-            //   },
-            externalEntities: true
+            externalEntities: {
+              include: {
+                SavedTemplate: {
+                  select: {
+                    diffList: true,
+                    changed: true,
+                    modifiedDate: true,
+                  }
+                }
+               }
+            }
           },
         }),
         prisma.project.count({
