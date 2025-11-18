@@ -1,45 +1,43 @@
 <template>
   <AppBar title="CRIS Systems" />
 
-  <v-table density="compact">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>API</th>
-        <th>Research Institution</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="item in data" :key="item.id">
-        <td>
-          <span :class="{ 'font-weight-bold': item.id === currentCRIS }">
-            {{ item.name }}
-          </span>
-        </td>
-        <td>{{ item.apiUrl }}</td>
-        <td>{{ item.researchInstitution.name }}</td>
-        <td>
-          <v-btn
-            v-if="item.id !== currentCRIS"
-            variant="outlined"
-            size="small"
-            @click="select(item.id, item.name)"
-          >
-            select
-          </v-btn>
-          <v-btn
-            v-else
-            variant="outlined"
-            size="small"
-            @click="deselect()"
-          >
-            deselect
-          </v-btn>
-        </td>
-      </tr>
-    </tbody>
-  </v-table>
+  <v-container>
+    <v-row>
+      <v-col v-for="item in data" :key="item.id" cols="12" md="6">
+        <v-card
+          :class="{ 'border-primary': item.id === currentCRIS }"
+          :style="{
+            'background-color': item.id === currentCRIS ? '#e3f2fd' : 'white',
+          }"
+        >
+          <v-card-title>
+            <span :class="{ 'font-weight-bold': item.id === currentCRIS }">
+              {{ item.name }}
+            </span>
+          </v-card-title>
+          <v-card-text>
+            <div><strong>API:</strong> {{ item.apiUrl }}</div>
+            <div>
+              <strong>Research Institution:</strong>
+              {{ item.researchInstitution.name }}
+            </div>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn
+              v-if="item.id !== currentCRIS"
+              variant="outlined"
+              @click="select(item.id, item.name)"
+            >
+              Select
+            </v-btn>
+            <v-btn v-else variant="outlined" @click="deselect()">
+              Deselect
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup lang="ts">
@@ -53,11 +51,11 @@ const userSettingsStore = useUserSettingsStore();
 const { setCRIS } = userSettingsStore;
 const currentCRIS = computed(() => userSettingsStore.cris.id || null);
 
-function select (itemId?: number, itemName: string) {
-  setCRIS(itemId || null, itemName || null)
+function select(itemId?: number, itemName: string) {
+  setCRIS(itemId || null, itemName || null);
 }
 
-function deselect () {
-  setCRIS(null, null)
+function deselect() {
+  setCRIS(null, null);
 }
 </script>

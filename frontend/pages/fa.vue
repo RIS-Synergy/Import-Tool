@@ -1,36 +1,36 @@
 <template>
   <AppBar title="Funding Agencies" />
-  <v-table density="compact">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Acronym</th>
-        <th>Name</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="item in data" :key="item.id">
-        <td>{{ item.id }}</td>
-        <td>
-          {{ item.data.acronym }}
-        </td>
-        <td>
-          {{ item.data.name }}
-        </td>
-        <td>
-          <v-btn variant="outlined" size="small" @click="startSync(item.id)">
-            Sync
-          </v-btn>
-          <FADeleteButton :item-id="item.id" @deleted="handleDeleted" />
-          <FAFormButton
-            :item-id="item.id"
-            @submitted="(formData) => handleFormSubmit(formData, item.id)"
-          />
-        </td>
-      </tr>
-    </tbody>
-  </v-table>
+  <v-container>
+    <v-row>
+      <v-col
+        v-for="item in data"
+        :key="item.id"
+        cols="12"
+      >
+        <v-card >
+          <v-card-title>
+            {{ item.data.name }}
+          </v-card-title>
+          <v-card-subtitle>
+            {{ item.data.acronym }}
+          </v-card-subtitle>
+          <v-card-text>
+            <div><strong>ID:</strong> {{ item.id }}</div>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn variant="outlined" @click="startSync(item.id)">
+              Sync
+            </v-btn>
+            <FADeleteButton :item-id="item.id" @deleted="handleDeleted" />
+            <FAFormButton
+              :item-id="item.id"
+              @submitted="(formData) => handleFormSubmit(formData, item.id)"
+            />
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup>
