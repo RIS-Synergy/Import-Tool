@@ -89,9 +89,9 @@ export class ProjectService {
         // this will be a problem when we use the Shared Service approach
         prisma.project.findMany({
           where: whereClause,
-          orderBy: orderBy,
+          orderBy: [orderBy, { createdDate: 'asc' }],
           take: itemsPerPage,
-          skip: skip,
+          skip,
           include: {
             externalEntities: {
               include: {
@@ -102,7 +102,7 @@ export class ProjectService {
                     modifiedDate: true,
                   }
                 }
-               }
+              }
             }
           },
         }),
@@ -125,7 +125,7 @@ export class ProjectService {
     }
   }
 
-  findByResearchInstitution(researchInstitutionId: number){
+  findByResearchInstitution(researchInstitutionId: number) {
     // count!
     const results = prisma.project.count({
       where: {

@@ -35,7 +35,8 @@
             </v-btn>
             <v-spacer />
             <v-btn variant="outlined" @click="discover(item.id)">
-              Discover
+              <v-icon class="mr-1">mdi-search-web</v-icon>
+               Discover
             </v-btn>
           </v-card-actions>
         </v-card>

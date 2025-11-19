@@ -11,69 +11,117 @@ const log = new Logger({ name: 'feature:cris:discoverExternalService' });
   🧐
  */
 export default class DiscoverExternalService {
+  // take = 5;
+  statuses: string[] = ['IN_PREPERATION', 'ACTIVE'];
+
   constructor(private cris: CRIS) { }
 
-  private countByRI(researchInstitutionId: number): Promise<number> {
-    return prisma.project.count({
-      where: {
-        researchInstitutions: {
-          some: {
-            id: researchInstitutionId
-          }
+  private countProjects(researchInstitutionId: number, withoutExternalEntities: boolean): Promise<number> {
+    const whereClause: any = {
+      status: {
+        in: this.statuses
+      },
+      researchInstitutions: {
+        some: {
+          id: researchInstitutionId
         }
       }
+    };
+
+    if (withoutExternalEntities) {
+      whereClause.externalEntities = {
+        none: {}
+      };
+    }
+
+    return prisma.project.count({
+      where: whereClause
     });
   }
 
-  private countByRIwithoutExternalEntities(researchInstitutionId: number): Promise<number> {
-    return prisma.project.count({
-      where: {
-        researchInstitutions: {
-          some: {
-            id: researchInstitutionId
-          }
-        },
-        externalEntities: {
-          none: {}
-        }
-      }
+  private async loop(withoutExternalEntities = false) {
+    log.info("Starting discovery loop", {
+      crisId: this.cris.id,
+      withoutExternalEntities,
+      // take: this.take
     });
-  }
-
-  private loop (withoutSavedTemplates = false, take = 10) {
-    log.info("Looping...", this.cris);
 
     const crisAPI = new CrisAPI(this.cris.apiUrl, this.cris.apiKey);
     const likelihoodService = new LikelyhoodService(crisAPI);
 
-    // TODO wait 1 second
-    // take only 10 projects at a time
-    // for each project,
-    // take the risId
-    // then do this in the loop:
-    // likelihoodService.calculateAndSave(
-    // risId, crisId);
+    try {
+      const whereClause: any = {
+        status: {
+          in: this.statuses
+        },
+        researchInstitutions: {
+          some: {
+            id: this.cris.researchInstitutionId
+          }
+        }
+      };
+
+      if (withoutExternalEntities) {
+        whereClause.externalEntities = {
+          none: {}
+        };
+      }
+
+      // Fetch projects
+      const projects = await prisma.project.findMany({
+        where: whereClause,
+        // take: this.take,
+        select: {
+          id: true,
+          risId: true
+        },
+        orderBy: {
+          startDate: 'desc'
+        }
+      });
+
+      log.debug("--------------------------------");
+      log.debug(`Found ${projects.length} projects to process`);
+      log.debug("--------------------------------");
+      // sleep 2 seconds
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Process each project with delay
+      for (const project of projects) {
+        try {
+          log.debug(`Processing project ${project.risId}`);
+          await likelihoodService.calculateAndSave(project.risId, this.cris.id);
+
+          log.debug(`Finished processing project ${project.risId}`)
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        } catch (error) {
+          log.error(`Error processing project ${project.risId}:`, error);
+          // Continue with next project even if one fails
+        }
+      }
+
+      log.info("Discovery loop completed", {
+        processedCount: projects.length,
+        crisId: this.cris.id
+      });
+
+    } catch (error) {
+      log.error("Error in discovery loop:", error);
+      throw error;
+    }
   }
 
-  private loopWithoutExternalEntities(take = 10) {
-    this.loop(true, take);
-  }
-
-  private loopWithSavedTemplates(take = 10) {
-    this.loop(false, take);
-  }
-
-  async discover() {
+  async discover(onlyWithoutExternalEntities = true) {
     log.info("Discovering external entities...", this.cris);
 
     const researchInstitutionId = this.cris.researchInstitution.id
 
-    const countProjects = await this.countByRI(researchInstitutionId);
+    const countProjects = await this.countProjects(researchInstitutionId, onlyWithoutExternalEntities)
     log.debug(`Found ${countProjects} projects for research institution ID ${researchInstitutionId}`);
 
-    const countProjectsWithoutExternalEntities = await this.countByRIwithoutExternalEntities(researchInstitutionId);
+    const countProjectsWithoutExternalEntities = await this.countProjects(researchInstitutionId, true);
     log.debug(`Found ${countProjectsWithoutExternalEntities} projects without external entities for research institution ID ${researchInstitutionId}`);
 
-    this.loopWithoutExternalEntities(10);
+    this.loop(onlyWithoutExternalEntities);
   }
 }

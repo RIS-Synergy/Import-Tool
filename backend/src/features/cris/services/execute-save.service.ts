@@ -68,7 +68,7 @@ export default class ExportSaveService {
         projectId_templateId_externalEntityId: {
           projectId: project.id,
           templateId: this.templateSelected,
-          externalEntityId: externalEntity.id
+          externalEntityId: externalEntity?.id
         }
       },
       create: {

@@ -21,10 +21,12 @@
           </v-dialog>
 
           <v-spacer />
+
           <PureButton
             :pureId="item.pureId"
             :entityType="item.systemName.toLowerCase()"
           />
+          <hr width="140em" class="mt-3" />
 
           <DiffButton :risId="risId"
              :systemName="item.systemName"
@@ -32,7 +34,7 @@
              :pureId="item.pureId"
              :externalEntityId="item.externalEntityId"
           />
-
+          <hr width="140em" class="mt-2" />
           <DiffRefresh
             :risId="risId"
             :systemName="item.systemName"
@@ -275,5 +277,9 @@ function entitySelected(entity) {
   justify-content: flex-end;
   align-items: flex-end;
   right: 1em;
+}
+
+.tiny-pre{
+  font-size: 0.5em;
 }
 </style>

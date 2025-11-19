@@ -13,14 +13,16 @@
           variant="tonal"
         ></v-btn>
         <DiffText v-if="diffList" :data="diffList" @click="dialog = true" />
+        <div class="modifiedDate">
+          {{modDate(modifiedDate)}}
+        </div>
       </div>
     </template>
 
     <template v-slot:default="{ isActive }">
       <v-card>
         <v-card-text>
-          <DiffView :diff-list="diffList"
-          />
+          <DiffView :diff-list="diffList" />
         </v-card-text>
 
         <v-card-actions>
@@ -36,6 +38,10 @@
 <script setup>
 // const route = useRoute();
 // const id = route.params.id;
+import { formatDistance } from "date-fns";
+function modDate(date) {
+  return formatDistance(date, new Date(), { addSuffix: true });
+}
 
 const dialog = ref(false);
 
@@ -66,6 +72,7 @@ const { getDiffs } = (await cris).default;
 const isActive = ref(false);
 // const diffList = ref([]);
 const diffList = ref(null);
+const modifiedDate = ref(null);
 
 onMounted(async () => {
   const result = await getDiffs(
@@ -76,6 +83,7 @@ onMounted(async () => {
     props.externalEntityId,
   );
   diffList.value = result && result.diffList;
+  modifiedDate.value = result && result.modifiedDate;
 });
 
 const templateSelected = computed(() => {
@@ -127,8 +135,16 @@ function btnText() {
 .diff {
   /* background-color: lightgrey; */
   /* padding: 10px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: self-end;
+  width: 100%;
+}
 
-  /* right: 0; */
-  /* position: absolute; */
+.modifiedDate{
+  font-style: italic;
+  font-size: 1em;
+  opacity: 0.4;
 }
 </style>
