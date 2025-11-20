@@ -83,7 +83,7 @@ export default class ExportSaveService {
         diffList,
         changed,
         externalEntity: {
-          connect: { id: externalEntity.id }
+          connect: { id: externalEntity?.id }
         }
       },
       update: {

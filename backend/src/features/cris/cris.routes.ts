@@ -58,6 +58,9 @@ router.post('/refreshDiff/:id',
   validate(refreshDiffSchema, "body"), controller.refreshDiff)
 
 router.post('/discoverExternalEntities',
-  controller.discoverExternalEntities);
+            controller.discoverExternalEntities);
+
+router.post('/diffSync',
+  controller.diffSync);
 
 export default router;

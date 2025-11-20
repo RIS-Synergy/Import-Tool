@@ -6,7 +6,7 @@ import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: "feature:cris:controller" });
 
 import DiscoverExternalService from './services/discoverExternal.service.js';
-
+import DiffSync from './services/diffSync.service.js';
 
 // similar code is duplicated from features/user/user.controller.ts, move to a common file
 function limitByUserPermission(reqUser: any) {
@@ -200,25 +200,6 @@ export class CRISController {
     res.json(result);
   }
 
-  /*
-  public executeAndSave = async (req: Request, res: Response): Promise<void> => {
-    log.info(`req: ${req.path}`, 'CRISController:getDiffs', req.body)
-    const crisData = await this.getCrisData(req.body.crisId, req.user);
-
-    const result = await this.service.getDiffs(
-      req.params.id,
-      req.body.systemName,
-      req.body.uuid,
-      req.body.templateId,
-      req.body.settings,
-      crisData.apiUrl,
-      crisData.apiKey
-    );
-
-    res.json(result);
-  }
-  */
-
   public assignCluster = async (req: Request, res: Response): Promise<void> => {
     try {
       const crisData = await this.getCrisData(req.body.crisId, req.user);
@@ -235,6 +216,19 @@ export class CRISController {
     } catch (error) {
       log.error('Error assigning cluster:', error);
       res.status(500).json({ message: 'Error assigning cluster' });
+    }
+  }
+
+  public diffSync = async (req: Request, res: Response): Promise<void> => {
+    const crisData = await this.getCrisData(req.body.crisId, req.user);
+
+    try {
+      const diffSyncService = new DiffSync(crisData);
+      const result = diffSyncService.sync();
+      res.json(result);
+    } catch (error) {
+      log.error('Error in diff sync:', error);
+      res.status(500).json({ message: 'Error in diff sync' });
     }
   }
 }

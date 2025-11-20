@@ -115,7 +115,7 @@ model ExternalEntity {
 
   crisId        Int
   cris          CRIS            @relation(fields: [crisId], references: [id])
-  SavedTemplate SavedTemplate[]
+  SavedTemplate SavedTemplate[] // note: it actually should be plural: might confuse later
 
   @@unique([projectId, crisId, uuid, templateType])
 }
