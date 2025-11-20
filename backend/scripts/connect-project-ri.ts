@@ -14,19 +14,18 @@ async function getProjectsForResearchInstitution(rorId: string) {
     throw new Error(`Invalid ROR ID: ${rorId}`);
   }
 
-  // Using Prisma's raw query to match the SQL condition
-  // Note: We need to use template literals here because the path can't be parameterized
+  // Escape the ROR ID for use in regex to prevent regex injection
+  // Since it's alphanumeric, we don't need to escape, but just to be safe
+  const escapedRorId = rorId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+  // Using Prisma's raw query to find projects where risData contains the ROR ID
+  // We need to construct the path with the escaped ROR ID
   const query = `
-        SELECT
-            p.*,
-            d.length AS "diffLength",
-            d.list AS "diffList"
+        SELECT p.*
         FROM "Project" p
-        LEFT JOIN "Diff" d
-            ON p."risId" = d.id
         WHERE jsonb_path_exists(
             p."risData"::jsonb,
-            '$.funded[*].as.recipients[*].orgUnit.identifiers[*] ? (@.value like_regex "${rorId}")'
+            '$.funded[*].as.recipients[*].orgUnit.identifiers[*] ? (@.value like_regex "${escapedRorId}")'
         )
     `;
 
