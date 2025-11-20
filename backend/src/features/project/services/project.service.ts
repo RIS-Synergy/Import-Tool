@@ -289,7 +289,7 @@ AND (${diffSQL})
   public update(id: number, projectData: Partial<Project>): Promise<Project> {
     return prisma.project.update({
       where: { id },
-      data: { ...projectData, ...updateData(projectData.risData) },
+      data: { ...updateData(projectData.risData) },
     });
   }
 

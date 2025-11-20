@@ -18,7 +18,7 @@ async function main() {
 
   for (const project of result.items) {
     console.log(project.id, project.risId);
-    projectService.update(project.id, project);
+    await projectService.update(project.id, project);
   }
 }
 
