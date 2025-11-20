@@ -56,7 +56,17 @@ export default class ExportSaveService {
       throw new Error('Project ID is undefined');
     }
 
-    const externalEntity = await this.findExternal(project.id)
+    let externalEntity = await this.findExternal(project.id)
+    if (!externalEntity) {
+      externalEntity = await prisma.externalEntity.create({
+        data: {
+          uuid: this.uuid,
+          templateType: this.systemName.toUpperCase() as any,
+          projectId: project.id,
+          crisId: this.crisId,
+        }
+      })
+    }
 
     const differ = new Differ(this.transformationResult.output, this.crisData)
     const setOfDiffKeys: Set<string> = differ.diff()
@@ -68,7 +78,7 @@ export default class ExportSaveService {
         projectId_templateId_externalEntityId: {
           projectId: project.id,
           templateId: this.templateSelected,
-          externalEntityId: externalEntity?.id
+          externalEntityId: externalEntity.id
         }
       },
       create: {
@@ -83,7 +93,7 @@ export default class ExportSaveService {
         diffList,
         changed,
         externalEntity: {
-          connect: { id: externalEntity?.id }
+          connect: { id: externalEntity.id }
         }
       },
       update: {

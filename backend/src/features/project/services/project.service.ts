@@ -81,6 +81,8 @@ export class ProjectService {
       const pageNumber = parseInt(page, 10);
       const skip = (pageNumber - 1) * itemsPerPage;
 
+      log.info("Final Where Clause", whereClause, "Order By", orderBy);
+
       const [projects, total] = await Promise.all([
         // TODO actually we need to limit this only the crisId
         // of the user.
@@ -125,16 +127,35 @@ export class ProjectService {
     }
   }
 
-  findByResearchInstitution(researchInstitutionId: number) {
-    // count!
-    const results = prisma.project.count({
-      where: {
-        researchInstitutions: {
-          some: {
-            id: researchInstitutionId
-          }
-        }
+  findByResearchInstitution(researchInstitutionId: number, {
+    statuses = ["IN_PREPERATION", "ACTIVE"],
+    count = false,
+    select = null,
+    orderBy = null
+  }) {
+    // count or findMany
+    const key = count ? 'count' : 'findMany';
+
+    const whereClause: any = {
+      status: {
+        in: statuses
       },
+      researchInstitutions: {
+        some: {
+          id: researchInstitutionId
+        }
+      }
+    };
+
+    // if (withoutExternalEntities) {
+    //   whereClause.externalEntities = {
+    //     none: {}
+    //   };
+    // }
+
+    const results = prisma.project[key]({
+      where: whereClause,      select,
+      orderBy
     });
     return results;
   }

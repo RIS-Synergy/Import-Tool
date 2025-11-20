@@ -25,7 +25,7 @@ export async function getDiff(
       },
     });
 
-    log.debug("Diffs fetched:", diffs);
+    // log.debug("Diffs fetched:", diffs);
     return diffs;
   } catch (error) {
     log.error("Error fetching diff", error);

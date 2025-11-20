@@ -44,8 +44,12 @@ JSON.stringify(new Function(args, body)(...args));
     if (typeof obj === 'object' && obj !== null) {
       for (const key in obj) {
         if (typeof obj[key] === 'string') {
+          // Handle the string "null" to convert to actual null
+          if (obj[key] === 'null') {
+            obj[key] = null;
+          }
           // Handle input placeholders
-          if (obj[key].startsWith('${input.')) {
+          else if (obj[key].startsWith('${input.')) {
             console.log(obj[key])
             const inputPath = obj[key].match(/\${input\.(.+)}/)?.[1];
             if (inputPath) {

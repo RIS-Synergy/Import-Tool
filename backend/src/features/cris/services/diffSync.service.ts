@@ -24,7 +24,7 @@ export default class DiffSyncService {
           some: {
             crisId,
             SavedTemplate: {
-              some: {}  // Ensure at least one SavedTemplate exists
+              some: {}
             }
           }
         }
@@ -36,7 +36,7 @@ export default class DiffSyncService {
           },
           where: {
             SavedTemplate: {
-              some: {}  // Filter external entities to only those with SavedTemplates
+              some: {}
             }
           }
         }
@@ -61,12 +61,12 @@ export default class DiffSyncService {
 
           /////////////// This is where do the diffing happend ///////////////
           var saved = await exportSaveService.executeAndSave(
-            risId, // done
-            crisId, // done
-            templateType, //done
-            uuid, // done
-            templateId, // done
-            settings // done
+            risId,
+            crisId,
+            templateType,
+            uuid,
+            templateId,
+            settings
           )
 
           // sleep 1.5 second
@@ -85,22 +85,5 @@ export default class DiffSyncService {
 
     log.debug('Total Projects:', projects.length)
     log.debug('Total Entities:', totalEntitiesUpdated.length)
-
-
-    /*
-      TODO
-      for each of ......
-
-      we call this:
-
-      var saved = await exportSaveService.executeAndSave(
-      risId, // done
-      crisId, // done
-      templateType, //done
-      uuid, // done
-      templateId, // done
-      settings // done
-      )
-      */
   }
 }
