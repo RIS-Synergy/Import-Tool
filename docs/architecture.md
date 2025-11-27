@@ -2,6 +2,10 @@
 
 ![](./architecture1.png)
 
+## ERD (Entity Relationship Diagram)
+
+![](./prisma-erd.svg)
+
 ## Backend
 
 ### Core Components
