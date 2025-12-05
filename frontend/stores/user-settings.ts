@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 type CRIS = {
   id: number | null,
   name: string | null
+  apiUrl: string | null
 }
 
 const projectFilters = {
@@ -25,7 +26,8 @@ export const useUserSettingsStore = defineStore('user-settings', {
     user: null,
     cris: <CRIS>{
       id: null,
-      name: null
+      name: null,
+      apiUrl: null
     }
   }),
   actions: {
@@ -38,12 +40,13 @@ export const useUserSettingsStore = defineStore('user-settings', {
     clearFilters() {
       this.projectFilters = projectFilters
     },
-    setCRIS(id: number, name: string) {
+    setCRIS(id: number, name: string, apiUrl: string) {
       console.log('Saving CRIS info in store:', { id, name })
       console.log('Current CRIS info:', this.cris)
       this.cris = {
         id,
-        name
+        name,
+        apiUrl
       }
     }
   },

@@ -27,7 +27,7 @@
                 <v-btn
                   v-if="item.id !== currentCRIS"
                   variant="outlined"
-                  @click="select(item.id, item.name)"
+                  @click="select(item.id, item.name, item.apiUrl)"
                 >
                   Select
                 </v-btn>
@@ -84,8 +84,8 @@ const userSettingsStore = useUserSettingsStore();
 const { setCRIS } = userSettingsStore;
 const currentCRIS = computed(() => userSettingsStore.cris.id || null);
 
-function select(itemId?: number, itemName: string) {
-  setCRIS(itemId || null, itemName || null);
+function select(itemId?: number, itemName: string, apiUrl: string) {
+  setCRIS(itemId || null, itemName || null, apiUrl || null);
 }
 
 function deselect() {
