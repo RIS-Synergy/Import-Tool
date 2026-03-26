@@ -22,7 +22,7 @@ export const filter = makeSchema({
       ror: Joi.string()
     }),
     diffs: Joi.string()
-      .valid("All", "NULL", "IDENTICAL", "DIFFERENT"),
+      .valid("All", "NULL", "IDENTICAL", "DIFFERENT", "SYNCED"),
     orderBy: Joi.string(),
     itemsPerPage: Joi.number().integer()
   })

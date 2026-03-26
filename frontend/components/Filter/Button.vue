@@ -107,6 +107,10 @@ const diffs = [
     value: "DIFFERENT",
     title: "Project in CRIS, but has differences (Diff)",
   },
+  {
+    value: "SYNCED",
+    title: "Project in CRIS and no difference",
+  },
 ];
 
 const orderBy = [

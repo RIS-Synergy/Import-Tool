@@ -12,7 +12,7 @@ type SortBy = {
 
 type Status = "IN_PREPERATION" | "ACTIVE" | "COMPLETED" | "CANCELLED" | "REJECTED";
 
-type DiffFilter = "All" | "NULL" | "IDENTICAL" | "DIFFERENT";
+type DiffFilter = "All" | "NULL" | "IDENTICAL" | "DIFFERENT" | "SYNCED";
 
 type Filter = {
   status: Array<Status>;
@@ -46,7 +46,7 @@ type FindManyProjects = {
 
 export class ProjectService {
   public async findMany2(
-    limitByUserPermission = {},
+    limitByUserPermission: any = {},
     filters: Filter,
     page: string,
   ): Promise<FindManyProjects | undefined> {
@@ -69,6 +69,55 @@ export class ProjectService {
         whereClause.status = {
           in: filters.status
         };
+      }
+
+      // Add diffs filter using Prisma relation criteria
+      if (filters.diffs && filters.diffs !== "All") {
+        if (filters.diffs === "NULL") {
+          // "Project not linked to CRIS" -> no externalEntities
+          whereClause.externalEntities = {
+            none: {}
+          };
+        } else if (filters.diffs === "IDENTICAL") {
+          // "Project in CRIS and has no differences"
+          // Must have at least one external entity AND none of them should have differences
+          whereClause.externalEntities = {
+            some: {},
+            none: {
+              SavedTemplate: {
+                some: {
+                  changed: true
+                }
+              }
+            }
+          };
+        } else if (filters.diffs === "SYNCED") {
+          // "Project in CRIS and fully synchronized (Only green checks)"
+          // Must have at least one comparison result AND no differences
+          whereClause.externalEntities = {
+            some: {
+               SavedTemplate: { some: {} }
+            },
+            none: {
+              SavedTemplate: {
+                some: {
+                  changed: true
+                }
+              }
+            }
+          };
+        } else if (filters.diffs === "DIFFERENT") {
+          // "Project in CRIS, but has differences" -> at least one difference exists
+          whereClause.externalEntities = {
+            some: {
+              SavedTemplate: {
+                some: {
+                  changed: true
+                }
+              }
+            }
+          };
+        }
       }
 
       // Determine orderBy
