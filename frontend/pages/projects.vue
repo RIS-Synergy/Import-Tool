@@ -54,13 +54,15 @@
           type="text, text, subtitle, list-item-three-line"
         ></v-skeleton-loader>
       </v-col>
-      <v-pagination
-        v-if="totalItems > 0"
-        v-model="page"
-        :length="pagesLength"
-        :total-visible="15"
-        class="my-4 mx-auto"
-      ></v-pagination>
+      <v-col cols="12">
+        <v-pagination
+          v-if="totalItems > 0"
+          v-model="page"
+          :length="pagesLength"
+          :total-visible="15"
+          class="my-4 mx-auto"
+        ></v-pagination>
+      </v-col>
     </v-row>
     Projects: <b>{{ totalItems }}</b>
   </v-container>
