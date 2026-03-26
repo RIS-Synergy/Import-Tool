@@ -203,6 +203,7 @@ const props = defineProps({
 });
 
 function modDate(date) {
+  if (!date) return "";
   return formatDistance(date, new Date(), { addSuffix: true });
 }
 

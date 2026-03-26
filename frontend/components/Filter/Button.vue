@@ -29,10 +29,9 @@
             outlined
           ></v-autocomplete>
           <v-select
-            disabled
             v-model="store.projectFilters.diffs"
             :items="diffs"
-            label="Diffs (disabled)"
+            label="Diffs"
             chips
             outlined
           ></v-select>

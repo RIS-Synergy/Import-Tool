@@ -85,6 +85,7 @@ async function startSearch() {
 import { formatDistance } from "date-fns";
 
 function modDate(date) {
+  if (!date) return "";
   return formatDistance(date, new Date(), { addSuffix: true });
 }
 </script>

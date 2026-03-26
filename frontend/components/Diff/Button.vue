@@ -40,6 +40,7 @@
 // const id = route.params.id;
 import { formatDistance } from "date-fns";
 function modDate(date) {
+  if (!date) return "Never";
   return formatDistance(date, new Date(), { addSuffix: true });
 }
 
