@@ -101,7 +101,7 @@ model SavedTemplate {
   createdDate  DateTime @default(now())
   modifiedDate DateTime @updatedAt
 
-  @@unique([projectId, templateId, externalEntityId])
+  @@unique([projectId, externalEntityId])
 }
 
 model ExternalEntity {

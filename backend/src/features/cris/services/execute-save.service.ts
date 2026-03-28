@@ -75,9 +75,8 @@ export default class ExportSaveService {
 
     const result = await prisma.savedTemplate.upsert({
       where: {
-        projectId_templateId_externalEntityId: {
+        projectId_externalEntityId: {
           projectId: project.id,
-          templateId: this.templateSelected,
           externalEntityId: externalEntity.id
         }
       },

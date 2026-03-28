@@ -96,7 +96,7 @@ export class ProjectService {
           // Must have at least one comparison result AND no differences
           whereClause.externalEntities = {
             some: {
-               SavedTemplate: { some: {} }
+              SavedTemplate: { some: {} }
             },
             none: {
               SavedTemplate: {
@@ -147,6 +147,8 @@ export class ProjectService {
             externalEntities: {
               include: {
                 SavedTemplate: {
+                  orderBy: { modifiedDate: 'desc' },
+                  take: 1,
                   select: {
                     diffList: true,
                     changed: true,
@@ -161,6 +163,14 @@ export class ProjectService {
           where: whereClause,
         }),
       ]);
+
+      // Sort externalEntities: ordered PROJECT, APPLICATION, AWARD
+      const typeOrder: any = { 'PROJECT': 1, 'APPLICATION': 2, 'AWARD': 3 };
+      projects.forEach((project: any) => {
+        project.externalEntities.sort((a: any, b: any) => {
+          return (typeOrder[a.templateType] || 4) - (typeOrder[b.templateType] || 4);
+        });
+      });
 
       const result = {
         items: projects,
@@ -203,7 +213,7 @@ export class ProjectService {
     // }
 
     const results = prisma.project[key]({
-      where: whereClause,      select,
+      where: whereClause, select,
       orderBy
     });
     return results;
