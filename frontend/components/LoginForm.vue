@@ -35,8 +35,7 @@ async function login() {
   store.setUser(result.user);
 
   // redirect
-  console.log("Login successful", result);
-  router.push({ name: "projects" });
-  console.log("Redirecting to projects...");
+  console.log("Login successful, redirecting to projects...");
+  await navigateTo({ name: "dashboard" }, { replace: true });
 }
 </script>

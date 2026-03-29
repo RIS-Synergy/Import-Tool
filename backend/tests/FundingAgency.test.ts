@@ -5,11 +5,17 @@ import { Project } from '@/models/Project'
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
+vi.mock('@/models/Registry', () => ({
+  Registry: vi.fn().mockImplementation(() => ({
+    run: vi.fn().mockResolvedValue(undefined),
+    getURL: vi.fn().mockReturnValue('test/'),
+    members: []
+  }))
+}))
+
 vi.mock('../src/utils/oauth2', () => ({
   getAuthEndpoint: vi.fn()
-    .mockResolvedValueOnce([]) // something to do with Registry (& FundingAgency)
-    .mockResolvedValueOnce(
-      [
+    .mockResolvedValueOnce([
         { id: 'project1' },
         { id: 'project2' }
       ]

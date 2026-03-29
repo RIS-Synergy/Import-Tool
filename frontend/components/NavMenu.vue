@@ -9,6 +9,11 @@
     <UserLable />
     <CrisLable />
     <v-divider></v-divider>
+    <v-list-item to="/dashboard" title="Dashboard" >
+      <template v-slot:append>
+        <v-icon>mdi-view-dashboard</v-icon>
+      </template>
+    </v-list-item>
     <v-list-item to="/projects" title="Projects" >
       <template v-slot:append>
         <v-icon>mdi-book-open-page-variant</v-icon>

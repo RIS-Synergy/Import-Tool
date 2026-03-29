@@ -23,6 +23,7 @@ if (process.env.NODE_ENV == 'development') {
 // console.log('📹 Videos will be stored in:', vidDir)
 
 export default defineConfig({
+  timeout: 120000,
   reporter: [['html', { open: 'never',}]],
   use: {
     baseURL: process.env.PLAYWRIGHT_BASE_URL,

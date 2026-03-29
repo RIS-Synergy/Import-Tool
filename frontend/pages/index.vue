@@ -2,5 +2,10 @@
 </template>
 
 <script setup>
-navigateTo({ path: '/projects' })
+  const store = useUserSettingsStore();
+  if (store.token) {
+    navigateTo({ path: '/dashboard' });
+  } else {
+    navigateTo({ path: '/login' });
+  }
 </script>

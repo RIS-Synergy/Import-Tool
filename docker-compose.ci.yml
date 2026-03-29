@@ -43,7 +43,7 @@ services:
     ports:
       - 4000:3000
     environment:
-      BACKEND_API_PROXY: http://backend-ci:3001/**
+      BACKEND_API_PROXY: http://backend-ci:3001
 
   playwright:
     container_name: playwright-ci

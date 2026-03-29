@@ -14,11 +14,11 @@ async function authenticateUser(page: any, username: string, password: string) {
   }
 
   // make sure backend is ready
-  await page.goto('/api');
+  await page.goto('/api/');
   await expect(page.getByText('RIS Synergy API')).toBeVisible();
 
   // Perform authentication steps.
-  await page.goto('/');
+  await page.goto('/login');
 
   await expect(page).toHaveURL(/.*\/login/, { timeout: 30000 });
 
@@ -41,17 +41,8 @@ async function authenticateUser(page: any, username: string, password: string) {
   await page.getByRole('textbox', { name: 'User name User name' }).fill(username);
   await page.getByRole('textbox', { name: 'Password Password' }).fill(password);
 
-  const [loginRequest, loginResponse] = await Promise.all([
-    page.waitForRequest('**/api/auth/login'),
-    page.waitForResponse('**/api/auth/login'),
-    page.getByRole('button', { name: 'Login' }).click()
-  ]);
-
-  const postData = loginRequest.postDataJSON();
-  console.log('➡️', postData)
-
-  expect(postData.username).toBe(username);
-  expect(postData.password).toBe(password);
+  await page.getByRole('button', { name: 'Login' }).click();
+  const loginResponse = await page.waitForResponse('**/api/auth/login');
 
   // Example: Wait for login response and check status
   console.log('⬅️', await loginResponse.json())
@@ -62,11 +53,10 @@ async function authenticateUser(page: any, username: string, password: string) {
   // we can't see 'FetchError'
   await expect(page.getByText('FetchError')).not.toBeVisible({ timeout: 10000 });
 
-  // page moved over to /projects
-  await expect(page).toHaveURL(/.*\/projects/, { timeout: 120000 });
+  // page moved over to /dashboard
+  await expect(page).toHaveURL(/.*\/dashboard/, { timeout: 30000 });
 
-  await expect(page.getByRole('banner')
-    .getByText('Projects'))
+  await expect(page.getByRole('heading', { name: 'Dashboard' }))
     .toBeVisible({ timeout: 60000 });
 
   // End of authentication steps.

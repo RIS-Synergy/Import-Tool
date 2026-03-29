@@ -15,13 +15,22 @@ test.describe("Unauthenticated", () => {
     await page.getByText('Import Tool').click();
   });
 
+  test('Login and view "Dashboard"', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('textbox', { name: 'User name User name' }).fill('admin');
+    await page.getByRole('textbox', { name: 'Password Password' }).fill('admin');
+    await page.getByRole('button', { name: 'Login' }).click();
+    await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
+    await expect(page.getByText('🚧')).toBeVisible();
+  });
+
   test('Login and view "Projects"', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('textbox', { name: 'User name User name' }).fill('admin');
     await page.getByRole('textbox', { name: 'Password Password' }).fill('admin');
     await page.getByRole('button', { name: 'Login' }).click();
+    await page.goto('/projects');
     await expect(page.getByRole('banner').getByText('Projects')).toBeVisible();
-
     await expect(page.getByText('Status: IN_').nth(0)).toBeVisible();
   });
 });
@@ -30,7 +39,7 @@ test.describe("Authenticated", () => {
   test.use(user);
 
   test('View a Project details', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/projects');
 
     await expect(page.getByText('Status:')
       .nth(0))

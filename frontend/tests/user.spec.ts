@@ -4,7 +4,7 @@ import { user, admin } from './utils';
 test.use(user);
 
 test('User can Logout', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/projects');
 
   const projects = await page.waitForResponse('**/api/project2');
   const numProjects = (await projects.json()).items.length;
@@ -19,11 +19,11 @@ test('User can Logout', async ({ page }) => {
   await expect(page).toHaveURL(/.*\/projects/);
   await expect(page.getByRole('banner').getByText('Projects')).toBeVisible();
 
-  // open user menu
-  await page.locator('.mdi-account').click();
-  // await page.getByRole('listbox').getByRole('button').click();
+  // open user menu (opens dialog)
+  await page.getByText('user', { exact: true }).first().click();
+  // await page.locator('.mdi-account').click();
 
-  // click Logout
+  // click Logout in the dialog
   await page.getByRole('button', { name: 'Logout' }).click();
 
   // assert our page is /login

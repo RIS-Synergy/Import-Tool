@@ -10,7 +10,7 @@
     "build": "tsc",
     "docker": "tsx ./src/server.ts",
     "debug": "PORT=3001 tsx --inspect=0.0.0.0 ./src/server.ts",
-    "test": "vitest --ui --open=false --api.host=0.0.0.0",
+    "test": "vitest --ui --open=false --api.host=0.0.0.0 run",
     "test:docker": "docker exec -it backend yarn vitest --ui --open=false --api.host=0.0.0.0 --coverage.enabled=true",
     "test:ci": "vitest --coverage.enabled=true",
     "test:coverage": "docker exec -it backend yarn vitest --ui --open=false --api.host=0.0.0.0 --coverage.enabled=true --coverage.reporter=text",
