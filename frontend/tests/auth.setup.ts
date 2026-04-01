@@ -17,35 +17,30 @@ async function authenticateUser(page: any, username: string, password: string) {
   await page.goto('/api/');
   await expect(page.getByText('RIS Synergy API')).toBeVisible();
 
+  // Start listener BEFORE going to the page or we might miss the event
+  const loginFormLoadedPromise = page.waitForEvent('console', (msg: any) => msg.text() === '🟢 Login form loaded');
+
   // Perform authentication steps.
   await page.goto('/login');
-
   await expect(page).toHaveURL(/.*\/login/, { timeout: 30000 });
 
   await page.getByText('RIS Synergy').click();
   await page.getByText('Import Tool').click();
 
-  // This is important ❗
-  if (process.env.NODE_ENV === "ci") {
-    var delay = 3000;
-    if (process.env.CI_TIME_DELAY) {
-      delay = parseInt(process.env.CI_TIME_DELAY) * 1000;
-    }
+  // Wait for the hydration log we set up earlier
+  await loginFormLoadedPromise;
 
-    // This is needed for making Nuxt load properly withing GitHub Action,
-    // when everything needs to be running when a new docker file is being started
-    console.log(`🚧 CI, ${delay / 1000} second delay...`)
-    await page.waitForTimeout(delay);
-  }
+  await page.getByLabel('User name').fill(username);
+  await page.getByLabel('Password').fill(password);
 
-  await page.getByRole('textbox', { name: 'User name User name' }).fill(username);
-  await page.getByRole('textbox', { name: 'Password Password' }).fill(password);
+  // Wait for the response BEFORE clicking, or use Promise.all
+  const loginResponsePromise = page.waitForResponse('**/api/auth/login');
 
   await page.getByRole('button', { name: 'Login' }).click();
-  const loginResponse = await page.waitForResponse('**/api/auth/login');
+  const loginResponse = await loginResponsePromise;
 
   // Example: Wait for login response and check status
-  console.log('⬅️', await loginResponse.json())
+  console.log('⬅️ Login Response Body:', await loginResponse.json())
   expect(loginResponse.status()).toBe(200);
 
   await page.waitForLoadState('networkidle');

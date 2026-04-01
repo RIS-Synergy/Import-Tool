@@ -1,0 +1,53 @@
+name: ris-test
+
+services:
+  db-test:
+    image: postgres:16.3-alpine3.20
+    container_name: db-test
+    ports:
+      - 3033:5432
+    environment:
+      POSTGRES_USER: ris-user
+      POSTGRES_PASSWORD: dummy
+      POSTGRES_DB: ris_db
+    volumes:
+      - data-test:/var/lib/postgresql/data
+
+  backend-test:
+    build:
+      context: ./backend
+      target: development
+    container_name: backend-test
+    depends_on:
+      - db-test
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://ris-user:dummy@db-test:5432/ris_db?schema=public
+      - JWT_SECRET=password!!!
+      - JWT_EXPIRES_IN=1h
+      - RIS_REGISTRY_URL=https://forschungsdaten.at/registry/registry.json
+      - RIS_MEMBER_ID=FWF_Test
+      - RIS_TEST_DATA=2024-09-04_testdata_projects_updated.json
+    ports:
+      - "3034:3001"
+    volumes:
+      - ./backend/:/app
+      - /app/node_modules
+
+  frontend-test:
+    build:
+      context: ./frontend
+    container_name: frontend-test
+    depends_on:
+      - backend-test
+    environment:
+      - BACKEND_API_PROXY=http://backend-test:3001
+    ports:
+      - "3035:3000"
+    volumes:
+      - ./frontend/:/app
+      - /app/node_modules
+      - /app/.nuxt
+
+volumes:
+  data-test:

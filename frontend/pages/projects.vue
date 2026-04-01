@@ -73,46 +73,54 @@ definePageMeta({
   layout: "projects",
 });
 
-const { project } = useApiUtils();
-const { listAll } = (await project).default;
-
+const { project, hasCRIS } = useApiUtils();
 const loading = ref(false);
 const serverItems = ref([]);
 const totalItems = ref(0);
 const page = ref(1);
 
-const { getProjectsList, hasCRIS } = useApiUtils();
+const store = useUserSettingsStore();
+
 async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
+  if (!store.token) return;
+
   store.sortBy = sortBy;
   loading.value = true;
 
-  const filters = storeFilter || store.projectFilters;
+  try {
+    const { listAll } = (await project).default;
+    const filters = storeFilter || store.projectFilters;
 
-  // const { total, items } = await getProjectsList({
-  const { total, items } = await listAll({
-    page,
-    itemsPerPage,
-    sortBy,
-    filters,
-  });
+    const result = await listAll({
+      page,
+      itemsPerPage,
+      sortBy,
+      filters,
+    });
 
-  serverItems.value = items.map((x) => {
-    return {
-      ...x.risData,
-      externalEntities: x.externalEntities,
-      diffList: x.diffList,
-      diffLength: x.diffLength
+    if (result) {
+      const { total, items } = result;
+      serverItems.value = items.map((x) => {
+        return {
+          ...x.risData,
+          externalEntities: x.externalEntities,
+          diffList: x.diffList,
+          diffLength: x.diffLength
+        }
+      });
+      totalItems.value = total;
     }
-  });
-  totalItems.value = total;
-  loading.value = false;
+  } catch (error) {
+    console.error("❌ loadItems failed:", error);
+  } finally {
+    loading.value = false;
+  }
 }
 
 function getLang(item, lang) {
   try {
     return item.find((x) => x.lang === lang).text;
   } catch (error) {
-    console.log(item);
     return "";
   }
 }
@@ -125,7 +133,6 @@ function piName(x) {
       x.team[0].person.personName.familyName
     );
   } catch (error) {
-    console.error(error);
     return "";
   }
 }
@@ -136,39 +143,44 @@ const columnData = computed(() => {
   }
 });
 
-const store = useUserSettingsStore();
+// const store = useUserSettingsStore(); // Fixed redundant declaration
+
 
 function updateItemsPerPage(idx) {
-  store.itemsPerPage = idx;
+  store.projectFilters.itemsPerPage = idx;
 }
 
 const pagesLength = computed(() => {
-  return Math.ceil(totalItems.value / store.projectFilters.itemsPerPage);
+  const itemsPerPage = store.projectFilters?.itemsPerPage || 10;
+  return Math.ceil(totalItems.value / itemsPerPage);
 });
 
 watch(
-  store.projectFilters,
-  () => {
+  () => JSON.stringify(store.projectFilters),
+  (newVal, oldVal) => {
+    if (newVal === oldVal) return;
+    console.log("👀 store.projectFilters changed", newVal);
     loadItems(
-      { page: 1, itemsPerPage: store.itemsPerPage, sortBy: store.sortBy },
+      { page: 1, itemsPerPage: store.projectFilters.itemsPerPage, sortBy: store.sortBy },
       store.projectFilters,
     );
-  },
-  { deep: true },
+  }
 );
 
 onMounted(() => {
+  console.log("🚀 projects.vue mounted, initial load");
   loadItems(
-    { page: 1, itemsPerPage: store.itemsPerPage, sortBy: store.sortBy },
+    { page: 1, itemsPerPage: store.projectFilters.itemsPerPage, sortBy: store.sortBy },
     store.projectFilters,
   );
 });
 
 watch(page, () => {
+  console.log("📄 page changed to", page.value);
   loadItems(
     {
       page: page.value,
-      itemsPerPage: store.itemsPerPage,
+      itemsPerPage: store.projectFilters.itemsPerPage,
       sortBy: store.sortBy,
     },
     store.projectFilters,

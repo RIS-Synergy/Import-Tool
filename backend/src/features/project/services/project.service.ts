@@ -126,8 +126,16 @@ export class ProjectService {
       const orderDirection = sortBy.order.toUpperCase() === 'DESC' ? 'desc' : 'asc';
       orderBy[sortBy.key] = orderDirection;
 
-      const itemsPerPage = parseInt(filters.itemsPerPage, 10);
-      const pageNumber = parseInt(page, 10);
+      let itemsPerPage = parseInt(filters.itemsPerPage, 10);
+      if (isNaN(itemsPerPage) || itemsPerPage < 1) {
+        itemsPerPage = 10;
+      }
+
+      let pageNumber = parseInt(page, 10);
+      if (isNaN(pageNumber) || pageNumber < 1) {
+        pageNumber = 1;
+      }
+
       const skip = (pageNumber - 1) * itemsPerPage;
 
       log.info("Final Where Clause", whereClause, "Order By", orderBy);

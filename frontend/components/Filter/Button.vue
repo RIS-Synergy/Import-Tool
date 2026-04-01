@@ -162,7 +162,8 @@ const filterIcon = computed(() => {
 watch(
   () => store.projectFilters,
   (value) => {
-    console.log(value.value, "store.projectFilters");
+    console.log("👀 Button.vue: store.projectFilters changed", JSON.parse(JSON.stringify(value)));
   },
+  { deep: true }
 );
 </script>

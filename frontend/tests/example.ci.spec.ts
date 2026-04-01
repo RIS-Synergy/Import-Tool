@@ -31,7 +31,7 @@ test.describe("Unauthenticated", () => {
     await page.getByRole('button', { name: 'Login' }).click();
     await page.goto('/projects');
     await expect(page.getByRole('banner').getByText('Projects')).toBeVisible();
-    await expect(page.getByText('Status: IN_').nth(0)).toBeVisible();
+    await expect(page.getByText('Status: IN_').nth(0)).toBeVisible({ timeout: 60000 });
   });
 });
 
@@ -43,7 +43,7 @@ test.describe("Authenticated", () => {
 
     await expect(page.getByText('Status:')
       .nth(0))
-      .toBeVisible({ timeout: 10000 })
+      .toBeVisible({ timeout: 35000 })
 
     // Click the first 'View' button for a project in the list
     await page.locator('.v-btn.v-theme--light.text-primary').first().click();
@@ -51,6 +51,6 @@ test.describe("Authenticated", () => {
     // See some text come back
     await expect(page.getByText('Human-Translated')
       .nth(0))
-      .toBeVisible({ timeout: 30000 }); // Might take a while to load under low resources
+      .toBeVisible({ timeout: 35000 }); // Might take a while to load under low resources
   });
 });

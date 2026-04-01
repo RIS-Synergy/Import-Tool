@@ -29,6 +29,7 @@
     "fa-api": "tsx ./scripts/fa-api.ts",
     "json-to-excel": "tsx ./scripts/json-to-excel.ts",
     "update-projects": "tsx ./scripts/update-projects.ts",
+    "db-reset": "tsx ./scripts/db-reset.ts",
     "cli": "tsx ./scripts/cli.ts"
   },
   "keywords": [],

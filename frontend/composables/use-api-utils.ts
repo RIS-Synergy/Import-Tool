@@ -15,7 +15,10 @@ export async function apiCall(url = '', method = 'GET', data: any = {}) {
       });
   } catch (e: any) {
     if (e.status === 401) {
-      router.push({ name: "login" });
+      if (router.currentRoute.value.name !== 'login') {
+        console.log("🚦 401 Unauthorized, redirecting to login");
+        router.push({ name: "login" });
+      }
     }
     else if (e.status === 422) {
       snackbar.error(e.data, 'ResearchInstitutionError')
