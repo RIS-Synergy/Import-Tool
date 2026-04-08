@@ -7,6 +7,7 @@ const router = Router();
 const controller = new ProjectController();
 
 router.post('/', controller.getMany); // '/' will be a POST, as an exception. [Bad design long-term]
+router.post('/stats', controller.getStats);
 // router.get('/:id', validate(projectIdSchema, "params"), controller.getById);
 // router.get('/ris/:risId', controller.getByRisId);
 // router.put('/:id', validate(projectIdSchema, "params"), controller.update);

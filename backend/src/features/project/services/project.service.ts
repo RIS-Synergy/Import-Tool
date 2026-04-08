@@ -45,6 +45,87 @@ type FindManyProjects = {
 }
 
 export class ProjectService {
+  public async getStats(limitByUserPermission: any = {}, filters: any = {}): Promise<any> {
+    try {
+      const whereClause: any = {
+        ...limitByUserPermission.where,
+      };
+
+      // Add status filter if provided
+      if (filters.status && filters.status.length > 0) {
+        whereClause.status = {
+          in: filters.status
+        };
+      }
+
+      const [total, notLinked, identical, different, synced] = await Promise.all([
+        // All
+        prisma.project.count({ where: whereClause }),
+        // NULL (Project not linked to CRIS)
+        prisma.project.count({
+          where: {
+            ...whereClause,
+            externalEntities: { none: {} }
+          }
+        }),
+        // IDENTICAL (Project in CRIS and has no differences)
+        prisma.project.count({
+          where: {
+            ...whereClause,
+            externalEntities: {
+              some: {},
+              none: {
+                SavedTemplate: {
+                  some: { changed: true }
+                }
+              }
+            }
+          }
+        }),
+        // DIFFERENT (Project in CRIS, but has differences)
+        prisma.project.count({
+          where: {
+            ...whereClause,
+            externalEntities: {
+              some: {
+                SavedTemplate: {
+                  some: { changed: true }
+                }
+              }
+            }
+          }
+        }),
+        // SYNCED (Project in CRIS and no difference - at least one comparison)
+        prisma.project.count({
+          where: {
+            ...whereClause,
+            externalEntities: {
+              some: {
+                SavedTemplate: { some: {} }
+              },
+              none: {
+                SavedTemplate: {
+                  some: { changed: true }
+                }
+              }
+            }
+          }
+        })
+      ]);
+
+      return {
+        total,
+        notLinked,
+        identical,
+        different,
+        synced
+      };
+    } catch (error) {
+      log.error('Error getting project stats:', error);
+      throw error;
+    }
+  }
+
   public async findMany2(
     limitByUserPermission: any = {},
     filters: Filter,

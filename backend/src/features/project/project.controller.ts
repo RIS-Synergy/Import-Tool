@@ -115,4 +115,27 @@ export class ProjectController {
       res.status(500).json({ message: 'Error deleting project' });
     }
   };
+
+  public getStats = async (req: Request, res: Response): Promise<void> => {
+    log.info('ProjectController.getStats', req.body);
+
+    try {
+      const filters = req.body.filters || {
+        status: ['IN_PREPARATION', 'ACTIVE'],
+        piDomain: { domain: "", ror: "" }
+      };
+
+      // Ensure default status if not provided in filters
+      if (!filters.status || filters.status.length === 0) {
+        filters.status = ['IN_PREPARATION', 'ACTIVE'];
+      }
+
+      const query = limitByUserPermission(req.user, filters.piDomain?.domain);
+      const stats = await this.service.getStats(query, filters);
+      res.status(200).json(stats);
+    } catch (error) {
+      log.error('Error retrieving project stats:', error);
+      res.status(500).json({ message: 'Error retrieving project stats' });
+    }
+  };
 }
