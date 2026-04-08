@@ -58,7 +58,12 @@ export class ProjectService {
         };
       }
 
-      const [total, notLinked, identical, different, synced] = await Promise.all([
+      // This one ignores the status filter
+      const whereClauseAllRI: any = {
+        ...limitByUserPermission.where,
+      };
+
+      const [total, notLinked, identical, different, synced, totalRI] = await Promise.all([
         // All
         prisma.project.count({ where: whereClause }),
         // NULL (Project not linked to CRIS)
@@ -110,7 +115,11 @@ export class ProjectService {
               }
             }
           }
-        })
+        }),
+        // Total Projects in RI (ignores status filter)
+        prisma.project.count({
+          where: whereClauseAllRI,
+        }),
       ]);
 
       return {
@@ -118,7 +127,8 @@ export class ProjectService {
         notLinked,
         identical,
         different,
-        synced
+        synced,
+        totalRI,
       };
     } catch (error) {
       log.error('Error getting project stats:', error);

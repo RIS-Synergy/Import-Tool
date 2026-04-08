@@ -73,6 +73,11 @@ definePageMeta({
   layout: "projects",
 });
 
+useHead({
+  title: "Projects",
+});
+
+const route = useRoute();
 const { project, hasCRIS } = useApiUtils();
 const loading = ref(false);
 const serverItems = ref([]);
@@ -80,6 +85,15 @@ const totalItems = ref(0);
 const page = ref(1);
 
 const store = useUserSettingsStore();
+
+// Map route status to diff filter
+const slugToDiffFilter = {
+  "all": "All",
+  "not-linked": "NULL",
+  "diff": "DIFFERENT",
+  "identical": "IDENTICAL",
+  "synced": "SYNCED"
+};
 
 async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
   if (!store.token) return;
@@ -89,7 +103,19 @@ async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
 
   try {
     const { listAll } = (await project).default;
-    const filters = storeFilter || store.projectFilters;
+    const filters = { ...(storeFilter || store.projectFilters) };
+    
+    // Override diffs filter from URL param
+    const statusParam = route.params.status;
+
+    // Handle 'really-all' by clearing status filters
+    if (statusParam === "really-all") {
+      filters.status = [];
+    }
+
+    if (statusParam && slugToDiffFilter[statusParam]) {
+      filters.diffs = slugToDiffFilter[statusParam];
+    }
 
     const result = await listAll({
       page,
@@ -143,9 +169,6 @@ const columnData = computed(() => {
   }
 });
 
-// const store = useUserSettingsStore(); // Fixed redundant declaration
-
-
 function updateItemsPerPage(idx) {
   store.projectFilters.itemsPerPage = idx;
 }
@@ -167,8 +190,20 @@ watch(
   }
 );
 
+// Also watch route changes
+watch(
+  () => route.params.status,
+  () => {
+    page.value = 1;
+    loadItems(
+      { page: 1, itemsPerPage: store.projectFilters.itemsPerPage, sortBy: store.sortBy },
+      store.projectFilters,
+    );
+  }
+);
+
 onMounted(() => {
-  console.log("🚀 projects.vue mounted, initial load");
+  console.log("🚀 [status].vue mounted, initial load for", route.params.status);
   loadItems(
     { page: 1, itemsPerPage: store.projectFilters.itemsPerPage, sortBy: store.sortBy },
     store.projectFilters,
@@ -187,12 +222,6 @@ watch(page, () => {
   );
 });
 
-// const items_per_page_options = [
-//   { value: 10, title: "10" },
-//   { value: 15, title: "15" },
-//   { value: 20, title: "20" },
-//   { value: 25, title: "25" },
-// ];
 </script>
 
 <style scoped>
@@ -214,12 +243,6 @@ a {
   font-weight: bold;
 }
 
-/* :deep(.v-chip) {
-   position: absolute;
-   right: 1em;
-   bottom: 1em;
-   }
- */
 .right {
   float: right;
 }

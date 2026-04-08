@@ -44,14 +44,19 @@ setProjectId(store, route);
 const router = useRouter();
 
 const titleName = computed(() => {
-  const name = router.currentRoute.value.name;
+  const name = String(router.currentRoute.value.name || "");
+
+  if (name.startsWith("projects")) {
+    return "Projects";
+  }
 
   // capital first letter
   return name.charAt(0).toUpperCase() + name.slice(1);
 });
 
 const needsFiltering = computed(() => {
-  return router.currentRoute && router.currentRoute.value.name === "projects";
+  const name = String(router.currentRoute.value.name || "");
+  return name.startsWith("projects");
 });
 </script>
 

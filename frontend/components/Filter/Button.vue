@@ -29,13 +29,6 @@
             outlined
           ></v-autocomplete>
           <v-select
-            v-model="store.projectFilters.diffs"
-            :items="diffs"
-            label="Diffs"
-            chips
-            outlined
-          ></v-select>
-          <v-select
             v-model="store.projectFilters.orderBy"
             :items="orderBy"
             label="Order by"
@@ -50,16 +43,6 @@
             outlined
           ></v-select>
         </v-card-text>
-
-        <v-card-actions v-if="false">
-          <v-spacer></v-spacer>
-          <v-btn v-if="false" text="Clear Filters" @click="clearFilters" />
-          <v-btn
-            v-if="false"
-            text="Apply Filter"
-            @click="isActive.value = false"
-          ></v-btn>
-        </v-card-actions>
       </v-card>
     </template>
   </v-dialog>
@@ -90,46 +73,11 @@ onMounted(async () => {
     });
 })
 
-const diffs = [
-  {
-    value: "All",
-    title: "All",
-  },
-  {
-    value: "NULL",
-    title: "Project not linked to CRIS",
-  },
-  {
-    value: "IDENTICAL",
-    title: "Project in CRIS and has no differences (Identical)",
-  },
-  {
-    value: "DIFFERENT",
-    title: "Project in CRIS, but has differences (Diff)",
-  },
-  {
-    value: "SYNCED",
-    title: "Project in CRIS and no difference",
-  },
-];
-
 const orderBy = [
-  {
-    value: "startDate:asc",
-    title: "Start Date, ascending",
-  },
-  {
-    value: "startDate:desc",
-    title: "Start Date, descending",
-  },
-  {
-    value: "endDate:asc",
-    title: "End Date, ascending",
-  },
-  {
-    value: "endDate:desc",
-    title: "End Date, descending",
-  },
+  { value: "startDate:asc", title: "Start Date, ascending" },
+  { value: "startDate:desc", title: "Start Date, descending" },
+  { value: "endDate:asc", title: "End Date, ascending" },
+  { value: "endDate:desc", title: "End Date, descending" },
 ];
 
 const itemsPerPage = [
