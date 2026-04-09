@@ -16,7 +16,7 @@
       <v-col v-for="stat in displayedStats" :key="stat.title" cols="12" md="4" class="d-flex">
         <v-card
           class="pa-4 text-center cursor-pointer clickable-card flex-grow-1 d-flex flex-column justify-center"
-          :to="`/projects/${stat.slug}`"
+          :to="stat.to"
         >
           <div class="">
             {{ stat.title }}
@@ -48,37 +48,37 @@ const displayedStats = computed(() => {
       key: "totalRI",
       title: "All Projects in Research Institution",
       color: "grey-darken-2",
-      slug: "really-all",
+      to: "/projects/all?clear=true",
     },
     {
       key: "total",
-      title: `All${statusLabels}`,
+      title: `All filtered Projects ${statusLabels}`,
       color: "primary",
-      slug: "all",
+      to: "/projects/all",
     },
     {
       key: "notLinked",
       title: "Project not linked to CRIS",
       color: "warning",
-      slug: "not-linked",
+      to: "/projects/not-linked",
     },
     {
       key: "different",
-      title: "Project in CRIS, but has differences (Diff)",
+      title: "Project in CRIS, but has differences",
       color: "error",
-      slug: "diff",
+      to: "/projects/diff",
     },
     {
-      key: "identical",
-      title: "Project in CRIS and has no differences (Identical)",
-      color: "success",
-      slug: "identical",
+      key: "notSynced",
+      title: "In CRIS, but missing RIS_ID",
+      color: "warning",
+      to: "/projects/incomplete",
     },
     {
       key: "synced",
-      title: "Project in CRIS and no difference",
-      color: "info",
-      slug: "synced",
+      title: "Synced",
+      color: "success",
+      to: "/projects/synced",
     },
   ];
 });

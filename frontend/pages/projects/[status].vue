@@ -92,7 +92,8 @@ const slugToDiffFilter = {
   "not-linked": "NULL",
   "diff": "DIFFERENT",
   "identical": "IDENTICAL",
-  "synced": "SYNCED"
+  "synced": "SYNCED",
+  "incomplete": "NOT_SYNCED"
 };
 
 async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
@@ -105,14 +106,15 @@ async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
     const { listAll } = (await project).default;
     const filters = { ...(storeFilter || store.projectFilters) };
     
-    // Override diffs filter from URL param
-    const statusParam = route.params.status;
-
-    // Handle 'really-all' by clearing status filters
-    if (statusParam === "really-all") {
-      filters.status = [];
+    // Handle 'clear' query param to reset all filters
+    if (route.query.clear === "true") {
+      console.log("🧹 Clearing filters due to 'clear' query param");
+      store.clearFilters();
+      // Ensure we use the cleared filters for the immediate load
+      Object.assign(filters, store.projectFilters);
     }
 
+    const statusParam = route.params.status;
     if (statusParam && slugToDiffFilter[statusParam]) {
       filters.diffs = slugToDiffFilter[statusParam];
     }
@@ -192,7 +194,7 @@ watch(
 
 // Also watch route changes
 watch(
-  () => route.params.status,
+  () => [route.params.status, route.query.clear],
   () => {
     page.value = 1;
     loadItems(

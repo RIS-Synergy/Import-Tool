@@ -12,7 +12,7 @@ type SortBy = {
 
 type Status = "IN_PREPERATION" | "ACTIVE" | "COMPLETED" | "CANCELLED" | "REJECTED";
 
-type DiffFilter = "All" | "NULL" | "IDENTICAL" | "DIFFERENT" | "SYNCED";
+type DiffFilter = "All" | "NULL" | "IDENTICAL" | "DIFFERENT" | "SYNCED" | "NOT_SYNCED";
 
 type Filter = {
   status: Array<Status>;
@@ -63,7 +63,7 @@ export class ProjectService {
         ...limitByUserPermission.where,
       };
 
-      const [total, notLinked, identical, different, synced, totalRI] = await Promise.all([
+      const [total, notLinked, identical, different, synced, notSynced, totalRI] = await Promise.all([
         // All
         prisma.project.count({ where: whereClause }),
         // NULL (Project not linked to CRIS)
@@ -87,7 +87,7 @@ export class ProjectService {
             }
           }
         }),
-        // DIFFERENT (Project in CRIS, but has differences)
+        // DIFFERENT (Project in CRIS, but has differences - AT LEAST ONE RED)
         prisma.project.count({
           where: {
             ...whereClause,
@@ -100,18 +100,37 @@ export class ProjectService {
             }
           }
         }),
-        // SYNCED (Project in CRIS and no difference - at least one comparison)
+        // SYNCED (Project in CRIS, fully synchronized - ONLY GREEN)
+        // Must have at least one entity, ALL entities must have snapshots, and NONE must have differences.
         prisma.project.count({
           where: {
             ...whereClause,
             externalEntities: {
-              some: {
+              some: {},
+              every: {
                 SavedTemplate: { some: {} }
               },
               none: {
                 SavedTemplate: {
                   some: { changed: true }
                 }
+              }
+            }
+          }
+        }),
+        // NOT_SYNCED (Project in CRIS, NO RED, but MISSING SOME snapshots - SOME BLUE)
+        // Must have no entities with differences, and at least one entity without a snapshot.
+        prisma.project.count({
+          where: {
+            ...whereClause,
+            externalEntities: {
+              none: {
+                SavedTemplate: {
+                  some: { changed: true }
+                }
+              },
+              some: {
+                SavedTemplate: { none: {} }
               }
             }
           }
@@ -128,6 +147,7 @@ export class ProjectService {
         identical,
         different,
         synced,
+        notSynced,
         totalRI,
       };
     } catch (error) {
@@ -184,12 +204,22 @@ export class ProjectService {
           };
         } else if (filters.diffs === "SYNCED") {
           // "Project in CRIS and fully synchronized (Only green checks)"
-          // Must have at least one comparison result AND no differences
+          // Must have at least one entity, ALL entities must have snapshots, and NONE must have differences.
           whereClause.externalEntities = {
-            some: {
+            some: {},
+            every: {
               SavedTemplate: { some: {} }
             },
             none: {
+              SavedTemplate: {
+                some: { changed: true }
+              }
+            }
+          };
+        } else if (filters.diffs === "DIFFERENT") {
+          // "Project in CRIS, but has differences (At least one red check)"
+          whereClause.externalEntities = {
+            some: {
               SavedTemplate: {
                 some: {
                   changed: true
@@ -197,15 +227,16 @@ export class ProjectService {
               }
             }
           };
-        } else if (filters.diffs === "DIFFERENT") {
-          // "Project in CRIS, but has differences" -> at least one difference exists
+        } else if (filters.diffs === "NOT_SYNCED") {
+          // "Project in CRIS, NO differences (No red), but at least one entity is missing a comparison (Some blue)"
           whereClause.externalEntities = {
-            some: {
+            none: {
               SavedTemplate: {
-                some: {
-                  changed: true
-                }
+                some: { changed: true }
               }
+            },
+            some: {
+              SavedTemplate: { none: {} }
             }
           };
         }

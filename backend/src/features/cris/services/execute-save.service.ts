@@ -41,7 +41,7 @@ export default class ExportSaveService {
           projectId,
           crisId: this.crisId,
           uuid: this.uuid,
-          templateType: this.systemName.toUpperCase(),
+          templateType: this.systemName.toUpperCase() as any,
         }
       }
     })
@@ -75,8 +75,9 @@ export default class ExportSaveService {
 
     const result = await prisma.savedTemplate.upsert({
       where: {
-        projectId_externalEntityId: {
+        projectId_templateId_externalEntityId: {
           projectId: project.id,
+          templateId: this.templateSelected,
           externalEntityId: externalEntity.id
         }
       },
