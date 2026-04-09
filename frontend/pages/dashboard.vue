@@ -16,7 +16,7 @@
       <v-col v-for="stat in displayedStats" :key="stat.title" cols="12" md="4" class="d-flex">
         <v-card
           class="pa-4 text-center cursor-pointer clickable-card flex-grow-1 d-flex flex-column justify-center"
-          :to="stat.to"
+          @click="navigateStat(stat)"
         >
           <div class="">
             {{ stat.title }}
@@ -48,40 +48,48 @@ const displayedStats = computed(() => {
       key: "totalRI",
       title: "All Projects in Research Institution",
       color: "grey-darken-2",
-      to: "/projects/all?clear=true",
+      path: "/projects/all",
+      clear: true,
     },
     {
       key: "total",
       title: `All filtered Projects ${statusLabels}`,
       color: "primary",
-      to: "/projects/all",
+      path: "/projects/all",
     },
     {
       key: "notLinked",
       title: "Project not linked to CRIS",
       color: "warning",
-      to: "/projects/not-linked",
+      path: "/projects/not-linked",
     },
     {
       key: "different",
       title: "Project in CRIS, but has differences",
       color: "error",
-      to: "/projects/diff",
+      path: "/projects/diff",
     },
     {
       key: "notSynced",
       title: "In CRIS, but missing RIS_ID",
       color: "warning",
-      to: "/projects/incomplete",
+      path: "/projects/incomplete",
     },
     {
       key: "synced",
       title: "Synced",
       color: "success",
-      to: "/projects/synced",
+      path: "/projects/synced",
     },
   ];
 });
+
+async function navigateStat(stat) {
+  if (stat.clear) {
+    store.clearFilters();
+  }
+  await navigateTo(stat.path);
+}
 
 async function fetchStats() {
   loading.value = true;

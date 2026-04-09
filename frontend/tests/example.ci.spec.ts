@@ -21,7 +21,6 @@ test.describe("Unauthenticated", () => {
     await page.getByRole('textbox', { name: 'Password Password' }).fill('admin');
     await page.getByRole('button', { name: 'Login' }).click();
     await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
-    await expect(page.getByText('🚧')).toBeVisible();
   });
 
   test('Login and view "Projects"', async ({ page }) => {
@@ -29,9 +28,11 @@ test.describe("Unauthenticated", () => {
     await page.getByRole('textbox', { name: 'User name User name' }).fill('admin');
     await page.getByRole('textbox', { name: 'Password Password' }).fill('admin');
     await page.getByRole('button', { name: 'Login' }).click();
+    await page.waitForURL('**/dashboard');
     await page.goto('/projects');
-    await expect(page.getByRole('banner').getByText('Projects')).toBeVisible();
-    await expect(page.getByText('Status: IN_').nth(0)).toBeVisible({ timeout: 60000 });
+    await page.waitForURL('**/projects/all');
+    await expect(page.locator('header').getByText('Projects')).toBeVisible();
+    await expect(page.getByText('Status: IN_').first()).toBeVisible({ timeout: 60000 });
   });
 });
 

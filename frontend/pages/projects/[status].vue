@@ -105,15 +105,6 @@ async function loadItems({ page, itemsPerPage, sortBy }, storeFilter = null) {
   try {
     const { listAll } = (await project).default;
     const filters = { ...(storeFilter || store.projectFilters) };
-    
-    // Handle 'clear' query param to reset all filters
-    if (route.query.clear === "true") {
-      console.log("🧹 Clearing filters due to 'clear' query param");
-      store.clearFilters();
-      // Ensure we use the cleared filters for the immediate load
-      Object.assign(filters, store.projectFilters);
-    }
-
     const statusParam = route.params.status;
     if (statusParam && slugToDiffFilter[statusParam]) {
       filters.diffs = slugToDiffFilter[statusParam];
@@ -194,7 +185,7 @@ watch(
 
 // Also watch route changes
 watch(
-  () => [route.params.status, route.query.clear],
+  () => route.params.status,
   () => {
     page.value = 1;
     loadItems(
