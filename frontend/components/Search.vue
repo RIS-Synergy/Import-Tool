@@ -1,0 +1,9 @@
+<template>
+  <v-text-field
+    label="Search"
+    prepend-inner-icon="mdi-magnify"
+    variant="outlined"
+    density="compact"
+    hide-details
+  ></v-text-field>
+</template>
