@@ -19,8 +19,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      valueOrganization: process.env.RIS_DEV_VALUE_ORGANIZATION || null,
-      valuePerson: process.env.RIS_DEV_VALUE_PERSON || null,
+      valueOrganization: process.env.RIS_DEV_VALUE_ORGANIZATION || undefined,
+      valuePerson: process.env.RIS_DEV_VALUE_PERSON || undefined,
 
       // Some instances do not have a CRIS. Some UI Components will otherwise show errors
       // hasCRIS: !!process.env.PURE_API_URL || false,
@@ -47,12 +47,18 @@ export default defineNuxtConfig({
   },
   nitro: {
     routeRules: {
-      // '/api/**': { proxy: process.env.BACKEND_API_PROXY }
-      '/api/**': { proxy: process.env.BACKEND_API_PROXY ? process.env.BACKEND_API_PROXY.replace(/\/*$/, '') + '/**' : undefined }
+      '/api/**': { proxy: process.env.BACKEND_API_PROXY + '/**' }
     }
   },
   vite: {
     server: {
+      proxy: {
+        '/api': {
+          target: process.env.BACKEND_API_PROXY,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, '')
+        }
+      },
       hmr: {
         protocol: 'ws',
         host: '0.0.0.0',

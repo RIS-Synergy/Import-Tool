@@ -138,4 +138,24 @@ export class ProjectController {
       res.status(500).json({ message: 'Error retrieving project stats' });
     }
   };
+
+  public search = async (req: Request, res: Response): Promise<void> => {
+    log.info('ProjectController.search', req.query.q);
+    const start = Date.now();
+    const q = req.query.q as string;
+    if (!q) {
+      res.status(200).json([]);
+      return;
+    }
+
+    try {
+      const results = await this.service.search(q);
+      const duration = Date.now() - start;
+      log.info(`ProjectController.search took ${duration}ms for query: ${q}`);
+      res.status(200).json(results);
+    } catch (error) {
+      log.error('Error searching projects:', error);
+      res.status(500).json({ message: 'Error searching projects' });
+    }
+  };
 }

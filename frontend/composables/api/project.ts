@@ -11,6 +11,12 @@ const listAll = async ({ page, itemsPerPage, sortBy, filters }) => {
   return result;
 }
 
+const search = async (q: string) => {
+  const result = await apiCall(`project2/search?q=${encodeURIComponent(q)}`, 'GET')
+  return result;
+}
+
 export default {
-  listAll
+  listAll,
+  search,
 }
