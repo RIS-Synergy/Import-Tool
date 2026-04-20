@@ -487,4 +487,72 @@ AND (${diffSQL})
       where: { id },
     });
   }
+
+  public async search(q: string): Promise<any[]> {
+    const searchTerm = `%${q}%`;
+    const startMatch = `${q}%`;
+    try {
+      // Prioritize matches: 
+      // 1. Starts with risId
+      // 2. Starts with title
+      // 3. Contains risId
+      // 4. Contains in JSON
+      const projects = await prisma.$queryRawUnsafe<any[]>(
+        `
+        SELECT id, "risId", "risData"
+        FROM "Project"
+        WHERE "risId" ILIKE $1
+        OR CAST(id AS TEXT) ILIKE $1
+        OR "risData"::text ILIKE $1
+        ORDER BY 
+          CASE 
+            WHEN "risId" ILIKE $2 THEN 1
+            WHEN "risId" ILIKE $1 THEN 2
+            WHEN EXISTS (
+              SELECT 1 FROM jsonb_array_elements("risData"->'title') t 
+              WHERE t->>'text' ILIKE $2
+            ) THEN 3
+            ELSE 4
+          END ASC,
+          "risId" ASC
+        LIMIT 15
+        `,
+        searchTerm,
+        startMatch
+      );
+
+      return projects.map(p => {
+        const risData = p.risData as any;
+        // Extract title (English preferred, then German)
+        let title = "";
+        if (Array.isArray(risData.title)) {
+          const enTitle = risData.title.find((t: any) => t.lang === 'en')?.text;
+          const deTitle = risData.title.find((t: any) => t.lang === 'de')?.text;
+          title = enTitle || deTitle || "";
+        }
+
+        // Extract PI Name
+        let piName = "";
+        if (Array.isArray(risData.team)) {
+          const pi = risData.team.find((member: any) => member.type === 'PRINCIPAL_INVESTIGATOR');
+          if (pi?.person?.personName) {
+            piName = `${pi.person.personName.firstName} ${pi.person.personName.familyName}`;
+          }
+        }
+
+        return {
+          id: p.id,
+          risId: p.risId,
+          title,
+          piName,
+          startDate: risData.startDate || "",
+          endDate: risData.endDate || "",
+          subjects: risData.subjects || []
+        };
+      });
+    } catch (error) {
+      log.error('Error in ProjectService.search:', error);
+      return [];
+    }
+  }
 }

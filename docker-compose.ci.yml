@@ -24,6 +24,11 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3001/ || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     ports:
       - 4001:3001
     environment:
@@ -40,6 +45,14 @@ services:
     container_name: frontend-ci
     image: my-ci-test-frontend
     working_dir: /app
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     ports:
       - 4000:3000
     environment:
@@ -49,7 +62,8 @@ services:
     container_name: playwright-ci
     image: my-ci-test-playwright
     depends_on:
-      - frontend
+      frontend:
+        condition: service_healthy
     volumes:
       - ${GITHUB_WORKSPACE:-.}:/app
       - ./frontend/playwright-report:/app/frontend/playwright-report
@@ -58,6 +72,7 @@ services:
     environment:
       - NODE_ENV=ci
       - PLAYWRIGHT_BASE_URL=http://frontend-ci:3000
+      - BACKEND_API_PROXY=http://backend-ci:3001
       - PLAYWRIGHT_HTML_OUTPUT_DIR=/app/frontend/.playwright-ci
       - PLAYWRIGHT_OUTPUT_DIR=/app/frontend/.playwright-ci
       - CI_TIME_DELAY=7 # prevent errors when the runner (GitHub Actions) is slow

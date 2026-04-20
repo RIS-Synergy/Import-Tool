@@ -15,6 +15,8 @@
         {{ titleName }}
       </v-app-bar-title>
 
+      <Search />
+
       <template v-slot:append>
         <ClientOnly>
           <FilterButton v-if="needsFiltering" />

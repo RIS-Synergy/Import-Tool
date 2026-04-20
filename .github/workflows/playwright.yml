@@ -36,6 +36,7 @@ jobs:
         run: |
           docker build \
             --tag my-ci-test-frontend \
+            --build-arg BACKEND_API_PROXY=http://backend-ci:3001 \
             ${GITHUB_WORKSPACE:-.}/frontend
 
       - name: ⚽ Build Playwright Image
@@ -75,12 +76,12 @@ jobs:
       - name: 💾 Save Backend Logs
         if: always()
         run: |
-          docker compose -p my-ci-test logs backend > backend-logs.txt
+          docker compose -f docker-compose.ci.yml -p my-ci-test --env-file env-test logs backend > backend-logs.txt
 
       - name: 💾 Save Frontend Logs on Failure
         if: always()
         run: |
-          docker compose -p my-ci-test logs frontend > ./frontend/frontend-logs.txt 2>&1
+          docker compose -f docker-compose.ci.yml -p my-ci-test --env-file env-test logs frontend > ./frontend/frontend-logs.txt 2>&1
 
       - name: 📁 Upload Playwright report
         if: always()

@@ -13,10 +13,6 @@ async function authenticateUser(page: any, username: string, password: string) {
     return;
   }
 
-  // make sure backend is ready
-  await page.goto('/api/');
-  await expect(page.getByText('RIS Synergy API')).toBeVisible();
-
   // Start listener BEFORE going to the page or we might miss the event
   const loginFormLoadedPromise = page.waitForEvent('console', (msg: any) => msg.text() === '🟢 Login form loaded');
 
