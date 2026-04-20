@@ -35,12 +35,8 @@ CMD ["yarn", "dev"]
 # Production stage
 FROM base AS production
 ENV NODE_ENV=production
-RUN yarn build
-
-# Ensure the build output exists
-# RUN ls -la dist/
 
 # Use a non-root user for security
 USER node
 
-CMD ["node", "dist/server.js"]
+CMD ["yarn", "docker"]
