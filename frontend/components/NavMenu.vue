@@ -94,46 +94,12 @@
     <!-- <v-divider v-if="isAdmin()"></v-divider> -->
     <!-- End Admin -->
 
-    <v-list-item
-      class="my-0"
-      v-model="theme.global.current.dark"
-      title="(Dark Mode)"
-      @prepend-icon="prepare_icon()"
-      @click="toggleTheme"
-    >
-      <template v-slot:append>
-        <v-icon>{{ prepend_icon() }}</v-icon>
-      </template>
-    </v-list-item>
     <v-divider></v-divider>
   </v-list>
 </template>
 
 <script setup>
-import { useTheme } from "vuetify";
-
-const theme = useTheme();
-
-const store = useUserSettingsStore();
-
 const { isAdmin } = useUser();
-
-// if (store.dark) {
-//   theme.global.name.value = "dark";
-// }
-//
-function toggleTheme() {
-  console.log(theme);
-
-  theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";
-  store.dark = !store.dark;
-}
-
-function prepend_icon() {
-  return theme.global.current.value.dark
-    ? "mdi-white-balance-sunny"
-    : "mdi-moon-waning-crescent";
-}
 </script>
 
 <style scoped>

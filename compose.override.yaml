@@ -28,6 +28,8 @@ services:
       - "3029:9229"   # debugger
 
   frontend:
+    build:
+      target: development
     environment:
       - BACKEND_API_PROXY=http://backend:3001
       - DEV_TOOLS=${DEV_TOOLS}

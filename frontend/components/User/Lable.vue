@@ -7,7 +7,7 @@
         </b>
         <template v-slot:append>
           <v-chip
-            v-if="user && user.permission.includes('admin')"
+            v-if="store.user && store.user.permission.includes('admin')"
             size="small"
             class="mr-1"
           >
@@ -22,6 +22,15 @@
       <v-card title="User">
         <v-card-text>
           <v-text-field label="Username" readonly v-model="username" />
+
+          <v-switch
+            class="mt-n2"
+            v-model="isDark"
+            label="Dark Mode"
+            @update:model-value="toggleTheme"
+            hide-details
+            color="primary"
+          ></v-switch>
         </v-card-text>
         <v-card-actions>
           <UserLogout />
@@ -34,12 +43,25 @@
 </template>
 
 <script setup>
-const { token, user } = useUserSettingsStore();
+import { useTheme } from "vuetify";
+
+const theme = useTheme();
+const store = useUserSettingsStore();
 
 const dialog = ref(false);
+const isDark = ref(store.dark);
+
+// Initialize theme state from store
+onMounted(() => {
+  theme.global.name.value = store.dark ? "dark" : "light";
+});
+
+function toggleTheme() {
+  theme.global.name.value = isDark.value ? "dark" : "light";
+  store.dark = isDark.value;
+}
 
 const username = computed(() => {
-  const store = useUserSettingsStore();
   return store.user && store.user.username;
 });
 </script>

@@ -46,8 +46,8 @@ test.describe("Authenticated", () => {
       .nth(0))
       .toBeVisible({ timeout: 35000 })
 
-    // Click the first 'View' button for a project in the list
-    await page.locator('.v-btn.v-theme--light.text-primary').first().click();
+    // Click the first 'view' button for a project in the list
+    await page.getByRole('button', { name: 'view' }).first().click();
 
     // See some text come back
     await expect(page.getByText('Human-Translated')
