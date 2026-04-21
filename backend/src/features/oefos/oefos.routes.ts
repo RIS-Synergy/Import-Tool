@@ -6,6 +6,16 @@ import { oefosIdSchema } from './oefos.validation.js';
 const router = Router();
 const service = new OefosService();
 
+router.get('/', async (req, res) => {
+  try {
+    const result = service.getAll();
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error retrieving OEFOS entries:', error);
+    res.status(500).json({ message: 'Error retrieving OEFOS entries' });
+  }
+});
+
 router.get('/:id', validate(oefosIdSchema, 'params'), async (req, res) => {
   try {
     const { id } = req.params;

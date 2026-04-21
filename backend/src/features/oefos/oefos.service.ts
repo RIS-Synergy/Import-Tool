@@ -72,4 +72,10 @@ export class OefosService {
     };
   }
 
+  public getAll() {
+    return {
+      de: Object.values(data_de),
+      en: Object.values(data_en)
+    };
+  }
 }

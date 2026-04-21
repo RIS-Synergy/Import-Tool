@@ -91,6 +91,12 @@
       </template>
     </v-list-item>
     <v-divider />
+    <v-list-item :to="`/oefos`" link title="OeFOS">
+      <template v-slot:append>
+        <v-icon>mdi-file-tree</v-icon>
+      </template>
+    </v-list-item>
+    <v-divider />
     <!-- <v-divider v-if="isAdmin()"></v-divider> -->
     <!-- End Admin -->
 
