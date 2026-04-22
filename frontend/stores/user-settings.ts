@@ -15,6 +15,7 @@ const projectFilters = {
   orderBy: 'startDate:desc',
   itemsPerPage: 10,
   diffs: "All",
+  oefos: '',
 }
 
 export const useUserSettingsStore = defineStore('user-settings', {

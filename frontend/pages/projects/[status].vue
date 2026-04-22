@@ -197,6 +197,14 @@ watch(
 
 onMounted(() => {
   console.log("🚀 [status].vue mounted, initial load for", route.params.status);
+  
+  // Extract oefos from query string if present
+  if (route.query.oefos) {
+    store.projectFilters.oefos = route.query.oefos;
+  } else {
+    store.projectFilters.oefos = '';
+  }
+
   loadItems(
     { page: 1, itemsPerPage: store.projectFilters.itemsPerPage, sortBy: store.sortBy },
     store.projectFilters,

@@ -58,7 +58,7 @@ export const useOefosStore = defineStore('oefos', {
             map.get(parentCode)!.children.push(node)
           } else {
             // Fallback for codes that don't follow the pattern or if parent is missing
-            // In OEFOS, sometimes the EBENE is the only guide.
+            // In OeFOS, sometimes the EBENE is the only guide.
             // But usually the code prefix is the standard.
             // If parent is not found via code prefix, we might need a more complex lookup.
             // For now, let's stick to prefix.
@@ -91,7 +91,7 @@ export const useOefosStore = defineStore('oefos', {
         this.entries.en = data.en
         this.loaded = true
       } catch (error) {
-        console.error('Failed to fetch OEFOS:', error)
+        console.error('Failed to fetch OeFOS:', error)
       } finally {
         this.loading = false
       }

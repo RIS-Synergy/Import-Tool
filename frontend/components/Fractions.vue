@@ -2,14 +2,15 @@
   <v-chip class="float-right" v-if="false && isHundertPercent(model)"
     >Fractions validated</v-chip
   >
-  <v-list v-if="true">
-    <v-list-item
+  <div v-if="true" class="mt-2">
+    <OefosHierarchy
       v-for="(x, idx) in data"
       :key="idx"
-      :title="x.title"
+      :code="x.value"
+      :title="x.localizedTitle"
       :subtitle="x.subtitle"
-    ></v-list-item>
-  </v-list>
+    />
+  </div>
 </template>
 
 <script setup>
@@ -31,7 +32,8 @@ onMounted(async () => {
       const subject = { ...subj };
       subject.subtitle = getPercent(subject.fraction);
       const response = await getOefosID(subject.value);
-      subject.title = `${subject.value}, ${response.de.Titel} / ${response.en.Titel} `;
+      subject.localizedTitle = `${response.de.Titel} / ${response.en.Titel}`;
+      subject.title = `${subject.value}, ${subject.localizedTitle}`;
       return subject;
     }),
   );

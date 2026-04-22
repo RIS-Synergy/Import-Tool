@@ -20,6 +20,7 @@ type Filter = {
   diffs: DiffFilter;
   orderBy: string;
   itemsPerPage: string;
+  oefos?: string | string[];
 }
 
 /*
@@ -58,9 +59,24 @@ export class ProjectService {
         };
       }
 
+      // Add oefos filter if provided
+      if (filters.oefos) {
+        const codes = Array.isArray(filters.oefos) ? filters.oefos : (typeof filters.oefos === 'string' ? filters.oefos.split(',') : []);
+        if (codes.length > 0) {
+          const pathQuery = codes.map(c => `@ starts with "${c}"`).join(' || ');
+          const matchingIds: any[] = await prisma.$queryRawUnsafe(
+            `SELECT id FROM "Project" WHERE jsonb_path_exists("risData", '$.subjects[*].value ? (${pathQuery})')`
+          );
+          const ids = matchingIds.map(p => p.id);
+          // If no projects match, we must ensure zero results
+          whereClause.id = { in: ids.length > 0 ? ids : [-1] };
+        }
+      }
+
       // This one ignores the status filter
       const whereClauseAllRI: any = {
         ...limitByUserPermission.where,
+        ...(whereClause.id ? { id: whereClause.id } : {})
       };
 
       const [total, notLinked, identical, different, synced, notSynced, totalRI] = await Promise.all([
@@ -180,6 +196,20 @@ export class ProjectService {
         whereClause.status = {
           in: filters.status
         };
+      }
+
+      // Add oefos filter if provided
+      if (filters.oefos) {
+        const codes = Array.isArray(filters.oefos) ? filters.oefos : (typeof filters.oefos === 'string' ? filters.oefos.split(',') : []);
+        if (codes.length > 0) {
+          const pathQuery = codes.map(c => `@ starts with "${c}"`).join(' || ');
+          const matchingIds: any[] = await prisma.$queryRawUnsafe(
+            `SELECT id FROM "Project" WHERE jsonb_path_exists("risData", '$.subjects[*].value ? (${pathQuery})')`
+          );
+          const ids = matchingIds.map(p => p.id);
+          // If no projects match, we must ensure zero results
+          whereClause.id = { in: ids.length > 0 ? ids : [-1] };
+        }
       }
 
       // Add diffs filter using Prisma relation criteria

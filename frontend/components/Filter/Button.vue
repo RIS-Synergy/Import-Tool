@@ -42,6 +42,17 @@
             chips
             outlined
           ></v-select>
+          <v-text-field
+            v-if="store.projectFilters.oefos"
+            v-model="store.projectFilters.oefos"
+            label="OeFOS Filter"
+            clearable
+            prepend-inner-icon="mdi-file-tree"
+            readonly
+            hint="Active OeFOS category filter"
+            persistent-hint
+            outlined
+          ></v-text-field>
         </v-card-text>
       </v-card>
     </template>

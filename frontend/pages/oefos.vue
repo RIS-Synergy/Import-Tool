@@ -33,6 +33,18 @@ onMounted(async () => {
           <span class="mr-1 font-weight-bold">{{ entry.Code }}</span> {{ entry.Titel }}
         </v-chip>
         <v-btn
+          v-if="selectedEntries.length"
+          prepend-icon="mdi-magnify"
+          color="primary"
+          variant="elevated"
+          size="small"
+          class="text-none ml-2"
+          :to="`/projects/all?oefos=${store.selectedCodes.join(',')}`"
+        >
+          Filter Projects ({{ selectedEntries.length }})
+        </v-btn>
+
+        <v-btn
           v-if="selectedEntries.length > 1"
           variant="text"
           size="x-small"

@@ -11,8 +11,8 @@ router.get('/', async (req, res) => {
     const result = service.getAll();
     res.status(200).json(result);
   } catch (error) {
-    console.error('Error retrieving OEFOS entries:', error);
-    res.status(500).json({ message: 'Error retrieving OEFOS entries' });
+    console.error('Error retrieving OeFOS entries:', error);
+    res.status(500).json({ message: 'Error retrieving OeFOS entries' });
   }
 });
 
@@ -24,11 +24,13 @@ router.get('/:id', validate(oefosIdSchema, 'params'), async (req, res) => {
     if (result) {
       res.status(200).json(result);
     } else {
-      res.status(404).json({ message: `OEFOS entry with id ${id} not found` });
+      res.status(404).json({ message: `OeFOS entry with id ${id} not found` });
+      return;
     }
+    res.json(entry);
   } catch (error) {
-    console.error('Error retrieving OEFOS entry:', error);
-    res.status(500).json({ message: 'Error retrieving OEFOS entry' });
+    console.error('Error retrieving OeFOS entry:', error);
+    res.status(500).json({ message: 'Error retrieving OeFOS entry' });
   }
 });
 
