@@ -21,12 +21,23 @@ export default class CRISSearchService {
       const endpoint = `/${entityType}/search`
 
       const method = 'POST';
-      return this.crisAPI.post(endpoint, {
+      const postParams = {
         size: this.maxItemSize,
         offset: 0,
         searchString: query
+      }
+      return this.crisAPI.post(endpoint, {
+        ...postParams
+        // size: this.maxItemSize,
+        // offset: 0,
+        // searchString: query
       }).then((result: any) => {
         log.debug('SearchResults', endpoint, result.items.length)
+
+        // send
+        log.debug('External API Search call send 👉', endpoint, postParams)
+        // and receive
+        log.debug('External API Search returns 👈', result)
 
         result.items && result.items.map((item: any) => {
           results.push(item);

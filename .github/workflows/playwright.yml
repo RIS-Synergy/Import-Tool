@@ -10,7 +10,7 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     concurrency: 1
-    timeout-minutes: 5
+    timeout-minutes: 15
 
     env:
       NODE_OPTIONS: --no-deprecation

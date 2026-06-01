@@ -25,7 +25,7 @@ services:
       - DATABASE_URL=postgresql://ris-user:dummy@db-test:5432/ris_db?schema=public
       - JWT_SECRET=password!!!
       - JWT_EXPIRES_IN=1h
-      - RIS_REGISTRY_URL=https://forschungsdaten.at/registry/registry.json
+      - RIS_REGISTRY_URL=https://api.forschungsdaten.at/registry.json
       - RIS_MEMBER_ID=FWF_Test
       - RIS_TEST_DATA=2024-09-04_testdata_projects_updated.json
     ports:
