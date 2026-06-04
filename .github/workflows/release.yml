@@ -22,6 +22,9 @@ permissions:
 jobs:
   container-build-publish:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component: [frontend, backend]
 
     steps:
       - uses: actions/checkout@v4
@@ -37,7 +40,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository }}/frontend
+          images: ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.component }}
           # git tag: v1.2.3, output: 1.2.3
           tags: |
             type=semver,pattern={{version}},enable=${{ env.is-version-tag == 'true'}}
@@ -50,8 +53,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend
-          file: ./frontend/Dockerfile
+          context: ./${{ matrix.component }}
+          file: ./${{ matrix.component }}/Dockerfile
           target: production
           push: true
           build-args: |

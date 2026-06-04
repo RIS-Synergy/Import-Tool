@@ -20,7 +20,7 @@ const projectFilters = {
 
 export const useUserSettingsStore = defineStore('user-settings', {
   state: () => ({
-    dark: true,
+    dark: false,
     sortBy: [{ key: 'startDate', order: 'desc' }],
     projectFilters,
     token: null,

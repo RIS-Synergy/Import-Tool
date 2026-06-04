@@ -5,8 +5,26 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 
 export default defineNuxtPlugin((app) => {
+  let initialTheme = 'light'
+
+  if (import.meta.client) {
+    try {
+      const persisted = localStorage.getItem('user-settings')
+      if (persisted) {
+        const state = JSON.parse(persisted)
+        if (state && typeof state.dark === 'boolean') {
+          initialTheme = state.dark ? 'dark' : 'light'
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to parse persisted theme', e)
+    }
+  }
+
   const vuetify = createVuetify({
-    // ... your configuration
+    theme: {
+      defaultTheme: initialTheme
+    }
   })
   app.vueApp.use(vuetify)
 })
