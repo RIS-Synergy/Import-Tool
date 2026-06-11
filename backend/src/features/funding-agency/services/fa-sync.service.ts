@@ -51,12 +51,42 @@ export class FundingAgencySync {
       };
     }
 
-    const projects = await this.fetchAllProjectPages();
-    const fetchDurationSeconds = (Date.now() - startTime) / 1000;
+    this.isSyncRunning = true;
+    const countStats: ProjectCountStats = {
+      new: { size: 0, sampleIds: [] },
+      existing: { size: 0, sampleIds: [] },
+      updated: { size: 0, sampleIds: [] }
+    };
 
-    log.info(`Received ${projects.length} Projects in ${fetchDurationSeconds} seconds`);
+    let currentPage = 0;
+    let hasMorePages = true;
+    let totalProjectsProcessed = 0;
 
-    const countStats = await this.saveProjectsToDatabase(projects);
+    try {
+      while (hasMorePages) {
+        const currentPageProjects = await this.fetchProjectsPage(currentPage);
+
+        // Ensure we always have an array to work with
+        const safePageProjects = Array.isArray(currentPageProjects) ? currentPageProjects : [];
+
+        // If we get an empty array, stop pagination
+        if (safePageProjects.length === 0) {
+          hasMorePages = false;
+        } else {
+          await this.saveProjectsToDatabaseChunk(safePageProjects, countStats);
+          totalProjectsProcessed += safePageProjects.length;
+          currentPage++;
+        }
+      }
+
+      const syncDurationSeconds = (Date.now() - startTime) / 1000;
+      log.info(`Received and processed ${totalProjectsProcessed} Projects in ${syncDurationSeconds} seconds`);
+    } catch (error) {
+      log.error('Error during sync pagination', error);
+    } finally {
+      this.isSyncRunning = false;
+    }
+
     const totalProjectsInDatabase = await prisma.project.count();
 
     log.info('Projects saved to database', countStats);
@@ -65,16 +95,10 @@ export class FundingAgencySync {
     return countStats;
   }
 
-  private async saveProjectsToDatabase(faProjects: any[]): Promise<ProjectCountStats> {
-    const countStats: ProjectCountStats = {
-      new: { size: 0, sampleIds: [] },
-      existing: { size: 0, sampleIds: [] },
-      updated: { size: 0, sampleIds: [] }
-    };
-
+  private async saveProjectsToDatabaseChunk(faProjects: any[], countStats: ProjectCountStats): Promise<void> {
     // Filter out invalid projects early
     const validProjects = faProjects.filter(project => project?.id);
-    if (validProjects.length === 0) return countStats;
+    if (validProjects.length === 0) return;
 
     // Get IDs of all projects to check which ones exist
     const projectIds = validProjects.map(project => project.id);
@@ -88,18 +112,20 @@ export class FundingAgencySync {
       existingProjects.map(project => [project.risId, project.risData])
     );
 
-    // Process each project
-    await Promise.all(validProjects.map(async (project) => {
-      const projectHasExistingRecord = existingProjectMap.has(project.id);
+    // Process each project in batches of 100 to avoid resource exhaustion
+    const batchSize = 100;
+    for (let i = 0; i < validProjects.length; i += batchSize) {
+      const batch = validProjects.slice(i, i + batchSize);
+      await Promise.all(batch.map(async (project) => {
+        const projectHasExistingRecord = existingProjectMap.has(project.id);
 
-      if (!projectHasExistingRecord) {
-        await this.createNewProject(project, countStats);
-      } else {
-        await this.updateExistingProject(project, existingProjectMap.get(project.id), countStats);
-      }
-    }));
-
-    return countStats;
+        if (!projectHasExistingRecord) {
+          await this.createNewProject(project, countStats);
+        } else {
+          await this.updateExistingProject(project, existingProjectMap.get(project.id), countStats);
+        }
+      }));
+    }
   }
 
   private async createNewProject(project: any, countStats: ProjectCountStats): Promise<void> {
@@ -178,42 +204,7 @@ export class FundingAgencySync {
     }
   }
 
-  private async fetchAllProjectPages(): Promise<any[]> {
-    if (this.isSyncRunning) {
-      log.info('Sync is already running');
-      return [];
-    }
 
-    this.isSyncRunning = true;
-    const allProjects: any[] = [];
-    let currentPage = 0;
-    let hasMorePages = true;
-
-    try {
-      while (hasMorePages) {
-        const currentPageProjects = await this.fetchProjectsPage(currentPage);
-
-        // Ensure we always have an array to work with
-        const safePageProjects = Array.isArray(currentPageProjects) ? currentPageProjects : [];
-
-        // If we get an empty array, stop pagination
-        if (safePageProjects.length === 0) {
-          hasMorePages = false;
-        } else {
-          allProjects.push(...safePageProjects);
-          currentPage++;
-        }
-      }
-
-      log.info(`===> FA Received total: ${allProjects.length} Projects`);
-      return allProjects;
-    } catch (error) {
-      log.error('Error during pagination', error);
-      return allProjects; // Return what we have so far
-    } finally {
-      this.isSyncRunning = false;
-    }
-  }
 
   private async getProjectsEndpointUrl(): Promise<string> {
     const areEndpointsCached = this.registry.endpoints.size > 0;

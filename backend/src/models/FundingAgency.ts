@@ -17,61 +17,98 @@ export class FundingAgency {
 
   async copyProjectToDatabase() {
     const start = new Date().getTime();
-    const projects = await this.fetchAllPages();
-    const end = new Date().getTime() - start;
-    log.info(`Received ${projects.length} Projects in ${end / 1000} seconds`);
+    const countStats = { new: 0, existing: 0, updated: 0 };
+    let page = 0;
+    let response = [];
+    let totalProjectsProcessed = 0;
 
-    const countStats = await this.saveProjectsToDatabase(projects);
+    if (this.running) {
+      log.info('Already running');
+      return countStats;
+    }
+
+    this.running = true;
+
+    try {
+      do {
+        response = await this.fetchPage(page);
+        const safePageProjects = Array.isArray(response) ? response : [];
+        if (safePageProjects.length === 0) {
+          break;
+        }
+
+        await this.saveProjectsToDatabaseChunk(safePageProjects, countStats);
+        totalProjectsProcessed += safePageProjects.length;
+        page++;
+      } while (response && response.length > 0);
+
+      const end = new Date().getTime() - start;
+      log.info(`Finished sync for ${totalProjectsProcessed} projects in ${end / 1000} seconds`);
+    } catch (error) {
+      log.error('Error during pagination sync', error);
+    } finally {
+      this.running = false;
+    }
 
     log.info('Projects saved to database', countStats);
     log.info(`Database has ${await prisma.project.count()} projects`);
 
-    return countStats
+    return countStats;
   }
 
-  private async saveProjectsToDatabase(faProjects: any[]) {
-    let countStats = { new: 0, existing: 0, updated: 0 };
+  private async saveProjectsToDatabaseChunk(
+    faProjects: any[],
+    countStats: { new: number; existing: number; updated: number }
+  ): Promise<void> {
+    const validProjects = faProjects.filter(project => project?.id);
+    if (validProjects.length === 0) return;
 
-    // Fetch all existing projects
-    const projectIds = faProjects.map(p => p.id).filter(id => id);
+    // Fetch existing projects for this chunk to avoid loading too many at once
+    const projectIds = validProjects.map(project => project.id);
     const existingProjects = await prisma.project.findMany({
       where: { risId: { in: projectIds } },
-      select: { risId: true }
+      select: { risId: true, risData: true }
     });
 
-    const existingProjectIds = new Set(existingProjects.map(p => p.risId));
+    const existingProjectMap = new Map(
+      existingProjects.map(project => [project.risId, project.risData])
+    );
 
-    await Promise.all(faProjects.map(async (project) => {
-      if (!project || !project.id) return;
+    // Process in batches of 100
+    const batchSize = 100;
+    for (let i = 0; i < validProjects.length; i += batchSize) {
+      const batch = validProjects.slice(i, i + batchSize);
+      await Promise.all(batch.map(async (project) => {
+        const projectHasExistingRecord = existingProjectMap.has(project.id);
 
-      if (!existingProjectIds.has(project.id)) {
-        try {
-          const newProject = await prisma.project.create({
-            data: {
-              risId: project.id,
-              risData: project
-            }
-          });
-          log.debug(`Project ${newProject.risId} created`);
-          countStats.new++;
-        } catch (error) {
-          log.error('Error creating project', error);
-        }
-      } else {
-        const existingProject = await prisma.project.findUnique({
-          where: { risId: project.id },
-          select: { risData: true }
-        });
-        const updated = await this.upsertProject(project, existingProject.risData);
-        if (updated) {
-          countStats.updated++;
+        if (!projectHasExistingRecord) {
+          try {
+            const newProject = await prisma.project.create({
+              data: {
+                risId: project.id,
+                risData: project
+              }
+            });
+            log.debug(`Project ${newProject.risId} created`);
+            countStats.new++;
+          } catch (error) {
+            log.error('Error creating project', error);
+          }
         } else {
-          countStats.existing++;
+          try {
+            const updated = await this.upsertProject(project, existingProjectMap.get(project.id));
+            if (updated) {
+              countStats.updated++;
+            } else {
+              countStats.existing++;
+            }
+          } catch (error) {
+            log.error('Error updating existing project', error);
+            countStats.existing++;
+          }
         }
-      }
-    }));
-
-    return countStats;
+      }));
+    }
   }
 
   async upsertProject(newProject: any, oldProject: any): Promise<boolean> {

@@ -48,9 +48,20 @@ oc exec -it deployment/backend -c backend -n aris-importtool-staging -- \
   yarn db-user --domain=univie.ac.at
 ```
 
+### UI: create a Funding Agency API
+
+For now it's _FWF_ and _FWF_Test_.
+This can be created in the Frontend manually.
+
 ## Logging
 
 ### Backend
+
+View all your env variables. Note, you will see secrets!
+
+```
+oc exec -it deployment/backend -c backend -n aris-importtool-staging -- env
+```
 
 Logging in the CLI instead of the OpenShift UI.
 
@@ -63,7 +74,7 @@ oc logs -l app.kubernetes.io/name=backend -f -n aris-importtool-staging
 Database SQL REPL:
 
 ```bash
-oc exec -it pod/importtool-staging-db-1 -n aris-importtool-staging -- \
+oc exec -it pod/importtool-staging-db-1 -- \
   psql -U postgres -d importtool
 ```
 
@@ -71,4 +82,12 @@ and then run your query, e.g.:
 
 ```sql
 SELECT * FROM "User";
+```
+
+or directly in the CLI:
+
+```bash
+oc exec -it pod/importtool-staging-db-1 -c postgres -- \
+  psql -U postgres -d importtool -c \
+  "SELECT COUNT(*) Projects"
 ```
