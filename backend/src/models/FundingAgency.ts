@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client'
 import { Project } from './Project.js'
 import { Differ } from './Diff.js'
 import { getAuthEndpoint } from "../utils/oauth2.js";
+import { updateData } from '../features/project/services/update-data.js'
 
 const prisma = new PrismaClient()
 
@@ -86,7 +87,8 @@ export class FundingAgency {
             const newProject = await prisma.project.create({
               data: {
                 risId: project.id,
-                risData: project
+                risData: project,
+                ...updateData(project)
               }
             });
             log.debug(`Project ${newProject.risId} created`);
@@ -122,7 +124,10 @@ export class FundingAgency {
     try {
       const dbResult = await prisma.project.update({
         where: { risId: newProject.id },
-        data: { risData: newProject }
+        data: {
+          risData: newProject,
+          ...updateData(newProject)
+        }
       });
       log.debug('Project', dbResult.id, "updated");
       return true

@@ -1,4 +1,33 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import { execSync } from 'child_process'
+import fs from 'fs'
+import path from 'path'
+
+let gitCommit = 'unknown'
+try {
+  gitCommit = execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim()
+} catch (e) {
+  try {
+    let gitDir = path.resolve(process.cwd(), '.git')
+    if (!fs.existsSync(gitDir)) {
+      gitDir = path.resolve(process.cwd(), '../.git')
+    }
+    if (fs.existsSync(gitDir)) {
+      const headContent = fs.readFileSync(path.join(gitDir, 'HEAD'), 'utf-8').trim()
+      if (headContent.startsWith('ref:')) {
+        const refPath = headContent.replace('ref:', '').trim()
+        const fullRefPath = path.join(gitDir, refPath)
+        if (fs.existsSync(fullRefPath)) {
+          gitCommit = fs.readFileSync(fullRefPath, 'utf-8').trim().substring(0, 7)
+        }
+      } else if (headContent.length >= 40) {
+        gitCommit = headContent.substring(0, 7)
+      }
+    }
+  } catch (err) {
+    // ignore
+  }
+}
 
 export default defineNuxtConfig({
   devtools: { enabled: !!process.env.DEV_TOOLS },
@@ -24,7 +53,8 @@ export default defineNuxtConfig({
 
       // Some instances do not have a CRIS. Some UI Components will otherwise show errors
       // hasCRIS: !!process.env.PURE_API_URL || false,
-      hasCRIS: true
+      hasCRIS: true,
+      gitCommit: process.env.GIT_COMMIT || gitCommit
     }
   },
 
