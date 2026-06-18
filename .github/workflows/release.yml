@@ -59,6 +59,7 @@ jobs:
           push: true
           build-args: |
             BACKEND_API_PROXY=http://backend:3000
+            GIT_COMMIT=${{ github.sha }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha

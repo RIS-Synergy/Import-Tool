@@ -3,9 +3,9 @@ import { execSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
-let gitCommit = 'unknown'
+let localGitCommit = 'unknown'
 try {
-  gitCommit = execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim()
+  localGitCommit = execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim()
 } catch (e) {
   try {
     let gitDir = path.resolve(process.cwd(), '.git')
@@ -18,10 +18,10 @@ try {
         const refPath = headContent.replace('ref:', '').trim()
         const fullRefPath = path.join(gitDir, refPath)
         if (fs.existsSync(fullRefPath)) {
-          gitCommit = fs.readFileSync(fullRefPath, 'utf-8').trim().substring(0, 7)
+          localGitCommit = fs.readFileSync(fullRefPath, 'utf-8').trim().substring(0, 7)
         }
       } else if (headContent.length >= 40) {
-        gitCommit = headContent.substring(0, 7)
+        localGitCommit = headContent.substring(0, 7)
       }
     }
   } catch (err) {
@@ -54,7 +54,7 @@ export default defineNuxtConfig({
       // Some instances do not have a CRIS. Some UI Components will otherwise show errors
       // hasCRIS: !!process.env.PURE_API_URL || false,
       hasCRIS: true,
-      gitCommit: process.env.GIT_COMMIT || gitCommit
+      gitCommit: process.env.GIT_COMMIT ? process.env.GIT_COMMIT.substring(0, 7) : localGitCommit
     }
   },
 

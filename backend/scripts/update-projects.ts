@@ -12,7 +12,6 @@ const filters = {
 
 const page = "1";
 
-
 async function main() {
   const result = await projectService.findMany2({}, filters, page);
 

@@ -21,7 +21,9 @@ CMD ["yarn", "dev:docker"]
 # Production stage
 FROM base AS production
 ARG BACKEND_API_PROXY
+ARG GIT_COMMIT
 ENV BACKEND_API_PROXY=$BACKEND_API_PROXY
+ENV GIT_COMMIT=$GIT_COMMIT
 ENV NODE_ENV=production
 RUN yarn build
 EXPOSE 3000
