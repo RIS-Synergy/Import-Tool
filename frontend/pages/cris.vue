@@ -2,6 +2,53 @@
   <AppBar title="CRIS Systems" />
 
   <v-container>
+    <v-dialog v-model="dialog" max-width="500px">
+      <template v-slot:activator="{ props }">
+        <v-fab
+          color="primary"
+          icon="mdi-plus"
+          class="mb-4"
+          location="bottom end"
+          app
+          @click="dialog = true"
+        ></v-fab>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">New CRIS System</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="newCrisName"
+                  label="Name"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="newCrisApiUrl"
+                  label="API URL"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+            Cancel
+          </v-btn>
+          <v-btn color="blue-darken-1" variant="text" @click="create">
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-row>
       <v-col v-for="item in data" :key="item.id" cols="12" md="6">
         <v-card
@@ -33,6 +80,11 @@
                 </v-btn>
                 <v-btn v-else variant="outlined" @click="deselect()">
                   Deselect
+                </v-btn>
+              </v-col>
+              <v-col class="text-right" v-if="item.id === currentCRIS">
+                <v-btn variant="outlined" color="error" @click="deleteCris(item.id)">
+                  Delete
                 </v-btn>
               </v-col>
             </v-row>
@@ -73,12 +125,34 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 const { cris, diff } = useApiUtils();
-const { listAll, discoverExternalEntities } = (await cris).default;
+const { listAll, discoverExternalEntities, createApi, deleteApi } = (await cris).default;
 const { diffSync } = (await diff).default;
-const data = await listAll();
+const data = ref(await listAll());
+
+const dialog = ref(false);
+const newCrisName = ref("");
+const newCrisApiUrl = ref("");
+
+const create = async () => {
+  await createApi(newCrisName.value, newCrisApiUrl.value);
+  dialog.value = false;
+  newCrisName.value = "";
+  newCrisApiUrl.value = "";
+  data.value = await listAll();
+};
+
+const deleteCris = async (id: number) => {
+  if (confirm("Are you sure you want to delete this CRIS system?")) {
+    await deleteApi(id);
+    data.value = await listAll();
+    if (currentCRIS.value == id) {
+      deselect();
+    }
+  }
+};
 
 const userSettingsStore = useUserSettingsStore();
 const { setCRIS } = userSettingsStore;
@@ -89,7 +163,7 @@ function select(itemId?: number, itemName: string, apiUrl: string) {
 }
 
 function deselect() {
-  setCRIS(null, null);
+  setCRIS(null as any, null as any, null as any);
 }
 
 function discover(itemId) {

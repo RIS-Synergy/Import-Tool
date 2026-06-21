@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import prisma from '@/lib/prisma.js';
 
 import { CRISService } from './services/cris.service.js';
 
@@ -54,9 +55,23 @@ export class CRISController {
 
   public create = async (req: Request, res: Response): Promise<void> => {
     try {
-      const newCRIS = await this.service.create(req.body);
+      const data = { ...req.body };
+      if (!data.researchInstitutionId) {
+        if (req.user && req.user.ri) {
+          data.researchInstitutionId = req.user.ri;
+        } else {
+          const ri = await prisma.researchInstitution.findFirst({
+            where: { domain: 'univie.ac.at' }
+          });
+          if (ri) {
+            data.researchInstitutionId = ri.id;
+          }
+        }
+      }
+      const newCRIS = await this.service.create(data);
       res.status(201).json(newCRIS);
     } catch (error) {
+      log.error('Error creating CRIS:', error);
       res.status(500).json({ message: 'Error creating CRIS' });
     }
   };
@@ -75,8 +90,10 @@ export class CRISController {
     try {
       const id = parseInt(req.params.id, 10);
       const deletedCRIS = await this.service.delete(id);
+      log.info(`Deleted CRIS system ${id}`);
       res.status(200).json(deletedCRIS);
     } catch (error) {
+      log.error(`Error deleting CRIS ${req.params.id}:`, error);
       res.status(500).json({ message: 'Error deleting CRIS' });
     }
   };

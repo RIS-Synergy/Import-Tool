@@ -1,5 +1,10 @@
 # ARI&Snet Cluster
 
+When using the Cluster, make sure we are using either `aris-importtool-staging`
+or `aris-importtool-prod` namespace.
+
+To make sure: `oc project`, _Using project "aris-importtool-staging" on server ..._
+
 ## Initialize Kubernetes Secrets
 
 ### Environment Variable `JWT_SECRET`
@@ -20,8 +25,8 @@ oc create secret generic backend-jwt-secret --from-literal=JWT_SECRET=(pass aris
 
 Currently after migration, we need to create:
 
-  - list of Research Institutions
-  - create a one admin user
+- list of Research Institutions
+- create a one admin user
 
 ### Create Research Institutions
 
@@ -87,7 +92,15 @@ SELECT * FROM "User";
 or directly in the CLI:
 
 ```bash
-oc exec -it pod/importtool-staging-db-1 -c postgres -- \
+oc exec -it service/importtool-staging-db-rw -c postgres -- \
   psql -U postgres -d importtool -c \
-  "SELECT COUNT(*) Projects"
+  'SELECT COUNT(*) FROM public."Project";'
 ```
+
+### Port forwarding
+
+```
+oc port-forward service/importtool-staging-db-rw 5432:5432
+```
+
+Then you can use e.g. [DBeaver](https://dbeaver.io) or similar DB management tools in your local machine.

@@ -38,15 +38,22 @@ export class CRISService {
     });
   }
 
-  public async create(crisData: CRISCreationParams, domain: string): Promise<CRIS> {
+  public async create(crisData: CRISCreationParams, domain?: string): Promise<CRIS> {
     try {
-      // Find the research institution by domain
-      const researchInstitution = await prisma.researchInstitution.findFirst({
-        where: { domain },
-      });
+      let researchInstitution;
+      
+      if (domain) {
+        researchInstitution = await prisma.researchInstitution.findFirst({
+          where: { domain },
+        });
+      } else if (crisData.researchInstitutionId) {
+        researchInstitution = await prisma.researchInstitution.findFirst({
+          where: { id: crisData.researchInstitutionId },
+        });
+      }
 
       if (!researchInstitution) {
-        throw new BadRequestError(`Research institution with domain ${domain} not found`);
+        throw new BadRequestError(`Research institution not found`);
       }
 
       // Check if a CRIS with the same name already exists for this research institution
@@ -61,10 +68,12 @@ export class CRISService {
         throw new BadRequestError(`CRIS with name "${crisData.name}" already exists for research institution "${researchInstitution.name}"`);
       }
 
+      const { researchInstitutionId: _, ...dataToCreate } = crisData;
+
       // Connect using the rorId which is unique
       return await prisma.cRIS.create({
         data: {
-          ...crisData,
+          ...dataToCreate,
           researchInstitution: {
             connect: {
               rorId: researchInstitution.rorId,

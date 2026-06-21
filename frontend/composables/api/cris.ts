@@ -146,6 +146,20 @@ const discoverExternalEntities = async (thisCrisId: number) => {
   return result;
 }
 
+const createApi = async (name: string, apiUrl: string) => {
+  const result = await apiCall('cris', 'POST', {
+    body: JSON.stringify({
+      name,
+      apiUrl
+    }),
+  })
+  return result;
+}
+
+const deleteApi = async (id: number) => {
+  const result = await apiCall(`cris/${id}`, 'DELETE')
+  return result;
+}
 
 export default {
   listAll,
@@ -157,4 +171,6 @@ export default {
   getDiffs,
   assignCluster,
   discoverExternalEntities,
+  createApi,
+  deleteApi,
 }
