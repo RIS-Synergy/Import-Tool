@@ -3,6 +3,7 @@ import Joi from 'joi';
 export const createCRISSchema = Joi.object({
   name: Joi.string().required(),
   apiUrl: Joi.string().uri().required(),
+  apiKey: Joi.string().allow('').optional(),
   researchInstitutionId: Joi.number().integer().min(1).optional(),
   data: Joi.object().default({}),
 });

@@ -146,11 +146,12 @@ const discoverExternalEntities = async (thisCrisId: number) => {
   return result;
 }
 
-const createApi = async (name: string, apiUrl: string) => {
+const createApi = async (name: string, apiUrl: string, apiKey: string = '') => {
   const result = await apiCall('cris', 'POST', {
     body: JSON.stringify({
       name,
-      apiUrl
+      apiUrl,
+      apiKey
     }),
   })
   return result;

@@ -34,6 +34,12 @@
                   required
                 ></v-text-field>
               </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="newCrisApiKey"
+                  label="API Key (optional)"
+                ></v-text-field>
+              </v-col>
             </v-row>
           </v-container>
         </v-card-text>
@@ -135,12 +141,14 @@ const data = ref(await listAll());
 const dialog = ref(false);
 const newCrisName = ref("");
 const newCrisApiUrl = ref("");
+const newCrisApiKey = ref("");
 
 const create = async () => {
-  await createApi(newCrisName.value, newCrisApiUrl.value);
+  await createApi(newCrisName.value, newCrisApiUrl.value, newCrisApiKey.value);
   dialog.value = false;
   newCrisName.value = "";
   newCrisApiUrl.value = "";
+  newCrisApiKey.value = "";
   data.value = await listAll();
 };
 
