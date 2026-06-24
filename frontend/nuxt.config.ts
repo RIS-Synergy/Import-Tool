@@ -70,8 +70,26 @@ export default defineNuxtConfig({
       })
     },
     '@pinia/nuxt',
-    'pinia-plugin-persistedstate/nuxt'
+    'pinia-plugin-persistedstate/nuxt',
+    'nuxt-oidc-auth'
   ],
+  oidc: {
+    providers: {
+      keycloak: {
+        baseUrl: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL,
+        clientId: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID,
+        clientSecret: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET,
+        redirectUri: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI,
+        audience: 'account',
+        userNameClaim: 'preferred_username',
+        exposeAccessToken: true,
+        exposeIdToken: true
+      }
+    },
+    middleware: {
+      globalMiddlewareEnabled: false,
+    }
+  },
   piniaPluginPersistedstate: {
     storage: 'localStorage',
   },
@@ -105,3 +123,4 @@ export default defineNuxtConfig({
 console.log('🛠️ NODE_ENV:', process.env.NODE_ENV)
 console.log('🔧 BACKEND_API_PROXY', process.env.BACKEND_API_PROXY)
 console.log('🧪 DEV_TOOLS', process.env.DEV_TOOLS)
+console.log('🔗 OIDC_REDIRECT_URI:', process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI)

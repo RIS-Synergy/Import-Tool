@@ -52,7 +52,9 @@ export default defineConfig({
 
         // Exclude features with validation and routes
         '**/features/**/*.validation.ts',
-        '**/features/**/*.routes.ts'
+        '**/features/**/*.routes.ts',
+        'scripts/**',
+        '**/scripts/**'
       ]
     },
 

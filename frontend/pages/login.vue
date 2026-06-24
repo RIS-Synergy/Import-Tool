@@ -4,7 +4,7 @@
       style="height: 100vh"
       align="center" justify="center">
       <v-col>
-        <v-sheet class="mx-auto" width="300">
+        <v-sheet class="mx-auto" width="500">
           <div class="text-h3 mb-2">
             RIS Synergy
           </div>
