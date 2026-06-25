@@ -63,7 +63,11 @@ export default defineNuxtConfig({
   ],
 
   hooks: {
-    'nitro:prepare:types': (opts) => {
+    'prepare:types': (opts: any) => {
+      opts.sharedReferences = opts.sharedReferences || []
+      opts.nodeReferences = opts.nodeReferences || []
+    },
+    'nitro:prepare:types': (opts: any) => {
       if (!opts.references) opts.references = []
     }
   },
