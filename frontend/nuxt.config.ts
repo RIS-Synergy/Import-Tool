@@ -62,9 +62,16 @@ export default defineNuxtConfig({
     '~/plugins/event-bus.ts',
   ],
 
+  hooks: {
+    'nitro:prepare:types': (opts) => {
+      if (!opts.references) opts.references = []
+    }
+  },
+
   modules: [
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
+        config.plugins = config.plugins || []
         // @ts-expect-error
         config.plugins.push(vuetify({ autoImport: true }))
       })
