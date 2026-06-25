@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev --dotenv .env.dev",
-    "dev:docker": "nuxt dev --dotenv .env.docker",
+    "dev": "CHOKIDAR_USEPOLLING=true nuxt dev --dotenv .env.dev",
+    "dev:docker": "CHOKIDAR_USEPOLLING=true nuxt dev --dotenv .env.docker",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",

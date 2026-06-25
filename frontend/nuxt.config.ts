@@ -87,10 +87,10 @@ export default defineNuxtConfig({
   oidc: {
     providers: {
       keycloak: {
-        baseUrl: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL,
-        clientId: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID,
-        clientSecret: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET,
-        redirectUri: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI,
+        baseUrl: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL || '',
+        clientId: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID || '',
+        clientSecret: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET || '',
+        redirectUri: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI || '',
         audience: 'account',
         userNameClaim: 'preferred_username',
         exposeAccessToken: true,
@@ -111,6 +111,9 @@ export default defineNuxtConfig({
   },
   vite: {
     server: {
+      watch: {
+        ignored: ['**/node_modules/**', '**/.git/**', '**/dist/**', '**/.nuxt/**', '**/.output/**']
+      },
       proxy: {
         '/api': {
           target: process.env.BACKEND_API_PROXY,

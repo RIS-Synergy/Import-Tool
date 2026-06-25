@@ -18,6 +18,7 @@ if (import.meta.client) {
     if (loggedIn.value && user.value && user.value.accessToken && !store.token) {
       console.log("🟢 SSO Login session detected. Provider data:", user.value)
       console.log("Exchanging token with backend...")
+      console.log("SSO user:", user.value)
       try {
         const result = await apiCall("auth/sso-login", "POST", {
           body: JSON.stringify({ token: user.value.accessToken })
