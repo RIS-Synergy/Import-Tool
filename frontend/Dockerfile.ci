@@ -3,7 +3,7 @@ FROM "mcr.microsoft.com/playwright:v1.55.0-noble"
 WORKDIR /app/frontend
 
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile --ignore-engines
 
 COPY . .
 
