@@ -12,9 +12,9 @@ services:
   backend:
     build:
       target: development
+    user: "${UID:-1000}:${GID:-1000}"
     volumes:
       - ./backend/:/app
-      - /app/node_modules
     environment:
       - NODE_ENV=development
       - JWT_SECRET=nosecret
@@ -30,6 +30,7 @@ services:
   frontend:
     build:
       target: development
+    user: "${UID:-1000}:${GID:-1000}"
     env_file:
       - ./frontend/.env.dev
     environment:
@@ -40,10 +41,8 @@ services:
       - NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET=${NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET}
       - NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI=${NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI}
     ports:
-      - "3032:3000"
+      - "3000:3000"
       - "24678:24678"
       - "9229:9229"
     volumes:
       - ./frontend/:/app
-      - /app/node_modules
-      - /app/.nuxt

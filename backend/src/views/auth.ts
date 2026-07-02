@@ -78,9 +78,10 @@ router.get('/refresh', auth, async (req: Request, res: Response) => {
 })
 
 router.post('/sso-login', async (req: Request, res: Response) => {
-  const { token } = req.body
+  const { frontendData } = req.body
 
-  log.info(`🧑 SSO login attempt`)
+  const { userInfo, accessToken: token, idToken } = frontendData
+  log.info(`🧑 SSO login`, userInfo)
 
   if (!token) {
     return res.status(400).json({ error: "Missing token" })
@@ -89,10 +90,12 @@ router.post('/sso-login', async (req: Request, res: Response) => {
   try {
     let username: string
     let email: string = ''
+    let displayName: string = ''
 
     if (typeof token === 'string' && token.startsWith('mock-')) {
       username = token.replace('mock-', '')
       email = `${username}@example.com`
+      displayName = username
       log.info(`Mock SSO bypass for user: ${username}`)
     } else {
       const keycloakBaseUrl = process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL || 'http://localhost:8080/realms/importtool'
@@ -114,6 +117,8 @@ router.post('/sso-login', async (req: Request, res: Response) => {
       log.info(`Received user profile from Keycloak SSO:\n${JSON.stringify(userInfo, null, 2)}`)
       username = userInfo.preferred_username || userInfo.username || userInfo.email
       email = userInfo.email || ''
+      displayName = (userInfo.family_name && userInfo.given_name) ? `${userInfo.family_name}, ${userInfo.given_name}` : username
+
 
       if (!username) {
         log.error('Keycloak userinfo response did not contain username, preferred_username or email', userInfo)
@@ -125,26 +130,47 @@ router.post('/sso-login', async (req: Request, res: Response) => {
 
     // Find user in database, or create one if they don't exist
     let user = await prisma.user.findUnique({
-      where: { username }
+      where: { username },
+      include: { researchInstitution: true }
     })
 
     if (!user) {
       log.info(`User ${username} not found in database. Creating default user.`)
-      const firstRi = await prisma.researchInstitution.findFirst()
+
+      const userEmail = email || `${username}@example.com`
+      const domainMatch = userEmail.includes('@') ? userEmail.split('@')[1] : null
+
+      let matchedRi = null
+      if (domainMatch) {
+        matchedRi = await prisma.researchInstitution.findFirst({
+          where: { domain: domainMatch }
+        })
+      }
+
+      if (!matchedRi) {
+        log.info(`No RI found for domain ${domainMatch}. Falling back to first RI.`)
+        matchedRi = await prisma.researchInstitution.findFirst()
+      }
+
       user = await prisma.user.create({
         data: {
           username,
-          email: email || `${username}@example.com`,
-          permission: ['edit'],
-          researchInstitutionId: firstRi ? firstRi.id : null
-        }
+          email: userEmail,
+          permission: [], // XXX for now ANY person can log in. Later, RI users should whitelist a handful of users
+          researchInstitutionId: matchedRi ? matchedRi.id : null
+        },
+        include: { researchInstitution: true }
       })
     }
 
     const userDisplay = {
       username: user.username,
+      email: user.email,
       permission: user.permission,
-      ri: user.researchInstitutionId
+      ri: user.researchInstitutionId,
+      riName: (user as any).researchInstitution?.name || null,
+      riDomain: (user as any).researchInstitution?.domain || null,
+      displayName
     }
     const appToken = {
       user: {
@@ -155,6 +181,8 @@ router.post('/sso-login', async (req: Request, res: Response) => {
     const tokenSigned = jwt.sign(appToken, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN
     })
+
+    console.log(`SSO login successful for user: ${username}, token: ${tokenSigned}`)
 
     res.json({
       token: tokenSigned,

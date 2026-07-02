@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "CHOKIDAR_USEPOLLING=true nuxt dev --dotenv .env.dev",
+    "dev": "CHOKIDAR_USEPOLLING=true nuxt dev --port 3000 --dotenv .env.dev",
     "dev:docker": "CHOKIDAR_USEPOLLING=true nuxt dev --dotenv .env.docker",
     "generate": "nuxt generate",
     "preview": "nuxt preview",

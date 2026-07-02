@@ -17,8 +17,17 @@ export default (req: Request, _res: Response, next: NextFunction) => {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
     // @ts-ignore
     req.user = decodedToken.user
+
+    // Prevent access if user has no permissions at all
+    if (!req.user.permission || req.user.permission.length === 0) {
+      log.error(`User ${req.user.username} has no permissions, denying access to ${req.path}`)
+      return _res.status(403).json({ error: "Forbidden: No permissions" })
+    }
+
     next()
   } catch (e) {
+    console.log(`[auth] Error verifying JWT token:`, e)
+
     throw new AuthenticationError()
   }
 }

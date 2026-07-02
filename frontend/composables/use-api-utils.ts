@@ -2,6 +2,7 @@ export async function apiCall(url = '', method = 'GET', data: any = {}) {
   const snackbar = useSnackbar();
   const router = useRouter();
   const store = useUserSettingsStore();
+  const { loggedIn } = useOidcAuth();
   var result: any;
   try {
     result = await $fetch(
@@ -15,10 +16,15 @@ export async function apiCall(url = '', method = 'GET', data: any = {}) {
       });
   } catch (e: any) {
     if (e.status === 401) {
-      if (router.currentRoute.value.name !== 'login') {
+      if (router.currentRoute.value.name !== 'login' && !loggedIn.value) {
         console.log("🚦 401 Unauthorized, redirecting to login");
         router.push({ name: "login" });
+      } else if (loggedIn.value) {
+        console.log("🚦 401, but SSO session exists. Waiting for sync...");
       }
+    } else if (e.status === 403) {
+      console.log("🚦 403 Forbidden (No permissions), redirecting to /");
+      router.push("/");
     }
     else if (e.status === 422) {
       snackbar.error(e.data, 'ResearchInstitutionError')

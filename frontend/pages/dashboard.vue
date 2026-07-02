@@ -38,6 +38,9 @@ const { apiCall } = useApiUtils();
 const store = useUserSettingsStore();
 const stats = ref({});
 const loading = ref(true);
+const route = useRoute();
+
+const ssoCookie = useCookie('sso_backend_data');
 
 const displayedStats = computed(() => {
   const activeStatuses = store.projectFilters?.status || [];
@@ -118,6 +121,32 @@ watch(
 );
 
 onMounted(() => {
+  console.log("DEBUG: inside onMounted. ssoCookie present?", !!ssoCookie.value);
+  if (ssoCookie.value) {
+    try {
+      const binStr = atob(String(ssoCookie.value));
+      const bytes = Uint8Array.from(binStr, (m) => m.codePointAt(0));
+      const decodedPayload = JSON.parse(new TextDecoder().decode(bytes));
+      console.log("🚀 SSO Session Data from log-auth middleware:", decodedPayload.session);
+      
+      if (decodedPayload.backendData) {
+        console.log("🚀 Backend Data from middleware:", decodedPayload.backendData);
+        
+        if (decodedPayload.backendData.token) {
+          console.log("DEBUG: Setting token in store:", decodedPayload.backendData.token.substring(0, 15) + "...");
+          store.setToken(decodedPayload.backendData.token);
+        }
+        if (decodedPayload.backendData.user) {
+          store.setUser(decodedPayload.backendData.user);
+        }
+      }
+    } catch (e) {
+      console.error("Failed to decode sso_backend_data cookie", e);
+    } finally {
+      ssoCookie.value = null; // Clear it so it doesn't process again
+    }
+  }
+
   fetchStats();
 });
 </script>

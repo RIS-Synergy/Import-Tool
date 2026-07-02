@@ -21,7 +21,20 @@
     <template v-slot:default="{ isActive }">
       <v-card title="User">
         <v-card-text>
-          <v-text-field label="Username" readonly v-model="username" />
+          <v-list class="mb-2">
+            <v-list-item
+              title="Research Institution"
+              :subtitle="store.user?.riName || '-'"
+            ></v-list-item>
+            <v-list-item
+              title="Email"
+              :subtitle="store.user?.email || '-'"
+            ></v-list-item>
+            <v-list-item
+              title="Username"
+              :subtitle="store.user?.username || '-'"
+            ></v-list-item>
+          </v-list>
 
           <v-switch
             class="mt-n2"
@@ -62,7 +75,7 @@ function toggleTheme() {
 }
 
 const username = computed(() => {
-  return store.user && store.user.username;
+  return store.user && (store.user.displayName || store.user.username);
 });
 </script>
 

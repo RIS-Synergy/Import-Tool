@@ -94,7 +94,8 @@ export default defineNuxtConfig({
         audience: 'account',
         userNameClaim: 'preferred_username',
         exposeAccessToken: true,
-        exposeIdToken: true
+        exposeIdToken: true,
+        pkce: true
       }
     },
     middleware: {
@@ -137,4 +138,12 @@ export default defineNuxtConfig({
 console.log('🛠️ NODE_ENV:', process.env.NODE_ENV)
 console.log('🔧 BACKEND_API_PROXY', process.env.BACKEND_API_PROXY)
 console.log('🧪 DEV_TOOLS', process.env.DEV_TOOLS)
-console.log('🔗 OIDC_REDIRECT_URI:', process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI)
+
+// NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL
+// NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID
+// NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET
+// NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI
+console.log('🔗 NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL:', process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL)
+console.log('🔗 NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID:', process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID)
+console.log('🔗 NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET:', '***')
+console.log('🔗 NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI:', process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI)

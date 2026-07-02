@@ -40,7 +40,7 @@ describe('SSO Authentication Route', () => {
   })
 
   it('should reject requests without a token', async () => {
-    mockRequest.body = {}
+    mockRequest.body = { frontendData: {} }
     const ssoRoute = router.stack.find((s) => s.route && s.route.path === '/sso-login')
     expect(ssoRoute).toBeDefined()
 
@@ -50,7 +50,7 @@ describe('SSO Authentication Route', () => {
   })
 
   it('should accept mock-username bypass token and find/return existing user', async () => {
-    mockRequest.body = { token: 'mock-johndoe' }
+    mockRequest.body = { frontendData: { accessToken: 'mock-johndoe', userInfo: {} } }
     const ssoRoute = router.stack.find((s) => s.route && s.route.path === '/sso-login')
 
     const mockUser = {
@@ -63,7 +63,7 @@ describe('SSO Authentication Route', () => {
 
     await ssoRoute.route.stack[0].handle(mockRequest as Request, mockResponse as Response)
 
-    expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { username: 'johndoe' } })
+    expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { username: 'johndoe' }, include: { researchInstitution: true } })
     expect(mockResponse.json).toHaveBeenCalled()
     const responseData = vi.mocked(mockResponse.json).mock.calls[0][0]
     expect(responseData.user.username).toBe('johndoe')
@@ -74,7 +74,7 @@ describe('SSO Authentication Route', () => {
   })
 
   it('should create user if username does not exist', async () => {
-    mockRequest.body = { token: 'mock-newuser' }
+    mockRequest.body = { frontendData: { accessToken: 'mock-newuser', userInfo: {} } }
     const ssoRoute = router.stack.find((s) => s.route && s.route.path === '/sso-login')
 
     vi.mocked(prisma.user.findUnique).mockResolvedValue(null)
@@ -83,21 +83,22 @@ describe('SSO Authentication Route', () => {
     const createdUser = {
       id: 777,
       username: 'newuser',
-      permission: ['edit'],
+      permission: [],
       researchInstitutionId: 999
     }
     vi.mocked(prisma.user.create).mockResolvedValue(createdUser as any)
 
     await ssoRoute.route.stack[0].handle(mockRequest as Request, mockResponse as Response)
 
-    expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { username: 'newuser' } })
+    expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { username: 'newuser' }, include: { researchInstitution: true } })
     expect(prisma.user.create).toHaveBeenCalledWith({
       data: {
         username: 'newuser',
         email: 'newuser@example.com',
-        permission: ['edit'],
+        permission: [],
         researchInstitutionId: 999
-      }
+      },
+      include: { researchInstitution: true }
     })
     expect(mockResponse.json).toHaveBeenCalled()
   })
