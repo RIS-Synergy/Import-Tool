@@ -138,6 +138,10 @@ onMounted(() => {
         }
         if (decodedPayload.backendData.user) {
           store.setUser(decodedPayload.backendData.user);
+          const permissions = decodedPayload.backendData.user.permission || [];
+          if (permissions.length === 0) {
+            return navigateTo('/new-user');
+          }
         }
       }
     } catch (e) {
