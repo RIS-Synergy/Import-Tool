@@ -4,7 +4,11 @@
 <script setup>
   const store = useUserSettingsStore();
   if (store.token) {
-    navigateTo({ path: '/dashboard' });
+    if (store.user && (!store.user.permission || store.user.permission.length === 0)) {
+      navigateTo({ path: '/new-user' });
+    } else {
+      navigateTo({ path: '/dashboard' });
+    }
   } else {
     navigateTo({ path: '/login' });
   }

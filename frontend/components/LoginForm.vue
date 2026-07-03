@@ -79,6 +79,6 @@ async function login() {
 
 function loginSSO() {
   console.log("Redirecting to SSO via Keycloak...");
-  oidcLogin("keycloak");
+  oidcLogin("keycloak", { callbackRedirectUrl: "/auth/sso-success" });
 }
 </script>

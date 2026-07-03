@@ -36,17 +36,17 @@ test.describe('New User SSO Flow', () => {
     await expect(page).toHaveURL(/.*\/new-user/);
 
     // 4. Test the UI on /new-user
-    await expect(page.getByText('Account Pending Approval')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Pending' })).toBeVisible();
     await expect(page.getByText('Contact your CRIS department')).toBeVisible();
 
     // 5. Test the Back to Home button
-    await page.getByRole('button', { name: 'Back to Home' }).click();
-    await expect(page).toHaveURL(/.*\/$/);
+    await page.getByRole('link', { name: 'Back to Home' }).click();
+    await expect(page).toHaveURL(/.*\/new-user/);
 
     // 6. Test direct API call restriction (403 Forbidden)
     // The dashboard page will attempt to fetch /api/project2/stats which will throw 403, 
     // triggering useApiUtils to push to '/'
     await page.goto('/dashboard');
-    await expect(page).toHaveURL(/.*\/$/);
+    await expect(page).toHaveURL(/.*\/new-user/);
   });
 });

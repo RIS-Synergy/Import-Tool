@@ -23,8 +23,8 @@ export async function apiCall(url = '', method = 'GET', data: any = {}) {
         console.log("🚦 401, but SSO session exists. Waiting for sync...");
       }
     } else if (e.status === 403) {
-      console.log("🚦 403 Forbidden (No permissions), redirecting to /");
-      router.push("/");
+      console.log("🚦 403 Forbidden (No permissions), redirecting to /new-user");
+      router.push("/new-user");
     }
     else if (e.status === 422) {
       snackbar.error(e.data, 'ResearchInstitutionError')

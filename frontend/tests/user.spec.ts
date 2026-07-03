@@ -37,6 +37,9 @@ test.describe("User: 'user'", () => {
   test('Users table', async ({ page }) => {
     await page.goto('/users');
 
+    // wait for the table to populate
+    await expect(page.getByRole('cell', { name: 'user', exact: true })).toBeVisible();
+
     // there should be at least 1 user in the table
     const rowCount = await page.locator('table tbody tr').count();
     expect(rowCount).toBeGreaterThanOrEqual(1);

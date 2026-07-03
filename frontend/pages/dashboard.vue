@@ -138,10 +138,6 @@ onMounted(() => {
         }
         if (decodedPayload.backendData.user) {
           store.setUser(decodedPayload.backendData.user);
-          const permissions = decodedPayload.backendData.user.permission || [];
-          if (permissions.length === 0) {
-            return navigateTo('/new-user');
-          }
         }
       }
     } catch (e) {
@@ -149,6 +145,11 @@ onMounted(() => {
     } finally {
       ssoCookie.value = null; // Clear it so it doesn't process again
     }
+  }
+
+  const permissions = store.user?.permission || [];
+  if (permissions.length === 0) {
+    return navigateTo('/new-user');
   }
 
   fetchStats();
