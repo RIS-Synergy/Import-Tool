@@ -21,6 +21,23 @@ Create secret key in K8s:
 oc create secret generic backend-jwt-secret --from-literal=JWT_SECRET=(pass aris/import-tool/staging/backend-jwt-secret)
 ```
 
+### Frontend Environment
+
+#### OIDC
+
+The same should be also done for frontend:
+
+```
+oc create secret generic frontend-oidc-session-secret \
+  --from-literal=NUXT_OIDC_SESSION_SECRET=(pass aris/import-tool/staging/frontend-oidc-session-secret)
+
+oc create secret generic frontend-oidc-token-key \
+  --from-literal=NUXT_OIDC_TOKEN_KEY=(pass aris/import-tool/staging/frontend-oidc-token-key)
+
+oc create secret generic frontend-oidc-auth-session-secret \
+  --from-literal=NUXT_OIDC_AUTH_SESSION_SECRET=(pass aris/import-tool/staging/frontend-oidc-auth-session-secret)
+```
+
 ## Initialize the database
 
 Currently after migration, we need to create:
