@@ -47,6 +47,29 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    oidc: {
+      sessionSecret: '',
+      tokenKey: '',
+      authSessionSecret: '',
+      providers: {
+        keycloak: {
+          baseUrl: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL || '',
+          clientId: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID || '',
+          clientSecret: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET || '',
+          redirectUri: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI || '',
+          authorizationUrl: '',
+          tokenUrl: '',
+          userInfoUrl: '',
+          logoutUrl: '',
+          callbackRedirectUrl: '/auth/sso-success',
+          audience: 'account',
+          userNameClaim: 'preferred_username',
+          exposeAccessToken: true,
+          exposeIdToken: true,
+          pkce: true
+        }
+      }
+    },
     public: {
       valueOrganization: process.env.RIS_DEV_VALUE_ORGANIZATION || undefined,
       valuePerson: process.env.RIS_DEV_VALUE_PERSON || undefined,
@@ -86,18 +109,7 @@ export default defineNuxtConfig({
   ],
   oidc: {
     providers: {
-      keycloak: {
-        baseUrl: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL || '',
-        clientId: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID || '',
-        clientSecret: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET || '',
-        redirectUri: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI || '',
-        callbackRedirectUrl: '/auth/sso-success',
-        audience: 'account',
-        userNameClaim: 'preferred_username',
-        exposeAccessToken: true,
-        exposeIdToken: true,
-        pkce: true
-      }
+      keycloak: {}
     },
     middleware: {
       globalMiddlewareEnabled: false,
@@ -140,14 +152,3 @@ console.log('🛠️ NODE_ENV:', process.env.NODE_ENV)
 console.log('🔧 BACKEND_API_PROXY', process.env.BACKEND_API_PROXY)
 console.log('🧪 DEV_TOOLS', process.env.DEV_TOOLS)
 
-const redact = (val?: string) => val ? val.substring(0, 3) + '***' : val;
-
-// Keycloak
-console.log('🔗 NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL:', process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL)
-console.log('🔗 NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID:', process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID)
-console.log('🔗 NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET:', redact(process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET))
-console.log('🔗 NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI:', process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI)
-// OIDC Secrets
-console.log('🔗 NUXT_OIDC_SESSION_SECRET:', redact(process.env.NUXT_OIDC_SESSION_SECRET))
-console.log('🔗 NUXT_OIDC_TOKEN_KEY:', redact(process.env.NUXT_OIDC_TOKEN_KEY))
-console.log('🔗 NUXT_OIDC_AUTH_SESSION_SECRET:', redact(process.env.NUXT_OIDC_AUTH_SESSION_SECRET))
