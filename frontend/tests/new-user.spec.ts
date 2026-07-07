@@ -16,7 +16,7 @@ test.describe('New User SSO Flow', () => {
     const backendData = await response.json();
     expect(backendData.token).toBeDefined();
 
-    // 2. Set the sso_backend_data cookie to simulate the redirect from log-auth.ts
+    // 2. Set the sso_backend_data cookie to simulate the redirect from sso-callback.ts
     const payload = { backendData };
     const base64Session = Buffer.from(JSON.stringify(payload)).toString('base64');
 
@@ -29,7 +29,7 @@ test.describe('New User SSO Flow', () => {
       url: baseURL,
     }]);
 
-    // 3. Navigate to dashboard - log-auth.ts middleware should intercept and redirect to /new-user
+    // 3. Navigate to dashboard - sso-callback.ts middleware should intercept and redirect to /new-user
     await page.goto('/dashboard');
 
     // Wait for it to redirect to the new-user page

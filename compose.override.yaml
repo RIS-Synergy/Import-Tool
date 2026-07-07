@@ -34,6 +34,7 @@ services:
     env_file:
       - ./frontend/.env.dev
     environment:
+      - ROOT_URL=${ROOT_URL}
       - BACKEND_API_PROXY=http://backend:3001
       - DEV_TOOLS=${DEV_TOOLS}
       - NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL=${NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL}

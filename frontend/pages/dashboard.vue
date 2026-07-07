@@ -127,7 +127,7 @@ onMounted(() => {
       const binStr = atob(String(ssoCookie.value));
       const bytes = Uint8Array.from(binStr, (m) => m.codePointAt(0));
       const decodedPayload = JSON.parse(new TextDecoder().decode(bytes));
-      console.log("🚀 SSO Session Data from log-auth middleware:", decodedPayload.session);
+      console.log("🚀 SSO Session Data from sso-callback middleware:", decodedPayload.session);
       
       if (decodedPayload.backendData) {
         console.log("🚀 Backend Data from middleware:", decodedPayload.backendData);
