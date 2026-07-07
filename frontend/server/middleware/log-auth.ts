@@ -9,6 +9,13 @@ export default defineEventHandler(async (event) => {
 
   // Intercept authentication-related endpoints
   if (pathname.startsWith('/auth/') || pathname.includes('/api/auth/')) {
+
+    // url
+    console.log(`url: ${url.toString()}`)
+    // parameters
+    const params = new URLSearchParams(url.search)
+    console.log(`params:`, Object.fromEntries(params.entries()))
+
     console.log(`\n🔑 [OIDC Dev Log] --- Incoming Auth Request ---`)
     console.log(`   Path:   ${pathname}`)
     console.log(`   Method: ${event.node.req.method}`)
@@ -19,16 +26,18 @@ export default defineEventHandler(async (event) => {
 
     try {
       const session = await getUserSession(event)
-      console.log(`   Session Retrieved:`, session ? 'Yes' : 'No')
+      console.log(`🍪   Session Retrieved:`, session ? 'Yes' : 'No')
 
       if (session && Object.keys(session).length > 0) {
         console.log(`   Session Details:`, JSON.stringify(session, null, 2))
 
         let backendData = null;
         try {
-          const backendProxy = process.env.BACKEND_API_PROXY || 'http://localhost:3000'
+          // const backendProxy = process.env.BACKEND_API_PROXY || 'http://localhost:3000'
+          const backendProxy = process.env.BACKEND_API_PROXY || ''
           const backendUrl = backendProxy.replace(/\/$/, '') + '/auth/sso-login'
 
+          console.log('backendUrl', backendUrl)
           const result = await fetch(backendUrl, {
             method: 'POST',
             headers: {
@@ -40,7 +49,7 @@ export default defineEventHandler(async (event) => {
               token: (session as any)?.accessToken || (session as any)?.tokens?.access_token || ''
             })
           })
-          
+
           if (result.headers.get('content-type')?.includes('application/json')) {
             backendData = await result.json();
             console.log(`🔑---- Backend JSON:`, backendData)
@@ -59,20 +68,20 @@ export default defineEventHandler(async (event) => {
           }
           const base64Session = Buffer.from(JSON.stringify(payload)).toString('base64')
           setCookie(event, 'sso_backend_data', base64Session, { path: '/', maxAge: 60 })
-          
+
           let redirectUrl = '/dashboard';
           const permissions = backendData?.user?.permission || [];
           if (permissions.length === 0) {
             redirectUrl = '/new-user';
           }
-          
+
           return sendRedirect(event, redirectUrl, 302)
         }
-      } else {
         console.log(`   Session: None/Empty`)
       }
     } catch (error: any) {
       console.log(`   Session Check Error:`, error?.message || error)
+      console.log(error)
     }
     console.log(`🔑 [OIDC Dev Log] -------------------------------\n`)
   }

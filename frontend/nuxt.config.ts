@@ -113,7 +113,8 @@ export default defineNuxtConfig({
   },
   nitro: {
     routeRules: {
-      '/api/**': { proxy: process.env.BACKEND_API_PROXY + '/**' }
+      '/api/**': { proxy: process.env.BACKEND_API_PROXY + '/**' },
+      '/authenticator/callback': { proxy: '/auth/keycloak/callback' }, // workaround for testing Arisnet Keycloak
     }
   },
   vite: {
