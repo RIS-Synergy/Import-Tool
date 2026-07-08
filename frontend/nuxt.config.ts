@@ -47,22 +47,6 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    oidc: {
-      providers: {
-        keycloak: {
-          baseUrl: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL || '',
-          clientId: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID || '',
-          clientSecret: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET || '',
-          redirectUri: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI || '',
-          callbackRedirectUrl: '/auth/sso-success',
-          audience: 'account',
-          userNameClaim: 'preferred_username',
-          exposeAccessToken: true,
-          exposeIdToken: true,
-          pkce: true
-        }
-      }
-    },
     public: {
       valueOrganization: process.env.RIS_DEV_VALUE_ORGANIZATION || undefined,
       valuePerson: process.env.RIS_DEV_VALUE_PERSON || undefined,
@@ -102,7 +86,18 @@ export default defineNuxtConfig({
   ],
   oidc: {
     providers: {
-      keycloak: {}
+      keycloak: {
+        baseUrl: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL || '',
+        clientId: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID || '',
+        clientSecret: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET || '',
+        redirectUri: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI || '',
+        callbackRedirectUrl: '/auth/sso-success',
+        audience: 'account',
+        userNameClaim: 'preferred_username',
+        exposeAccessToken: true,
+        exposeIdToken: true,
+        pkce: true
+      }
     },
     middleware: {
       globalMiddlewareEnabled: false,

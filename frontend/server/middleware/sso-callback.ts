@@ -26,6 +26,13 @@ export default defineEventHandler(async (event) => {
       })
     })
 
+    if (!result.ok) {
+      let errorText = await result.text()
+      console.error(`❌ SSO Backend Sync failed (${result.status}):`)
+      console.error(`   Response: ${errorText}`)
+      return
+    }
+
     if (!result.headers.get('content-type')?.includes('application/json')) return
 
     const backendData = await result.json()
