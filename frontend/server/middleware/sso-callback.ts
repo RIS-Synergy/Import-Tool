@@ -13,6 +13,8 @@ export default defineEventHandler(async (event) => {
 
   const backendProxy = process.env.BACKEND_API_PROXY || ''
   const backendUrl = backendProxy.replace(/\/$/, '') + '/auth/sso-login'
+  console.log(`🧑‍🦰---- Backend URL:`, backendUrl)
+  // const backendUrl = "/auth/sso-login"
 
   try {
     const result = await fetch(backendUrl, {

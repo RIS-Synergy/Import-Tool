@@ -15,6 +15,7 @@ node_modules/
 .aider*
 .prompts
 GEMINI.md
+.opencode
 
 # just for dev, sometimes
 backend/projects/
