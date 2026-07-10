@@ -7,6 +7,7 @@ export default defineEventHandler(async (event) => {
 
   if (!pathname.startsWith('/auth/') && !pathname.includes('/api/auth/')) return
   if (pathname.startsWith('/api/')) return
+  if (pathname.includes('/logout')) return
 
   const session = await getUserSession(event).catch(() => null)
   if (!session || Object.keys(session).length === 0) return

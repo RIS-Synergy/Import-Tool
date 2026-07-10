@@ -39,7 +39,7 @@ const route = useRoute();
 const store = useProjectStore();
 const { setProjectId } = useApiUtils();
 
-useCron()
+// useCron()
 
 setProjectId(store, route);
 

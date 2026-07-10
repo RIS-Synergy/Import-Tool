@@ -26,8 +26,8 @@ test('User can Logout', async ({ page }) => {
   // click Logout in the dialog
   await page.getByRole('button', { name: 'Logout' }).click();
 
-  // assert our page is /login
-  await expect(page).toHaveURL(/.*\/login/);
+  // assert our page is /
+  await expect(page).toHaveURL(/.*\//);
 
 });
 

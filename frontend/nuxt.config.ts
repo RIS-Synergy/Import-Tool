@@ -87,16 +87,16 @@ export default defineNuxtConfig({
   oidc: {
     providers: {
       keycloak: {
+        audience: 'account',
         baseUrl: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL || '',
         clientId: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_ID || '',
         clientSecret: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_CLIENT_SECRET || '',
         redirectUri: process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_REDIRECT_URI || '',
-        callbackRedirectUrl: '/auth/sso-success',
-        audience: 'account',
+        // callbackRedirectUrl: '/auth/sso-success',
         userNameClaim: 'preferred_username',
         exposeAccessToken: true,
-        exposeIdToken: true,
-        pkce: true
+        // exposeIdToken: true,
+        // pkce: true
       }
     },
     middleware: {

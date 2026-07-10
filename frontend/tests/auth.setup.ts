@@ -17,8 +17,8 @@ async function authenticateUser(page: any, username: string, password: string) {
   const loginFormLoadedPromise = page.waitForEvent('console', (msg: any) => msg.text() === '🟢 Login form loaded');
 
   // Perform authentication steps.
-  await page.goto('/login');
-  await expect(page).toHaveURL(/.*\/login/, { timeout: 30000 });
+  await page.goto('/');
+  await expect(page).toHaveURL(/.*\//, { timeout: 30000 });
 
   await page.getByText('RIS Synergy').click();
   await page.getByText('Import Tool').click();

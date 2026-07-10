@@ -16,9 +16,11 @@ export async function apiCall(url = '', method = 'GET', data: any = {}) {
       });
   } catch (e: any) {
     if (e.status === 401) {
-      if (router.currentRoute.value.name !== 'login' && !loggedIn.value) {
-        console.log("🚦 401 Unauthorized, redirecting to login");
-        router.push({ name: "login" });
+      if (router.currentRoute.value.path !== '/' && !loggedIn.value) {
+        console.log("🚦 401 Unauthorized, clearing token and redirecting to /");
+        store.setToken(null);
+        store.setUser(null);
+        router.push({ path: "/" });
       } else if (loggedIn.value) {
         console.log("🚦 401, but SSO session exists. Waiting for sync...");
       }

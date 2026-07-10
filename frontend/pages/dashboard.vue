@@ -40,7 +40,7 @@ const stats = ref({});
 const loading = ref(true);
 const route = useRoute();
 
-const ssoCookie = useCookie('sso_backend_data');
+const ssoCookie = useCookie('sso_backend_data', { path: '/' });
 
 const displayedStats = computed(() => {
   const activeStatuses = store.projectFilters?.status || [];
@@ -147,7 +147,11 @@ onMounted(() => {
     }
   }
 
-  const permissions = store.user?.permission || [];
+  if (!store.user) {
+    return navigateTo('/');
+  }
+
+  const permissions = store.user.permission || [];
   if (permissions.length === 0) {
     return navigateTo('/new-user');
   }

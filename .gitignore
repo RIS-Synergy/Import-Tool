@@ -35,3 +35,6 @@ backend/resources/whitelistProjects.json
 /frontend/.playwright-dev/
 /frontend/.playwright-ci/
 /frontend/tests/.auth-*
+
+# random .py scripts
+validate*.py

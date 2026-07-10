@@ -24,7 +24,7 @@ definePageMeta({
 });
 
 const store = useUserSettingsStore();
-const ssoCookie = useCookie('sso_backend_data');
+const ssoCookie = useCookie('sso_backend_data', { path: '/' });
 
 onMounted(() => {
   if (ssoCookie.value) {
@@ -45,6 +45,10 @@ onMounted(() => {
     } finally {
       ssoCookie.value = null; // Clear it so it doesn't process again
     }
+  }
+
+  if (!store.user) {
+    return navigateTo('/');
   }
 });
 </script>

@@ -22,7 +22,7 @@ const drawer = ref(true);
 const route = useRoute();
 const title = route.meta.meta && route.meta.meta.title;
 
-useCron();
+// useCron();
 </script>
 
 <style scoped></style>
