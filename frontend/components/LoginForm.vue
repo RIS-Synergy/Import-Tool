@@ -63,7 +63,7 @@ const { login: oidcLogin } = useOidcAuth();
 
 const store = useUserSettingsStore();
 
-console.log("🟢 Login form loaded");
+// console.log("🟢 Login form loaded");
 
 async function login() {
   console.log("Logging in...");

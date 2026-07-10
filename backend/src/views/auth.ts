@@ -114,7 +114,7 @@ router.post('/sso-login', async (req: Request, res: Response) => {
       }
 
       const userInfo: any = await userinfoResponse.json()
-      log.info(`Received user profile from Keycloak SSO:\n${JSON.stringify(userInfo, null, 2)}`)
+      // log.info(`Received user profile from Keycloak SSO:\n${JSON.stringify(userInfo, null, 2)}`)
       username = userInfo.preferred_username || userInfo.username || userInfo.email
       email = userInfo.email || ''
       displayName = (userInfo.family_name && userInfo.given_name) ? `${userInfo.family_name}, ${userInfo.given_name}` : username

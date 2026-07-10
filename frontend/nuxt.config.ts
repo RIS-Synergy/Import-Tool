@@ -108,7 +108,7 @@ export default defineNuxtConfig({
   },
   nitro: {
     routeRules: {
-      '/api/**': { proxy: process.env.BACKEND_API_PROXY + '/**' },
+      // API proxy is now handled dynamically in server/middleware/api-proxy.ts
       '/authenticator/callback': { proxy: process.env.ROOT_URL + '/auth/keycloak/callback' }, // workaround for testing Arisnet Keycloak
       '/auth/keycloak/callback': { ssr: false }, // Prevent Vue Router warning during SSO callback
     }

@@ -26,8 +26,8 @@ definePageMeta({
 const store = useUserSettingsStore();
 
 const { loggedIn, user, login, logout } = useOidcAuth()
-console.log("🚀 OIDC Auth State: loggedIn:", loggedIn.value, "user:", user.value)
-console.log("🚀 store.user", store.user, store.token)
+// console.log("🚀 OIDC Auth State: loggedIn:", loggedIn.value, "user:", user.value)
+// console.log("🚀 store.user", store.user, store.token)
 
 if (store.token) {
   if (store.user && (!store.user.permission || store.user.permission.length === 0)) {

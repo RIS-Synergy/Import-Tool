@@ -13,9 +13,7 @@ async function authenticateUser(page: any, username: string, password: string) {
     return;
   }
 
-  // Start listener BEFORE going to the page or we might miss the event
-  const loginFormLoadedPromise = page.waitForEvent('console', (msg: any) => msg.text() === '🟢 Login form loaded');
-
+  // We rely on Playwright's auto-waiting for the input fields to be ready.
   // Perform authentication steps.
   await page.goto('/');
   await expect(page).toHaveURL(/.*\//, { timeout: 30000 });
@@ -23,8 +21,6 @@ async function authenticateUser(page: any, username: string, password: string) {
   await page.getByText('RIS Synergy').click();
   await page.getByText('Import Tool').click();
 
-  // Wait for the hydration log we set up earlier
-  await loginFormLoadedPromise;
 
   await page.getByLabel('User name').fill(username);
   await page.getByLabel('Password').fill(password);

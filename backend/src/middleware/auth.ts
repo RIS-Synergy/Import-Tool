@@ -26,8 +26,7 @@ export default (req: Request, _res: Response, next: NextFunction) => {
 
     next()
   } catch (e) {
-    console.log(`[auth] Error verifying JWT token:`, e)
-
+    log.error(`[auth] Error verifying JWT token:`, e.message)
     throw new AuthenticationError()
   }
 }

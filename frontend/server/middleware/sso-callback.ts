@@ -1,18 +1,24 @@
 import { defineEventHandler, getRequestURL, sendRedirect, setCookie } from 'h3'
 import { getUserSession } from 'nuxt-oidc-auth/runtime/server/utils/session.js'
+import { resolveBackend } from '../utils/proxy-resolver'
 
 export default defineEventHandler(async (event) => {
   const url = getRequestURL(event)
   const pathname = url.pathname
 
-  if (!pathname.startsWith('/auth/') && !pathname.includes('/api/auth/')) return
+  // Ignore API requests and auth flow requests that shouldn't be intercepted
   if (pathname.startsWith('/api/')) return
   if (pathname.includes('/logout')) return
+  if (pathname.includes('/login')) return // Don't intercept login initiations
+  if (pathname.includes('/callback')) return // Let nuxt-oidc-auth handle the callback and redirect first
+
+  // If we already have the backend session (or it's processing), no need to sync
+  if (getCookie(event, 'sso_backend_data')) return
 
   const session = await getUserSession(event).catch(() => null)
   if (!session || Object.keys(session).length === 0) return
 
-  const backendProxy = process.env.BACKEND_API_PROXY || ''
+  const backendProxy = await resolveBackend()
   const backendUrl = backendProxy.replace(/\/$/, '') + '/auth/sso-login'
   console.log(`🧑‍🦰---- Backend URL:`, backendUrl)
   // const backendUrl = "/auth/sso-login"
