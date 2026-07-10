@@ -7,11 +7,11 @@
         </v-list-item-title>
         <template v-slot:append>
           <v-chip
-            v-if="store.user && store.user.permission.includes('admin')"
+            v-if="highestPermission"
             size="small"
             class="mr-1"
           >
-            admin
+            {{ highestPermission }}
           </v-chip>
 
           <v-icon>mdi-account</v-icon>
@@ -84,6 +84,13 @@ function toggleTheme() {
 
 const username = computed(() => {
   return store.user && (store.user.displayName || store.user.username);
+});
+
+const highestPermission = computed(() => {
+  if (!store.user || !store.user.permission) return null;
+  if (store.user.permission.includes('superuser')) return 'superuser';
+  if (store.user.permission.includes('admin')) return 'admin';
+  return null;
 });
 </script>
 

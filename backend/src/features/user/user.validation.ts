@@ -8,3 +8,7 @@ export const createUserSchema = Joi.object({
 export const userIdSchema = Joi.object({
   id: Joi.number().integer().min(1).required(),
 });
+
+export const updatePermissionSchema = Joi.object({
+  permission: Joi.array().items(Joi.string().valid('edit', 'admin', 'superuser')).required(),
+});

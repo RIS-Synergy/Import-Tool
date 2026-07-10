@@ -27,6 +27,7 @@
           >
             {{ permission }}
           </v-chip>
+          <UserPermissionEdit :user="item" @updated="refreshUsers" />
         </td>
       </tr>
     </tbody>
@@ -34,9 +35,16 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
 const { users } = useApiUtils();
 const { listAll } = (await users).default;
-const data = await listAll();
+
+const data = ref(await listAll());
+
+async function refreshUsers() {
+  data.value = await listAll();
+}
 
 const store = useUserSettingsStore();
 

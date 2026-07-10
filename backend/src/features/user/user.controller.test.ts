@@ -111,6 +111,75 @@ describe('UserController', () => {
     });
   });
 
+  describe('updatePermission', () => {
+    it('should forbid user without admin or superuser', async () => {
+      mockRequest.params = { id: '2' };
+      mockRequest.body = { permission: ['edit'] };
+      mockRequest.user = { permission: ['edit'], ri: 1 }; // No admin or superuser
+
+      await userController.updatePermission(mockRequest as Request, mockResponse as Response);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(403);
+      expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Forbidden' });
+    });
+
+    it('should forbid admin from editing user in another RI', async () => {
+      mockRequest.params = { id: '2' };
+      mockRequest.body = { permission: ['edit', 'admin'] };
+      mockRequest.user = { permission: ['admin'], ri: 1 }; // Caller RI is 1
+
+      mockUserService.findById.mockResolvedValue({ id: 2, researchInstitutionId: 2 }); // Target RI is 2
+
+      await userController.updatePermission(mockRequest as Request, mockResponse as Response);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(403);
+      expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Forbidden: Cannot edit user from another Research Institution.' });
+    });
+
+    it('should forbid admin from granting superuser permission', async () => {
+      mockRequest.params = { id: '2' };
+      mockRequest.body = { permission: ['edit', 'superuser'] }; // Trying to grant superuser
+      mockRequest.user = { permission: ['admin'], ri: 1 }; // Caller RI is 1
+
+      mockUserService.findById.mockResolvedValue({ id: 2, researchInstitutionId: 1 }); // Same RI
+
+      await userController.updatePermission(mockRequest as Request, mockResponse as Response);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(403);
+      expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Forbidden: Only superusers can grant superuser permission.' });
+    });
+
+    it('should allow admin to edit user in same RI', async () => {
+      mockRequest.params = { id: '2' };
+      mockRequest.body = { permission: ['edit', 'admin'] };
+      mockRequest.user = { permission: ['admin'], ri: 1 }; // Caller RI is 1
+
+      mockUserService.findById.mockResolvedValue({ id: 2, researchInstitutionId: 1 });
+      mockUserService.updatePermission = vi.fn().mockResolvedValue({ id: 2, permission: ['edit', 'admin'], password: 'secret' });
+
+      await userController.updatePermission(mockRequest as Request, mockResponse as Response);
+
+      expect(mockUserService.updatePermission).toHaveBeenCalledWith(2, ['edit', 'admin']);
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({ id: 2, permission: ['edit', 'admin'] }); // Password removed
+    });
+
+    it('should allow superuser to edit user in any RI', async () => {
+      mockRequest.params = { id: '2' };
+      mockRequest.body = { permission: ['edit', 'admin', 'superuser'] };
+      mockRequest.user = { permission: ['superuser'], ri: 1 }; // Caller RI is 1
+
+      mockUserService.findById.mockResolvedValue({ id: 2, researchInstitutionId: 99 }); // Target RI is 99
+      mockUserService.updatePermission = vi.fn().mockResolvedValue({ id: 2, permission: ['edit', 'admin', 'superuser'], password: 'secret' });
+
+      await userController.updatePermission(mockRequest as Request, mockResponse as Response);
+
+      expect(mockUserService.updatePermission).toHaveBeenCalledWith(2, ['edit', 'admin', 'superuser']);
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({ id: 2, permission: ['edit', 'admin', 'superuser'] });
+    });
+  });
+
   describe('error handling', () => {
     // Test error handling for getAllUsers
     it('getAllUsers should return 500 on error', async () => {

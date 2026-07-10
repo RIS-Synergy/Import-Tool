@@ -10,7 +10,7 @@
             to grant you access to the Import Tool.
           </p>
           <div class="mt-8">
-            <v-btn to="/" color="primary" variant="elevated">Back to Home</v-btn>
+            <v-btn @click="logoutUser" color="primary" variant="elevated">Back to Home</v-btn>
           </div>
         </v-card>
       </v-col>
@@ -25,6 +25,12 @@ definePageMeta({
 
 const store = useUserSettingsStore();
 const ssoCookie = useCookie('sso_backend_data', { path: '/' });
+const { user } = useApiUtils();
+
+async function logoutUser() {
+  const u = await user;
+  u.default.logout();
+}
 
 onMounted(() => {
   if (ssoCookie.value) {

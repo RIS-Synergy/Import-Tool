@@ -45,4 +45,41 @@ export class UserController {
       res.status(500).json({ message: 'Error creating user' });
     }
   };
+
+  public updatePermission = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      const newPermissions: string[] = req.body.permission;
+      const callerPermissions = req.user.permission || [];
+
+      if (!callerPermissions.includes('admin') && !callerPermissions.includes('superuser')) {
+        res.status(403).json({ message: 'Forbidden' });
+        return;
+      }
+
+      const targetUser = await this.userService.findById(id);
+      if (!targetUser) {
+        res.status(404).json({ message: `User with id ${id} not found.` });
+        return;
+      }
+
+      if (callerPermissions.includes('admin') && !callerPermissions.includes('superuser')) {
+        if (targetUser.researchInstitutionId !== req.user.ri) {
+          res.status(403).json({ message: 'Forbidden: Cannot edit user from another Research Institution.' });
+          return;
+        }
+        if (newPermissions.includes('superuser')) {
+           res.status(403).json({ message: 'Forbidden: Only superusers can grant superuser permission.' });
+           return;
+        }
+      }
+
+      const updatedUser = await this.userService.updatePermission(id, newPermissions);
+      // Remove password before sending
+      const { password, ...userWithoutPassword } = updatedUser;
+      res.status(200).json(userWithoutPassword);
+    } catch (error) {
+      res.status(500).json({ message: 'Error updating user permissions' });
+    }
+  };
 }

@@ -45,4 +45,11 @@ export class UserService {
       data: userData,
     });
   }
+
+  public async updatePermission(id: number, permission: string[]): Promise<User> {
+    return prisma.user.update({
+      where: { id },
+      data: { permission },
+    });
+  }
 }

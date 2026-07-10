@@ -5,6 +5,14 @@ const listAll = async () => {
   return result
 }
 
+const updatePermission = async (id: number, permission: string[]) => {
+  const result = await apiCall(`user/${id}/permission`, 'PATCH', {
+    body: JSON.stringify({ permission })
+  })
+  return result
+}
+
 export default {
-  listAll
+  listAll,
+  updatePermission
 }
