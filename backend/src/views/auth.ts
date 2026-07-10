@@ -91,6 +91,8 @@ router.post('/sso-login', async (req: Request, res: Response) => {
     let username: string
     let email: string = ''
     let displayName: string = ''
+    let givenName: string = ''
+    let familyName: string = ''
 
     if (typeof token === 'string' && token.startsWith('mock-')) {
       username = token.replace('mock-', '')
@@ -98,7 +100,7 @@ router.post('/sso-login', async (req: Request, res: Response) => {
       displayName = username
       log.info(`Mock SSO bypass for user: ${username}`)
     } else {
-      const keycloakBaseUrl = process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL || 'http://localhost:8080/realms/importtool'
+      const keycloakBaseUrl = process.env.NUXT_OIDC_PROVIDERS_KEYCLOAK_BASE_URL
       const userinfoUrl = `${keycloakBaseUrl}/protocol/openid-connect/userinfo`
 
       log.info(`Verifying token with Keycloak at: ${userinfoUrl}`)
@@ -118,6 +120,8 @@ router.post('/sso-login', async (req: Request, res: Response) => {
       username = userInfo.preferred_username || userInfo.username || userInfo.email
       email = userInfo.email || ''
       displayName = (userInfo.family_name && userInfo.given_name) ? `${userInfo.family_name}, ${userInfo.given_name}` : username
+      givenName = userInfo.given_name || ''
+      familyName = userInfo.family_name || ''
 
 
       if (!username) {
@@ -170,7 +174,9 @@ router.post('/sso-login', async (req: Request, res: Response) => {
       ri: user.researchInstitutionId,
       riName: (user as any).researchInstitution?.name || null,
       riDomain: (user as any).researchInstitution?.domain || null,
-      displayName
+      displayName,
+      givenName,
+      familyName
     }
     const appToken = {
       user: {

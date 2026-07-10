@@ -2,9 +2,9 @@
   <v-dialog v-model="dialog" max-width="500">
     <template v-slot:activator="{ props: activatorProps }">
       <v-list-item v-bind="activatorProps" link @click="dialog = true">
-        <b>
+        <v-list-item-title class="font-weight-bold">
           {{ username }}
-        </b>
+        </v-list-item-title>
         <template v-slot:append>
           <v-chip
             v-if="store.user && store.user.permission.includes('admin')"
@@ -33,6 +33,14 @@
             <v-list-item
               title="Username"
               :subtitle="store.user?.username || '-'"
+            ></v-list-item>
+            <v-list-item
+              title="Given Name"
+              :subtitle="store.user?.givenName || '-'"
+            ></v-list-item>
+            <v-list-item
+              title="Family Name"
+              :subtitle="store.user?.familyName || '-'"
             ></v-list-item>
           </v-list>
 
