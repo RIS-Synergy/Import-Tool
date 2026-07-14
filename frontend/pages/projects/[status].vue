@@ -8,9 +8,14 @@
         md="6"
       >
         <v-card v-if="!loading">
-          <v-card-title
-            >{{ getLang(item.title, "de") }} <br />
-            {{ getLang(item.title, "en") }}
+          <v-card-title>
+            <template v-if="store.languages.de">
+              {{ getLang(item.title, "de") }}
+              <br v-if="store.languages.en" />
+            </template>
+            <template v-if="store.languages.en">
+              {{ getLang(item.title, "en") }}
+            </template>
           </v-card-title>
           <v-card-text class="pb-3">
             <v-row>

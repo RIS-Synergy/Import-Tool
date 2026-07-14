@@ -19,45 +19,70 @@
       </v-list-item>
     </template>
     <template v-slot:default="{ isActive }">
-      <v-card title="User">
-        <v-card-text>
-          <v-list class="mb-2">
-            <v-list-item
-              title="Research Institution"
-              :subtitle="store.user?.riName || '-'"
-            ></v-list-item>
-            <v-list-item
-              title="Email"
-              :subtitle="store.user?.email || '-'"
-            ></v-list-item>
-            <v-list-item
-              title="Username"
-              :subtitle="store.user?.username || '-'"
-            ></v-list-item>
-            <v-list-item
-              title="Given Name"
-              :subtitle="store.user?.givenName || '-'"
-            ></v-list-item>
-            <v-list-item
-              title="Family Name"
-              :subtitle="store.user?.familyName || '-'"
-            ></v-list-item>
-          </v-list>
+      <v-card>
+        <v-tabs v-model="tab">
+          <v-tab value="user">User</v-tab>
+          <v-tab value="settings">Settings</v-tab>
+        </v-tabs>
 
-          <v-switch
-            class="mt-n2"
-            v-model="isDark"
-            label="Dark Mode"
-            @update:model-value="toggleTheme"
-            hide-details
-            color="primary"
-          ></v-switch>
-        </v-card-text>
-        <v-card-actions>
-          <UserLogout />
-          <v-spacer />
-          <UserPassword />
-        </v-card-actions>
+        <v-window v-model="tab">
+          <v-window-item value="user">
+            <v-card-text>
+              <v-list class="mb-2">
+                <v-list-item
+                  title="Research Institution"
+                  :subtitle="store.user?.riName || '-'"
+                ></v-list-item>
+                <v-list-item
+                  title="Email"
+                  :subtitle="store.user?.email || '-'"
+                ></v-list-item>
+                <v-list-item
+                  title="Username"
+                  :subtitle="store.user?.username || '-'"
+                ></v-list-item>
+                <v-list-item
+                  title="Given Name"
+                  :subtitle="store.user?.givenName || '-'"
+                ></v-list-item>
+                <v-list-item
+                  title="Family Name"
+                  :subtitle="store.user?.familyName || '-'"
+                ></v-list-item>
+              </v-list>
+
+              <v-switch
+                class="mt-n2"
+                v-model="isDark"
+                label="Dark Mode"
+                @update:model-value="toggleTheme"
+                hide-details
+                color="primary"
+              ></v-switch>
+            </v-card-text>
+            <v-card-actions>
+              <UserLogout />
+              <v-spacer />
+              <UserPassword />
+            </v-card-actions>
+          </v-window-item>
+
+          <v-window-item value="settings">
+            <v-card-text>
+              <h3 class="text-subtitle-1 mb-2 font-weight-bold">Project Title Language</h3>
+              <v-checkbox
+                v-model="store.languages.de"
+                label="Deutsch (de)"
+                hide-details
+              ></v-checkbox>
+              <v-checkbox
+                v-model="store.languages.en"
+                label="English (en)"
+                hide-details
+              ></v-checkbox>
+            </v-card-text>
+          </v-window-item>
+        </v-window>
       </v-card>
     </template>
   </v-dialog>
@@ -70,6 +95,7 @@ const theme = useTheme();
 const store = useUserSettingsStore();
 
 const dialog = ref(false);
+const tab = ref("user");
 const isDark = ref(store.dark);
 
 // Initialize theme state from store

@@ -11,7 +11,16 @@ export default () => {
     return !!isAdmin
   }
 
+  const isSuperuser = () => {
+    const { user } = useUserSettingsStore()
+    if (!user) return false
+
+    const { permission } = user
+    return !!(permission && Array.isArray(permission) && permission.includes('superuser'))
+  }
+
   return {
-    isAdmin
+    isAdmin,
+    isSuperuser
   }
 }

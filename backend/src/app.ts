@@ -17,11 +17,13 @@ app.get('/', (_req: Request, res: Response) => {
   })
 })
 
+import { permission } from './middleware/permission.js'
+
 // fa: funding agency (Fördergeber)
 app.use('/fa', auth, (await import('./views/funding-agency.js')).default)
 
 // ri: research institution (Forschungsstätte)
-app.use('/ri', auth, (await import('./views/research-institution.js')).default)
+app.use('/ri', auth, permission('superuser'), (await import('./views/research-institution.js')).default)
 
 // transform: Transformations
 app.use('/transform', auth, (await import('./features/transform/transform.routes.js')).default)

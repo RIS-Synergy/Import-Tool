@@ -1,15 +1,14 @@
 <template>
   <v-list-item v-if="!noCris">
-    CRIS API: <b>{{ cris.name }}</b>
+    CRIS API: <b>{{ store.cris?.name }}</b>
   </v-list-item>
 </template>
 
 <script setup>
-const { cris } = useUserSettingsStore();
+const store = useUserSettingsStore();
 
-const { cris: crisId } = useUserSettingsStore();
 const noCris = computed(() => {
-  return !crisId || !crisId.id
+  return !store.cris || !store.cris.id
 });
 </script>
 

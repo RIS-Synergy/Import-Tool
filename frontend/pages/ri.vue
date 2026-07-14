@@ -35,11 +35,15 @@
 </template>
 
 <script setup>
+const store = useUserSettingsStore();
+if (!store.user?.permission?.includes('superuser')) {
+  navigateTo('/');
+}
+
 const { ri } = useApiUtils();
 const { listAll } = (await ri).default;
 const data = await listAll();
 
-const store = useUserSettingsStore();
 const userRI = store.user && store.user.ri;
 
 function rorUrl(id) {

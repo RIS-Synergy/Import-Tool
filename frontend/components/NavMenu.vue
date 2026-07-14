@@ -70,16 +70,20 @@
         </template>
       </v-list-item>
       <v-divider></v-divider>
-      <v-list-item v-if="false" :to="`/info`" link title="Info" />
-      <v-divider />
+      <template v-if="false">
+        <v-list-item :to="`/info`" link title="Info" />
+        <v-divider />
+      </template>
       <!-- Admin -->
       <!-- <v-divider v-if="isAdmin()"></v-divider> -->
-      <v-list-item :to="`/ri`" link title="Research Institutions">
-        <template v-slot:append>
-          <v-icon>mdi-school-outline</v-icon>
-        </template>
-      </v-list-item>
-      <v-divider />
+      <template v-if="isSuperuser()">
+        <v-list-item :to="`/ri`" link title="Research Institutions">
+          <template v-slot:append>
+            <v-icon>mdi-school-outline</v-icon>
+          </template>
+        </v-list-item>
+        <v-divider />
+      </template>
       <v-list-item :to="`/users`" link title="Users">
         <template v-slot:append>
           <v-icon>mdi-account-group</v-icon>
@@ -115,7 +119,7 @@
 </template>
 
 <script setup>
-const { isAdmin } = useUser();
+const { isAdmin, isSuperuser } = useUser();
 </script>
 
 <style scoped>
