@@ -70,6 +70,9 @@ app.use('/cris', auth, (await import('./features/cris/cris.routes.js')).default)
 // Funding Agency (new version)
 app.use('/fa2', auth, (await import('./features/funding-agency/funding-agency.routes.js')).default)
 
+// Jobs
+app.use('/job', auth, (await import('./features/job/job.routes.js')).default)
+
 // error handler last
 app.use(unexpectedErrorHandler)
 

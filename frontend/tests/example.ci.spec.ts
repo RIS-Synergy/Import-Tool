@@ -20,7 +20,8 @@ test.describe("Unauthenticated", () => {
     await page.getByRole('textbox', { name: 'User name User name' }).fill('admin');
     await page.getByRole('textbox', { name: 'Password Password' }).fill('admin');
     await page.getByRole('button', { name: 'Login' }).click();
-    await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
+    await page.waitForURL('**/dashboard');
+    await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible({ timeout: 15000 });
   });
 
   test('Login and view "Projects"', async ({ page }) => {

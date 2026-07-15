@@ -2,6 +2,7 @@ import { CRIS } from "@/features/cris/cris.model.js";
 import CrisAPI from './cris.api.service.js';
 import ExportSaveService from './execute-save.service.js';
 import prisma from '@/lib/prisma.js';
+import { jobManager } from '@/features/job/job.service.js';
 
 import { Logger } from "@/utils/logger.js";
 const log = new Logger({ name: 'feature:cris:diffSync' });
@@ -9,11 +10,22 @@ const log = new Logger({ name: 'feature:cris:diffSync' });
 export default class DiffSyncService {
   constructor(private cris: CRIS) { }
 
-  async sync() {
+  sync() {
     log.info("Diff sync service", { crisId: this.cris.id });
 
     const crisId = this.cris.id
+    const jobId = `cris-diffSync-${crisId}`;
+    const job = jobManager.startJob(jobId, 'diffSync', crisId.toString(), 'Starting diff sync...');
 
+    this.runSync(crisId, jobId).catch(e => {
+        log.error("Unhandled error in diff sync loop", e);
+        jobManager.failJob(jobId, e.message || 'Unknown error');
+    });
+
+    return job;
+  }
+
+  private async runSync(crisId: number, jobId: string) {
     const crisAPI = new CrisAPI("", "");
     await crisAPI.setByCrisId(crisId)
     const exportSaveService = new ExportSaveService(crisAPI)
@@ -44,12 +56,17 @@ export default class DiffSyncService {
     })
 
     log.debug("# Projects:", projects.length)
+    jobManager.updateJob(jobId, 0, projects.length, `Found ${projects.length} projects`);
+    
     const totalEntitiesUpdated = []
     const startTime = new Date()
+    let processedCount = 0;
+    
     for (const project of projects) {
       const { risId } = project
       log.info(`-> Project ${risId}`);
       log.debug("-- externalEntities", project.externalEntities.length)
+      jobManager.updateJob(jobId, processedCount, projects.length, `Processing project ${risId}`);
 
       for (const externalEntity of project.externalEntities) {
         const { uuid, SavedTemplate, templateType } = externalEntity
@@ -76,6 +93,7 @@ export default class DiffSyncService {
         }
       }
       log.info(`-< Project ${risId}`);
+      processedCount++;
     }
 
     // how much time it took us
@@ -85,5 +103,7 @@ export default class DiffSyncService {
 
     log.debug('Total Projects:', projects.length)
     log.debug('Total Entities:', totalEntitiesUpdated.length)
+    
+    jobManager.completeJob(jobId, `Completed diff sync for ${projects.length} projects`);
   }
 }

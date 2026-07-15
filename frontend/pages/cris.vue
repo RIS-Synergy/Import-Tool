@@ -55,6 +55,18 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="cancelDialog" max-width="400px">
+      <v-card>
+        <v-card-title class="text-h6">Cancel Job?</v-card-title>
+        <v-card-text>Are you sure you want to cancel this background process? This cannot be undone.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="grey-darken-1" variant="text" @click="cancelDialog = false">No, Keep Running</v-btn>
+          <v-btn color="error" variant="text" @click="confirmCancel">Yes, Cancel</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-row>
       <v-col v-for="item in data" :key="item.id" cols="12" md="6">
         <v-card
@@ -99,7 +111,12 @@
 
             <v-row v-if="item.id === currentCRIS" class="mt-0">
               <v-col cols="4">
-                <v-btn variant="tonal" @click="discover(item.id)">
+                <v-btn 
+                  variant="tonal" 
+                  @click="handleDiscover(item.id)"
+                  :disabled="isJobRunning(`cris-discover-${item.id}`)"
+                  :loading="isJobRunning(`cris-discover-${item.id}`)"
+                >
                   <v-icon class="mr-1">mdi-search-web</v-icon>
                   Discover
                 </v-btn>
@@ -108,18 +125,73 @@
                 Search for potential external entities in this CRIS (by the <b>title</b> of a Project).
               </v-col>
             </v-row>
+            <v-row v-if="isJobRunning(`cris-discover-${item.id}`)" class="mt-0">
+              <v-col cols="12">
+                <div class="mt-2 text-caption text-primary">
+                  <div class="d-flex justify-space-between align-center">
+                    <span>{{ jobProgress(`cris-discover-${item.id}`) }}</span>
+                    <div class="d-flex align-center">
+                      <span class="mr-3 font-weight-bold">{{ jobDuration(`cris-discover-${item.id}`) }}</span>
+                      <v-btn icon="mdi-cancel" variant="text" size="small" color="error" @click="openCancelDialog(`cris-discover-${item.id}`)"></v-btn>
+                    </div>
+                  </div>
+                  <v-progress-linear
+                    :model-value="jobValue(`cris-discover-${item.id}`)"
+                    :max="jobTotal(`cris-discover-${item.id}`)"
+                    color="light-blue"
+                    height="25"
+                    striped
+                    class="mt-1"
+                  >
+                    <template v-slot:default="{ value }">
+                      <strong>{{ Math.ceil(value) }}%</strong>
+                    </template>
+                  </v-progress-linear>
+                </div>
+              </v-col>
+            </v-row>
 
             <hr v-if="item.id === currentCRIS" class="mt-3" />
 
             <v-row v-if="item.id === currentCRIS" class="mt-0">
               <v-col cols="4">
-                <v-btn variant="tonal" @click="diffSync(item.id)">
+                <v-btn 
+                  variant="tonal" 
+                  @click="handleDiffSync(item.id)"
+                  :disabled="isJobRunning(`cris-diffSync-${item.id}`)"
+                  :loading="isJobRunning(`cris-diffSync-${item.id}`)"
+                >
                   <v-icon class="mr-1">mdi-set-right</v-icon>
                   Diff Sync
                 </v-btn>
               </v-col>
               <v-col class="info-text">
                 Search for differences between a given template and the corresponding external entity in this CRIS.
+              </v-col>
+            </v-row>
+            <v-row v-if="isJobRunning(`cris-diffSync-${item.id}`)" class="mt-0">
+              <v-col cols="12">
+                <div class="mt-2 text-caption text-primary">
+                  <div class="d-flex justify-space-between align-center">
+                    <span>{{ jobProgress(`cris-diffSync-${item.id}`) }}</span>
+                    <div class="d-flex align-center">
+                      <span class="mr-3 font-weight-bold">{{ jobDuration(`cris-diffSync-${item.id}`) }}</span>
+                      <v-btn icon="mdi-cancel" variant="text" size="small" color="error" @click="openCancelDialog(`cris-diffSync-${item.id}`)"></v-btn>
+                    </div>
+                  </div>
+                  <v-progress-linear
+                    :model-value="jobValue(`cris-diffSync-${item.id}`)"
+                    :max="jobTotal(`cris-diffSync-${item.id}`)"
+                    color="light-blue"
+                    height="25"
+                    striped
+                    class="mt-1"
+                  >
+                    <template v-slot:default="{ value }">
+                      <strong>{{ Math.ceil(value) }}%</strong>
+                    </template>
+                  </v-progress-linear>
+                </div>
               </v-col>
             </v-row>
 
@@ -131,17 +203,63 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, onMounted, onUnmounted } from "vue";
+import { useJobs } from "~/composables/use-jobs";
+import { intervalToDuration } from "date-fns";
 
 const { cris, diff } = useApiUtils();
 const { listAll, discoverExternalEntities, createApi, deleteApi } = (await cris).default;
 const { diffSync } = (await diff).default;
 const data = ref(await listAll());
 
+const { getJobById, fetchJobs, cancelJob } = useJobs();
+
+const now = ref(new Date());
+let timer: ReturnType<typeof setInterval>;
+
+onMounted(() => {
+  timer = setInterval(() => {
+    now.value = new Date();
+  }, 1000);
+});
+
+onUnmounted(() => {
+  if (timer) clearInterval(timer);
+});
+
+const jobDuration = (jobId: string) => {
+  const job = getJobById(jobId);
+  if (!job) return '';
+  const end = ['COMPLETED', 'FAILED', 'CANCELLED'].includes(job.status) 
+    ? new Date(job.updatedAt) 
+    : now.value;
+  
+  const duration = intervalToDuration({ start: new Date(job.createdAt), end });
+  const mm = String(duration.minutes || 0).padStart(2, '0');
+  const ss = String(duration.seconds || 0).padStart(2, '0');
+  return `${mm}:${ss}`;
+};
+
 const dialog = ref(false);
 const newCrisName = ref("");
 const newCrisApiUrl = ref("");
 const newCrisApiKey = ref("");
+
+const cancelDialog = ref(false);
+const jobToCancel = ref("");
+
+const openCancelDialog = (jobId: string) => {
+  jobToCancel.value = jobId;
+  cancelDialog.value = true;
+};
+
+const confirmCancel = async () => {
+  if (jobToCancel.value) {
+    await cancelJob(jobToCancel.value);
+  }
+  cancelDialog.value = false;
+  jobToCancel.value = "";
+};
 
 const create = async () => {
   await createApi(newCrisName.value, newCrisApiUrl.value, newCrisApiKey.value);
@@ -174,9 +292,36 @@ function deselect() {
   setCRIS(null as any, null as any, null as any);
 }
 
-function discover(itemId) {
-  discoverExternalEntities(itemId);
-}
+const isJobRunning = (jobId: string) => {
+  const job = getJobById(jobId);
+  return job && job.status === 'RUNNING';
+};
+
+const jobProgress = (jobId: string) => {
+  const job = getJobById(jobId);
+  if (!job) return '';
+  return job.message || `Processing... ${job.progress}`;
+};
+
+const jobValue = (jobId: string) => {
+  const job = getJobById(jobId);
+  return job ? job.progress : 0;
+};
+
+const jobTotal = (jobId: string) => {
+  const job = getJobById(jobId);
+  return job && job.total ? job.total : 100;
+};
+
+const handleDiscover = async (itemId: number) => {
+  await discoverExternalEntities(itemId);
+  fetchJobs();
+};
+
+const handleDiffSync = async (itemId: number) => {
+  await diffSync(itemId);
+  fetchJobs();
+};
 </script>
 
 <style scoped>

@@ -4,6 +4,7 @@ import { Differ } from '@/models/Diff.js'
 import { getAuthEndpointV2 } from './fa-oauth2-api.service.js'
 import { Registry } from './fa-registry.service.js'
 import { updateData } from '@/features/project/services/update-data.js'
+import { jobManager } from '@/features/job/job.service.js'
 
 const prisma = new PrismaClient()
 
@@ -28,7 +29,6 @@ type RISRegistryData = {
 export class FundingAgencySync {
   // Best to keep it to 1000; setting it to 100 for test
   pageSize = 1000;
-  isSyncRunning = false;
   showSample = 5
   registry: Registry;
 
@@ -40,19 +40,21 @@ export class FundingAgencySync {
     this.registry = new Registry(this.data.oauth2);
   }
 
-  async start(): Promise<ProjectCountStats> {
+  start() {
+    const jobId = `fa-sync-${this.data.id}`;
+    const job = jobManager.startJob(jobId, 'fa-sync', this.data.id, 'Starting sync...');
+
+    this.runSync(jobId).catch(error => {
+      log.error('Error during sync execution', error);
+      jobManager.failJob(jobId, error.message || 'Unknown error');
+    });
+
+    return job;
+  }
+
+  private async runSync(jobId: string): Promise<ProjectCountStats> {
     const startTime = Date.now();
 
-    if (this.isSyncRunning) {
-      log.info('Sync is already running');
-      return {
-        new: { size: 0, sampleIds: [] },
-        existing: { size: 0, sampleIds: [] },
-        updated: { size: 0, sampleIds: [] }
-      };
-    }
-
-    this.isSyncRunning = true;
     const countStats: ProjectCountStats = {
       new: { size: 0, sampleIds: [] },
       existing: { size: 0, sampleIds: [] },
@@ -65,6 +67,12 @@ export class FundingAgencySync {
 
     try {
       while (hasMorePages) {
+        if (jobManager.isJobCancelled(jobId)) {
+          log.info(`Sync job ${jobId} was cancelled by user`);
+          break;
+        }
+
+        jobManager.updateJob(jobId, totalProjectsProcessed, undefined, `Fetching page ${currentPage + 1}...`);
         const currentPageProjects = await this.fetchProjectsPage(currentPage);
 
         // Ensure we always have an array to work with
@@ -74,24 +82,29 @@ export class FundingAgencySync {
         if (safePageProjects.length === 0) {
           hasMorePages = false;
         } else {
+          jobManager.updateJob(jobId, totalProjectsProcessed, undefined, `Processing ${safePageProjects.length} projects from page ${currentPage + 1}...`);
           await this.saveProjectsToDatabaseChunk(safePageProjects, countStats);
           totalProjectsProcessed += safePageProjects.length;
           currentPage++;
         }
       }
 
-      const syncDurationSeconds = (Date.now() - startTime) / 1000;
-      log.info(`Received and processed ${totalProjectsProcessed} Projects in ${syncDurationSeconds} seconds`);
+      const totalProjectsInDatabase = await prisma.project.count();
+      log.info('Projects saved to database', countStats);
+      log.info(`Database has ${totalProjectsInDatabase} projects`);
+
+      if (!jobManager.isJobCancelled(jobId)) {
+        const syncDurationSeconds = (Date.now() - startTime) / 1000;
+        log.info(`Received and processed ${totalProjectsProcessed} Projects in ${syncDurationSeconds} seconds`);
+        jobManager.completeJob(jobId, `Completed sync of ${totalProjectsProcessed} projects`, {
+          countStats,
+          totalProjectsInDatabase
+        });
+      }
     } catch (error) {
       log.error('Error during sync pagination', error);
-    } finally {
-      this.isSyncRunning = false;
+      jobManager.failJob(jobId, error.message || 'Unknown error during pagination');
     }
-
-    const totalProjectsInDatabase = await prisma.project.count();
-
-    log.info('Projects saved to database', countStats);
-    log.info(`Database has ${totalProjectsInDatabase} projects`);
 
     return countStats;
   }
