@@ -7,8 +7,8 @@ export class UserController {
   public getAllUsers = async (req: Request, res: Response): Promise<void> => {
     let where = {};
     const permissions = req.user.permission || []
-    if (!permissions.includes('admin')) {
-      // If not admin, only show users from the same research institution
+    if (!permissions.includes('superuser')) {
+      // If not superuser, only show users from the same research institution
       where = {
         researchInstitutionId: req.user.ri
       }
