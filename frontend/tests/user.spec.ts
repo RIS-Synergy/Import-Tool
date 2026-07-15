@@ -55,7 +55,7 @@ test.describe("User: 'admin' 🔑", () => {
     // general checks
     await expect(page.getByRole('cell', { name: 'user', exact: true })).toBeVisible();
     await expect(page.getByRole('cell', { name: 'admin', exact: true })).toBeVisible();
-    await expect(page.getByRole('cell', { name: 'admin edit' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'superuser admin edit' })).toBeVisible();
     await expect(page.getByRole('cell', { name: 'edit', exact: true })).toBeVisible();
 
     // does not exist

@@ -64,11 +64,11 @@ async function createUsers() {
     create: {
       username: 'admin',
       password: hash('admin'),
-      permission: ['admin', 'edit']
+      permission: ['superuser', 'admin', 'edit']
     },
     update: {
       password: hash('admin'),
-      permission: ['admin', 'edit'],
+      permission: ['superuser', 'admin', 'edit'],
       researchInstitutionId: null // Ensure no RI
     }
   });
