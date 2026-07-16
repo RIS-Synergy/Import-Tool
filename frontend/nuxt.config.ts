@@ -4,24 +4,39 @@ import fs from 'fs'
 import path from 'path'
 
 let localGitCommit = 'unknown'
+let localGitCommitDate = 'unknown'
+
+const isValidGitDir = (dir: string) => {
+  try {
+    return fs.existsSync(dir) && fs.existsSync(path.join(dir, 'HEAD'))
+  } catch {
+    return false
+  }
+}
+
 try {
   localGitCommit = execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim()
+  localGitCommitDate = execSync('git log -1 --format="%cI"', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim()
 } catch (e) {
   try {
     let gitDir = path.resolve(process.cwd(), '.git')
-    if (!fs.existsSync(gitDir)) {
+    if (!isValidGitDir(gitDir)) {
       gitDir = path.resolve(process.cwd(), '../.git')
     }
-    if (fs.existsSync(gitDir)) {
+    if (isValidGitDir(gitDir)) {
       const headContent = fs.readFileSync(path.join(gitDir, 'HEAD'), 'utf-8').trim()
+      let refPath = ''
       if (headContent.startsWith('ref:')) {
-        const refPath = headContent.replace('ref:', '').trim()
-        const fullRefPath = path.join(gitDir, refPath)
-        if (fs.existsSync(fullRefPath)) {
+        refPath = headContent.replace('ref:', '').trim()
+      }
+      const fullRefPath = refPath ? path.join(gitDir, refPath) : path.join(gitDir, 'HEAD')
+      if (fs.existsSync(fullRefPath)) {
+        if (refPath) {
           localGitCommit = fs.readFileSync(fullRefPath, 'utf-8').trim().substring(0, 7)
+        } else if (headContent.length >= 40) {
+          localGitCommit = headContent.substring(0, 7)
         }
-      } else if (headContent.length >= 40) {
-        localGitCommit = headContent.substring(0, 7)
+        localGitCommitDate = fs.statSync(fullRefPath).mtime.toISOString()
       }
     }
   } catch (err) {
@@ -54,7 +69,8 @@ export default defineNuxtConfig({
       // Some instances do not have a CRIS. Some UI Components will otherwise show errors
       // hasCRIS: !!process.env.PURE_API_URL || false,
       hasCRIS: true,
-      gitCommit: process.env.GIT_COMMIT ? process.env.GIT_COMMIT.substring(0, 7) : localGitCommit
+      gitCommit: process.env.GIT_COMMIT ? process.env.GIT_COMMIT.substring(0, 7) : localGitCommit,
+      gitCommitDate: process.env.GIT_COMMIT_DATE || localGitCommitDate
     }
   },
 

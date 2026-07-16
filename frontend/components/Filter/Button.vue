@@ -19,6 +19,7 @@
             clearable
           ></v-select>
           <v-autocomplete
+            v-if="isSuperuser()"
             v-model="store.projectFilters.piDomain"
             :items="projectStatusDomain"
             label="Research Institution"
@@ -60,6 +61,7 @@
 </template>
 
 <script setup>
+const { isSuperuser } = useUser();
 const dialog = ref(false);
 
 const projectStatus = [
@@ -75,13 +77,15 @@ const projectStatusDomain = ref([]);
 const { apiCall } = useApiUtils();
 
 onMounted(async () => {
-  projectStatusDomain.value = (await apiCall("institution/list"))
-    .map((domain) => {
-      return {
-        value: { domain: domain.domain, ror: domain.ror },
-        title: domain.name,
-      };
-    });
+  if (isSuperuser()) {
+    projectStatusDomain.value = (await apiCall("institution/list"))
+      .map((domain) => {
+        return {
+          value: { domain: domain.domain, ror: domain.ror },
+          title: domain.name,
+        };
+      });
+  }
 })
 
 const orderBy = [

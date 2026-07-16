@@ -50,3 +50,4 @@ services:
       - "9229:9229"
     volumes:
       - ./frontend/:/app
+      - ./.git:/.git:ro

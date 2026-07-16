@@ -5,23 +5,31 @@ import { ProjectService } from './services/project.service.js';
 import { researchInstitutionIdSchema } from '../research-institution/research-institution.validation.js';
 
 function limitByUserPermission(reqUser: any, domain: string) {
-  // XXX for now, do not limit by user permission
+  const permissions = reqUser.permission || [];
 
-  // const permissions = reqUser.permission || [];
-
-  // if (!permissions.includes('admin')) {
-  //   return {
-  //     researchInstitutionId: reqUser.ri
-  //   };
-  // }
-  return {
-    where: {
-      // Limit to research institution by domain
-      researchInstitutions: {
-        some: { domain }
+  if (!permissions.includes('superuser')) {
+    return {
+      where: {
+        researchInstitutions: {
+          some: { id: reqUser.ri || -1 }
+        }
       }
-    },
-  };
+    };
+  }
+
+  if (domain) {
+    return {
+      where: {
+        researchInstitutions: {
+          some: { domain }
+        }
+      },
+    };
+  }
+
+  log.warn('User has superuser permission but no domain provided. Returning empty query.');
+
+  return {};
 }
 
 export class ProjectController {
