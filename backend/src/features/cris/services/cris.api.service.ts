@@ -17,6 +17,11 @@ export async function callCrisApi(
   endpoint: string,
   method: Method = 'POST',
   body = null): Promise<any> {
+  // Workaround for docker networking in development
+  if (process.env.NODE_ENV === 'development' && apiUrl.includes('localhost:3032/api')) {
+    apiUrl = apiUrl.replace('localhost:3032/api', 'localhost:3001')
+  }
+
   const url = `${apiUrl}${endpoint}`
 
   log.debug(`>>> ${method} ${endpoint}`)

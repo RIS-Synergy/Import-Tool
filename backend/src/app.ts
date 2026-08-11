@@ -59,6 +59,9 @@ if (process.env.NODE_ENV === 'development' || process.env.CI) {
 
   // CRIS API mock
   app.use('/test-cris-api', (await import('./utils/dev/cris-api.js')).default)
+
+  // Simple CRIS
+  app.use('/simple-cris', (await import('./features/simple-cris/index.js')).default)
 }
 
 // Users
