@@ -26,4 +26,5 @@
 * [Templates](./docs/templates.md)
 * [Permissions](./docs/permissions.md)
 * [Definitions](./docs/definitions.md)
+* [CRIS API](./docs/cris-api.md)
 * [ARI&Snet](./docs/aris-net.md)

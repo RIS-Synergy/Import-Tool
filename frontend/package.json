@@ -19,14 +19,14 @@
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
-    "@pinia/nuxt": "^0.5.1",
+    "@pinia/nuxt": "^1.0.1",
     "ace-builds": "^1.36.2",
     "date-fns": "^4.1.0",
     "highlight.js": "^11.9.0",
     "js-yaml": "^4.1.0",
     "jsonwebtoken": "^9.0.2",
     "mitt": "^3.0.1",
-    "nuxt": "^3.11.2",
+    "nuxt": "^3.21.11",
     "nuxt-oidc-auth": "^1.0.0-beta.11",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^4.0.2",
@@ -39,5 +39,8 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0"
+  },
+  "resolutions": {
+    "tar": ">=7.5.19"
   }
 }
